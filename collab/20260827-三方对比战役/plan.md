@@ -1,0 +1,72 @@
+# plan.md — 三方对比战役：适配管线（Codex 派单契约）
+
+> 总纲：`~/.claude/plans/twinkling-greeting-kahan.md`（用户已批准 v3）。派单人 Claude，执行人 Codex。
+> Codex 义务：执行中追加本目录 `notes.md`，完成后写 `result.md`（含全部自测输出）。
+
+## 背景
+
+对比三方：MCAT（`baselines/MCAT`）、PORPOISE（`baselines/PORPOISE`）、NPJ 骨架（landau 已复现）。五癌种 BLCA/BRCA/LUAD/LGG/UCEC、我们的 CSV 4:2:4 split、5 seeds。已侦查：两库官方队列恰为 blca/brca/gbmlgg/luad/ucec，自带基因组 CSV（`datasets_csv*/tcga_*_all_clean.csv.zip`）；split 格式为 `splits_{i}.csv`（train/val 两列 case_id）。WSI 统一用 UNI2-h 1536（转 pt_files）。我们的标签 CSV 在 landau `/home/wuhao/NPJ/data/TCGA_9523sample_label_4-2-4_Censorship_HKUST.csv`，本地副本见本目录 `labels_424.csv`（Claude 提供，含 patient_id/cancer_type/split/survival_months/censorship 五列脱敏版）。
+
+## 任务 A：MCAT/PORPOISE 数据契约分析 + 适配脚本三件套
+
+### A0 契约分析（先做，写进 result.md）
+通读 `baselines/MCAT/{main.py,datasets/dataset_survival.py,utils/core_utils.py}` 与 PORPOISE 对应文件，回答：
+1. 特征加载：pt_files 的路径拼接规则（data_root_dir/？/pt_files/<slide_id>.pt？）、slide_id 从 CSV 哪列来、多切片病人如何聚合
+2. 基因组输入：dataset CSV 哪些列、signatures.csv 如何分组、`--apply_sig` 等关键开关
+3. split 消费方式：val 是否参与模型选择（决定我们 train/val 列怎么填，见 A1 注）
+4. 生存标签：用哪列、如何分 bin、censorship 语义方向
+5. seed 与评估：--seed 传播到哪、最终 c-index 用什么函数、结果文件落在哪
+6. `--path_input_dim`/特征维度参数是否支持 1536
+7. MCAT 与 PORPOISE 的差异点清单
+
+### A1 脚本 `make_splits.py`
+输入：labels_424.csv + 库名 + 癌种。输出：`splits_0.csv`（我们的 split → 其格式）。
+- 默认映射 train列=our train, val列=our test；**若 A0 发现 val 参与 epoch/模型选择，改为 train列=our train+valid, val列=our test，并在 result.md 说明依据**
+- LGG：用 gbmlgg 的 dataset CSV，按 labels_424.csv 的 LGG patient_id 过滤
+- 打印交集统计：我们 split 病人 vs 库 CSV case_id 的交集/缺失数（逐癌种逐 split）
+**验收**：BLCA 上运行产出 splits_0.csv；交集统计打印；缺失病人清单落盘。
+
+### A2 脚本 `uni2h_to_ptfiles.py`
+输入：UNI2-h 的 TCGA-<C>.tar.gz（格式同 `collab/20260826-NPJ三模态复现/convert_uni2h_to_npj.py` 所述：每切片 .h5，features [1,N,1536]）。输出：`<out>/pt_files/<slide_id>.pt`（torch.FloatTensor [N,1536]）。
+- slide_id 命名与库 CSV 的 slide_id 列对齐（A0 查明格式后决定保留全名或截断）
+- 逐成员解压用完即删；自检块：切片数/病人数/维度
+**验收**：用合成 h5（构造 [1,50,1536]）跑通并打印自检。
+
+### A3 冒烟命令序列（写进 result.md，不执行真实训练）
+给出 BLCA 上 MCAT 与 PORPOISE 各一条完整可执行命令（含 --seed 123、指向我们的 splits/特征/CSV、1 epoch 试跑参数如支持），及预期输出位置。
+
+## 任务 B：GDC STAR-Counts 下载管线（骨架 4 新癌种 RNA）
+
+脚本 `gdc_fetch_star_counts.py`：
+- 输入：labels_424.csv + 癌种列表（BRCA/LUAD/LGG/UCEC）
+- GDC API（api.gdc.cancer.gov）按 project TCGA-<C> + data_type "Gene Expression Quantification" + workflow "STAR - Counts" + open access 查询；样本条码仅保留 01（原发瘤）；一病人多文件取一（规则写死并记录）
+- 输出：manifest CSV（patient_id, file_id, file_name, md5）+ 下载函数（断点续传：已存在且 md5 对则跳过）+ 末尾自检（每癌种：CSV 病人数 vs 命中数 vs 缺失清单）
+- 只查询与下载，不做表达预处理（BulkRNABert 预处理是后续独立步骤）
+**验收**：--dry-run 模式只打 manifest 统计不下载；用 BRCA 前 5 个病人实测小批量下载 5 个文件校验 md5。
+
+## 文件白名单
+
+```
+/Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役/adapters/make_splits.py        （新建）
+/Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役/adapters/uni2h_to_ptfiles.py   （新建）
+/Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役/adapters/gdc_fetch_star_counts.py（新建）
+/Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役/{notes.md,result.md}
+本目录下 scratch/ 内任意自测临时文件
+```
+
+## 禁止事项
+
+- 不得修改 `baselines/MCAT`、`baselines/PORPOISE`、`NPJ/` 下任何文件（只读）
+- 不得 git commit/push；不得 ssh/scp/访问 landau；不得下载超过自测所需（GDC 实测 ≤5 个文件）
+- 不得安装依赖（可用系统 python3 + 已有库；缺库时在 notes.md 记录并给出降级自测）
+- 解压库自带的 csv.zip 到 scratch/ 允许
+
+## 测试命令（Codex 自测，Claude 复跑）
+
+```bash
+cd /Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役
+python3 adapters/make_splits.py --lib MCAT --cancer BLCA --labels labels_424.csv --out scratch/splits_mcat_blca/   # 交集统计+splits_0.csv
+python3 adapters/uni2h_to_ptfiles.py --selftest                                                                    # 合成数据自检
+python3 adapters/gdc_fetch_star_counts.py --labels labels_424.csv --cancers BRCA --dry-run                         # manifest 统计
+python3 adapters/gdc_fetch_star_counts.py --labels labels_424.csv --cancers BRCA --limit 5 --out scratch/gdc_test/ # 5 文件实测
+```
