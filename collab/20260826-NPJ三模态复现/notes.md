@@ -60,3 +60,21 @@
 - 原 Codex 工作区 `/Users/wuhao/Desktop/NPJ` → `/Users/wuhao/Desktop/TriModalSurv/NPJ`（git 历史随迁，2 个 commit 完好）；plan.md 白名单中的旧绝对路径按此对应。
 - landau `/home/wuhao/NPJ` 不受影响；迁移时阶段 0 的 5 seeds 正在运行，未中断。
 - 冒烟三轮记录：①text pkl 为字符串化向量（作者数据失误）→ parse_text_embeddings.py 修复；②tmp_sur_cache/ 的字符串版 text 缓存命中（实际类 TCGASurDataset 用 tmp_sur_cache/*.pkl，非 HANDOFF 所写 tmp/*.cache）→ 删 text 缓存；③通过（1 epoch，c-index 0.50 非 NaN，bf16 未触发，main_survival.py 零修改）。
+
+---
+
+## 对抗审查与裁决记录（2026-08-26 深夜）
+
+- Codex read-only 全库对抗审查：4 P0 / 8 P1 / 4 P2，判"停掉重来"（全文见 审查/codex-对抗审查报告-20260826.md）。
+- decision-reviewer 复核（84/100）：**有条件支持继续跑**——承重前提（作者数字出自 raw-logit 评估路径、summary 中带 sigmoid 的实现是死代码）经其独立验证成立。条件已采纳：
+  - R1：回报一律用 out/<seed>/*_results.json 的未翻转原值 + 翻转标记（summary 的 <0.5 翻转使 §10 停机线失灵）。
+  - R2：保住 5 个 ckpt（out/<seed>/ 不清理），跑完后写只读脚本做 A(作者口径)/B(sigmoid 修正口径) 双口径复评，A−B 量化 P0-1，作论文"骨架评估有误"的硬证据。B 的边界：ckpt 由坏 valid 指标选出，B ≠ 修正后的真实性能。
+  - R3：区间外归因顺序 = ①text parsed（我们独有步骤）→ ②weight_decay=1 → ③bf16，最后才是与作者共享的 P0。
+  - R4：P0-2 修复必须写成 per-sample 掩码（batch 级 sum()==0 判据改键名也没用）。
+- 4 条 P0 = 创新点阶段前置修复清单；"假 MoE + 零填充式缺失处理"= 骨架可指认短板（论文改进空间证据）。
+
+### Bug Post-Mortem（双卡拆分误杀）
+- **现象**: kill 外层 bash 后 seed 进程一并死亡；且当时串行已完成 4/5 seed（123/132/213/231），远快于 80min/seed 的估算，被杀的是 321 中途。
+- **根因**: ①tmux pane 主进程退出时向整个进程组发 SIGHUP，"孤儿继续跑"预判错误；②用拥挤时段瞬时 batch 速度外推整体时长，缓存命中后实际 ~2-5min/seed。
+- **修复**: 清理三个重跑冗余队列，仅补跑 321（卡1）。净损失 ≈ 321 已跑的十几分钟。
+- **Prevention Rule**: 动 tmux 里的进程树前先 `ps -o pgid` 确认信号传播面，需要保活先 `setsid`/`disown`；估算剩余时长用**已完成单元的实测均值**（results.json mtime 差分），不用瞬时速度。
