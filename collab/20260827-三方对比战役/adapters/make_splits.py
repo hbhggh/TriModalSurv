@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""把 labels_424.csv 的 4:2:4 划分转换为 MCAT/PORPOISE 的 train/val 两列。"""
+"""把 labels_424.csv 的 train/valid 划分转换为 MCAT/PORPOISE 的 train/val 两列。"""
 from __future__ import annotations
 
 import argparse
@@ -10,27 +10,14 @@ from pathlib import Path
 
 
 SUPPORTED_CANCERS = {"BLCA", "BRCA", "LUAD", "LGG", "UCEC"}
-LIBRARY_DIRS = {"MCAT": "dataset_csv", "PORPOISE": "datasets_csv"}
-
-
-def repository_root() -> Path:
-    return Path(__file__).resolve().parents[3]
-
-
-def dataset_zip(lib: str, cancer: str) -> Path:
-    """返回库内对应癌种的官方 CSV；LGG 复用合并的 gbmlgg 队列。"""
-    library_cancer = "gbmlgg" if cancer == "LGG" else cancer.lower()
-    path = repository_root() / "baselines" / lib / LIBRARY_DIRS[lib] / f"tcga_{library_cancer}_all_clean.csv.zip"
-    if not path.is_file():
-        raise FileNotFoundError(f"找不到 {lib} 的数据集 CSV: {path}")
-    return path
+SUPPORTED_LIBRARIES = {"MCAT", "PORPOISE"}
 
 
 def read_case_ids(path: Path) -> set[str]:
     with zipfile.ZipFile(path) as archive:
-        names = [name for name in archive.namelist() if name.lower().endswith(".csv")]
+        names = [name for name in archive.namelist() if name and not name.endswith("/")]
         if len(names) != 1:
-            raise ValueError(f"{path} 应恰有一个 CSV 成员，实际为 {names}")
+            raise ValueError(f"{path} 应恰有一个非目录 CSV 成员，实际为 {names}")
         with archive.open(names[0]) as raw:
             reader = csv.DictReader((line.decode("utf-8-sig") for line in raw))
             if not reader.fieldnames or "case_id" not in reader.fieldnames:
@@ -90,9 +77,9 @@ def intersect_and_write_missing(out_dir: Path, cancer: str, groups: dict[str, li
 
 
 def write_splits(out_dir: Path, kept: dict[str, list[str]]) -> Path:
-    # 两个 baseline 都在每个 epoch 消费 val 并以其作最终报告，故 train 合并 our train+valid，val 放 our test。
-    train = kept["train"] + kept["valid"]
-    val = kept["test"]
+    # Round 2 冻结 test：训练列只放 our train，验证列只放 our valid。
+    train = kept["train"]
+    val = kept["valid"]
     split_path = out_dir / "splits_0.csv"
     with split_path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=["train", "val"])
@@ -105,11 +92,57 @@ def write_splits(out_dir: Path, kept: dict[str, list[str]]) -> Path:
     return split_path
 
 
+def default_training_csv(adapted_csv: Path) -> Path:
+    suffix = "_adapted.csv.zip"
+    if not adapted_csv.name.endswith(suffix):
+        raise ValueError(
+            "未传 --training-csv，且 --adapted-csv 文件名不以 "
+            f"{suffix!r} 结尾，无法推导 trainval 产物"
+        )
+    return adapted_csv.with_name(
+        f"{adapted_csv.name[:-len(suffix)]}_adapted_trainval.csv.zip"
+    )
+
+
+def validate_adapted_contract(
+    groups: dict[str, list[str]],
+    adapted_cases: set[str],
+    training_cases: set[str],
+) -> None:
+    label_cases = {patient_id for split in groups.values() for patient_id in split}
+    unknown = sorted(adapted_cases - label_cases)
+    if unknown:
+        raise ValueError(f"完整 adapted CSV 含 labels 之外的患者: {unknown[:10]}")
+    test_cases = set(groups["test"])
+    leaked_test = sorted(training_cases & test_cases)
+    if leaked_test:
+        raise ValueError(f"训练 CSV 含 test 患者，存在冻结测试泄漏: {leaked_test[:10]}")
+    expected_training = adapted_cases & (set(groups["train"]) | set(groups["valid"]))
+    missing = sorted(expected_training - training_cases)
+    extra = sorted(training_cases - expected_training)
+    if missing or extra:
+        raise ValueError(
+            "训练 CSV 患者集合必须精确等于完整 adapted CSV 中的 train∪valid；"
+            f"缺失={missing[:10]}，额外={extra[:10]}"
+        )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--lib", required=True, choices=sorted(LIBRARY_DIRS), help="MCAT 或 PORPOISE")
+    parser.add_argument("--lib", required=True, choices=sorted(SUPPORTED_LIBRARIES), help="MCAT 或 PORPOISE")
     parser.add_argument("--cancer", required=True, help="BLCA/BRCA/LUAD/LGG/UCEC")
     parser.add_argument("--labels", required=True, type=Path)
+    parser.add_argument(
+        "--adapted-csv",
+        required=True,
+        type=Path,
+        help="build_outcome_table.py 生成的完整 adapted CSV（用于三 split 交集审计）",
+    )
+    parser.add_argument(
+        "--training-csv",
+        type=Path,
+        help="排除 test 的训练 CSV；默认由 --adapted-csv 文件名推导 *_adapted_trainval.csv.zip",
+    )
     parser.add_argument("--out", required=True, type=Path)
     args = parser.parse_args()
 
@@ -118,17 +151,27 @@ def main() -> int:
         parser.error(f"不支持的癌种 {args.cancer!r}；仅支持 {', '.join(sorted(SUPPORTED_CANCERS))}")
     if not args.labels.is_file():
         parser.error(f"找不到 labels 文件: {args.labels}")
+    if not args.adapted_csv.is_file():
+        parser.error(f"找不到完整 adapted CSV: {args.adapted_csv}")
 
     try:
         args.out.mkdir(parents=True, exist_ok=True)
-        source_zip = dataset_zip(args.lib, cancer)
-        print(f"库 CSV: {source_zip}")
-        library_cases = read_case_ids(source_zip)
         groups = read_labels(args.labels, cancer)
-        kept = intersect_and_write_missing(args.out, cancer, groups, library_cases)
+        training_csv = args.training_csv or default_training_csv(args.adapted_csv)
+        if not training_csv.is_file():
+            raise FileNotFoundError(f"找不到排除 test 的训练 CSV: {training_csv}")
+        print(f"完整 adapted CSV: {args.adapted_csv}")
+        print(f"训练期 trainval CSV: {training_csv}")
+        adapted_cases = read_case_ids(args.adapted_csv)
+        training_cases = read_case_ids(training_csv)
+        validate_adapted_contract(groups, adapted_cases, training_cases)
+        kept = intersect_and_write_missing(args.out, cancer, groups, adapted_cases)
         split_path = write_splits(args.out, kept)
         print(f"已写入 splits: {split_path}")
-        print("映射: train=train+valid，val=test（val 被 baseline 的逐 epoch 验证消费）")
+        print(
+            f"映射: train=our train ({len(kept['train'])})，"
+            f"val=our valid ({len(kept['valid'])})；our test ({len(kept['test'])}) 未写入训练 split"
+        )
         return 0
     except (FileNotFoundError, ValueError, zipfile.BadZipFile) as exc:
         print(f"错误: {exc}", file=sys.stderr)

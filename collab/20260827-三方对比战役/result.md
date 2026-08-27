@@ -737,3 +737,385 @@ git -C baselines/MCAT diff | cmp - collab/20260827-三方对比战役/mcat_patch
 - **根因**: 选择了策略禁止的删除形式，且没有复用本任务历史中已验证的 find 清理方式。
 - **修复**: 精确解析三个目标、核对大小和 symlink 后，用 find 删除普通文件与空目录。
 - **Prevention Rule**: scratch 临时树固定采用 realpath 核对、symlink 检查、find -type f -delete、find -depth -type d -empty -delete。
+
+## 13. 修复轮 Round 2 路 C：PORPOISE 全 collator 修复 + UNI2 事务化（2026-08-27 增补）
+
+结论：路 C finding 4 + 5 的指定代码、扩展 `--selftest`、PORPOISE 双 mode 首批取数和 diff 留档均已完成，最终验收命令全部 exit 0。没有启动训练、下载、SSH、commit 或 push；首批冒烟通过后已停止。
+
+### 13.1 改了哪些文件（必填项 1）
+
+本路实际写入仅限以下白名单文件：
+
+1. `baselines/PORPOISE/utils/utils.py`
+   - 统一修复 `collate_MIL_survival`、`collate_MIL_survival_sig`、`collate_MIL_survival_cluster`。
+   - tensor 列表先 `torch.cat`，再显式转成 `torch.float32` / `torch.long`；cluster/sig 的 `event_time` 不再返回 NumPy array。
+2. `adapters/uni2h_to_ptfiles.py`
+   - 新增 staging 转换、成员 manifest、SHA-256/shape/dtype 全量复核、原子发布、overwrite 整套替换与失败清理。
+   - 扩展 `--selftest`，覆盖正常发布、中途失败、`written == 0`、整套 overwrite。
+3. `porpoise_patch.diff`
+   - 按既有口径更新为 PORPOISE 子仓库当前完整 diff；与 `git diff` 逐字一致。
+4. `scratch/task_c_round2_porpoise_collator_test.py`
+   - 官方 BLCA CSV + A1 split + 合成 1536 维 pt 的 pathomic/coattn DataLoader 首批行为测试；另含 cluster 最小合成首批。
+5. `notes.md`、`result.md`
+   - 仅追加本路过程、问题、验证和结果。
+
+说明：`porpoise_patch.diff` 中的 `models/model_coattn.py`、`utils/cluster_train_utils.py`、`utils/coattn_train_utils.py`、`utils/core_utils.py` 四段补丁在本路启动前已经存在；本路没有修改这四个生产文件，只把同一留档中的 `utils/utils.py` 段更新到当前状态。
+
+### 13.2 对应哪条 finding（必填项 2）
+
+| Finding | 修复与证据 | 状态 |
+|---|---|---|
+| finding 4：PORPOISE 三个 collator 对 tensor 列表的构造不兼容 Torch 2.x | 三个 collator 全部改为 `torch.cat(...).to(dtype=...)`；官方 BLCA 的 pathomic/coattn 首批与 cluster 合成首批均验证 label/event/c shape `(1,)`、dtype `int64/float32/float32` | PASS |
+| finding 5：UNI2 转换直接写最终目录、失败留半成品、`written==0` 成功、overwrite 逐文件混写 | 新数据只写唯一 staging；manifest 记录 `source_member/slide_id/patient_id/output_file/shape/dtype/sha256`；发布前逐 `.pt` 重新加载并校验 checksum/shape/dtype/成员集合；全通过后 `os.replace`；overwrite 先把旧正式集合移到唯一 backup，发布失败恢复，成功后删除旧集合 | PASS |
+
+### 13.3 `plan.md` 路 C 验收标准逐条状态
+
+1. `collate_MIL_survival / _sig / _cluster` 三个统一修：PASS。
+2. 官方 BLCA CSV + 合成 pt + A1 split，DataLoader 首批真实取数覆盖 pathomic 与 coattn：PASS。
+3. cluster 无现成数据时构造最小合成首批：PASS。
+4. staging → 全成员校验 + manifest → 原子 rename 发布：PASS。
+5. 半途失败不留最终目录：PASS；第二个成员为 `[1,3,1024]`，断言明确命中该非法维度。
+6. `written == 0` 非零退出：PASS；子进程 exit 2。
+7. `--overwrite` 整套替换、最终不混入旧成员：PASS。
+8. `porpoise_patch.diff` 更新且与当前 PORPOISE diff 一致：PASS。
+
+### 13.4 怎么验证（必填项 3）：命令与真实原始输出
+
+#### 13.4.1 UNI2 扩展 `--selftest`
+
+命令：
+
+~~~bash
+cd /Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役
+PYTHONDONTWRITEBYTECODE=1 PYTHONWARNINGS=ignore /Users/wuhao/miniconda3/envs/protomasksurv-exp1/bin/python adapters/uni2h_to_ptfiles.py --selftest
+~~~
+
+退出码：0
+
+真实原始 stdout：
+
+~~~text
+SELFTEST PASS: normal publish + manifest [1,50,1536] -> FloatTensor [50,1536]；临时成员已清理
+SELFTEST PASS: mid-conversion failure leaves no final pt_files
+SELFTEST PASS: written==0 exits 2; 错误: 输入中未找到任何 .h5 成员；written == 0，拒绝发布
+SELFTEST PASS: --overwrite replaces the whole pt_files set atomically
+~~~
+
+#### 13.4.2 PORPOISE 双 mode 首批 + cluster 合成首批
+
+命令：
+
+~~~bash
+cd /Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役
+PYTHONDONTWRITEBYTECODE=1 PYTHONWARNINGS=ignore /Users/wuhao/miniconda3/envs/protomasksurv-exp1/bin/python scratch/task_c_round2_porpoise_collator_test.py
+~~~
+
+退出码：0
+
+真实原始 stdout：
+
+~~~text
+test_coattn_official_blca_first_batch (__main__.OfficialBlcaFirstBatchTests) ... ok
+test_pathomic_official_blca_first_batch (__main__.OfficialBlcaFirstBatchTests) ... ok
+test_cluster_first_batch (__main__.SyntheticClusterFirstBatchTests) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 23.519s
+
+OK
+(0, 0) : 0
+(0, 1) : 1
+(1, 0) : 2
+(1, 1) : 3
+(2, 0) : 4
+(2, 1) : 5
+(3, 0) : 6
+(3, 1) : 7
+Shape (204, 20395)
+Shape (138, 20395)
+****** Normalizing Data ******
+PORPOISE FIRST BATCH PASS: mode=coattn case=TCGA-2F-A9KO path=(4, 1536) omics=[(94,), (334,), (521,), (468,), (1496,), (479,)] label=(1,)/torch.int64 event_time=(1,)/torch.float32 censorship=(1,)/torch.float32
+(0, 0) : 0
+(0, 1) : 1
+(1, 0) : 2
+(1, 1) : 3
+(2, 0) : 4
+(2, 1) : 5
+(3, 0) : 6
+(3, 1) : 7
+Shape (204, 20395)
+Shape (138, 20395)
+****** Normalizing Data ******
+PORPOISE FIRST BATCH PASS: mode=pathomic case=TCGA-2F-A9KO path=(4, 1536) omic=(1, 20395) label=(1,)/torch.int64 event_time=(1,)/torch.float32 censorship=(1,)/torch.float32
+PORPOISE CLUSTER SYNTH FIRST BATCH PASS: path=(4, 1536) cluster_ids=(4,)/torch.int64 omic=(8,)/torch.float32 label=(1,)/torch.int64 event_time=(1,)/torch.float32 censorship=(1,)/torch.float32
+~~~
+
+#### 13.4.3 语法、whitespace 与 diff 留档一致性
+
+语法检查命令：
+
+~~~bash
+cd /Users/wuhao/Desktop/TriModalSurv
+PYTHONDONTWRITEBYTECODE=1 /Users/wuhao/miniconda3/envs/protomasksurv-exp1/bin/python - <<'PY'
+from pathlib import Path
+for path in [
+    Path('baselines/PORPOISE/utils/utils.py'),
+    Path('collab/20260827-三方对比战役/adapters/uni2h_to_ptfiles.py'),
+    Path('collab/20260827-三方对比战役/scratch/task_c_round2_porpoise_collator_test.py'),
+]:
+    compile(path.read_bytes(), str(path), 'exec')
+    print(f'SYNTAX PASS: {path}')
+PY
+~~~
+
+退出码：0；真实原始 stdout：
+
+~~~text
+SYNTAX PASS: baselines/PORPOISE/utils/utils.py
+SYNTAX PASS: collab/20260827-三方对比战役/adapters/uni2h_to_ptfiles.py
+SYNTAX PASS: collab/20260827-三方对比战役/scratch/task_c_round2_porpoise_collator_test.py
+~~~
+
+命令：
+
+~~~bash
+git -C /Users/wuhao/Desktop/TriModalSurv/baselines/PORPOISE diff --check
+~~~
+
+退出码：0；真实原始 stdout 为空。
+
+命令：
+
+~~~bash
+cd /Users/wuhao/Desktop/TriModalSurv/baselines/PORPOISE
+git diff | cmp - /Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役/porpoise_patch.diff
+~~~
+
+退出码：0；真实原始 stdout 为空。
+
+当前完整 PORPOISE diff stat（含本路开始前已有四文件补丁）：
+
+~~~text
+ models/model_coattn.py       |  2 +-
+ utils/cluster_train_utils.py |  6 +++---
+ utils/coattn_train_utils.py  |  6 +++---
+ utils/core_utils.py          |  6 +++---
+ utils/utils.py               | 39 ++++++++++++++++++++-------------------
+ 5 files changed, 30 insertions(+), 29 deletions(-)
+~~~
+
+### 13.5 有没有动到白名单外目录（必填项 4）
+
+- 本路没有写入路 C 白名单之外的文件；没有修改 `adapters/make_splits.py`、`baselines/MCAT/` 或 `NPJ/`。
+- `adapters/make_splits.py` 的最终 mtime 为 `2026-08-27 01:45:42 JST`，早于本路 `11:59:09 JST` 启动；NPJ 在该时点后无新文件。
+- 审计发现三路并行期间，其他执行方新增/修改了 `scratch/round2_route_a_contract_test.py`、`mcat_patch.diff`、`baselines/MCAT/main.py`。这些不是本路命令或 patch 产生；本路没有覆盖、回退或纳入本路交付断言。
+- PORPOISE 子仓库其余四个 modified 文件在本路启动时已经存在，最终仍保持 modified；本路仅写 `utils/utils.py`。
+- 未执行 `git commit`、`git push`、SSH、下载或任何训练。
+
+### 13.6 遇到的问题
+
+1. 当前官方 PORPOISE BLCA ZIP 缺旧 loader 固定断言要求的 `Unnamed: 0`，元数据顺序也不同。测试只在临时 `scratch/` 副本插入行号列并恢复旧 loader 期望顺序，病例、切片、结局和全部基因组值不变；没有修改官方 ZIP 或 dataset 源码。
+2. coattn loader 硬编码读取不存在的 `datasets_csv_sig/signatures.csv`，实际文件在 `datasets_csv/signatures.csv`。该路径修复不在路 C 白名单；测试仅把现有官方 signatures 复制到临时 scratch 夹具的预期相对路径，以验证真实 dataset/DataLoader/collator 路径。
+3. 初版半途失败自测接受任意 `ValueError`，adversarial review 后收紧为必须命中第二个 1024 维非法成员，排除假阳性。
+4. `apply_patch` 给原本无 EOF newline 的 `utils.py` 补了换行；已机械恢复，最终 diff 不含该噪声。
+
+### 13.7 未尽事项与边界
+
+- 路 C 指定 finding 4 + 5 没有未完成项。
+- 未执行完整训练或模型 forward，符合公共停机门；本轮只验证 DataLoader 首批和转换事务。
+- PORPOISE 当前官方 CSV schema 与签名相对路径的生产级适配仍是白名单外既有问题；本路首批测试使用了明确记录的 scratch 兼容夹具，不能把它表述为这两个生产问题已经修复。
+- cluster collator 已通过最小 DataLoader 首批；当前 `cluster_train_utils.py` 的训练循环还存在既有的 tuple 解包契约差异，本轮禁止训练且 finding 4 只授权 collator 文件，因此未扩展修复或宣称 cluster 训练可运行。
+
+### Bug Post-Mortem（PORPOISE 首批夹具）
+
+- **现象**: 初版双 mode 测试先被官方 CSV metadata 断言和缺失 signatures 相对目录阻断，未到达 coattn collator。
+- **根因**: 测试假设仓库磁盘工件仍满足旧 PORPOISE loader 的固定 schema/路径，但当前 ZIP 和目录布局已漂移。
+- **修复**: 只在白名单 scratch 临时副本恢复 loader 预期列顺序和 signatures 相对路径；随后准确得到 `_sig` / `_cluster` RED，完成生产补丁后同一测试 GREEN。
+- **Prevention Rule**: 旧科研仓库的集成测试先核对“工件 schema + 硬编码相对路径”；任何测试兼容层必须临时、显式并写入结果，禁止把夹具适配冒充生产修复。
+
+## 修复轮 Round 2 — 路 B：MCAT 实验身份隔离
+
+### 1. 改了哪些文件
+
+1. `baselines/MCAT/main.py`
+   - 向 `param_code` 和 `exp_code` 同时追加 `_pid{path_input_dim}`。
+   - 向 experiment settings 写入 `path_input_dim` 与 `data_root_dir`。
+   - 在已有结果目录上，先用 `ast.literal_eval` 解析对应 `experiment_<exp_code>.txt`，再严格比对两个身份键。缺文件、解析失败、非 dict、缺键、类型不同或值不同均抛出 `RuntimeError`。检查位于 `summary_latest.csv` 早退之前，`--overwrite` 不能绕过。
+2. `collab/20260827-三方对比战役/mcat_patch.diff`
+   - 按计划指定命令更新为 MCAT 子仓库当前全量 diff，包含必须保留的 Round 1/其他协作者既有 hunks 与本轮 `main.py` 增量。
+3. `collab/20260827-三方对比战役/notes.md`
+   - append-only 追加路 B 边界、RED/GREEN、取舍、验证与 Bug Post-Mortem。
+4. `collab/20260827-三方对比战役/result.md`
+   - append-only 追加本节。
+
+路 B 的生产代码增量只涉及 `baselines/MCAT/main.py`。
+
+### 2. 对应哪条 finding
+
+对应 adversarial review **finding 3：MCAT 实验身份未隔离**。
+
+- 修复前：1024 与 1536 共用同一无 `_pid` 目录，1536 请求可因 1024 的 `summary_latest.csv` 存在而 exit 0。
+- 修复后：1024 和 1536 的 `param_code`/`exp_code` 均分离；相同 pid 目录的 `data_root_dir` 或 experiment 记录中 `path_input_dim` 不一致时 exit 1。
+- 默认 `path_input_dim=1024` 的计算语义不变；目录命名相对官方行为的唯一有意差异是追加 `_pid1024`。
+- `data_root_dir` 按 CLI 传入的原始字符串精确比较；同一物理目录若改用相对/绝对路径字符串，也会按“元数据不完全匹配”硬失败。
+
+### 3. 怎么验证的
+
+#### 3.1 RED：修复前身份碰撞
+
+命令在 `/private/tmp` 临时目录中，用内存 import stubs 运行两次 `main.py`；两次都指定 `--k_start 0 --k_end 0`，参数只在 `--path_input_dim 1024/1536` 之间变化。退出码：0。
+
+真实原始输出（验收摘取命令的 stdout）：
+
+~~~text
+RED RUN path_input_dim=1024 exit=0
+RED RUN path_input_dim=1536 exit=0
+RED experiment_file_count=1
+RED leaf_dirs=['5foldcv/MCAT_nll_surv_a0.0_5foldcv_gc32_concat/tcga_blca_MCAT_nll_surv_a0.0_5foldcv_gc32_concat_s1']
+RED checkpoint_count=0
+RED CONFIRMED: 1024 与 1536 复用同一无 pid 实验目录
+~~~
+
+#### 3.2 GREEN：1024/1536 隔离、元数据硬门与零训练证据
+
+命令：
+
+~~~bash
+cd /Users/wuhao/Desktop/TriModalSurv
+PYTHONDONTWRITEBYTECODE=1 PYTHONWARNINGS=ignore \
+  /Users/wuhao/miniconda3/envs/protomasksurv-exp1/bin/python - <<'PY'
+# 内联 harness 用 subprocess 以实际退出码运行 main.py；
+# 四组 main.py 参数均包含：
+# --results_dir <private-tmp>/results --which_splits 5foldcv
+# --split_dir tcga_blca --model_type mcat --mode coattn
+# --k_start 0 --k_end 0
+# 顺序验证：
+# 1) path_input_dim=1024,data_root_dir=./features_A
+# 2) path_input_dim=1536,data_root_dir=./features_A
+# 3) 复用 1024 与 features_A
+# 4) 复用 1024，features_B，带 --overwrite
+# 然后篡改临时 1024 experiment 记录的 path_input_dim=1536 并重跑。
+# harness 对目录名、settings、退出码、错误文本和训练产物计数均有 assert。
+PY
+~~~
+
+外层验收命令退出码：0。真实原始 stdout：
+
+~~~text
+=== CREATE 1024: exit=0 ===
+Experiment Name: tcga_blca_MCAT_nll_surv_a0.0_5foldcv_gc32_concat_pid1024
+data_root_dir:  ./features_A
+path_input_dim:  1024
+=== CREATE 1536: exit=0 ===
+Experiment Name: tcga_blca_MCAT_nll_surv_a0.0_5foldcv_gc32_concat_pid1536
+data_root_dir:  ./features_A
+path_input_dim:  1536
+experiment_file_count=2
+experiment_dirs=['5foldcv/MCAT_nll_surv_a0.0_5foldcv_gc32_concat_pid1024/tcga_blca_MCAT_nll_surv_a0.0_5foldcv_gc32_concat_pid1024_s1', '5foldcv/MCAT_nll_surv_a0.0_5foldcv_gc32_concat_pid1536/tcga_blca_MCAT_nll_surv_a0.0_5foldcv_gc32_concat_pid1536_s1']
+settings[1024]: path_input_dim=1024, data_root_dir='./features_A'
+settings[1536]: path_input_dim=1536, data_root_dir='./features_A'
+=== REUSE MATCHING 1024: exit=0 ===
+Experiment Name: tcga_blca_MCAT_nll_surv_a0.0_5foldcv_gc32_concat_pid1024
+Exp Code <tcga_blca_MCAT_nll_surv_a0.0_5foldcv_gc32_concat_pid1024> already exists! Exiting script.
+=== REJECT data_root_dir MISMATCH WITH --overwrite: exit=1 ===
+RuntimeError: Experiment identity mismatch for existing results directory </private/tmp/mcat_round2_green_cjr_6g5l/results/5foldcv/MCAT_nll_surv_a0.0_5foldcv_gc32_concat_pid1024/tcga_blca_MCAT_nll_surv_a0.0_5foldcv_gc32_concat_pid1024_s1>: data_root_dir: existing='./features_A', requested='./features_B'
+Experiment Name: tcga_blca_MCAT_nll_surv_a0.0_5foldcv_gc32_concat_pid1024
+=== REJECT path_input_dim MISMATCH: exit=1 ===
+RuntimeError: Experiment identity mismatch for existing results directory </private/tmp/mcat_round2_green_cjr_6g5l/results/5foldcv/MCAT_nll_surv_a0.0_5foldcv_gc32_concat_pid1024/tcga_blca_MCAT_nll_surv_a0.0_5foldcv_gc32_concat_pid1024_s1>: path_input_dim: existing=1536, requested=1024
+Experiment Name: tcga_blca_MCAT_nll_surv_a0.0_5foldcv_gc32_concat_pid1024
+checkpoint_count=0
+fold_result_count=0
+IDENTITY DRY-RUN PASS
+~~~
+
+`checkpoint_count=0` 且 `fold_result_count=0`；源码控制流中 `folds=np.arange(0,0)`，未调用 `train()`。本轮没有使用会进入训练的 `--testing`。
+
+#### 3.3 help、语法与 diff 留档
+
+命令：用内存 import stubs 运行 `main.py --help`，检查三个 Round 1 参数；用 `compile()` 检查 `main.py`；然后执行 `git diff --check`。退出码：0。
+
+真实原始 stdout：
+
+~~~text
+HELP PASS: exit=0
+required_flags=--path_input_dim,--testing,--inst_loss
+SYNTAX PASS: /Users/wuhao/Desktop/TriModalSurv/baselines/MCAT/main.py
+~~~
+
+`git -C baselines/MCAT diff --check` 退出码 0，原始 stdout 为空。
+
+留档与一致性命令：
+
+~~~bash
+git -C baselines/MCAT diff > collab/20260827-三方对比战役/mcat_patch.diff
+git -C baselines/MCAT diff | cmp - collab/20260827-三方对比战役/mcat_patch.diff
+wc -l -c collab/20260827-三方对比战役/mcat_patch.diff
+shasum -a 256 collab/20260827-三方对比战役/mcat_patch.diff
+git -C baselines/MCAT diff --stat
+~~~
+
+退出码：0。`cmp` 原始 stdout 为空。其余真实原始 stdout：
+
+~~~text
+     227   11864 collab/20260827-三方对比战役/mcat_patch.diff
+4999105a1d75d3ac70ae21268e8ae57d9e419f109dff77c9e484bb692f6bf6fc  collab/20260827-三方对比战役/mcat_patch.diff
+ datasets/dataset_survival.py |  7 ++++---
+ main.py                      | 42 ++++++++++++++++++++++++++++++++++++++++--
+ models/model_coattn.py       |  7 ++++---
+ utils/cluster_train_utils.py |  6 +++---
+ utils/coattn_train_utils.py  |  6 +++---
+ utils/core_utils.py          | 14 +++++++++-----
+ 6 files changed, 63 insertions(+), 19 deletions(-)
+~~~
+
+说明：上述 stat 是子仓库当前必须留档的全量 diff，不等于路 B 改了 6 个生产文件。路 B 生产增量仅为 `main.py`；其余 5 个已改文件的实施前/后 SHA256 一致：
+
+~~~text
+9f9938b944708909246aa093eee0b9ef673ca3917cee84944c3bd2e5f551a261  baselines/MCAT/datasets/dataset_survival.py
+bdf294a4b7b6c9e714ef8d8c85cc43715a64c759996dd8d46c4ee1de4ccfb181  baselines/MCAT/models/model_coattn.py
+f0119549dab43c86e1723f6834900b693187a7062b1b756503a01cd7be3257ea  baselines/MCAT/utils/cluster_train_utils.py
+14069bc393fd0a6f55166759f455ae0255b4e13cbbcf8779ea0d11ee678ad06d  baselines/MCAT/utils/coattn_train_utils.py
+7bc8b98999cfcde10e5b51b477522756d0144a3fe5dd89a9c10d1815ab93e259  baselines/MCAT/utils/core_utils.py
+~~~
+
+### 4. 有没有动到白名单外目录
+
+**没有。**
+
+- 路 B 没有修改 `adapters/`、`baselines/PORPOISE/`、`NPJ/`。
+- 执行期间根工作树可观察到路 A、路 C 和监视器的既有/并发改动；路 B 只读观察且未覆盖、回退或改写。
+- 干跑的可变产物全部位于 `/private/tmp` 的自动清理目录；没有在 MCAT 或本任务目录新建测试脚本、结果目录或 pycache。
+- 未执行 SSH/scp，未访问 landau，未下载，未执行 `git commit`、`git push` 或等效操作。
+
+### 验收标准逐条状态
+
+1. `param_code/exp_code` 追加 `_pid{path_input_dim}`：**PASS**。
+2. settings 记录 `path_input_dim` 与 `data_root_dir`：**PASS**。
+3. 已有结果目录元数据不完全匹配时硬失败：**PASS**；`data_root_dir` + `--overwrite` 和篡改 `path_input_dim` 均 exit 1。
+4. 默认 1024 的行为差异仅限目录身份追加 `_pid1024`：**PASS**。
+5. 1024 与 1536 落入不同目录：**PASS**。
+6. CPU 干跑未训练：**PASS**；checkpoint=0，fold result=0。
+7. `mcat_patch.diff` 更新并与当前 MCAT diff 一致：**PASS**。
+
+### 独立交叉审核
+
+写本节前，独立只读 reviewer 对 correctness、scope、compatibility、test sufficiency 的代码判定均为 PASS，未发现正常 CLI 下的身份校验绕过；当时总门控为 `CONCERNS 90/100`，唯一阻塞项就是本 `result.md` 增补节尚未写。本节写完后再做最终范围复审；仍需 Claude 按项目互审纪律验收，Codex 不自行宣布进入下一 Gate。
+
+### 遇到的问题
+
+1. 指定 Python 环境缺少 `torchvision`、`torch_geometric`、`sksurv`、`tensorboardX`。遵守“禁止安装依赖”，只对空 folds 不会调用的 import 边界使用进程内 stub；dataset 构建和 `main.py` 身份逻辑均运行真实代码。
+2. `--testing` 仍会进入 epoch/反传，不符合“禁止训练”；改用 `--k_start 0 --k_end 0` 空 folds。
+3. 首次组合验证命令混用 cwd 与根目录相对路径，且未设 `set -e`，导致前两项失败被末尾 help 的 exit 0 掩盖。发现后立即用正确路径和 `set -e` 重跑，语法与 diff 检查均 exit 0。
+
+### 未尽事项
+
+- 路 B 的源码、干跑、留档与文档义务已完成，无任务内未尽项。
+- 未执行任何完整训练、正式实验或 GPU 任务；冒烟通过后已停止。
+- 依项目公共约束，必须交回 Claude 做另一方 review；本结果不授权开始 BLCA / BRCA / LUAD / LGG / UCEC 正式实验或 5-seed 全量。
+
+### Bug Post-Mortem（组合验证命令路径）
+
+- **现象**: 验证命令已在 `baselines/MCAT` cwd 中，但前两项仍重复使用 `baselines/MCAT/...`；它们报路径不存在，末尾 help 却成功，整体 shell 误报 exit 0。
+- **根因**: 混用两套相对路径语义，且未对组合验证设置 fail-fast。
+- **修复**: 在正确 cwd 下用 `git diff --check` 和 `Path('main.py')` 重跑，两项均 exit 0；最终命令使用绝对路径且设 `set -e`。
+- **Prevention Rule**: 多项验证固定一套 cwd/路径语义并强制 fail-fast；绝不以整段命令最后一项的退出码代替逐项验证。

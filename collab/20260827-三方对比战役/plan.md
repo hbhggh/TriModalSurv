@@ -85,3 +85,42 @@ python3 adapters/gdc_fetch_star_counts.py --labels labels_424.csv --cancers BRCA
 - 默认行为必须与官方一致（不传新参数时零行为变化）；禁止任何超出 5 点的重构/清理
 - 自测（mac protomasksurv-exp1 env，CPU）：①`--help` 跑通 ②合成 pt 特征（[50,1536] 与 [50,1024] 各一）+ 官方 BLCA CSV + A1 splits 构造 mini 冒烟：dataset 构建 + 模型 forward 各一遍（1024 默认路径与 1536 新路径都要过），不做完整训练
 - 完成后 `git -C baselines/MCAT diff > collab/20260827-三方对比战役/mcat_patch.diff`
+
+---
+
+# 修复轮 Round 2（2026-08-27，adversarial review 5 findings，用户批准 3 路并行）
+
+公共约束（三路都读）：遵守项目根 AGENTS.md 全部条款；禁止开任何正式训练；禁止 ssh/landau；禁止 git commit/push；每路完成后 result.md 增补节必含四项——改了哪些文件 / 对应哪条 finding / 怎么验证的 / 有没有动到白名单外目录。
+
+## 路 A：统一结局表 + split 契约修正（finding 1 + 2）
+
+1. 新建 `adapters/build_outcome_table.py`：
+   - 以 labels_424.csv 为唯一真源，输出 `scratch/outcome_table.csv`（patient_id / survival_months / censorship）
+   - 为 MCAT 与 PORPOISE 各生成 adapted dataset CSV（读官方 csv.zip → 把其中 survival_months / censorship 列**替换**为 labels_424 值，保留其余全部基因组与元数据列）→ 写 `scratch/adapted_csv/<lib>_tcga_<cancer>_adapted.csv.zip`（5 癌种；LGG 从 gbmlgg 过滤）
+   - 逐患者硬校验：替换后 CSV 的结局与 labels_424 完全一致，否则非零退出
+   - 替换前差异审计：按癌种输出旧值/新值差异分布（30 vs 30.44 换算假设的符合率）与异常值清单 `scratch/outcome_audit_<cancer>.csv`（含 review 提到的 UCEC 异常值）
+2. 修改 `adapters/make_splits.py`：映射改为 **train=our train, val=our valid**；删除 train+valid 合并逻辑；--adapted-csv 参数指向 1 的产物
+3. 新建 `adapters/eval_frozen_test.py`：加载指定 checkpoint（s_0_checkpoint.pt），在 our test 病人上构造该库 dataset 并 forward 一次，`sksurv.concordance_index_censored` 计算 c-index，打印逐患者数与结果 JSON；test 绝不在训练期出现
+**验收**：BLCA+LGG 上跑通 1→2→3 链（3 用合成 checkpoint 或跳过 forward 的 --dry-run 结构校验）；校验/审计文件落盘；make_splits 输出显示 train=136 val=68（BLCA）
+
+## 路 B：MCAT 实验身份隔离（finding 3）
+
+修改 `baselines/MCAT`（最小 diff）：
+- `path_input_dim` 写入实验身份：param_code/exp_code 追加 `_pid{path_input_dim}`；settings 记录 path_input_dim 与 data_root_dir
+- 结果目录已存在时：读取其 settings/experiment 记录，元数据（path_input_dim、data_root_dir）不完全匹配 → 硬失败退出，禁止复用 fold 产物
+- 默认 1024 时行为与官方目录命名的差异仅限追加后缀（可接受，写入 result.md 说明）
+**验收**：mac CPU 干跑 main.py 到目录创建段（--testing 或早退方式），证明 1024 与 1536 落不同目录、元数据不匹配时硬失败；`git -C baselines/MCAT diff > collab/20260827-三方对比战役/mcat_patch.diff` 更新
+
+## 路 C：PORPOISE 全 collator 修复 + UNI2 事务化（finding 4 + 5）
+
+1. `baselines/PORPOISE/utils/utils.py`：collate_MIL_survival / _sig / _cluster 三个统一修（tensor 列表 → torch.stack/cat 后显式 dtype；与已修的 survival 版一致化）；新增/更新 `porpoise_patch.diff`
+2. 首批集成自测：官方 BLCA CSV + 合成 pt + A1 splits，DataLoader 首批真实取数，覆盖 pathomic 与 coattn 两种 mode 的 collator 路径（cluster 无数据则构造最小合成）
+3. `adapters/uni2h_to_ptfiles.py` 事务化：staging 目录转换 → 全成员校验 + manifest（成员/shape/checksum）→ 原子 rename 发布 pt_files；written==0 非零退出；--overwrite 语义 = 整套替换（发布前删旧集），绝不留混合
+**验收**：--selftest 扩展为含事务语义测试（半途失败不留最终目录、written==0 失败、overwrite 全替换）；PORPOISE 首批测试双 mode 输出
+
+## 文件白名单（Round 2）
+
+- 路 A：`adapters/build_outcome_table.py`（新）、`adapters/make_splits.py`、`adapters/eval_frozen_test.py`（新）、scratch/、notes.md、result.md
+- 路 B：`baselines/MCAT/` 内必需最少文件、`mcat_patch.diff`、notes.md、result.md
+- 路 C：`baselines/PORPOISE/utils/utils.py`、`adapters/uni2h_to_ptfiles.py`、`porpoise_patch.diff`、scratch/、notes.md、result.md
+- 三路互不触碰对方白名单；违者判越权
