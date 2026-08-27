@@ -124,3 +124,23 @@ python3 adapters/gdc_fetch_star_counts.py --labels labels_424.csv --cancers BRCA
 - 路 B：`baselines/MCAT/` 内必需最少文件、`mcat_patch.diff`、notes.md、result.md
 - 路 C：`baselines/PORPOISE/utils/utils.py`、`adapters/uni2h_to_ptfiles.py`、`porpoise_patch.diff`、scratch/、notes.md、result.md
 - 三路互不触碰对方白名单；违者判越权
+
+---
+
+# Round 3 · 任务 G：两库真 batch 化改造（用户裁决 2026-08-27：为加速训练修改 batch_size，合理超参调整，判定表如实标注）
+
+## 目标
+让 `--batch_size N`（N>1）在 MCAT 与 PORPOISE 中真正生效并数学正确，吃满 GPU。
+
+## 改造点
+1. **collate**（两库 utils.py 新增 batched 版本，不删旧函数）：batch 内病人 patch 序列 padding 到最大长度 + 生成 attention/padding mask；label/event_time/censorship 堆叠为 [B]；genomic 堆叠为 [B, ...]（MCAT 六组 omic 各自堆叠）
+2. **模型 forward 兼容**：MCAT_Surv coattn 与 PorpoiseMMF 支持 [B, L_max, D] + mask（padding 位不参与 attention 与池化）；B=1 时行为与原实现等价
+3. **loss/step**：per-sample loss 求均值；gc 语义调整为 `有效样本数 = batch_size × gc`（保持每次 optimizer.step 的等效样本量 = 32：bs=8 时 gc=4，写死这个换算并打印）
+4. **回归测试（硬验收）**：bs=1 走新路径 vs 官方原路径，同 seed 同输入前向输出 allclose(atol=1e-5)；bs=8 时逐样本输出与各自单独 bs=1 前向 allclose（padding 正确性的金标准）
+5. CLI：新增 `--batched_collate` 开关（默认关 = 官方原行为零变化；开 = 新路径），S4 重启时显式开
+
+## 白名单
+`baselines/MCAT/{utils/utils.py, models/model_coattn.py, utils/core_utils.py}`、`baselines/PORPOISE/{utils/utils.py, models/model_porpoise.py, utils/core_utils.py}`、两 patch diff 更新、scratch/g_*、notes/result 增补。禁止动 adapters/、NPJ/、禁止 git commit/push、禁止 ssh、禁止改 seeds 与 lr。
+
+## 验收
+①回归测试两库全过（allclose 双档）②本机 CPU 合成 mini 冒烟 bs=1/bs=8 各一遍 ③result.md 增补四项齐全。完成后 Claude 复核 + landau 真实 1-epoch 冒烟（bs=8）通过 → 全场重启（已跑单元作废，按用户加速裁决）。
