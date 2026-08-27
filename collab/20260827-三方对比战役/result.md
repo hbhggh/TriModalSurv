@@ -1119,3 +1119,469 @@ f0119549dab43c86e1723f6834900b693187a7062b1b756503a01cd7be3257ea  baselines/MCAT
 - **根因**: 混用两套相对路径语义，且未对组合验证设置 fail-fast。
 - **修复**: 在正确 cwd 下用 `git diff --check` 和 `Path('main.py')` 重跑，两项均 exit 0；最终命令使用绝对路径且设 `set -e`。
 - **Prevention Rule**: 多项验证固定一套 cwd/路径语义并强制 fail-fast；绝不以整段命令最后一项的退出码代替逐项验证。
+
+## 任务 D：GDC STAR-Counts → BulkRNABert → NPJ pkl（BLOCKED，2026-08-27 13:21 JST）
+
+### 1. 改动文件清单
+
+1. 新建 `adapters/bulkrnabert_infer.py`
+   - CLI：`--manifests` / `--tsv-dirs` / `--cancers` / `--labels` / `--out` / `--compare-with` / `--device cpu|cuda` / `--limit N`。
+   - STAR-Counts：跳过 `#` 与 `N_`；读取 `gene_id`/`tpm_unstranded`；仅删除数值版本段并保留 `_PAR_Y`；按官方 common gene 顺序补零。
+   - HF：预留并实现 `AutoConfig` / `AutoTokenizer` / `AutoModel.from_pretrained("InstaDeepAI/BulkRNABert", trust_remote_code=True)`；`config.embeddings_layers_to_save=(4,)` 的等价动态最后层实现；`log10(1+x)`；输出取前 2,048 token。
+   - NPJ：原子写 `RNA_<CANCER>_embedding_token_lvl.pkl`，格式为 `{'identifier': list, 'embedding': list[np.float32 (2048,256)]}`；末尾重新读取并断言人数、dtype、shape。
+   - 比较：按相同 pid 对齐，展平 token 矩阵计算余弦，打印 `n/min/q25/median/mean/q75/max`。
+2. 新建 `scratch/d_test_bulkrnabert_infer.py`：7 项白名单内 TDD/回归测试，含三个假病人端到端合成验收。
+3. 新建 `scratch/d_cache/common_gene_id.txt`：官方文件缓存，19,062 行，SHA256 `ce44c2b58a3577878f43aa00fa4d940a090d678bd007f1dbd27ecb58c63d7ec5`。
+4. append-only 增补 `notes.md` 与本 `result.md`。
+
+未安装 `scikit-survival`，未创建 `scratch/e_sksurv_vendor/`；任务 D 不依赖 `sksurv`。没有改任何 Conda 环境。
+
+### 2. 验收标准逐条状态
+
+1. 合成 TSV 自测三个假病人并断言 `np.float32 (2048,256)`：**PASS**。测试真实创建三份 TSV、labels、manifest，调用解析/对齐/假推理/原子 pkl 写入链，并重新读取断言三人 identifier、dtype、shape。
+2. `scratch/gdc_test/` 已有 5 个真实 TSV + labels，`--device cpu --limit 5`：**BLOCKED**。
+   - 真实 TSV 解析与 19,062 common gene 对齐：**PASS（5/5）**。
+   - HF 模型加载、真实 token embedding、NPJ pkl 产出与末尾真实 shape 自检：**FAIL/BLOCKED**；本机所有现有 Python 环境均缺 `transformers`，真实命令在 import 边界 exit 1。
+3. `--compare-with`：**SKIPPED**；本机未提供作者版 pkl，且真实生成 pkl 尚未产出。代码级 pid 配对与余弦分布合成测试 PASS。
+4. 缓存边界：**PARTIAL**。官方 GitHub `common_gene_id.txt` 已缓存到 `scratch/d_cache/`；HF 模型尚未下载，因为缺少 `transformers` 且用户只授权了 `sksurv` vendor，未授权从 PyPI 安装 `transformers`。
+
+结论：任务 D 当前不得宣称“完成全部验收”或“真实 5 人跑通”。
+
+### 3. 测试命令与真实原始输出
+
+#### 3.1 七项合成/契约回归
+
+命令：
+
+~~~bash
+PYTHONDONTWRITEBYTECODE=1 /Users/wuhao/miniconda3/envs/protomasksurv-exp1/bin/python scratch/d_test_bulkrnabert_infer.py
+~~~
+
+退出码：0。真实原始输出：
+
+~~~text
+test_cli_help_exposes_required_contract (__main__.BulkRNABertInferTests) ... ok
+test_cli_maps_parallel_inputs_positionally (__main__.BulkRNABertInferTests) ... ok
+test_compare_with_author_matches_by_pid_and_reports_distribution (__main__.BulkRNABertInferTests) ... ok
+test_hf_model_card_log10_preprocessing_and_last_layer_output (__main__.BulkRNABertInferTests) ... ok
+test_official_common_gene_file_has_expected_order_and_count (__main__.BulkRNABertInferTests) ... ok
+test_star_counts_alignment_strips_versions_skips_metadata_and_zero_fills (__main__.BulkRNABertInferTests) ... ok
+test_three_synthetic_patients_write_npj_token_embeddings (__main__.BulkRNABertInferTests) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.168s
+
+OK
+~~~
+
+#### 3.2 五个真实 TSV 解析与 common gene 对齐
+
+命令：使用内存 import 调用 `read_star_counts()` 与 `build_expression_vector()`，遍历 `scratch/gdc_test/manifest.csv` 中本机实际存在的 TSV，并断言每个向量为 `np.float32 (19062,)`。
+
+退出码：0。真实原始输出：
+
+~~~text
+REAL TSV PASS: pid=TCGA-3C-AALI parsed_genes=60660 vector=(19062,) nonzero=17093
+REAL TSV PASS: pid=TCGA-3C-AALJ parsed_genes=60660 vector=(19062,) nonzero=16553
+REAL TSV PASS: pid=TCGA-3C-AALK parsed_genes=60660 vector=(19062,) nonzero=17111
+REAL TSV PASS: pid=TCGA-4H-AAAK parsed_genes=60660 vector=(19062,) nonzero=16940
+REAL TSV PASS: pid=TCGA-5L-AAT0 parsed_genes=60660 vector=(19062,) nonzero=16820
+REAL TSV ALIGNMENT PASS: patients=5 common_genes=19062
+~~~
+
+#### 3.3 真实 CPU `--limit 5` 命令
+
+命令：
+
+~~~bash
+PYTHONDONTWRITEBYTECODE=1 /Users/wuhao/miniconda3/envs/protomasksurv-exp1/bin/python adapters/bulkrnabert_infer.py \
+  --manifests scratch/gdc_test/manifest.csv \
+  --tsv-dirs scratch/gdc_test \
+  --cancers BRCA \
+  --labels labels_424.csv \
+  --out scratch/d_real_out \
+  --device cpu \
+  --limit 5
+~~~
+
+退出码：1。真实原始输出：
+
+~~~text
+[COMMON_GENES] count=19062 sha256=ce44c2b58a3577878f43aa00fa4d940a090d678bd007f1dbd27ecb58c63d7ec5 path=/Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役/scratch/d_cache/common_gene_id.txt
+Traceback (most recent call last):
+  File "/Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役/adapters/bulkrnabert_infer.py", line 360, in load_hf_runtime
+    from transformers import AutoConfig, AutoModel, AutoTokenizer
+ModuleNotFoundError: No module named 'transformers'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役/adapters/bulkrnabert_infer.py", line 554, in <module>
+    raise SystemExit(main())
+  File "/Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役/adapters/bulkrnabert_infer.py", line 492, in main
+    infer_one, model_genes, model_dim, layer_key = load_hf_runtime(
+  File "/Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役/adapters/bulkrnabert_infer.py", line 362, in load_hf_runtime
+    raise RuntimeError(
+RuntimeError: 真实 BulkRNABert 推理需要现有 Python 环境提供 torch 与 transformers；本脚本不会擅自安装依赖
+~~~
+
+#### 3.4 内存语法编译
+
+退出码：0。真实原始输出：
+
+~~~text
+SYNTAX PASS: adapters/bulkrnabert_infer.py
+SYNTAX PASS: scratch/d_test_bulkrnabert_infer.py
+~~~
+
+### 4. 遇到的问题
+
+1. 本机 `protomasksurv-exp1` 有 `torch 2.5.1`、`numpy 1.26.4`，但没有 `transformers`/`huggingface_hub`；其他已知本机 Conda/system Python 也没有可复用安装。
+2. 16 GiB ARM64 Mac 上，官方 19,062-token 全注意力的 CPU 前向还有明显内存/时长风险；由于 import 已先失败，本轮没有越过依赖边界做未经证实的性能结论。
+3. 真实 GDC 的 44 组 `_PAR_Y` 行暴露原版清理 bug，已按 TDD 修复并用 5 个真实 TSV 复验。
+
+### Bug Post-Mortem（任务 D gene_id 版本清理）
+
+- **现象**: 真实 GDC TSV 报 `gene_id 去版本号后重复: ENSG00000002586`。
+- **根因**: `.split('.', 1)[0]` 把 `.20_PAR_Y` 整段删除，错误丢失 `_PAR_Y` 注记。
+- **修复**: 仅删除明确的 `\.\d+` 版本段，保留 `_PAR_Y`；5 个真实文件均通过 19,062 gene 对齐。
+- **Prevention Rule**: Ensembl ID 标准化只删除数值版本段；用真实 `_PAR_Y` 行做永久回归，不得用宽泛字符串截断。
+
+### 5. 未尽事项与白名单核对
+
+- 未尽：获得依赖授权后，vendor `transformers` 及其必要依赖、下载 HF 模型到 `scratch/d_cache/`、重跑真实 CPU `--limit 5`、检查 `RNA_BRCA_embedding_token_lvl.pkl` 五人 `float32 (2048,256)`，再把最终真实输出 append 到本节。
+- 当前任务 D 只新增/修改：`adapters/bulkrnabert_infer.py`、`scratch/d_test_bulkrnabert_infer.py`、`scratch/d_cache/common_gene_id.txt`、`notes.md`、`result.md`，均在用户白名单内。
+- 没有修改 `adapters/` 其他文件、`baselines/` 或 `NPJ/`；没有 SSH/scp、没有访问 landau、没有正式训练、没有 git commit/push。
+- 依项目互审纪律，本 BLOCKED 结果仍须交回 Claude review；它不授权进入任何正式实验 Gate。
+
+## 任务 D 增补：landau fp32 OOM 后的 `--dtype` 最小补丁（2026-08-27 13:31 JST）
+
+### 1. 远端证据边界
+
+用户提供的 landau 真实验收结果是：V100 32GB 上 fp32 推理 OOM，19,062-token 注意力单层需 10.83 GiB，进程当时已占 22.5 GiB。本轮没有 SSH 或重跑 landau；这些数值按“用户提供的真实远端输出”记录，不伪装成本机复现结果。
+
+### 2. 改动文件与实现
+
+1. `adapters/bulkrnabert_infer.py`
+   - 新增 `--dtype {float32,float16}`，默认 `float32`。
+   - 调用侧加载后，float32 执行 `model.float()`，float16 执行 `model.half()`；没有修改 BulkRNABert 内部实现。
+   - 每个样本推理结束在 `finally` 中释放局部 tensor 引用，并执行一次 `torch.cuda.empty_cache()`。
+   - `input_ids` 显式移动到同一 device 并保持 `torch.long`。这是必要的模型契约偏差说明：它是 `nn.Embedding` 的离散索引，不能转换为 float16；模型权重和后续浮点激活由 `model.half()` 转为 float16。
+   - NPJ 输出仍转为 `np.float32 (2048, 256)`，没有改变文件格式。
+2. `scratch/d_test_bulkrnabert_infer.py`
+   - CLI 测试新增 `--dtype`、默认 float32 和显式 float16。
+   - 新增两条合成 dtype 子路径：使用真实 `torch.nn.Embedding` tiny model 验证模型参数 float32/float16 转换、索引 `torch.long`、输出 `np.float32`，以及每样本一次 `empty_cache()`。
+3. append-only 增补 `notes.md` 与本 `result.md`。
+
+没有修改其他 adapter、`baselines/` 或 `NPJ/`；没有安装依赖、改 Conda 环境、SSH、正式训练、`git commit` 或 `git push`。
+
+### 3. 验收状态
+
+1. `--dtype` 仅允许 float32/float16，且默认 float32：**PASS**。
+2. float16 调用侧执行 `model.half()`，float32 执行 `model.float()`：**PASS（合成真实 PyTorch tiny model）**。
+3. 两种 dtype 单样本路径均输出 `np.float32 (4, 256)`，并各执行一次 `torch.cuda.empty_cache()`：**PASS**。
+4. 原有三个假病人 TSV → NPJ `np.float32 (2048, 256)` 回归：**PASS**。
+5. landau V100 float16 真实前向是否消除 OOM：**NOT RUN / 待远端复验**。本轮结论不能替代真实 GPU 验收。
+
+### 4. 自测命令与真实原始输出
+
+命令：
+
+~~~bash
+PYTHONDONTWRITEBYTECODE=1 /Users/wuhao/miniconda3/envs/protomasksurv-exp1/bin/python \
+  collab/20260827-三方对比战役/scratch/d_test_bulkrnabert_infer.py
+~~~
+
+退出码：0。真实原始输出：
+
+~~~text
+test_cli_help_exposes_required_contract (__main__.BulkRNABertInferTests) ... ok
+test_cli_maps_parallel_inputs_positionally (__main__.BulkRNABertInferTests) ... ok
+test_compare_with_author_matches_by_pid_and_reports_distribution (__main__.BulkRNABertInferTests) ... ok
+test_float32_and_float16_paths_convert_model_and_clear_cache_per_sample (__main__.BulkRNABertInferTests) ... ok
+test_hf_model_card_log10_preprocessing_and_last_layer_output (__main__.BulkRNABertInferTests) ... ok
+test_official_common_gene_file_has_expected_order_and_count (__main__.BulkRNABertInferTests) ... ok
+test_star_counts_alignment_strips_versions_skips_metadata_and_zero_fills (__main__.BulkRNABertInferTests) ... ok
+test_three_synthetic_patients_write_npj_token_embeddings (__main__.BulkRNABertInferTests) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.144s
+
+OK
+~~~
+
+内存语法编译命令退出码：0。真实原始输出：
+
+~~~text
+SYNTAX PASS: collab/20260827-三方对比战役/adapters/bulkrnabert_infer.py
+SYNTAX PASS: collab/20260827-三方对比战役/scratch/d_test_bulkrnabert_infer.py
+~~~
+
+CLI help 已出现真实参数行：
+
+~~~text
+[--device {cpu,cuda}] [--dtype {float32,float16}]
+~~~
+
+### 5. 遇到的问题与未尽事项
+
+#### Bug Post-Mortem（landau fp32 OOM）
+
+- **现象**: 用户报告 V100 32GB 上 fp32 前向 OOM；19,062-token 注意力单层需 10.83 GiB，进程已占 22.5 GiB。
+- **根因**: 全长自注意力显存随 token 数平方增长，fp32 峰值超过当时剩余显存；样本之间还需释放 CUDA allocator 缓存。
+- **修复**: 仅在调用侧增加 float16 模型路径，并逐样本 `torch.cuda.empty_cache()`；模型内部与 NPJ 骨架格式不变。
+- **Prevention Rule**: 必须把本地 dtype 契约测试与 landau 真实显存验收分开记录；只有远端 float16 前向及最终 shape 自检真实通过后，才能宣布 OOM 修复完成。
+
+未尽事项仅有 landau 的 `--device cuda --dtype float16` 真实复验。本轮按禁止 SSH 和停机门要求在合成冒烟通过后停止，并交回 Claude 做独立 review。
+
+## 任务 E 增补：frozen test 评估与 bins 泄漏硬校验（2026-08-27 13:32 JST）
+
+> 证据边界：两条真实 BLCA `--assert-bins` 是 `current_project_fact`。本机没有真实 `s_0_checkpoint.pt` 和 UNI2-h `.pt`，因此 frozen forward 使用合成未训练 checkpoint 和合成 `[3,1536]` `.pt`；其 risk/c-index 只是 `pipeline_only/diagnostic_only`，**不是模型性能证据**。
+
+### 1. 改动文件清单
+
+1. 新建 `adapters/eval_frozen_test.py`（760 行，31,308 bytes，SHA256 `6b0b2739224f001975fad0938bdfff6207cb677debf39db7ab604e559756827c`）。
+2. 新建白名单内自测文件：
+   - `scratch/e_eval_frozen_test_contract.py`
+   - `scratch/e_eval_frozen_integration_test.py`
+   - `scratch/e_make_synthetic_frozen_assets.py`
+3. 新建白名单内自测产物：
+   - `scratch/e_eval_frozen_contract/`
+   - `scratch/e_eval_frozen_synthetic/`（合成 CSV 子集、checkpoint、`.pt`、JSON）
+   - `scratch/e_sksurv_vendor/`（`scikit-survival 0.22.2`，2.9 MiB，仅本机自测）
+4. append-only 增补 `notes.md` 与本 `result.md`。
+
+### 2. 对应 finding 与功能实现
+
+- 对应 `plan.md` Round 2 路 A finding 1+2 的结局一致性、split 隔离和冻结 test 评估闭环。
+- frozen 模式参数完整支持 `--lib MCAT|PORPOISE --cancer --ckpt --adapted-full-csv --labels --features-root --out`。
+- 强制通过 `PYTHONPATH` 加载并校验 baseline 真实模块路径；MCAT 使用 `Generic_MIL_Survival_Dataset/Generic_Split + MCAT_Surv`，`coattn + concat + path_input_dim=1536`；PORPOISE 使用真实 dataset/split 类与 `PorpoiseMMF`，`pathomic + concat + mutsig omic_input_dim + path_input_dim=1536`。
+- 只用 full CSV 中 labels=train+valid 的行初始化 baseline dataset 并计算 bins；test 不进入 dataset 构造器的 `qcut`。另以 labels=train 病人拟合 baseline 自带 scaler，再套用到 test。
+- test 通过 baseline 真实 `Generic_Split.__getitem__` 逐病人读 `.pt`并 forward；硬校验聚合 tensor 为 `[N,1536]`、survival 为 `[1,4]`。risk 按两库官方逻辑计算 `-sum(survival)`，再调用 `sksurv.metrics.concordance_index_censored`。
+- checkpoint 优先 `weights_only=True` 加载，并 `strict=True` 校验形状。JSON 含逐病人 risk、c-index、`n_test`、bins/scaler 来源、dataset/model 模块路径和形状配置，采用同目录临时文件原子发布。
+- `--assert-bins` 硬校验 trainval 病人集精确等于 `full∩(train+valid)`，test 混入时非零退出；分别打印 trainval-only qcut/应用边界与仅审计、不使用的 full-derived 边界。
+- `sksurv` 顺序为：先常规 import；仅在 `ModuleNotFoundError: sksurv` 时把 `scratch/e_sksurv_vendor/` 插入 `sys.path` 并重试。已测试常规 import 优先级。
+
+### 3. `plan.md`/用户验收标准逐条状态
+
+| 验收项 | 状态 | 证据 |
+|---|---|---|
+| BLCA MCAT adapted CSV `--assert-bins` | PASS | exit 0；train=136、valid=68、test=138，test excluded PASS |
+| BLCA PORPOISE adapted CSV `--assert-bins` | PASS | exit 0；与 MCAT 同一 labels 得到相同 trainval-only 边界 |
+| MCAT 合成 checkpoint + 合成 `.pt` 完整 frozen 链 | PASS（合成） | 真实 `Generic_Split + MCAT_Surv`，4 名 test，JSON 及逐人 risk 落盘 |
+| PORPOISE 合成 checkpoint + 合成 `.pt` 完整 frozen 链 | PASS（合成） | 真实 `Generic_Split + PorpoiseMMF`，mutsig `omic_input_dim=2181`，4 名 test |
+| JSON 含逐病人 risk、c-index、`n_test` | PASS | 两个 JSON 独立解析审计通过 |
+| test 不参与 bins，train-only scaler | PASS | trainval-only bins 独立重算与 baseline `.bins` 精确比对；JSON 记录 `scaler_source_split=train` |
+| 不写训练目录 | PASS | 代码拒绝 `--out` 位于 baseline/NPJ/checkpoint/特征目录；合成例外仅在 `scratch/e_` |
+
+### 4. 测试命令与真实原始输出
+
+#### 4.1 白名单 vendor 安装（用户特例批准）
+
+~~~bash
+PYTHONDONTWRITEBYTECODE=1 conda run -n protomasksurv-exp1 python -m pip install \
+  --no-deps \
+  --target scratch/e_sksurv_vendor \
+  scikit-survival==0.22.2
+~~~
+
+退出码：`0`。真实原始输出：
+
+~~~text
+Collecting scikit-survival==0.22.2
+  Downloading scikit_survival-0.22.2-cp310-cp310-macosx_11_0_arm64.whl.metadata (49 kB)
+Downloading scikit_survival-0.22.2-cp310-cp310-macosx_11_0_arm64.whl (830 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 830.8/830.8 kB 9.0 MB/s eta 0:00:00
+Installing collected packages: scikit-survival
+Successfully installed scikit-survival-0.22.2
+~~~
+
+#### 4.2 最终契约测试
+
+~~~bash
+PYTHONDONTWRITEBYTECODE=1 conda run -n protomasksurv-exp1 \
+  python scratch/e_eval_frozen_test_contract.py -v
+~~~
+
+退出码：`0`。真实原始输出：
+
+~~~text
+test_assert_bins_rejects_test_patient_in_trainval (__main__.AssertBinsContractTest) ... ok
+test_assert_bins_uses_only_trainval_uncensored_patients (__main__.AssertBinsContractTest) ... ok
+test_regular_sksurv_import_precedes_vendor_fallback (__main__.AssertBinsContractTest) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 1.614s
+
+OK
+~~~
+
+#### 4.3 最终两库合成全链测试
+
+~~~bash
+PYTHONDONTWRITEBYTECODE=1 conda run -n protomasksurv-exp1 \
+  python scratch/e_eval_frozen_integration_test.py -v
+~~~
+
+退出码：`0`。真实原始输出：
+
+~~~text
+test_mcat_frozen_evaluation (__main__.FrozenEvaluationIntegrationTest) ... ok
+test_porpoise_frozen_evaluation (__main__.FrozenEvaluationIntegrationTest) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 10.338s
+
+OK
+~~~
+
+#### 4.4 真实 BLCA MCAT `--assert-bins`
+
+~~~bash
+PYTHONDONTWRITEBYTECODE=1 conda run -n protomasksurv-exp1 python \
+  adapters/eval_frozen_test.py --assert-bins --lib MCAT --cancer BLCA \
+  --labels labels_424.csv \
+  --adapted-trainval-csv scratch/r2_outcome/adapted_csv/MCAT_tcga_BLCA_adapted_trainval.csv.zip \
+  --adapted-full-csv scratch/r2_outcome/adapted_csv/MCAT_tcga_BLCA_adapted.csv.zip
+~~~
+
+退出码：`0`。真实原始输出：
+
+~~~text
+MCAT/BLCA: train=136, valid=68, test=138
+qcut_edges(trainval uncensored only)=[0.66, 7.4025, 13.025, 22.2175, 97.04]
+applied_bins(trainval only)=[0.489999, 7.4025, 13.025, 22.2175, 163.17000099999998]
+full_qcut_edges(audit only, never applied)=[0.66, 7.62, 13.370000000000001, 21.505000000000003, 104.57]
+trainval_contract=PASS; test_excluded_from_bins=PASS
+ASSERT_BINS_JSON={"applied_bins": [0.489999, 7.4025, 13.025, 22.2175, 163.17000099999998], "bin_source_patient_ids_sha256": "56a9dff5d5c99dc053f38b67ff71da6175846d9541c6087c0ed19302baa52833", "bin_source_splits": ["train", "valid"], "cancer": "BLCA", "full_qcut_edges_audit_only": [0.66, 7.62, 13.370000000000001, 21.505000000000003, 104.57], "lib": "MCAT", "n_bin_source_uncensored": 90, "n_full": 342, "n_test": 138, "n_train": 136, "n_trainval": 204, "n_valid": 68, "qcut_edges": [0.66, 7.4025, 13.025, 22.2175, 97.04], "status": "PASS", "test_excluded_from_bins": true, "trainval_exact_match": true}
+~~~
+
+#### 4.5 真实 BLCA PORPOISE `--assert-bins`
+
+~~~bash
+PYTHONDONTWRITEBYTECODE=1 conda run -n protomasksurv-exp1 python \
+  adapters/eval_frozen_test.py --assert-bins --lib PORPOISE --cancer BLCA \
+  --labels labels_424.csv \
+  --adapted-trainval-csv scratch/r2_outcome/adapted_csv/PORPOISE_tcga_BLCA_adapted_trainval.csv.zip \
+  --adapted-full-csv scratch/r2_outcome/adapted_csv/PORPOISE_tcga_BLCA_adapted.csv.zip
+~~~
+
+退出码：`0`。真实原始输出：
+
+~~~text
+PORPOISE/BLCA: train=136, valid=68, test=138
+qcut_edges(trainval uncensored only)=[0.66, 7.4025, 13.025, 22.2175, 97.04]
+applied_bins(trainval only)=[0.489999, 7.4025, 13.025, 22.2175, 163.17000099999998]
+full_qcut_edges(audit only, never applied)=[0.66, 7.62, 13.370000000000001, 21.505000000000003, 104.57]
+trainval_contract=PASS; test_excluded_from_bins=PASS
+ASSERT_BINS_JSON={"applied_bins": [0.489999, 7.4025, 13.025, 22.2175, 163.17000099999998], "bin_source_patient_ids_sha256": "56a9dff5d5c99dc053f38b67ff71da6175846d9541c6087c0ed19302baa52833", "bin_source_splits": ["train", "valid"], "cancer": "BLCA", "full_qcut_edges_audit_only": [0.66, 7.62, 13.370000000000001, 21.505000000000003, 104.57], "lib": "PORPOISE", "n_bin_source_uncensored": 90, "n_full": 342, "n_test": 138, "n_train": 136, "n_trainval": 204, "n_valid": 68, "qcut_edges": [0.66, 7.4025, 13.025, 22.2175, 97.04], "status": "PASS", "test_excluded_from_bins": true, "trainval_exact_match": true}
+~~~
+
+#### 4.6 MCAT frozen CLI（合成 checkpoint + 合成 `.pt`）
+
+~~~bash
+PYTHONWARNINGS=ignore PYTHONDONTWRITEBYTECODE=1 \
+PYTHONPATH=/Users/wuhao/Desktop/TriModalSurv/baselines/MCAT \
+conda run -n protomasksurv-exp1 python adapters/eval_frozen_test.py \
+  --lib MCAT --cancer BLCA \
+  --ckpt scratch/e_eval_frozen_synthetic/mcat/s_0_checkpoint.pt \
+  --adapted-full-csv scratch/e_eval_frozen_synthetic/mcat/MCAT_synthetic_full.csv.zip \
+  --labels scratch/e_eval_frozen_synthetic/labels_synthetic_subset.csv \
+  --features-root scratch/e_eval_frozen_synthetic/mcat/synthetic_features \
+  --out scratch/e_eval_frozen_synthetic/mcat/e_mcat_cli_output.json
+~~~
+
+退出码：`0`。真实原始输出：
+
+~~~text
+(0, 0) : 0
+(0, 1) : 1
+(1, 0) : 2
+(1, 1) : 3
+(2, 0) : 4
+(2, 1) : 5
+(3, 0) : 6
+(3, 1) : 7
+Shape (8, 20394)
+Shape (4, 20394)
+MCAT/BLCA: n_test=4, c_index=0.666667, sksurv=scratch/e_sksurv_vendor fallback
+patient=TCGA-FD-A6TI risk=-0.936228514 time=9.660000000 censorship=0
+patient=TCGA-XF-A8HH risk=-0.928752005 time=1.870000000 censorship=0
+patient=TCGA-XF-A9SL risk=-0.929286897 time=66.360000000 censorship=0
+patient=TCGA-XF-A9T2 risk=-0.938440204 time=18.890000000 censorship=0
+JSON=/Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役/scratch/e_eval_frozen_synthetic/mcat/e_mcat_cli_output.json
+~~~
+
+#### 4.7 PORPOISE frozen CLI（合成 checkpoint + 合成 `.pt`）
+
+~~~bash
+PYTHONWARNINGS=ignore PYTHONDONTWRITEBYTECODE=1 \
+PYTHONPATH=/Users/wuhao/Desktop/TriModalSurv/baselines/PORPOISE \
+conda run -n protomasksurv-exp1 python adapters/eval_frozen_test.py \
+  --lib PORPOISE --cancer BLCA \
+  --ckpt scratch/e_eval_frozen_synthetic/porpoise/s_0_checkpoint.pt \
+  --adapted-full-csv scratch/e_eval_frozen_synthetic/porpoise/PORPOISE_synthetic_full.csv.zip \
+  --labels scratch/e_eval_frozen_synthetic/labels_synthetic_subset.csv \
+  --features-root scratch/e_eval_frozen_synthetic/porpoise/synthetic_features \
+  --out scratch/e_eval_frozen_synthetic/porpoise/e_porpoise_cli_output.json
+~~~
+
+退出码：`0`。真实原始输出：
+
+~~~text
+(0, 0) : 0
+(0, 1) : 1
+(1, 0) : 2
+(1, 1) : 3
+(2, 0) : 4
+(2, 1) : 5
+(3, 0) : 6
+(3, 1) : 7
+Shape (8, 2181)
+Shape (4, 2181)
+PORPOISE/BLCA: n_test=4, c_index=0.166667, sksurv=scratch/e_sksurv_vendor fallback
+patient=TCGA-FD-A6TI risk=-0.896928966 time=9.660000000 censorship=0
+patient=TCGA-XF-A8HH risk=-0.935981452 time=1.870000000 censorship=0
+patient=TCGA-XF-A9SL risk=-0.874571860 time=66.360000000 censorship=0
+patient=TCGA-XF-A9T2 risk=-0.014851406 time=18.890000000 censorship=0
+JSON=/Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役/scratch/e_eval_frozen_synthetic/porpoise/e_porpoise_cli_output.json
+~~~
+
+#### 4.8 语法、JSON 与 vendor/Conda 隔离核验
+
+退出码均为 `0`。真实原始输出：
+
+~~~text
+COMPILE_PASS 4
+scratch/e_eval_frozen_synthetic/mcat/e_mcat_cli_output.json JSON_AUDIT_PASS MCAT_Surv 4 0.6666666666666666 scratch/e_sksurv_vendor fallback
+scratch/e_eval_frozen_synthetic/porpoise/e_porpoise_cli_output.json JSON_AUDIT_PASS PorpoiseMMF 4 0.16666666666666666 scratch/e_sksurv_vendor fallback
+env_sksurv_spec None
+vendor_sksurv 0.22.2 /Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役/scratch/e_sksurv_vendor/sksurv/__init__.py
+
+# packages in environment at /Users/wuhao/miniconda3/envs/protomasksurv-exp1:
+#
+# Name                     Version          Build            Channel
+~~~
+
+### 5. 遇到的问题
+
+1. 系统 Python 缺 pandas，`protomasksurv-exp1` 有 pandas/torch/sklearn 但缺 sksurv，其他现有 Conda 环境也无 sksurv。用户特例批准后，仅将 `scikit-survival 0.22.2` vendor 到 `scratch/e_sksurv_vendor/`；`conda list` 证明环境未改。
+2. 本机缺 `torchvision` 和 `torch_geometric`，而两库 dataset 仅因 `utils.utils` 的顶层导入被卡住。经全仓确认 frozen 路径不用图像/graph collator 后，仅在缺包时为 dataset 导入提供 `generate_split/nth` 窄接口 shim；真实 dataset/model 类仍从 baseline 加载，模块路径已写入 JSON 并审计。
+3. MCAT 与 PORPOISE 的 patient-level 列重排不同。已改为以运行时 `dataset.slide_data.columns` 为真源，不再猜测 fork 行为。
+4. 不屏蔽警告的合成 CLI 复跑显示 baseline 自身有 `torch.load(weights_only=False)` 和 pandas `Series.__getitem__` FutureWarning；两条仍 exit 0。白名单禁止修改 baseline，因此本任务不越权清理。4.6/4.7 为可读的原始验收输出，命令显式加了 `PYTHONWARNINGS=ignore`；无警告版和未屏蔽版的 risk/c-index 完全一致。
+5. 当前环境没有 Ruff/Flake8；已用内存 `compile()`、契约测试、全链测试和七维代码审查替代，不伪报 lint。
+
+### 6. 未尽事项
+
+- 本机没有真实 checkpoint 与 UNI2-h `.pt`，所以未产生真实 BLCA 模型 c-index。正式 landau 评估应使用 `tcga_env` 的常规 sksurv import、真实 checkpoint 和特征路径；不应上传本机 ARM64 vendor。
+- 本任务只证明评估管线与泄漏门，不支持模型性能、基线对比或论文 claim。
+- 按项目互审纪律，仍需 Claude 独立 review 后才能进入下一 Gate；本 PASS 不授权开任何正式实验。
+
+### 7. 有没有动到白名单外目录
+
+**没有。**
+
+- 任务 E 的所有写入均位于 `adapters/eval_frozen_test.py`、`scratch/e_` 前缀、`notes.md`、`result.md`。
+- 未修改 `adapters/bulkrnabert_infer.py` 及任何 adapters 其他文件；工作树中的 `bulkrnabert_infer.py`、`scratch/d_` 和对应 `notes.md/result.md` 增补是另一并发任务的已有/同期变更，本任务未覆盖或回退。
+- 未修改 `baselines/MCAT`、`baselines/PORPOISE`、`NPJ/`；未生成 `adapters/eval_frozen_test.pyc`。
+- 未执行 SSH/scp、未访问 landau、未训练、未使用 GPU、未执行 `git commit`、`git push` 或等效操作。

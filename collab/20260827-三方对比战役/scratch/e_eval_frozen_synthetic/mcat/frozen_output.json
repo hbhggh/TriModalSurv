@@ -1,0 +1,91 @@
+{
+  "adapted_full_csv": "/Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役/scratch/e_eval_frozen_synthetic/mcat/MCAT_synthetic_full.csv.zip",
+  "applied_bins": [
+    0.659999,
+    6.08,
+    13.105,
+    22.9975,
+    97.040001
+  ],
+  "bin_source_patient_ids_sha256": "730998e0cdca2b47d6c231db1ee2251a80e81597ad28f7cc0d46f20c149cca2b",
+  "bin_source_splits": [
+    "train",
+    "valid"
+  ],
+  "c_index": 0.6666666666666666,
+  "cancer": "BLCA",
+  "checkpoint": "/Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役/scratch/e_eval_frozen_synthetic/mcat/s_0_checkpoint.pt",
+  "dataset_class": "Generic_Split",
+  "dataset_module": "/Users/wuhao/Desktop/TriModalSurv/baselines/MCAT/datasets/dataset_survival.py",
+  "dataset_utils_import_shimmed": true,
+  "device": "cpu",
+  "feature_tensor_shape_checked_per_patient": true,
+  "features_root": "/Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役/scratch/e_eval_frozen_synthetic/mcat/synthetic_features",
+  "labels": "/Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役/scratch/e_eval_frozen_synthetic/labels_synthetic_subset.csv",
+  "lib": "MCAT",
+  "model_class": "MCAT_Surv",
+  "model_config": {
+    "fusion": "concat",
+    "n_classes": 4,
+    "omic_sizes": [
+      94,
+      334,
+      521,
+      468,
+      1496,
+      479
+    ],
+    "path_input_dim": 1536
+  },
+  "model_module": "/Users/wuhao/Desktop/TriModalSurv/baselines/MCAT/models/model_coattn.py",
+  "n_bin_source_uncensored": 12,
+  "n_scaler_source": 8,
+  "n_test": 4,
+  "n_test_slides_checked": 4,
+  "path_input_dim": 1536,
+  "patients": [
+    {
+      "censorship": 0,
+      "disc_label": 1,
+      "event_observed": true,
+      "patient_id": "TCGA-FD-A6TI",
+      "risk": -0.9362285137176514,
+      "survival_months": 9.66
+    },
+    {
+      "censorship": 0,
+      "disc_label": 0,
+      "event_observed": true,
+      "patient_id": "TCGA-XF-A8HH",
+      "risk": -0.9287520051002502,
+      "survival_months": 1.87
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-XF-A9SL",
+      "risk": -0.9292868971824646,
+      "survival_months": 66.36
+    },
+    {
+      "censorship": 0,
+      "disc_label": 2,
+      "event_observed": true,
+      "patient_id": "TCGA-XF-A9T2",
+      "risk": -0.938440203666687,
+      "survival_months": 18.89
+    }
+  ],
+  "qcut_edges": [
+    0.66,
+    6.08,
+    13.105,
+    22.9975,
+    97.04
+  ],
+  "scaler_source_split": "train",
+  "schema_version": 1,
+  "sksurv_import_source": "scratch/e_sksurv_vendor fallback",
+  "test_excluded_from_bins": true
+}

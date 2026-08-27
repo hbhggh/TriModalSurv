@@ -256,7 +256,118 @@
 - **修复**: 立即在 `baselines/MCAT` cwd 下使用 `git diff --check` 和 `Path('main.py')` 重跑，两项均 exit 0；后续最终验证使用绝对路径并设 `set -e`。
 - **Prevention Rule**: 多项验证命令必须先固定 cwd 路径语义，并设 `set -e`；不得用末尾子命令的成功退出码掩盖前序失败。
 
+## 2026-08-27 任务 E — frozen test 评估实施启动
+
+- 用户已批准实施计划，并特例批准仅用 `pip --target` 将 `scikit-survival` 安装到 `scratch/e_sksurv_vendor/`；不得修改任何 Conda 环境。
+- 本轮写入边界严格限于 `adapters/eval_frozen_test.py`、`scratch/e_` 前缀、`notes.md` 与 `result.md` 增补；不触碰 `adapters/bulkrnabert_infer.py`、`baselines/`、`NPJ/`，不执行 SSH、训练、commit 或 push。
+- 证据边界：真实 BLCA adapted CSV 的 `--assert-bins` 属于 `current_project_fact`；合成 checkpoint、合成 `.pt` 与其 c-index 仅属于 `pipeline_only/diagnostic_only`，不支持任何模型性能结论。
+- RED 契约测试先覆盖：trainval 精确集合、test 泄漏硬失败，以及改动 test 生存期不得改变 trainval 未删失病人的 `qcut` 边界。
+
+### Bug Post-Mortem（RED 测试假阳性）
+
+- **现象**: 生产脚本尚不存在时，“泄漏必须非零退出”用例却显示通过。
+- **根因**: 断言只搜索过宽的 `test`，Python 报错中的入口文件名 `eval_frozen_test.py` 已满足条件。
+- **修复**: 改为断言精确语义 `trainval 含 test 病人`。
+- **补充修正**: 用于验证“改动 test 不影响 bins”的变体同时改动 full CSV 与 labels 的 test 结局，避免把“结局不一致”非法输入误当成正常样本。
+- **Prevention Rule**: 错误路径测试必须断言业务错误特征，不得使用可在文件名、命令行或 traceback 中偶然出现的通用词。
+
+## 2026-08-27 任务 E — `--assert-bins` GREEN 与 frozen 全链 RED 准备
+
+- `--assert-bins` 契约测试复跑为 `Ran 2 tests ... OK`；已验证 test 混入时硬失败，且在 full CSV 与 labels 中同步改变 test 生存期时，trainval-only `qcut_edges/applied_bins` 保持不变。
+- 第二轮 RED 使用真实 BLCA adapted CSV 的小型子集；只有 checkpoint 与 `[3,1536]` `.pt` 是合成数据。checkpoint 必须由对应 baseline 的 `MCAT_Surv`/`PorpoiseMMF` 类直接生成，且 `trained=false`。
+
+### Bug Post-Mortem（合成 checkpoint 夹具导入失败）
+
+- **现象**: 第二轮 RED 在 `setUpClass` 提前失败，未抵达 frozen 入口；`datasets.dataset_survival -> utils.utils` 导入时报 `ModuleNotFoundError: No module named 'torchvision'`。
+- **根因**: MCAT/PORPOISE 的 `utils/utils.py` 都有 `from torchvision import transforms`，但当前 Conda 环境没有 torchvision。
+- **修复**: 全仓搜索确认两库除该 import 外没有任何 `transforms` 使用；因此只在本机进程缺包时注入最小空模块，不安装 torchvision、不改 baseline。
+- **Prevention Rule**: 合成全链的 RED 必须先证明夹具能抵达目标缺口；可选依赖只能在全仓证明评估路径不使用后才可做进程级 shim。
+
+### Bug Post-Mortem（可选依赖逐包 shim 路线失败）
+
+- **现象**: 补了未使用的 `torchvision.transforms` import 后，同一 `utils.utils` 导入链紧接着因缺 `torch_geometric` 再次失败。
+- **根因**: dataset 只需 `generate_split/nth`，但直接导入了包含 DataLoader、vision 和 graph 功能的整个 `utils.utils`；逐个伪装无关重依赖会无限扩大测试表面。
+- **修复**: 切换为窄接口 shim：仅当本机缺 `torchvision/torch_geometric` 时提供 `utils.utils.generate_split/nth`；本评估路径不调用 `generate_split`，dataset/model 主体仍由 baseline 加载。
+- **Prevention Rule**: 连续两个无关可选包拦截同一导入链时，停止逐包 shim，改为按任务所需的最小符号边界隔离重依赖。
+
+### Bug Post-Mortem（PORPOISE test patient 列契约）
+
+- **现象**: frozen GREEN 首轮中 MCAT 通过，PORPOISE 在构造 `Generic_Split` 前报 test patient-level 列顺序不一致。
+- **根因**: MCAT 把末两列移到前面，PORPOISE 只把末一列 `disc_label` 移到前面；首版重建统一套用了 MCAT 规则。
+- **修复**: 不再猜测库的重排规则；先确认 test 增补后与真实 trainval dataset 列集完全一致，再直接按 `dataset.slide_data.columns` 重排。
+- **Prevention Rule**: 两个 fork 的数据契约必须以运行时库对象为真源，不得假定相似代码拥有相同列重排逻辑。
+
+### Bug Post-Mortem（import 优先级测试夹具）
+
+- **现象**: 新增的“常规 `sksurv` 优先于 vendor”测试在执行目标模块时于 `@dataclass` 内报 `NoneType has no attribute __dict__`。
+- **根因**: 使用 `importlib.util.module_from_spec/exec_module` 时，夹具没有先把模块挂到 `sys.modules`，违反 dataclasses 的动态加载前提。
+- **修复**: 在 `exec_module` 前执行 `sys.modules[spec.name] = module`。
+- **Prevention Rule**: 通过 `spec_from_file_location` 动态执行含 dataclass 的模块时，必须先注册 `sys.modules`；测试夹具错误不得归因于生产代码。
+
+## 2026-08-27 任务 E — 七维代码自查
+
+- D1 正确性：train+valid bins、train-only scaler、test-only `Generic_Split`、censorship 转 event 方向和 `-sum(survival)` 风险符号均与两库官方逻辑对齐；额外硬要求 train/valid/test 交集均非空。
+- D2/D3 形状与数值：逐病人真实 dataset 返回后检查 WSI 聚合 tensor 为 `[N,1536]`、`N>=1`、全有限；survival 强制 `[1,4]`，risk/c-index 强制有限。
+- D4 性能：发现特征预检与 baseline `__getitem__` 重复 `torch.load`，已改为路径预检+真实返回 tensor 一次检查，避免真实 WSI 特征 I/O 翻倍。
+- D5 安全：checkpoint 优先 `weights_only=True`、严格 `load_state_dict`、JSON 原子写，禁止写入 `baselines/`、`NPJ/`、checkpoint/训练目录和特征目录。baseline 自身 `__getitem__` 的 `torch.load(weights_only=False)` 警告属只读上游实现，本任务白名单禁止修改。
+- D6/D7 维护与复现：模型类/维度/import 来源写入 JSON，合成 checkpoint 固定 `torch.manual_seed(123)`；无密钥、无训练、无 GPU 自动使用。
+
 ## 2026-08-27 12:11:06 JST — 路 A 合成契约测试 RED
 
 - 新增白名单内 `scratch/round2_route_a_contract_test.py`，覆盖：labels 结局逐行覆盖、非结局列/双切片保留、非 labels 官方患者过滤、MCAT/PORPOISE 两类 ZIP 内成员兼容、trainval 副本排除 test、split 精确映射为 train/valid、错误训练 CSV 含 test 时硬失败、冻结 test dry-run JSON。
 - RED 命令：`PYTHONDONTWRITEBYTECODE=1 python3 scratch/round2_route_a_contract_test.py`；真实结果为 `Ran 1 test`、`FAILED (failures=1)`、exit 1。失败准确命中首个目标缺口：`adapters/build_outcome_table.py` 不存在，Python 返回 `[Errno 2] No such file or directory`；尚未执行到后续旧 split 错误与缺失 eval 脚本。
+
+## 2026-08-27 13:18:31 JST — 任务 D BulkRNABert 适配器 TDD 与真实验收阻塞
+
+- 已读完整 `plan.md`、项目根 `AGENTS.md`、NPJ `HANDOFF.md` 的 RNA 契约及现有 GDC manifest/5 个 TSV；任务 D 是现有 plan 之外的新增派单，因此不改写 plan，仅在本文件与 `result.md` append-only 留痕。
+- 官方契约核对：HF `InstaDeepAI/BulkRNABert` 配置为 19,062 genes、4 层、256 维；NPJ loader 只消费前 2,048 token。因此实现口径是“19,062 基因完整对齐并推理，取 `embeddings_4[0, :2048, :]` 落盘”，不是把模型输入错误裁成 2,048。
+- 仅从允许的 GitHub raw URL 下载 `common_gene_id.txt` 到 `scratch/d_cache/`：19,062 行、304,992 bytes、SHA256 `ce44c2b58a3577878f43aa00fa4d940a090d678bd007f1dbd27ecb58c63d7ec5`。
+- TDD 共六轮：脚本缺失 RED；STAR-Counts 解析 GREEN；三假病人端到端 pkl GREEN；HF 模型卡 `log10(1+x)`/最后层 GREEN；pid 对齐余弦分布 GREEN；多癌种 CLI 与真实 `--help` GREEN。当前白名单测试文件为 `scratch/d_test_bulkrnabert_infer.py`。
+- 测试夹具曾把“缺少 `read_label_patients`”直接触发为 `AttributeError`（ERROR），不符合清晰 RED；已改为显式 `hasattr` 断言后重跑，得到预期 FAIL，再实施生产代码。
+- 真实 BRCA 命令已运行到 HF import 边界：common gene 自检通过，随后因现有本机环境没有 `transformers` 以 exit 1 停止；没有下载 HF 模型、没有生成真实 pkl，也没有把该状态误报为 PASS。
+- 用户新增的 `scikit-survival` vendor 特例与任务 D 无依赖；本轮未安装 `sksurv`，也未改任何 Conda 环境。继续真实验收需要用户另行明确授权是否允许从 PyPI 把 `transformers` 及依赖 vendor 到 `scratch/d_` 前缀目录。
+
+### Bug Post-Mortem（任务 D 测试 RED 状态）
+
+- **现象**: 第二轮测试首次运行显示 `ERROR: AttributeError`，而不是预期的明确 `FAIL`。
+- **根因**: 测试直接调用尚不存在的生产 API，没有先把“API 缺失”转为可读的断言失败。
+- **修复**: 在调用前增加 `hasattr` 断言，复跑后得到 `FAILED (failures=1)` 且消息为“缺少 read_label_patients”，随后才写最小实现。
+- **Prevention Rule**: 对尚不存在的模块级 API 做 TDD 时，先用显式存在性断言形成业务可读 RED；不得把导入/属性异常当作有效 RED。
+
+## 2026-08-27 13:21:22 JST — 任务 D 真实 STAR-Counts `_PAR_Y` 修复
+
+- 在不依赖 HF 的真实输入预检中，首个 BRCA TSV 稳定报错：`gene_id 去版本号后重复: ENSG00000002586`。
+- 根因调查显示 5 个 GDC 文件各有 60,660 个基因行、44 组 `_PAR_Y` 配对；例如 `ENSG00000002586.20` 与 `ENSG00000002586.20_PAR_Y`。原实现的 `.split('.', 1)[0]` 同时删除数值版本和 `_PAR_Y` 注记，制造假重复。
+- 新增回归样本后先得到清晰 RED：合法 `_PAR_Y` 行被判重复；最小修复为仅删除首个 `\.\d+` 版本段并保留 `_PAR_Y`，真正重复仍硬失败。
+- 修复后 7 项测试全绿；5 个真实 TSV 全部得到 `float32 (19062,)` 表达向量，非零 common genes 分别为 17,093 / 16,553 / 17,111 / 16,940 / 16,820。
+
+### Bug Post-Mortem（任务 D gene_id 版本清理）
+
+- **现象**: 真实 GDC STAR-Counts 在第一个 `_PAR_Y` 配对处被误判为去版本号后的重复 gene_id，导致 5 人真实输入适配无法继续。
+- **根因**: `.split('.', 1)[0]` 把 `.20_PAR_Y` 整段截掉；其中 `.20` 才是版本号，`_PAR_Y` 是应保留的位点注记。
+- **修复**: 改用 `re.sub(r"\.\d+(?=$|_)", "", gene_id, count=1)`，得到 `ENSG...` 与 `ENSG..._PAR_Y` 两个不同键；common gene 仍匹配主键。
+- **Prevention Rule**: GDC Ensembl ID 标准化只能删除明确的数值版本段；任何 `_PAR_Y` 等非版本后缀必须保留，并用真实 GDC 行做回归。
+
+## 2026-08-27 13:31:41 JST — 任务 D landau fp32 OOM 后的最小 dtype 补丁
+
+- 用户提供 landau 真实验收结果：V100 32GB 上 fp32 推理 OOM；19,062-token 注意力单层需 10.83 GiB，进程当时已占 22.5 GiB。本轮不 SSH、不重跑 landau，只在调用侧做最小修复。
+- 新增 `--dtype {float32,float16}`，默认 `float32`；模型加载到所选 device 后，分别显式执行 `model.float()` 或 `model.half()`，没有修改 HF 模型内部实现。
+- BulkRNABert tokenizer 传入模型的是 `input_ids` 离散索引；`nn.Embedding` 要求整数索引，因此即使模型为 float16，`input_ids` 也必须显式保持 `torch.long` 并移动到同一 device。把它转换为 half 会在进入注意力层前就报 dtype 错误；模型权重及其后续浮点激活会随 `model.half()` 使用 float16。
+- 单样本推理用 `finally` 释放局部 tensor 引用，并在每次调用结束执行一次 `torch.cuda.empty_cache()`；落盘契约继续统一为 `np.float32 (2048, 256)`。
+- TDD：新增测试先得到 2 fail + 1 error 的 RED；最小实现后 8/8 GREEN。最终测试以真实 `torch.nn.Embedding` tiny model 分别验证 float32/float16 参数转换、`input_ids=torch.long`、输出 `np.float32`，并 mock 断言每样本恰好调用一次 `empty_cache()`。
+
+### Bug Post-Mortem（任务 D landau fp32 OOM）
+
+- **现象**: 用户报告 landau V100 32GB 的 fp32 前向 OOM；19,062-token 注意力单层需 10.83 GiB，进程已占 22.5 GiB。
+- **根因**: 全长自注意力显存随 token 数平方增长，fp32 在该 V100 的现有显存占用下没有足够峰值余量；逐样本间缓存也需要主动释放。
+- **修复**: 调用侧新增显式 float16 模型路径，并在每个样本结束后调用 `torch.cuda.empty_cache()`；不改模型内部实现和 NPJ 输出格式。
+- **Prevention Rule**: 全长 BulkRNABert GPU 冒烟必须显式记录 device/dtype/峰值显存；本地合成 dtype 通过不能替代 landau 真实前向，远端未复验前不得宣称 OOM 已解决。
+
+## 2026-08-27 13:32:26 JST — 任务 E 最终验收与停止
+
+- 真实 BLCA `--assert-bins` 最终复跑：MCAT 与 PORPOISE 均为 train=136、valid=68、test=138、trainval 未删失源=90；`qcut_edges=[0.66,7.4025,13.025,22.2175,97.04]`，与 full-derived 审计边界不同，两条均 exit 0。
+- 合成全链最终复跑：MCAT 与 PORPOISE 均使用 baseline 真实 `Generic_MIL_Survival_Dataset/Generic_Split` 和真实 `MCAT_Surv/PorpoiseMMF`；合成未训练 checkpoint+合成 `[3,1536]` `.pt`，各 4 名 test 病人。MCAT 合成 c-index=0.666667，PORPOISE=0.166667，均仅为 `pipeline_only/diagnostic_only`。
+- `sksurv` 导入顺序已实测：常规 import 可用时返回 `environment`；当前 Conda 环境 `env_sksurv_spec None`，因此回退到 `scratch/e_sksurv_vendor` 的 0.22.2。`conda list` 无 scikit-survival 条目，证明未修改 Conda 环境。
+- 最终自测：契约 3/3 OK，两库合成全链 2/2 OK，4 个 Python 文件内存编译 PASS，两个 JSON 内容审计 PASS。当前环境无 Ruff/Flake8，未伪报 lint。
+- 目标脚本 760 行/31,308 bytes，SHA256 `6b0b2739224f001975fad0938bdfff6207cb677debf39db7ab604e559756827c`；vendor 目录 2.9 MiB。
+- 本任务未写入白名单外目录，未修改 `bulkrnabert_infer.py`、`baselines/`、`NPJ/`，未执行 SSH、训练、GPU 任务、git commit/push。冒烟已通过，按停机门立即停止，交回 Claude 独立 review。
