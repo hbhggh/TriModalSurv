@@ -40,3 +40,10 @@
 卡住: b1noao03z(29min), b8pkea19b(60min), ae5b9f195a9b3919b(75min), b1613m4y2(91min), a7adb6aa841340bb0(902min), ab4d54ab9bc7c1dde(946min), bx79vf0nf(992min), bqjh1h2ro(1131min)
 通道异常: 无（status.json ts=2026-08-27 13:40:01 正常回传）
 需要我看的: landau d_verify_blca5 state=failed（RuntimeError: value cannot be converted to type at::Half without overflow，attention_mask 用 -1e30 在 fp16 下溢出）；近 2 小时被杀后台任务 by9850089/bvrdro2gx(47min)、b8q92pj7b/bvop9g3nz/bm8sciowb(88min)、b5pyj28n8(111min) 均 [killed]
+
+## 2026-08-27 14:16
+[14:16] 窗口/后台巡检
+运行中: task=b23qnl8nc idle=0min（本次巡检自身）；landau 侧 s4_g0_laneA/laneB/laneE、s4_g1_laneC/laneD/laneF、s4_gpu1_stage2 均 state=running
+卡住: bfxx5i4bw(29min), b1noao03z(59min), b8pkea19b(89min), ae5b9f195a9b3919b(105min), b1613m4y2(121min), a7adb6aa841340bb0(932min), ab4d54ab9bc7c1dde(976min), bx79vf0nf(1022min), bqjh1h2ro(1161min)
+通道异常: 无（[B] status.json ts=2026-08-27 14:10:01 正常回传，无 dup；[D] 10:56:30 的 CHANNEL_DOWN 已于 12:55:13 恢复为 OK）
+需要我看的: landau d_verify_blca5 state=failed（ValueError: pkl 的 identifier/embedding 必须是列表: data/RNA_embedding/RNA_BLCA_embedding_token_lvl.pkl，log_age=1560s；与 13:46 那次 fp16 溢出报错不同，已换成新的 pkl 格式错误）；近 2 小时内 [killed] 的后台任务 by9850089/bvrdro2gx(77min, sess 95a27e95)、b8q92pj7b/bvop9g3nz/bm8sciowb(118min, sess 6c59a6c3)，尾部仅 [killed] 无错误信息
