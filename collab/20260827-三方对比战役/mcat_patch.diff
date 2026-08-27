@@ -1,0 +1,95 @@
+diff --git a/datasets/dataset_survival.py b/datasets/dataset_survival.py
+index 53df12a..9cc7785 100755
+--- a/datasets/dataset_survival.py
++++ b/datasets/dataset_survival.py
+@@ -123,7 +123,7 @@ class Generic_WSI_Survival_Dataset(Dataset):
+         ### Signatures
+         self.apply_sig = apply_sig
+         if self.apply_sig:
+-            self.signatures = pd.read_csv('./dataset_csv_sig/signatures.csv')
++            self.signatures = pd.read_csv('./datasets_csv_sig/signatures.csv')
+         else:
+             self.signatures = None
+ 
+@@ -326,8 +326,9 @@ class Generic_Split(Generic_MIL_Survival_Dataset):
+         self.genomic_features = self.slide_data.drop(self.metadata, axis=1)
+         self.signatures = signatures
+ 
+-        with open(os.path.join(data_dir, 'fast_cluster_ids.pkl'), 'rb') as handle:
+-            self.fname2ids = pickle.load(handle)
++        if mode == 'cluster':
++            with open(os.path.join(data_dir, 'fast_cluster_ids.pkl'), 'rb') as handle:
++                self.fname2ids = pickle.load(handle)
+ 
+         def series_intersection(s1, s2):
+             return pd.Series(list(set(s1) & set(s2)))
+diff --git a/main.py b/main.py
+index 7944afe..7b0452c 100644
+--- a/main.py
++++ b/main.py
+@@ -110,6 +110,7 @@ parser.add_argument('--apply_sigfeats',  action='store_true', default=False, hel
+ parser.add_argument('--drop_out',        action='store_true', default=True, help='Enable dropout (p=0.25)')
+ parser.add_argument('--model_size_wsi',  type=str, default='small', help='Network size of AMIL model')
+ parser.add_argument('--model_size_omic', type=str, default='small', help='Network size of SNN model')
++parser.add_argument('--path_input_dim',  type=int, default=1024, help='Dimension of WSI features (Default: 1024)')
+ 
+ ### Optimizer Parameters + Survival Loss Function
+ parser.add_argument('--opt',             type=str, choices = ['adam', 'sgd'], default='adam')
+@@ -117,6 +118,7 @@ parser.add_argument('--batch_size',      type=int, default=1, help='Batch Size (
+ parser.add_argument('--gc',              type=int, default=32, help='Gradient Accumulation Step.')
+ parser.add_argument('--max_epochs',      type=int, default=20, help='Maximum number of epochs to train (default: 20)')
+ parser.add_argument('--lr',				 type=float, default=2e-4, help='Learning rate (default: 0.0001)')
++parser.add_argument('--inst_loss',       type=str, choices=['svm', 'ce', None], default=None, help='instance-level clustering loss function (default: None)')
+ parser.add_argument('--bag_loss',        type=str, choices=['svm', 'ce', 'ce_surv', 'nll_surv', 'cox_surv'], default='nll_surv', help='slide-level classification loss function (default: ce)')
+ parser.add_argument('--label_frac',      type=float, default=1.0, help='fraction of training labels (default: 1.0)')
+ parser.add_argument('--bag_weight',      type=float, default=0.7, help='clam: weight coefficient for bag-level loss (default: 0.7)')
+@@ -126,6 +128,7 @@ parser.add_argument('--reg_type',        type=str, choices=['None', 'omic', 'pat
+ parser.add_argument('--lambda_reg',      type=float, default=1e-4, help='L1-Regularization Strength (Default 1e-4)')
+ parser.add_argument('--weighted_sample', action='store_true', default=True, help='Enable weighted sampling')
+ parser.add_argument('--early_stopping',  action='store_true', default=False, help='Enable early stopping')
++parser.add_argument('--testing',         action='store_true', default=False, help='Debugging tool')
+ 
+ args = parser.parse_args()
+ device=torch.device("cuda" if torch.cuda.is_available() else "cpu")
+diff --git a/models/model_coattn.py b/models/model_coattn.py
+index 26c032e..f534bfb 100644
+--- a/models/model_coattn.py
++++ b/models/model_coattn.py
+@@ -17,12 +17,13 @@ from models.model_utils import *
+ ###########################
+ class MCAT_Surv(nn.Module):
+     def __init__(self, fusion='concat', omic_sizes=[100, 200, 300, 400, 500, 600], n_classes=4,
+-                 model_size_wsi: str='small', model_size_omic: str='small', dropout=0.25):
++                 model_size_wsi: str='small', model_size_omic: str='small', dropout=0.25,
++                 path_input_dim: int=1024):
+         super(MCAT_Surv, self).__init__()
+         self.fusion = fusion
+         self.omic_sizes = omic_sizes
+         self.n_classes = n_classes
+-        self.size_dict_WSI = {"small": [1024, 256, 256], "big": [1024, 512, 384]}
++        self.size_dict_WSI = {"small": [path_input_dim, 256, 256], "big": [path_input_dim, 512, 384]}
+         self.size_dict_omic = {'small': [256, 256], 'big': [1024, 1024, 1024, 256]}
+         
+         ### FC Layer over WSI bag
+@@ -471,7 +472,7 @@ def multi_head_attention_forward(
+ 
+ import torch
+ from torch import Tensor
+-from torch.nn.modules.linear import _LinearWithBias
++from torch.nn.modules.linear import Linear as _LinearWithBias  # torch>=2.0: private _LinearWithBias removed; nn.Linear(bias=True) is the exact equivalent
+ from torch.nn.init import xavier_uniform_
+ from torch.nn.init import constant_
+ from torch.nn.init import xavier_normal_
+diff --git a/utils/core_utils.py b/utils/core_utils.py
+index 97ee9f9..4b50467 100755
+--- a/utils/core_utils.py
++++ b/utils/core_utils.py
+@@ -158,7 +158,7 @@ def train(datasets: tuple, cur: int, args: Namespace):
+         model_dict = {'omic_input_dim': args.omic_input_dim, 'fusion': args.fusion, 'num_clusters': 10, 'n_classes': args.n_classes}
+         model = MIL_Cluster_FC_surv(**model_dict)
+     elif args.model_type == 'mcat':
+-        model_dict = {'fusion': args.fusion, 'omic_sizes': args.omic_sizes, 'n_classes': args.n_classes}
++        model_dict = {'fusion': args.fusion, 'omic_sizes': args.omic_sizes, 'n_classes': args.n_classes, 'path_input_dim': args.path_input_dim}
+         model = MCAT_Surv(**model_dict)
+     else:
+         raise NotImplementedError

@@ -112,3 +112,51 @@
 - final review round 2 结论：新增 patient 唯一性/跨 split 互斥修复 ADDRESSED，0 Critical、0 Important；A1 5/5、任务 A 10/10 的报告输出一致，A0 early-stopping 勘误正确。
 - 唯一 Minor 为 `make_splits.py` 旧注释仍写“验证/模型选择”，可能误导；已只改为“每个 epoch 消费 val 并以其作最终报告”，不改变运行逻辑。
 - 最终本地验证：三脚本语法 exit 0；任务 B fake-server 8/8；labels 全癌种 patient 唯一且 overlap=0；GDC manifest 963、TSV 5、`.part` 0、前五 MD5 PASS。
+
+## 2026-08-27 10:38:47 JST — 任务 C 启动、边界与根因审计
+
+- 已完整读取 `plan.md`，本轮只执行任务C的 5 点 MCAT 最小补丁。`baselines/MCAT` 起始状态为 clean；根仓库已有 `plan.md` 修改，视为用户/协作者既有改动，不覆盖、不回退。
+- 用户明确指定当前工作区并禁止 commit/push，因此不另建 worktree、不进入提交/合并流程；仅保留工作区 diff 和 `mcat_patch.diff`。
+- 根因 1：`main.py` 的 settings 读取 `args.inst_loss`，parser 未定义；PORPOISE 同源 parser 使用字符串 choices、默认 `None`。
+- 根因 2：`utils/core_utils.py` 构造 loader 时读取 `args.testing`，parser 未定义；PORPOISE 同源 parser 使用 `store_true`、默认 `False`。
+- 根因 3：MCAT `Generic_Split` 对所有 mode 无条件打开 `fast_cluster_ids.pkl`；PORPOISE 对照实现只在 `mode == 'cluster'` 时读取。
+- 根因 4：MCAT 代码读取 `./dataset_csv_sig/signatures.csv`，实际目录为 `datasets_csv_sig/`。
+- 根因 5：MCAT parser 无 `--path_input_dim`，`core_utils.py` 未把维度传给 `MCAT_Surv`，模型的 `size_dict_WSI` 又把 small/big 输入均固定为 1024；三层断链导致 UNI2-h 1536 forward 失败。
+- 默认兼容假设：新增默认分别为 `None`、`False`、`1024`；`MCAT_Surv` 未显式传维度时仍构造 1024 输入层。除清单要求修复的错误路径外，不改变其他参数、模型结构或训练流程。
+- 环境预检：指定 `/Users/wuhao/miniconda3/envs/protomasksurv-exp1/bin/python` 为 CPU（Torch 2.5.1，CUDA 不可用）；已有 torch/pandas/h5py/sklearn/scipy/lifelines，但缺 torchvision、torch_geometric、sksurv、tensorboardX。遵守“禁止安装依赖”，自测仅对未执行的导入边界使用 `scratch/` 测试桩，并在结果中如实标注；dataset 与 MCAT forward 使用真实 torch/pandas 代码。
+
+## 2026-08-27 10:48:44 JST — 任务 C TDD RED
+
+- 新增白名单内 `scratch/task_c_mcat_patch_test.py`，以运行行为而非源码字符串覆盖 parser、split 分支、signature 路径、core 构造参数、真实模型 forward 和官方 BLCA CSV+A1 split mini 冒烟。
+- 第一次 RED 未到目标：Torch 2.5.1 已删除 MCAT vendored attention 导入的私有 `_LinearWithBias`，模型模块在测试收集期失败。该兼容问题不在获批 5 点内，因此未改 baseline，只在测试进程把该旧私有名映射到现有 `nn.Linear`。
+- 第二次 RED 为有效失败：10 项测试运行 11.159 秒，`FAILED (failures=4, errors=4)`；失败分别为 `--inst_loss/--testing/--path_input_dim` 不在 help、core 未传 `path_input_dim`、coattn split 强读 cluster pickle、signature 旧目录不存在、1536 构造参数不接受。默认 1024 forward 与 cluster 正向守卫已通过。
+
+### Bug Post-Mortem
+- **现象**: 首次运行任务C行为测试时，收集阶段报 `ImportError: cannot import name '_LinearWithBias'`，没有触发预期的五点 RED。
+- **根因**: 官方 MCAT vendored attention 依赖旧版 PyTorch 私有 API，而指定环境是 Torch 2.5.1；测试夹具未先隔离这一已知环境差异。
+- **修复**: 只在 `scratch` 测试进程及 help 子进程的 `sitecustomize.py` 中把 `_LinearWithBias` 映射为 `nn.Linear`，未修改 baseline；第二次运行已到达并准确暴露五个目标缺口。
+- **Prevention Rule**: 对旧科研仓库做最小范围补丁时，先把计划外的依赖兼容问题限制在测试夹具；除非任务白名单明确授权，不把环境迁移修复混入生产 diff。
+
+## 2026-08-27 10:53:54 JST — 任务 C GREEN、最小 diff 与留档
+
+- 生产代码只改 4 个必要文件：`main.py`、`datasets/dataset_survival.py`、`utils/core_utils.py`、`models/model_coattn.py`；最终 diff 为 11 insertions/6 deletions，`git diff --check` exit 0。
+- 同一行为测试 GREEN：10/10，包含 parser 三参数、coattn 不读 cluster pickle、cluster 仍读取、实际 signature 目录、core 传参、默认 1024 forward、显式 1536 forward、官方 BLCA CSV+A1 split 的两维 mini 冒烟。
+- 官方 BLCA split 实际构建为 train 204、val 138、genomic 20394 维；两条 synthetic pt 均为 50 patches，输出分别打印 `bag=(50, 1024)` 和 `bag=(50, 1536)`，hazards 均为 `(1, 4)`。
+- 空参数运行时探针确认 `inst_loss=None`、`testing=False`、`path_input_dim=1024`；未把新维度写入实验命名或 settings，未触碰其他训练行为。
+- 首次 GREEN 未屏蔽 warning，观察到官方旧代码的 Torch transformer、`torch.load(weights_only=False)`、Pandas positional Series FutureWarning；均非本任务 5 点，未改。最终验收命令用 `PYTHONWARNINGS=ignore` 只压制 warning，不改变断言或执行路径。
+- `apply_patch` 曾给原本无 EOF newline 的三个官方文件补换行；已精确机械移除，最终 diff 不含该噪声。
+- 已生成 `mcat_patch.diff`；`git diff | cmp - mcat_patch.diff` exit 0，留档为 86 行、5383 bytes。
+- 本轮生成的三个 pycache 树共约 97 MB，均位于白名单 scratch 且无 symlink；已用精确 `find ... -delete` 清除，测试脚本保留。
+
+### Bug Post-Mortem
+- **现象**: 尝试用 `rm -rf` 清理三个明确的 scratch pycache 目录时被安全策略拒绝；命令未执行。
+- **根因**: 忽略了本协作历史已记录 `rm -rf` 会被拒绝，仍选择了被禁止的删除形式。
+- **修复**: 先用 `realpath`、`du` 和 `find -type l` 核对精确目标，再用 `find <三个精确目录> -type f -delete` 与 `find ... -depth -type d -empty -delete` 完成清理。
+- **Prevention Rule**: scratch 临时树清理固定采用“解析精确路径 → 排查 symlink → `find` 删除普通文件 → 删除空目录”，不再尝试 `rm -rf`。
+
+## 2026-08-27 10:58:21 JST — 任务 C 最终验证门
+
+- 最终树重跑行为测试：10/10，exit 0，运行 10.233 秒；1024/1536 官方 BLCA mini forward 再次 PASS。
+- 四个改动文件逐一 `compile()`：全部 exit 0；`git -C baselines/MCAT diff --check` exit 0；`git diff | cmp - mcat_patch.diff` exit 0。
+- MCAT 子仓库最终仅 4 个获批文件为 modified；notes/result 均为纯追加；scratch 中任务C只保留 `task_c_mcat_patch_test.py`。
+- 按用户禁止 commit/push 的既定选择，保留根仓库 main 与 MCAT master 当前未提交工作树，不执行任何集成操作。

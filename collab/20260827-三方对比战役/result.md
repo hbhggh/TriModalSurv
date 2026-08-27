@@ -403,3 +403,337 @@ INDEPENDENT_MD5_CHECK PASS
 - **根因**: 未给 `py_compile` 设置 `PYTHONPYCACHEPREFIX`，忽略了语法检查的写缓存副作用。
 - **修复**: 精确删除本轮生成的两个 `.pyc` 并移除空目录；用 `test ! -e` 验证清理完成。
 - **Prevention Rule**: 本任务所有 Python 语法、导入与测试命令必须把 `PYTHONPYCACHEPREFIX` 指向白名单内 scratch，或使用不会在源码旁写缓存的检查方式。
+
+## 12. 任务 C：MCAT 最小可运行补丁（2026-08-27 增补）
+
+本节覆盖第 11 节中“MCAT A3 仍为 BLOCKED”的旧状态：任务 C 已修复该节列出的 5 个源码缺口。它不追溯改写 A/B 的历史记录。
+
+### 12.1 持久改动文件清单
+
+1. baselines/MCAT/main.py
+2. baselines/MCAT/datasets/dataset_survival.py
+3. baselines/MCAT/utils/core_utils.py
+4. baselines/MCAT/models/model_coattn.py
+5. collab/20260827-三方对比战役/mcat_patch.diff
+6. collab/20260827-三方对比战役/scratch/task_c_mcat_patch_test.py
+7. collab/20260827-三方对比战役/notes.md（仅追加）
+8. collab/20260827-三方对比战役/result.md（本增补节）
+
+未修改 plan.md；根仓库开始时已有的 plan.md 修改属于既有工作区状态。未执行 git commit、git push、ssh 或依赖安装。
+
+### 12.2 五点验收逐条状态
+
+| 任务 C 验收项 | 状态 | 实现与证据 |
+|---|---|---|
+| 1. parser 补 --inst_loss | PASS | main.py 新增字符串参数，choices 为 svm/ce/None，默认 Python 值为 None；help 与默认值探针 exit 0。 |
+| 2. parser 补 --testing | PASS | main.py 新增 store_true，默认 False；help 与默认值探针 exit 0。 |
+| 3. cluster pickle 条件化 | PASS | Generic_Split 仅在 mode == cluster 时读取；coattn 无 pickle 构建通过，cluster 正向读取守卫也通过。 |
+| 4. signature 目录修正 | PASS | 引用改为实际存在的 datasets_csv_sig/signatures.csv；官方 BLCA CSV 在 apply_sig=True 下构建通过。 |
+| 5. MCAT WSI 输入维参数化 | PASS | --path_input_dim 默认 1024；core 传给 MCAT_Surv；small/big size_dict 均使用该输入维。默认 1024 与显式 1536 的真实 forward 均通过。 |
+
+### 12.3 默认兼容与范围核对
+
+- 空参数运行时值：inst_loss=None、testing=False、path_input_dim=1024。
+- MCAT_Surv 不传新参数时首层输入仍为 1024，默认模型 forward 通过。
+- 未改变实验命名、settings 字段、optimizer、loss、loader、训练 epoch、其他模型或其他维度。
+- baselines/MCAT 最终只有 4 个必要文件被修改；diff 为 11 insertions、6 deletions。
+- git diff --check exit 0。
+- mcat_patch.diff 与实时 git diff 经 cmp 字节级一致：86 行、5383 bytes。
+
+### 12.4 自测环境限制
+
+指定解释器为 /Users/wuhao/miniconda3/envs/protomasksurv-exp1/bin/python，Torch 2.5.1，CPU，CUDA 不可用。该环境缺少 torchvision、torch_geometric、sksurv、tensorboardX，且官方 MCAT vendored attention 仍导入 Torch 2.5 已删除的私有 _LinearWithBias。遵守禁止安装依赖、禁止超出 5 点改动：
+
+- help 和模块导入只在 scratch 测试进程为未执行边界提供最小测试桩；
+- _LinearWithBias 只在测试进程映射为现有 nn.Linear；
+- dataset、scaler、pt 加载、MCAT 网络和两次 forward 均执行真实仓库代码；
+- 未声称当前环境可脱离测试桩完成正式训练。
+
+依赖预检命令：
+
+~~~bash
+/Users/wuhao/miniconda3/envs/protomasksurv-exp1/bin/python - <<'PY'
+mods=['torchvision','torch_geometric','lifelines','sksurv','tensorboardX','h5py','pandas','sklearn','scipy']
+for name in mods:
+    try:
+        mod=__import__(name)
+        print(name, 'OK', getattr(mod, '__version__', ''))
+    except Exception as exc:
+        print(name, 'MISSING_OR_BROKEN', type(exc).__name__, str(exc))
+PY
+~~~
+
+退出码：0
+
+~~~text
+torchvision MISSING_OR_BROKEN ModuleNotFoundError No module named 'torchvision'
+torch_geometric MISSING_OR_BROKEN ModuleNotFoundError No module named 'torch_geometric'
+lifelines OK 0.30.0
+sksurv MISSING_OR_BROKEN ModuleNotFoundError No module named 'sksurv'
+tensorboardX MISSING_OR_BROKEN ModuleNotFoundError No module named 'tensorboardX'
+h5py OK 3.16.0
+pandas OK 2.1.4
+sklearn OK 1.3.2
+scipy OK 1.15.2
+~~~
+
+### 12.5 自测命令与真实原始输出
+
+#### 12.5.1 main.py --help
+
+实际执行先导入 scratch/task_c_mcat_patch_test.py 提供的测试进程兼容桩，再以 sys.argv = ['main.py', '--help'] 执行 main.py；未触发 dataset 或训练。
+
+退出码：0
+
+~~~text
+usage: main.py [-h] [--data_root_dir DATA_ROOT_DIR] [--seed SEED] [--k K]
+               [--k_start K_START] [--k_end K_END] [--results_dir RESULTS_DIR]
+               [--which_splits WHICH_SPLITS] [--split_dir SPLIT_DIR]
+               [--log_data] [--overwrite]
+               [--model_type {snn,deepset,amil,mi_fcn,mcat}]
+               [--mode {omic,path,pathomic,cluster,coattn}]
+               [--fusion {None,concat,bilinear}] [--apply_sig]
+               [--apply_sigfeats] [--drop_out]
+               [--model_size_wsi MODEL_SIZE_WSI]
+               [--model_size_omic MODEL_SIZE_OMIC]
+               [--path_input_dim PATH_INPUT_DIM] [--opt {adam,sgd}]
+               [--batch_size BATCH_SIZE] [--gc GC] [--max_epochs MAX_EPOCHS]
+               [--lr LR] [--inst_loss {svm,ce,None}]
+               [--bag_loss {svm,ce,ce_surv,nll_surv,cox_surv}]
+               [--label_frac LABEL_FRAC] [--bag_weight BAG_WEIGHT] [--reg REG]
+               [--alpha_surv ALPHA_SURV] [--reg_type {None,omic,pathomic}]
+               [--lambda_reg LAMBDA_REG] [--weighted_sample]
+               [--early_stopping] [--testing]
+
+Configurations for Survival Analysis on TCGA Data.
+
+options:
+  -h, --help            show this help message and exit
+  --data_root_dir DATA_ROOT_DIR
+                        Data directory to WSI features (extracted via CLAM
+  --seed SEED           Random seed for reproducible experiment (default: 1)
+  --k K                 Number of folds (default: 5)
+  --k_start K_START     Start fold (Default: -1, last fold)
+  --k_end K_END         End fold (Default: -1, first fold)
+  --results_dir RESULTS_DIR
+                        Results directory (Default: ./results)
+  --which_splits WHICH_SPLITS
+                        Which splits folder to use in ./splits/ (Default:
+                        ./splits/5foldcv
+  --split_dir SPLIT_DIR
+                        Which cancer type within ./splits/<which_splits> to
+                        use for training. Used synonymously for "task"
+                        (Default: tcga_blca_100)
+  --log_data            Log data using tensorboard
+  --overwrite           Whether or not to overwrite experiments (if already
+                        ran)
+  --model_type {snn,deepset,amil,mi_fcn,mcat}
+                        Type of model (Default: mcat)
+  --mode {omic,path,pathomic,cluster,coattn}
+                        Specifies which modalities to use / collate function
+                        in dataloader.
+  --fusion {None,concat,bilinear}
+                        Type of fusion. (Default: concat).
+  --apply_sig           Use genomic features as signature embeddings.
+  --apply_sigfeats      Use genomic features as tabular features.
+  --drop_out            Enable dropout (p=0.25)
+  --model_size_wsi MODEL_SIZE_WSI
+                        Network size of AMIL model
+  --model_size_omic MODEL_SIZE_OMIC
+                        Network size of SNN model
+  --path_input_dim PATH_INPUT_DIM
+                        Dimension of WSI features (Default: 1024)
+  --opt {adam,sgd}
+  --batch_size BATCH_SIZE
+                        Batch Size (Default: 1, due to varying bag sizes)
+  --gc GC               Gradient Accumulation Step.
+  --max_epochs MAX_EPOCHS
+                        Maximum number of epochs to train (default: 20)
+  --lr LR               Learning rate (default: 0.0001)
+  --inst_loss {svm,ce,None}
+                        instance-level clustering loss function (default:
+                        None)
+  --bag_loss {svm,ce,ce_surv,nll_surv,cox_surv}
+                        slide-level classification loss function (default: ce)
+  --label_frac LABEL_FRAC
+                        fraction of training labels (default: 1.0)
+  --bag_weight BAG_WEIGHT
+                        clam: weight coefficient for bag-level loss (default:
+                        0.7)
+  --reg REG             L2-regularization weight decay (default: 1e-5)
+  --alpha_surv ALPHA_SURV
+                        How much to weigh uncensored patients
+  --reg_type {None,omic,pathomic}
+                        Which network submodules to apply L1-Regularization
+                        (default: None)
+  --lambda_reg LAMBDA_REG
+                        L1-Regularization Strength (Default 1e-4)
+  --weighted_sample     Enable weighted sampling
+  --early_stopping      Enable early stopping
+  --testing             Debugging tool
+~~~
+
+#### 12.5.2 不传新参数的运行时默认值
+
+命令使用 runpy 执行 main.py，并在原始 ArgumentParser.parse_args([]) 返回后立即停止，未进入 dataset 或训练。
+
+退出码：0
+
+~~~text
+inst_loss=None
+testing=False
+path_input_dim=1024
+DEFAULTS PASS
+~~~
+
+#### 12.5.3 四个改动文件语法检查
+
+命令：
+
+~~~bash
+PYTHONDONTWRITEBYTECODE=1 /Users/wuhao/miniconda3/envs/protomasksurv-exp1/bin/python - <<'PY'
+from pathlib import Path
+paths = [
+    Path('baselines/MCAT/main.py'),
+    Path('baselines/MCAT/datasets/dataset_survival.py'),
+    Path('baselines/MCAT/utils/core_utils.py'),
+    Path('baselines/MCAT/models/model_coattn.py'),
+]
+for path in paths:
+    compile(path.read_bytes(), str(path), 'exec')
+    print(f'SYNTAX PASS: {path}')
+PY
+~~~
+
+退出码：0
+
+~~~text
+SYNTAX PASS: baselines/MCAT/main.py
+SYNTAX PASS: baselines/MCAT/datasets/dataset_survival.py
+SYNTAX PASS: baselines/MCAT/utils/core_utils.py
+SYNTAX PASS: baselines/MCAT/models/model_coattn.py
+~~~
+
+#### 12.5.4 任务 C 行为测试与 CPU mini forward
+
+命令：
+
+~~~bash
+cd /Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对比战役
+PYTHONDONTWRITEBYTECODE=1 PYTHONWARNINGS=ignore /Users/wuhao/miniconda3/envs/protomasksurv-exp1/bin/python scratch/task_c_mcat_patch_test.py
+~~~
+
+退出码：0
+
+~~~text
+test_train_passes_path_input_dim_to_mcat_constructor (__main__.CorePropagationBehaviorTests) ... ok
+test_cluster_split_still_loads_cluster_pickle (__main__.GenericSplitBehaviorTests) ... ok
+test_coattn_split_does_not_require_cluster_pickle (__main__.GenericSplitBehaviorTests) ... ok
+test_default_model_keeps_1024_input_and_forwards (__main__.ModelDimensionBehaviorTests) ... ok
+test_explicit_1536_model_input_forwards (__main__.ModelDimensionBehaviorTests) ... ok
+test_official_blca_dataset_and_model_forward_for_both_dimensions (__main__.OfficialBlcaMiniSmokeTests) ... ok
+test_help_exposes_inst_loss (__main__.ParserBehaviorTests) ... ok
+test_help_exposes_path_input_dim (__main__.ParserBehaviorTests) ... ok
+test_help_exposes_testing (__main__.ParserBehaviorTests) ... ok
+test_apply_sig_reads_repository_signature_directory (__main__.SignaturePathBehaviorTests) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 7.756s
+
+OK
+
+Training Fold 0!
+
+Init train/val/test splits... 
+Done!
+Training on 1 samples
+Validating on 1 samples
+
+Init loss function... Done!
+
+Init Model... Shape (1, 1)
+Shape (1, 1)
+(0, 0) : 0
+(0, 1) : 1
+(1, 0) : 2
+(1, 1) : 3
+(2, 0) : 4
+(2, 1) : 5
+(3, 0) : 6
+(3, 1) : 7
+Shape (204, 20394)
+Shape (138, 20394)
+****** Normalizing Data ******
+MCAT MINI FORWARD PASS: path_dim=1024, bag=(50, 1024), hazards=(1, 4)
+MCAT MINI FORWARD PASS: path_dim=1536, bag=(50, 1536), hazards=(1, 4)
+(0, 0) : 0
+(0, 1) : 1
+(1, 0) : 2
+(1, 1) : 3
+(2, 0) : 4
+(2, 1) : 5
+(3, 0) : 6
+(3, 1) : 7
+~~~
+
+#### 12.5.5 diff 范围与留档一致性
+
+命令：
+
+~~~bash
+git -C baselines/MCAT diff --check
+~~~
+
+退出码：0；原始 stdout 为空。
+
+命令：
+
+~~~bash
+git -C baselines/MCAT diff --stat
+~~~
+
+退出码：0
+
+~~~text
+ datasets/dataset_survival.py | 7 ++++---
+ main.py                      | 3 +++
+ models/model_coattn.py       | 5 +++--
+ utils/core_utils.py          | 2 +-
+ 4 files changed, 11 insertions(+), 6 deletions(-)
+~~~
+
+命令：
+
+~~~bash
+git -C baselines/MCAT diff | cmp - collab/20260827-三方对比战役/mcat_patch.diff
+~~~
+
+退出码：0；原始 stdout 为空。
+
+### 12.6 遇到的问题
+
+1. 指定环境缺少四项训练依赖；按禁止安装依赖约束，使用 scratch 测试桩隔离未执行的 import，未改 baseline。
+2. Torch 2.5.1 不再暴露 _LinearWithBias；仅在测试进程做别名兼容，未混入 5 点生产 diff。
+3. 初次 GREEN 显示官方旧代码的 torch.load、Pandas positional Series 与 Transformer warning；均未影响断言，且不在 5 点范围内，所以不修。
+4. apply_patch 自动补了三个官方文件的 EOF newline；已机械去除，最终 diff 无噪声。
+5. rm -rf 清理 scratch pycache 被安全策略拒绝且未执行；改用精确 find 删除，约 97 MB 临时缓存已清理。
+
+### 12.7 未尽事项
+
+- 任务 C 的 5 点源码修复与计划指定 mini 冒烟均已完成，没有任务内未尽项。
+- 未执行完整训练，符合 plan.md 明确的“不做完整训练”。
+- 当前 protomasksurv-exp1 环境若要脱离测试桩运行官方 main.py，仍需由后续独立任务处理缺失依赖及旧 Torch 私有 API 兼容；本轮禁止安装依赖且禁止超出 5 点修改，故没有扩展。
+
+### Bug Post-Mortem
+
+- **现象**: 首次测试在导入 model_coattn.py 时因 _LinearWithBias 缺失而停止，未到达目标 RED。
+- **根因**: 官方 MCAT vendored attention 依赖旧 PyTorch 私有 API，而指定环境为 Torch 2.5.1。
+- **修复**: 只在 scratch 测试进程建立 _LinearWithBias → nn.Linear 的兼容别名，随后得到准确 RED 并完成 GREEN。
+- **Prevention Rule**: 旧科研仓库的计划外环境兼容问题先在测试夹具隔离，未经白名单授权不得混入生产补丁。
+
+### Bug Post-Mortem（缓存清理）
+
+- **现象**: rm -rf 清理命令被安全策略拒绝；没有文件被该命令删除。
+- **根因**: 选择了策略禁止的删除形式，且没有复用本任务历史中已验证的 find 清理方式。
+- **修复**: 精确解析三个目标、核对大小和 symlink 后，用 find 删除普通文件与空目录。
+- **Prevention Rule**: scratch 临时树固定采用 realpath 核对、symlink 检查、find -type f -delete、find -depth -type d -empty -delete。

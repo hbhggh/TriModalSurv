@@ -70,3 +70,18 @@ python3 adapters/uni2h_to_ptfiles.py --selftest                                 
 python3 adapters/gdc_fetch_star_counts.py --labels labels_424.csv --cancers BRCA --dry-run                         # manifest 统计
 python3 adapters/gdc_fetch_star_counts.py --labels labels_424.csv --cancers BRCA --limit 5 --out scratch/gdc_test/ # 5 文件实测
 ```
+
+## 任务 C：MCAT 最小可运行补丁（用户已批准，2026-08-27）
+
+修复清单（全部源自 A0 契约分析，每处最小 diff）：
+1. `main.py`：parser 补 `--inst_loss`，默认值与现有引用处兼容（None/字符串，读代码定）
+2. parser 补 `--testing`（默认 False），与 `core_utils.py` 的 `args.testing` 引用一致
+3. `Generic_Split` 的 `fast_cluster_ids.pkl` 读取改为条件化（仅 `mode=='cluster'`，对齐 PORPOISE 写法）
+4. signature 目录引用改指实际存在的 `datasets_csv_sig/`（改代码不动目录）
+5. `MCAT_Surv` WSI 输入维参数化：新增 `--path_input_dim`（**默认 1024 = 官方原行为**），贯通到模型 size_dict；1536 由命令行显式传入
+
+约束：
+- 白名单 = `baselines/MCAT/` 内为实现上述 5 点所必需的最少文件 + 本目录 `mcat_patch.diff`（git diff 留档）+ notes.md/result.md 增补
+- 默认行为必须与官方一致（不传新参数时零行为变化）；禁止任何超出 5 点的重构/清理
+- 自测（mac protomasksurv-exp1 env，CPU）：①`--help` 跑通 ②合成 pt 特征（[50,1536] 与 [50,1024] 各一）+ 官方 BLCA CSV + A1 splits 构造 mini 冒烟：dataset 构建 + 模型 forward 各一遍（1024 默认路径与 1536 新路径都要过），不做完整训练
+- 完成后 `git -C baselines/MCAT diff > collab/20260827-三方对比战役/mcat_patch.diff`
