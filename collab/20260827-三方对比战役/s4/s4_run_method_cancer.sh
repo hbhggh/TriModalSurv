@@ -25,7 +25,7 @@ else
     EXTRA="--model_type mcat --mode coattn --fusion concat --apply_sig --gc 32"
     REPO=/home/wuhao/baselines/MCAT
   else
-    EXTRA="--model_type porpoise_mmf --mode pathomic --fusion concat --apply_mutsig --gc 1"
+    EXTRA="--model_type porpoise_mmf --mode pathomic --fusion concat --apply_mutsig --gc 32"
     REPO=/home/wuhao/baselines/PORPOISE
   fi
   for sd in $SEEDS; do
