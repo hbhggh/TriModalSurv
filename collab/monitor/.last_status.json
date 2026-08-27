@@ -1,0 +1,31 @@
+{
+ "ts": "2026-08-27 10:56:17",
+ "host": "landau",
+ "jobs": [
+  {
+   "id": "test_fake",
+   "pid": 570359,
+   "alive": false,
+   "log": "/home/wuhao/NPJ/logs/test_fake.log",
+   "log_mtime_age_s": 3,
+   "flags": {
+    "running": true,
+    "done": false,
+    "fail": false
+   },
+   "state": "gone",
+   "log_tail3": []
+  },
+  {
+   "id": "_adhoc_gdc_fetch",
+   "pid": 567909,
+   "alive": true,
+   "log": "",
+   "log_mtime_age_s": -1,
+   "flags": {},
+   "state": "running",
+   "dup_count": 2,
+   "log_tail3": []
+  }
+ ]
+}
