@@ -33,3 +33,10 @@
 卡住: task=b8pkea19b idle=30min(sess d9c85104), task=ae5b9f195a9b3919b idle=45min(sess 95a27e95), task=b1613m4y2 idle=61min(sess 144dfc4c), task=a7adb6aa841340bb0 idle=872min(sess 9bcbdb32), task=ab4d54ab9bc7c1dde idle=916min, task=bx79vf0nf idle=962min, task=bqjh1h2ro idle=1101min(均 sess 917bf129)
 通道异常: 无（landau status.json ts=2026-08-27 13:10:01，6 个 pt_conv 任务全部 state=done，无 dup）
 需要我看的: 近 2 小时内被 kill 的后台任务 —— by9850089/bvrdro2gx(17min, sess 95a27e95)、b8q92pj7b/bvop9g3nz/bm8sciowb(58min, sess 6c59a6c3)、b5pyj28n8(81min)/bntqb0c8j(111min, sess 9bcbdb32)，尾部仅 [killed] 无错误信息，需确认是主动终止还是异常被杀
+
+## 2026-08-27 13:46
+[13:46] 窗口/后台巡检
+运行中: 无
+卡住: b1noao03z(29min), b8pkea19b(60min), ae5b9f195a9b3919b(75min), b1613m4y2(91min), a7adb6aa841340bb0(902min), ab4d54ab9bc7c1dde(946min), bx79vf0nf(992min), bqjh1h2ro(1131min)
+通道异常: 无（status.json ts=2026-08-27 13:40:01 正常回传）
+需要我看的: landau d_verify_blca5 state=failed（RuntimeError: value cannot be converted to type at::Half without overflow，attention_mask 用 -1e30 在 fp16 下溢出）；近 2 小时被杀后台任务 by9850089/bvrdro2gx(47min)、b8q92pj7b/bvop9g3nz/bm8sciowb(88min)、b5pyj28n8(111min) 均 [killed]

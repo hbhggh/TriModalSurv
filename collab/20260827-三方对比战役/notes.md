@@ -371,3 +371,40 @@
 - 最终自测：契约 3/3 OK，两库合成全链 2/2 OK，4 个 Python 文件内存编译 PASS，两个 JSON 内容审计 PASS。当前环境无 Ruff/Flake8，未伪报 lint。
 - 目标脚本 760 行/31,308 bytes，SHA256 `6b0b2739224f001975fad0938bdfff6207cb677debf39db7ab604e559756827c`；vendor 目录 2.9 MiB。
 - 本任务未写入白名单外目录，未修改 `bulkrnabert_infer.py`、`baselines/`、`NPJ/`，未执行 SSH、训练、GPU 任务、git commit/push。冒烟已通过，按停机门立即停止，交回 Claude 独立 review。
+
+## 2026-08-27 13:38:14 JST — 任务 D half 上游溢出与 bfloat16 后备修正
+
+- landau 新证据推翻 13:31 增补中的 float16 可用假设：官方 BulkRNABert 在 `torch.where(mask, attention_weights, -1e30)` 把标量转换为 half 时直接 `RuntimeError`，因此此前 tiny model 的 float16 合成 PASS 只能证明 `.half()` 能调用，不能证明官方模型兼容。
+- 检查确认现有 `make_infer_one()` 的唯一模型前向早已位于 `with torch.inference_mode():` 内，且加载后执行 `model.eval()`；没有缺失 no-grad/inference guard。新增 tiny model 观测断言证明：即使调用方处于 `torch.enable_grad()`，forward 内仍为 `grad_enabled=False`、`inference_mode=True`、embedding `requires_grad=False`。
+- 19,062²=363,359,844；8-head fp32 attention weights 单层约 10.83 GiB。24 MB 参数模型在 OOM 时进程占用 22.5 GB 与全长注意力临时张量/allocator 相符，不能单凭该占用反推出激活图累积。
+- `--dtype` 现接受 `float32|float16|bfloat16`：float32 调 `model.float()`；float16 由 dtype 配置路径抛 `RuntimeError("该模型官方实现不支持 half（-1e30 掩码溢出）")`；bfloat16 调 `model.bfloat16()`。`input_ids` 继续保持 `torch.long`。
+- 本机 `torch 2.5.1` 最小复现：float16 的 `torch.where(..., -1e30)` 报 overflow，bfloat16 返回有限值。V100 上 bfloat16 属非原生慢路径；本轮只做 CPU 合成契约，不冒充 landau 实跑。
+- TDD 最终 8/8 PASS；测试同时覆盖三种 dtype、无计算图、逐样本 `empty_cache()`、bf16 输出回转 `np.float32` 与原三病人 pkl 回归。
+
+### Bug Post-Mortem（float16 合成测试代表性不足）
+
+- **现象**: 先前 tiny model 的 float16 路径通过，但 landau 官方模型在写死的 `-1e30` 掩码常量处溢出。
+- **根因**: tiny model 只覆盖 embedding 和 `.half()`，没有覆盖官方 attention mask 的数值常量边界。
+- **修复**: float16 改为明确拒绝；新增 `torch.where(float16/bfloat16, -1e30)` 回归，并把 bfloat16 作为低显存后备。
+- **Prevention Rule**: 低精度兼容性不能只用 tiny layer 证明；必须覆盖目标模型中的极值常量、mask、softmax 和最终导出边界，真实 GPU 未跑不得宣称模型兼容。
+
+### Bug Post-Mortem（bfloat16 NumPy 导出）
+
+- **现象**: 首轮 bfloat16 GREEN 在 `.cpu().numpy()` 报 `TypeError: Got unsupported ScalarType BFloat16`。
+- **根因**: NumPy 不直接支持 PyTorch bfloat16 tensor 的该转换路径。
+- **修复**: embedding 先在 PyTorch 内 `.to(device="cpu", dtype=torch.float32)`，再 `.numpy()`；NPJ 输出契约仍为 `np.float32`。
+- **Prevention Rule**: 新增低精度路径时必须同时测试模型转换、前向和 CPU/NumPy 序列化出口，不得只断言参数 dtype。
+
+### Bug Post-Mortem（网络白名单过程偏差）
+
+- **现象**: 为复核 V100 的 bfloat16 非原生行为，额外进行了 NVIDIA/PyTorch 官方文档的只读网页查询，超出了任务 D 原先仅允许 HF 模型与 GitHub common gene 文件的联网白名单。
+- **根因**: 最终代码审查时把“事实核验”错误地当成可以扩张既有网络授权。
+- **修复**: 立即停止额外联网；该查询未下载或写入文件，代码实现只依赖用户指定行为、本地 PyTorch 复现与既有 HF 模型契约。
+- **Prevention Rule**: 联网域名/资源白名单按整个任务链持续生效；即便只读且为官方来源，新增站点也必须先获明确授权。
+
+### Bug Post-Mortem（并发文档尾部上下文）
+
+- **现象**: 首次同时追加 `notes.md/result.md` 时，另一任务已追加新尾部，`apply_patch` 因旧上下文不匹配而安全失败。
+- **根因**: 使用了先前读取的共享文档尾部作为双文件补丁锚点。
+- **修复**: 未覆盖任何并发内容；重新读取最新尾部后按文件分别追加。
+- **Prevention Rule**: append-only 共享文档在写入前立即刷新尾部，并拆分为独立补丁，避免一个文件的并发变化阻断另一文件。

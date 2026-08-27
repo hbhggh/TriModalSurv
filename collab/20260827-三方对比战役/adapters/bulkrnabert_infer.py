@@ -95,7 +95,12 @@ def make_infer_one(
                     f"{layer_key} 形状错误: {tuple(embedding.shape)}，"
                     f"要求 (1, {expected_genes}, {expected_dim})"
                 )
-            array = embedding[0].detach().cpu().numpy().astype(np.float32, copy=False)
+            array = (
+                embedding[0]
+                .detach()
+                .to(device="cpu", dtype=torch_module.float32)
+                .numpy()
+            )
             if not np.isfinite(array).all():
                 raise AssertionError(f"{layer_key} 含 NaN/Inf")
             return np.ascontiguousarray(array)

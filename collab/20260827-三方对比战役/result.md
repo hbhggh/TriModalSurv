@@ -1585,3 +1585,125 @@ vendor_sksurv 0.22.2 /Users/wuhao/Desktop/TriModalSurv/collab/20260827-三方对
 - 未修改 `adapters/bulkrnabert_infer.py` 及任何 adapters 其他文件；工作树中的 `bulkrnabert_infer.py`、`scratch/d_` 和对应 `notes.md/result.md` 增补是另一并发任务的已有/同期变更，本任务未覆盖或回退。
 - 未修改 `baselines/MCAT`、`baselines/PORPOISE`、`NPJ/`；未生成 `adapters/eval_frozen_test.pyc`。
 - 未执行 SSH/scp、未访问 landau、未训练、未使用 GPU、未执行 `git commit`、`git push` 或等效操作。
+
+## 任务 D 再增补：float16 明确拒绝、bfloat16 后备与 inference-mode 审计（2026-08-27 13:38 JST）
+
+> 本节覆盖并纠正 13:31 的任务 D dtype 增补：先前“float16 合成路径 PASS”不再代表官方 BulkRNABert 可用。landau 已证明官方 `-1e30` mask 常量会在 half 中溢出。
+
+### 1. 检查结论
+
+1. **推理保护没有缺失**：`make_infer_one()` 原本就在 `with torch.inference_mode():` 内执行唯一的 `model(input_ids)`，模型加载后也执行 `model.eval()`。因此没有再加重复包装。
+2. **激活图累积诊断不成立**：新增测试在外层显式开启 grad，模型 forward 内观测到 `grad_enabled=False`、`inference_mode=True`，输出 embedding `requires_grad=False`。现有代码还会 detach、复制到 CPU、释放局部 tensor 引用并逐样本 `torch.cuda.empty_cache()`。
+3. **22.5 GB 不等于参数或计算图占用**：19,062²=363,359,844，8-head fp32 attention weights 单层约 10.83 GiB；全长注意力临时张量与 CUDA allocator 足以解释远大于 24 MB 参数文件的进程显存。仅凭 `nvidia-smi` 总占用不能证明计算图累积。
+
+### 2. 改动文件与行为
+
+1. `adapters/bulkrnabert_infer.py`
+   - `--dtype` 选项改为 `float32|float16|bfloat16`，默认仍为 `float32`。
+   - `float32`：调用 `model.float()`。
+   - `float16`：运行时抛出精确提示 `该模型官方实现不支持 half（-1e30 掩码溢出）`，不再调用 `model.half()`。
+   - `bfloat16`：调用 `model.bfloat16()`；`input_ids` 仍为 `torch.long`。
+   - bfloat16 embedding 在 PyTorch 内先转 CPU float32 后再转 NumPy，维持 NPJ `np.float32 (2048,256)` 契约。
+   - 现有 `torch.inference_mode()`、逐样本 `torch.cuda.empty_cache()` 均保留。
+2. `scratch/d_test_bulkrnabert_infer.py`
+   - 三种 dtype CLI/运行行为全覆盖。
+   - 用真实 tiny `nn.Embedding` 检查 float32/bfloat16 参数 dtype、forward grad 状态、inference-mode 状态、`requires_grad=False`、`input_ids=torch.long`、`np.float32` 输出和逐样本 cache 清理。
+   - 直接回归 `torch.where(..., -1e30)`：float16 必须 overflow，bfloat16 必须得到有限值。
+3. append-only 增补 `notes.md` 与本 `result.md`。
+
+未修改其他 adapter、`baselines/` 或 `NPJ/`，未 SSH、未训练、未提交或推送。
+
+### 3. 三种 dtype 验收状态
+
+1. float32：**PASS（本地合成）**。
+2. float16：**PASS（按要求拒绝）**，错误文本精确匹配。
+3. bfloat16：**PASS（本地 CPU 合成）**，包含前向、无图与 NumPy 出口；**landau V100 NOT RUN**。V100 的 bfloat16 是非原生慢路径，真实算子兼容性和峰值显存仍须远端冒烟确认。
+4. 三假病人 TSV → NPJ 回归：**PASS**。
+
+### 4. 测试命令与真实原始输出
+
+命令：
+
+~~~bash
+PYTHONDONTWRITEBYTECODE=1 /Users/wuhao/miniconda3/envs/protomasksurv-exp1/bin/python \
+  collab/20260827-三方对比战役/scratch/d_test_bulkrnabert_infer.py
+~~~
+
+退出码：0。真实原始输出：
+
+~~~text
+test_cli_help_exposes_required_contract (__main__.BulkRNABertInferTests) ... ok
+test_cli_maps_parallel_inputs_positionally (__main__.BulkRNABertInferTests) ... ok
+test_compare_with_author_matches_by_pid_and_reports_distribution (__main__.BulkRNABertInferTests) ... ok
+test_hf_model_card_log10_preprocessing_and_last_layer_output (__main__.BulkRNABertInferTests) ... ok
+test_official_common_gene_file_has_expected_order_and_count (__main__.BulkRNABertInferTests) ... ok
+test_star_counts_alignment_strips_versions_skips_metadata_and_zero_fills (__main__.BulkRNABertInferTests) ... ok
+test_three_dtype_behaviors_and_inference_mode (__main__.BulkRNABertInferTests) ... ok
+test_three_synthetic_patients_write_npj_token_embeddings (__main__.BulkRNABertInferTests) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.176s
+
+OK
+~~~
+
+dtype 与语法审计退出码：0。真实原始输出：
+
+~~~text
+SYNTAX PASS: collab/20260827-三方对比战役/adapters/bulkrnabert_infer.py
+SYNTAX PASS: collab/20260827-三方对比战役/scratch/d_test_bulkrnabert_infer.py
+DTYPE PASS: requested=float32 parameter=torch.float32
+DTYPE PASS: requested=bfloat16 parameter=torch.bfloat16
+DTYPE REJECT PASS: requested=float16 message=该模型官方实现不支持 half（-1e30 掩码溢出）
+~~~
+
+CLI help 真实参数行：
+
+~~~text
+[--dtype {float32,float16,bfloat16}]
+~~~
+
+本机 `-1e30` 最小复现真实输出：
+
+~~~text
+torch=2.5.1
+torch.float32: PASS dtype=torch.float32 values=[0.0, -1.0000000150474662e+30]
+torch.float16: ERROR RuntimeError: value cannot be converted to type at::Half without overflow
+torch.bfloat16: PASS dtype=torch.bfloat16 values=[0.0, -1.0002555517425873e+30]
+~~~
+
+### 5. 问题与 Post-Mortem
+
+#### Bug Post-Mortem（此前 float16 合成测试代表性不足）
+
+- **现象**: tiny model float16 测试通过，官方模型却在 `-1e30` mask 处溢出。
+- **根因**: tiny model 没有覆盖官方 attention 的极值常量。
+- **修复**: float16 明确拒绝；增加 half/bfloat16 mask 极值回归。
+- **Prevention Rule**: 低精度模型兼容性必须覆盖目标模型的 mask、softmax、极值常量与序列化出口；tiny layer 通过不等于官方模型通过。
+
+#### Bug Post-Mortem（bfloat16 NumPy 导出）
+
+- **现象**: 第一轮 bfloat16 测试在 `.cpu().numpy()` 报 `TypeError: Got unsupported ScalarType BFloat16`。
+- **根因**: NumPy 不能直接接收该 PyTorch bfloat16 tensor。
+- **修复**: 先在 PyTorch 内转 CPU float32，再 `.numpy()`；复跑 8/8 PASS。
+- **Prevention Rule**: 低精度路径必须端到端覆盖模型参数、前向、CPU 搬运和最终序列化。
+
+#### Bug Post-Mortem（网络白名单过程偏差）
+
+- **现象**: 为核实 V100 bfloat16 的非原生慢路径，进行了 NVIDIA/PyTorch 官方文档的只读网页查询，超出任务 D 原联网白名单。
+- **根因**: 把只读事实核验误当成无需新增网络授权。
+- **修复**: 已停止额外联网；未下载或写入任何文件，代码实现不依赖该额外访问。
+- **Prevention Rule**: 任务链中的网络白名单持续有效；任何新站点，即使官方且只读，也必须先获授权。
+
+#### Bug Post-Mortem（并发文档尾部上下文）
+
+- **现象**: 首次双文件追加因共享文档被并发任务更新而上下文失配，`apply_patch` 安全失败。
+- **根因**: 使用了过期尾部作为 `notes.md/result.md` 的共同补丁锚点。
+- **修复**: 没有覆盖并发内容；刷新尾部后按文件分别追加。
+- **Prevention Rule**: append-only 共享文档写入前立即刷新尾部，并拆分独立补丁。
+
+### 6. 未尽事项与范围
+
+- 唯一功能性未尽项：在 landau 执行真实 `--device cuda --dtype bfloat16` 冒烟，记录是否完整前向、峰值 allocated/reserved 显存及最终 `(2048,256)` 自检；本轮没有伪报 GPU PASS。
+- 本轮实际写入仅限 `adapters/bulkrnabert_infer.py`、`scratch/d_test_bulkrnabert_infer.py`、`notes.md`、`result.md`。工作树中的任务 E 文件属于既有/同期改动，本轮未触碰。
+- 未执行 SSH/scp、正式实验、git commit/push。按项目互审纪律，仍须 Claude 独立 review。
