@@ -382,6 +382,9 @@ def _load_checkpoint(torch: Any, path: Path) -> dict[str, Any]:
         raise ValueError("checkpoint 不是非空 state_dict")
     if all(str(key).startswith("module.") for key in state_dict):
         state_dict = {str(key)[7:]: value for key, value in state_dict.items()}
+    if any(".module." in str(key) for key in state_dict):
+        # PORPOISE relocate() 只把 attention_net 包进 DataParallel，产生中缀形态
+        state_dict = {str(key).replace(".module.", "."): value for key, value in state_dict.items()}
     return state_dict
 
 

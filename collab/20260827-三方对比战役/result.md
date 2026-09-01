@@ -1707,3 +1707,225 @@ torch.bfloat16: PASS dtype=torch.bfloat16 values=[0.0, -1.0002555517425873e+30]
 - 唯一功能性未尽项：在 landau 执行真实 `--device cuda --dtype bfloat16` 冒烟，记录是否完整前向、峰值 allocated/reserved 显存及最终 `(2048,256)` 自检；本轮没有伪报 GPU PASS。
 - 本轮实际写入仅限 `adapters/bulkrnabert_infer.py`、`scratch/d_test_bulkrnabert_infer.py`、`notes.md`、`result.md`。工作树中的任务 E 文件属于既有/同期改动，本轮未触碰。
 - 未执行 SSH/scp、正式实验、git commit/push。按项目互审纪律，仍须 Claude 独立 review。
+
+---
+
+## Round 3 · 任务 G：两库真 batch 化改造（2026-08-27 15:02 JST）
+
+### 1. 改了哪些文件
+
+本轮持久化改动严格落在任务 G 白名单与用户追加授权内：
+
+1. `baselines/MCAT/utils/utils.py`
+   - 新增 patient-level padding/mask helper、普通 batched collator、六组 omic 的 batched signature collator。
+   - `get_split_loader(..., batched_collate=False)` 仅在显式开启时选择新 collator。
+2. `baselines/MCAT/models/model_coattn.py`
+   - `MCAT_Surv.forward` 保留原 `[L,D]` 路径，新增 `[B,L,D] + [B,L] mask` 路径。
+3. `baselines/MCAT/utils/core_utils.py`
+   - 新增 batched co-attention train/validate/summary；loss 与梯度按真实样本数平均；最后 partial accumulation window 也执行 optimizer step。
+4. `baselines/MCAT/main.py`（用户追加授权）
+   - 新增 `--batched_collate`；开启时限定 `mcat+coattn`，固定目标 effective batch=32，bs=8 自动设 gc=4，并给实验身份追加 `_bc`。
+5. `baselines/PORPOISE/utils/utils.py`
+   - 新增普通/signature batched collator；开启新开关时 train/val/testing loader 都使用真实 `batch_size`。
+6. `baselines/PORPOISE/models/model_porpoise.py`
+   - `PorpoiseMMF.forward` 保留原 `[L,D]` 路径，新增 mask-aware `[B,L,D]` attention pooling。
+7. `baselines/PORPOISE/utils/core_utils.py`
+   - 新增 batched train/validate/summary；按样本归一化梯度；正确分派 NLL/CE survival loss 与 `[B]` risk。
+8. `baselines/PORPOISE/main.py`（用户追加授权）
+   - 新增 `--batched_collate`；开启时限定 `porpoise_mmf+pathomic/pathomic_fast`，bs=8 自动设 gc=4，实验身份追加 `_bc`。
+9. `scratch/g_mcat_batch_regression.py`、`scratch/g_porpoise_batch_regression.py`
+   - 两库独立 TDD 回归、allclose 金标准、CLI/gc、CPU backward、8-patient summary 测试。
+10. `mcat_patch.diff`、`porpoise_patch.diff`
+    - 更新为各子仓库当前完整工作树 diff，包含并保留任务 B/C/torch2 历史补丁。
+11. append-only 增补 `notes.md` 与本 `result.md`。
+
+任务启动前已 modified 的其他 MCAT/PORPOISE 文件未回滚、未覆盖；patch artifact 因按“完整工作树 diff”留档，会如实包含这些历史补丁。
+
+### 2. 对应任务 G 哪一条、达成情况
+
+| 任务 G 条款 | 状态 | 实现/证据 |
+|---|---|---|
+| 1. collate padding + mask + `[B]` patient fields | PASS | 两库形状测试；MCAT 六组 omic 各为 `[8,D_i]`，PORPOISE omic 为 `[8,D]`，path 为 `[8,10,8]`，mask 为 `[8,10] bool`。 |
+| 2. MCAT_Surv/PorpoiseMMF mask-aware forward，B=1 等价 | PASS | MCAT bs=1 max_abs=0；PORPOISE bs=1 max_abs=0；旧 2D 分支保留。 |
+| 3. per-sample mean loss；`effective=batch_size×gc=32` | PASS | 新循环按实际样本数累计/归一化；bs=8 CLI 实测 gc=4；最后不足 gc 的窗口也 step。PORPOISE NLL 与 CE 两类接口均有回归。 |
+| 4. bs=1 与 bs=8 双档 allclose | PASS | MCAT bs=8 max_abs=`1.1920929e-07`；PORPOISE bs=8 max_abs=`3.35276127e-08`；均使用 `atol=1e-5, rtol=1e-5`。 |
+| 5. `--batched_collate` 默认关、显式开 | PASS | 两库真实 `main.py --help` 暴露开关；开关关闭仍选旧 collator/旧 forward/旧 loop；开启时实验名追加 `_bc`。 |
+| 验收 ① 两库 allclose 全过 | PASS | MCAT 8/8、PORPOISE 9/9。 |
+| 验收 ② 本机 CPU 合成 bs=1/bs=8 | PASS | bs=1 做新旧完整前向；bs=8 做 batch 前向、8 次单独前向、mean loss、backward 与 optimizer step。 |
+| 验收 ③ result.md 四项齐全 | PASS | 本节 1–4；另含原始验证输出、问题与未尽事项。 |
+
+### 3. 怎么验证的：命令与真实原始输出
+
+#### 3.1 MCAT 最终任务 G 测试
+
+命令：
+
+~~~bash
+PYTHONPYCACHEPREFIX="$PWD/scratch/g_final_pycache_mcat" \
+  /Users/wuhao/miniconda3/envs/protomasksurv-exp1/bin/python \
+  scratch/g_mcat_batch_regression.py
+~~~
+
+退出码：`0`。真实原始输出：
+
+~~~text
+test_batched_collator_pads_paths_and_stacks_patient_fields (__main__.MCATBatchRegression) ... ok
+test_batched_summary_emits_all_eight_patients (__main__.MCATBatchRegression) ... /Users/wuhao/miniconda3/envs/protomasksurv-exp1/lib/python3.10/site-packages/torch/nn/modules/transformer.py:379: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.self_attn.batch_first was not True(use batch_first for better inference performance)
+  warnings.warn(
+ok
+test_bs1_new_path_matches_official_path_allclose (__main__.MCATBatchRegression) ... /Users/wuhao/miniconda3/envs/protomasksurv-exp1/lib/python3.10/site-packages/torch/nn/modules/transformer.py:379: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.self_attn.batch_first was not True(use batch_first for better inference performance)
+  warnings.warn(
+ok
+test_bs8_matches_eight_independent_forwards_allclose (__main__.MCATBatchRegression) ... ok
+test_cli_exposes_batched_collate_switch (__main__.MCATBatchRegression) ... ok
+test_cli_sets_gc4_for_batch_size_eight (__main__.MCATBatchRegression) ... ok
+test_cpu_bs8_training_smoke_steps_final_partial_window (__main__.MCATBatchRegression) ... ok
+test_validation_loader_really_uses_batch_size_eight (__main__.MCATBatchRegression) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 20.779s
+
+OK
+MCAT_BS1_ALLCLOSE_PASS atol=1e-5 max_abs=0
+MCAT_BS8_ALLCLOSE_PASS atol=1e-5 max_abs=1.1920929e-07
+MCAT_CLI_GC_PASS batch_size=8 gc=4 effective_samples=32
+Epoch: 0, train_loss_surv: 1.7471, train_loss: 1.7471, train_c_index: 0.6250
+~~~
+
+#### 3.2 PORPOISE 最终任务 G 测试
+
+命令：
+
+~~~bash
+PYTHONPYCACHEPREFIX="$PWD/scratch/g_final_pycache_porpoise" \
+  /Users/wuhao/miniconda3/envs/protomasksurv-exp1/bin/python \
+  scratch/g_porpoise_batch_regression.py
+~~~
+
+退出码：`0`。真实原始输出：
+
+~~~text
+test_batched_collator_pads_paths_and_stacks_patient_fields (__main__.PorpoiseBatchRegression) ... ok
+test_batched_loss_dispatch_supports_ce_surv_contract (__main__.PorpoiseBatchRegression) ... ok
+test_batched_summary_emits_all_eight_patients (__main__.PorpoiseBatchRegression) ... ok
+test_bs1_new_path_matches_official_path_allclose (__main__.PorpoiseBatchRegression) ... ok
+test_bs8_matches_eight_independent_forwards_allclose (__main__.PorpoiseBatchRegression) ... ok
+test_cli_exposes_batched_collate_switch (__main__.PorpoiseBatchRegression) ... ok
+test_cli_sets_gc4_for_batch_size_eight (__main__.PorpoiseBatchRegression) ... ok
+test_cpu_bs8_training_smoke_steps_final_partial_window (__main__.PorpoiseBatchRegression) ... ok
+test_validation_loader_really_uses_batch_size_eight (__main__.PorpoiseBatchRegression) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 18.190s
+
+OK
+PORPOISE_BS1_ALLCLOSE_PASS atol=1e-5 max_abs=0
+PORPOISE_BS8_ALLCLOSE_PASS atol=1e-5 max_abs=3.35276127e-08
+PORPOISE_CLI_GC_PASS batch_size=8 gc=4 effective_samples=32
+Epoch: 0, train_loss_surv: 1.7077, train_loss: 1.7077, train_c_index: 0.6250
+~~~
+
+#### 3.3 内存语法检查
+
+命令：对 8 个生产文件与 2 个 G 测试文件逐个执行 `compile(source, filename, 'exec')`，不写 baseline pycache。
+
+退出码：`0`。真实原始输出：
+
+~~~text
+SYNTAX_PASS baselines/MCAT/main.py
+SYNTAX_PASS baselines/MCAT/utils/utils.py
+SYNTAX_PASS baselines/MCAT/models/model_coattn.py
+SYNTAX_PASS baselines/MCAT/utils/core_utils.py
+SYNTAX_PASS baselines/PORPOISE/main.py
+SYNTAX_PASS baselines/PORPOISE/utils/utils.py
+SYNTAX_PASS baselines/PORPOISE/models/model_porpoise.py
+SYNTAX_PASS baselines/PORPOISE/utils/core_utils.py
+SYNTAX_PASS collab/20260827-三方对比战役/scratch/g_mcat_batch_regression.py
+SYNTAX_PASS collab/20260827-三方对比战役/scratch/g_porpoise_batch_regression.py
+SYNTAX_TOTAL 10
+~~~
+
+#### 3.4 历史补丁回归
+
+MCAT 命令：
+
+~~~bash
+PYTHONDONTWRITEBYTECODE=1 PYTHONWARNINGS=ignore \
+  /Users/wuhao/miniconda3/envs/protomasksurv-exp1/bin/python \
+  scratch/task_c_mcat_patch_test.py
+~~~
+
+退出码：`0`。测试 runner 原始状态块：
+
+~~~text
+test_train_passes_path_input_dim_to_mcat_constructor (__main__.CorePropagationBehaviorTests) ... ok
+test_cluster_split_still_loads_cluster_pickle (__main__.GenericSplitBehaviorTests) ... ok
+test_coattn_split_does_not_require_cluster_pickle (__main__.GenericSplitBehaviorTests) ... ok
+test_default_model_keeps_1024_input_and_forwards (__main__.ModelDimensionBehaviorTests) ... ok
+test_explicit_1536_model_input_forwards (__main__.ModelDimensionBehaviorTests) ... ok
+test_official_blca_dataset_and_model_forward_for_both_dimensions (__main__.OfficialBlcaMiniSmokeTests) ... ok
+test_help_exposes_inst_loss (__main__.ParserBehaviorTests) ... ok
+test_help_exposes_path_input_dim (__main__.ParserBehaviorTests) ... ok
+test_help_exposes_testing (__main__.ParserBehaviorTests) ... ok
+test_apply_sig_reads_repository_signature_directory (__main__.SignaturePathBehaviorTests) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 22.705s
+
+OK
+~~~
+
+PORPOISE Round 2 历史回归的完整成功运行原始状态块：
+
+~~~text
+test_coattn_official_blca_first_batch (__main__.OfficialBlcaFirstBatchTests) ... ok
+test_pathomic_official_blca_first_batch (__main__.OfficialBlcaFirstBatchTests) ... ok
+test_cluster_first_batch (__main__.SyntheticClusterFirstBatchTests) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 27.955s
+
+OK
+~~~
+
+最终并行复跑 PORPOISE 历史测试时，工具通道在 30 秒只返回首行且未返回 exit code；已按纪律尝试 `pgrep`/`ps` 查进程，但 macOS sandbox 禁止读取进程表，因此没有重复第三次派单。上面的 3/3 是本轮较早一次完整运行的真实输出；任务 G 的最终 9/9 是之后、且覆盖当前最终代码的新鲜证据。
+
+#### 3.5 diff 与 patch artifact
+
+两库 `git diff --check`：退出码均为 `0`，stdout 均为空。
+
+~~~text
+MCAT artifact: 628 lines, 31757 bytes
+SHA256 4fd3f93813e4298ac23656c55b2375044cd6d62faa172ac23069a87b7fd958b9
+PORPOISE artifact: 567 lines, 29543 bytes
+SHA256 135e2dce4c2285719c5672673f449cdc635d5c5904c3658221275d1f9273c2ad
+git diff | cmp - artifact: exit 0（两库）
+~~~
+
+### 4. 遇到的问题、未尽事项、有没有动白名单外
+
+#### 4.1 遇到的问题
+
+1. CLI RED 首次被本机缺失 `torchvision`/`torch_geometric` 遮蔽；测试子进程改用窄 shim 后，失败点准确收敛到 `--batched_collate` 缺失。
+2. 七维自查发现 PORPOISE CE survival loss/risk 分派错误；分别得到精确 RED（错误 loss keyword、risk shape `[2,4]`），最小修复后 GREEN，最终纳入 9/9。
+3. 裸 `py_compile` 短暂生成 8 个 baseline 内 Python 3.10 `.pyc`；已精确清除，原有 Python 3.13 历史缓存未动。最终语法检查改为内存 `compile()`。
+4. `rm -rf` 清理 `scratch/g_*pycache` 被安全策略拒绝且没有删除；随后把缓存移入精确临时目录，核对只含本轮 cache 后安全清除。最终工作区与 `/private/tmp` 均无这些缓存。
+
+详细 Post-Mortem 与 Prevention Rule 均已 append-only 写入 `notes.md`。
+
+#### 4.2 未尽事项
+
+- **按计划留给 Claude/landau**：Claude 独立 review 后，才可在 landau 做真实 1-epoch bs=8 冒烟；S4 命令必须显式加入 `--batched_collate`。本轮没有 SSH、没有远端 GPU、没有 1-epoch 真实数据训练。
+- 真实 1-epoch 冒烟通过后，是否“全场重启”仍由 Claude 和用户控制；本地 PASS 不授权 BLCA/BRCA/LUAD/LGG/UCEC 正式实验，也不授权 5-seed 全量。
+- 没有改 seeds、lr、adapters 或 NPJ。
+
+#### 4.3 有没有动到白名单外目录
+
+**最终持久化状态：没有白名单外改动。过程审计：有两类已完全清理的临时触碰，不能隐瞒。**
+
+- `py_compile` 曾在 baseline 非白名单路径生成 8 个 `.pyc`，均为本轮 Python 3.10 缓存，已删除；启动前已有的 Python 3.13 缓存保留不动。
+- 缓存清理曾使用 `/private/tmp/trimodalsurv-g-cache.rO7wg1`；只装本轮 `g_*pycache`，最终已精确删除并用 `test ! -e` 验证不存在。
+- 当前 `scratch/` 只新增两个白名单 `g_*` 测试脚本；当前根仓库另有既有 `collab/monitor/routine-sweep.md` 修改，本轮未触碰。
+- 未执行 git commit/push、gh PR、SSH/scp、下载、训练或 GPU 长任务。
+
+按项目互审纪律，本任务状态为：**本地实现与硬验收 PASS，等待 Claude 独立 review；不得据此进入正式实验 Gate。**

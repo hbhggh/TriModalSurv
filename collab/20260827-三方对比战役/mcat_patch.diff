@@ -24,7 +24,7 @@ index 53df12a..9cc7785 100755
          def series_intersection(s1, s2):
              return pd.Series(list(set(s1) & set(s2)))
 diff --git a/main.py b/main.py
-index 7944afe..4913e74 100644
+index 7944afe..370de37 100644
 --- a/main.py
 +++ b/main.py
 @@ -1,5 +1,6 @@
@@ -34,7 +34,7 @@ index 7944afe..4913e74 100644
  import argparse
  import pdb
  import os
-@@ -110,6 +111,7 @@ parser.add_argument('--apply_sigfeats',  action='store_true', default=False, hel
+@@ -110,13 +111,16 @@ parser.add_argument('--apply_sigfeats',  action='store_true', default=False, hel
  parser.add_argument('--drop_out',        action='store_true', default=True, help='Enable dropout (p=0.25)')
  parser.add_argument('--model_size_wsi',  type=str, default='small', help='Network size of AMIL model')
  parser.add_argument('--model_size_omic', type=str, default='small', help='Network size of SNN model')
@@ -42,7 +42,8 @@ index 7944afe..4913e74 100644
  
  ### Optimizer Parameters + Survival Loss Function
  parser.add_argument('--opt',             type=str, choices = ['adam', 'sgd'], default='adam')
-@@ -117,6 +119,7 @@ parser.add_argument('--batch_size',      type=int, default=1, help='Batch Size (
+ parser.add_argument('--batch_size',      type=int, default=1, help='Batch Size (Default: 1, due to varying bag sizes)')
++parser.add_argument('--batched_collate', action='store_true', default=False, help='Enable padded patient-level batching for MCAT co-attention')
  parser.add_argument('--gc',              type=int, default=32, help='Gradient Accumulation Step.')
  parser.add_argument('--max_epochs',      type=int, default=20, help='Maximum number of epochs to train (default: 20)')
  parser.add_argument('--lr',				 type=float, default=2e-4, help='Learning rate (default: 0.0001)')
@@ -50,7 +51,7 @@ index 7944afe..4913e74 100644
  parser.add_argument('--bag_loss',        type=str, choices=['svm', 'ce', 'ce_surv', 'nll_surv', 'cox_surv'], default='nll_surv', help='slide-level classification loss function (default: ce)')
  parser.add_argument('--label_frac',      type=float, default=1.0, help='fraction of training labels (default: 1.0)')
  parser.add_argument('--bag_weight',      type=float, default=0.7, help='clam: weight coefficient for bag-level loss (default: 0.7)')
-@@ -126,12 +129,16 @@ parser.add_argument('--reg_type',        type=str, choices=['None', 'omic', 'pat
+@@ -126,12 +130,28 @@ parser.add_argument('--reg_type',        type=str, choices=['None', 'omic', 'pat
  parser.add_argument('--lambda_reg',      type=float, default=1e-4, help='L1-Regularization Strength (Default 1e-4)')
  parser.add_argument('--weighted_sample', action='store_true', default=True, help='Enable weighted sampling')
  parser.add_argument('--early_stopping',  action='store_true', default=False, help='Enable early stopping')
@@ -59,15 +60,27 @@ index 7944afe..4913e74 100644
  args = parser.parse_args()
  device=torch.device("cuda" if torch.cuda.is_available() else "cpu")
  
++if args.batched_collate:
++	if args.model_type != 'mcat' or args.mode != 'coattn':
++		parser.error('--batched_collate requires --model_type mcat --mode coattn')
++	if args.batch_size <= 0 or args.batch_size > 32 or 32 % args.batch_size != 0:
++		parser.error('--batched_collate requires batch_size to be a positive divisor of 32')
++	args.gc = 32 // args.batch_size
++	print('batched_collate: batch_size={}, gc={}, effective_samples={}'.format(
++		args.batch_size, args.gc, args.batch_size * args.gc))
++
  ### Creates Experiment Code from argparse + Folder Name to Save Results
  args = get_custom_exp_code(args)
++if args.batched_collate:
++	args.param_code += '_bc'
++	args.exp_code += '_bc'
 +path_input_dim_code = '_pid{}'.format(args.path_input_dim)
 +args.param_code += path_input_dim_code
 +args.exp_code += path_input_dim_code
  args.task = '_'.join(args.split_dir.split('_')[:2]) + '_survival'
  print("Experiment Name:", args.exp_code)
  
-@@ -157,6 +164,8 @@ settings = {'num_splits': args.k,
+@@ -157,6 +177,8 @@ settings = {'num_splits': args.k,
  			'task': args.task,
  			'max_epochs': args.max_epochs, 
  			'results_dir': args.results_dir, 
@@ -76,7 +89,7 @@ index 7944afe..4913e74 100644
  			'lr': args.lr,
  			'experiment': args.exp_code,
  			'reg': args.reg,
-@@ -209,7 +218,36 @@ if not os.path.isdir(args.results_dir):
+@@ -209,7 +231,36 @@ if not os.path.isdir(args.results_dir):
  
  ### Appends to the results_dir path: 1) which splits were used for training (e.g. - 5foldcv), and then 2) the parameter code and 3) experiment code
  args.results_dir = os.path.join(args.results_dir, args.which_splits, args.param_code, str(args.exp_code) + '_s{}'.format(args.seed))
@@ -114,7 +127,7 @@ index 7944afe..4913e74 100644
  	os.makedirs(args.results_dir)
  
  if ('summary_latest.csv' in os.listdir(args.results_dir)) and (not args.overwrite):
-@@ -222,7 +260,7 @@ print("split_dir", args.split_dir)
+@@ -222,7 +273,7 @@ print("split_dir", args.split_dir)
  assert os.path.isdir(args.split_dir)
  settings.update({'split_dir': args.split_dir})
  
@@ -124,7 +137,7 @@ index 7944afe..4913e74 100644
  f.close()
  
 diff --git a/models/model_coattn.py b/models/model_coattn.py
-index 26c032e..f534bfb 100644
+index 26c032e..d81724d 100644
 --- a/models/model_coattn.py
 +++ b/models/model_coattn.py
 @@ -17,12 +17,13 @@ from models.model_utils import *
@@ -143,7 +156,72 @@ index 26c032e..f534bfb 100644
          self.size_dict_omic = {'small': [256, 256], 'big': [1024, 1024, 1024, 256]}
          
          ### FC Layer over WSI bag
-@@ -471,7 +472,7 @@ def multi_head_attention_forward(
+@@ -71,6 +72,64 @@ class MCAT_Surv(nn.Module):
+         x_path = kwargs['x_path']
+         x_omic = [kwargs['x_omic%d' % i] for i in range(1,7)]
+ 
++        if x_path.dim() == 3:
++            path_mask = kwargs.get('path_mask')
++            if path_mask is None:
++                raise ValueError('path_mask is required for batched MCAT input')
++            if path_mask.shape != x_path.shape[:2]:
++                raise ValueError('path_mask must have shape [B, L] matching x_path')
++            path_mask = path_mask.to(device=x_path.device, dtype=torch.bool)
++            if torch.any(path_mask.all(dim=1)):
++                raise ValueError('every patient must contain at least one valid path patch')
++
++            h_path_bag = self.wsi_net(x_path).transpose(0, 1)
++            h_omic = [
++                self.sig_networks[idx].forward(sig_feat)
++                for idx, sig_feat in enumerate(x_omic)
++            ]
++            h_omic_bag = torch.stack(h_omic, dim=0)
++
++            h_path_coattn, A_coattn = self.coattn(
++                h_omic_bag,
++                h_path_bag,
++                h_path_bag,
++                key_padding_mask=path_mask,
++            )
++
++            h_path_trans = self.path_transformer(h_path_coattn)
++            A_path, h_path = self.path_attention_head(h_path_trans)
++            A_path = A_path.permute(1, 2, 0)
++            h_path = h_path.permute(1, 0, 2)
++            h_path = torch.bmm(F.softmax(A_path, dim=2), h_path).squeeze(1)
++            h_path = self.path_rho(h_path)
++
++            h_omic_trans = self.omic_transformer(h_omic_bag)
++            A_omic, h_omic = self.omic_attention_head(h_omic_trans)
++            A_omic = A_omic.permute(1, 2, 0)
++            h_omic = h_omic.permute(1, 0, 2)
++            h_omic = torch.bmm(F.softmax(A_omic, dim=2), h_omic).squeeze(1)
++            h_omic = self.omic_rho(h_omic)
++
++            if self.fusion == 'bilinear':
++                h = self.mm(h_path, h_omic)
++            elif self.fusion == 'concat':
++                h = self.mm(torch.cat([h_path, h_omic], axis=1))
++
++            logits = self.classifier(h)
++            Y_hat = torch.topk(logits, 1, dim=1)[1]
++            hazards = torch.sigmoid(logits)
++            S = torch.cumprod(1 - hazards, dim=1)
++
++            attention_scores = {
++                'coattn': A_coattn,
++                'path': A_path[0] if x_path.size(0) == 1 else A_path,
++                'omic': A_omic[0] if x_path.size(0) == 1 else A_omic,
++            }
++            return hazards, S, Y_hat, attention_scores
++
++        if x_path.dim() != 2:
++            raise ValueError('x_path must have shape [L, D] or [B, L, D]')
++
+         h_path_bag = self.wsi_net(x_path).unsqueeze(1) ### path embeddings are fed through a FC layer
+         h_omic = [self.sig_networks[idx].forward(sig_feat) for idx, sig_feat in enumerate(x_omic)] ### each omic signature goes through it's own FC layer
+         h_omic_bag = torch.stack(h_omic).unsqueeze(1) ### omic embeddings are stacked (to be used in co-attention)
+@@ -471,7 +530,7 @@ def multi_head_attention_forward(
  
  import torch
  from torch import Tensor
@@ -187,7 +265,7 @@ index 229efd1..0e9c9d8 100644
          all_censorships[batch_idx] = c
          all_event_times[batch_idx] = event_time
 diff --git a/utils/core_utils.py b/utils/core_utils.py
-index 97ee9f9..6347e3d 100755
+index 97ee9f9..ade2077 100755
 --- a/utils/core_utils.py
 +++ b/utils/core_utils.py
 @@ -158,7 +158,7 @@ def train(datasets: tuple, cur: int, args: Namespace):
@@ -199,20 +277,244 @@ index 97ee9f9..6347e3d 100755
          model = MCAT_Surv(**model_dict)
      else:
          raise NotImplementedError
-@@ -201,7 +201,11 @@ def train(datasets: tuple, cur: int, args: Namespace):
+@@ -175,9 +175,12 @@ def train(datasets: tuple, cur: int, args: Namespace):
+     print('Done!')
+     
+     print('\nInit Loaders...', end=' ')
++    batched_collate = getattr(args, 'batched_collate', False)
+     train_loader = get_split_loader(train_split, training=True, testing = args.testing, 
+-        weighted = args.weighted_sample, mode=args.mode, batch_size=args.batch_size)
+-    val_loader = get_split_loader(val_split,  testing = args.testing, mode=args.mode, batch_size=args.batch_size)
++        weighted = args.weighted_sample, mode=args.mode, batch_size=args.batch_size,
++        batched_collate=batched_collate)
++    val_loader = get_split_loader(val_split, testing = args.testing, mode=args.mode,
++        batch_size=args.batch_size, batched_collate=batched_collate)
+     print('Done!')
+ 
+     print('\nSetup EarlyStopping...', end=' ')
+@@ -193,20 +196,218 @@ def train(datasets: tuple, cur: int, args: Namespace):
+     for epoch in range(args.max_epochs):
+         if args.task_type == 'survival':
+             if args.mode == 'coattn':
+-                train_loop_survival_coattn(epoch, model, train_loader, optimizer, args.n_classes, writer, loss_fn, reg_fn, args.lambda_reg, args.gc)
+-                stop = validate_survival_coattn(cur, epoch, model, val_loader, args.n_classes, early_stopping, monitor_cindex, writer, loss_fn, reg_fn, args.lambda_reg, args.results_dir)
++                if batched_collate:
++                    train_loop_survival_coattn_batched(epoch, model, train_loader, optimizer, args.n_classes, writer, loss_fn, reg_fn, args.lambda_reg, args.gc)
++                    stop = validate_survival_coattn_batched(cur, epoch, model, val_loader, args.n_classes, early_stopping, monitor_cindex, writer, loss_fn, reg_fn, args.lambda_reg, args.results_dir)
++                else:
++                    train_loop_survival_coattn(epoch, model, train_loader, optimizer, args.n_classes, writer, loss_fn, reg_fn, args.lambda_reg, args.gc)
++                    stop = validate_survival_coattn(cur, epoch, model, val_loader, args.n_classes, early_stopping, monitor_cindex, writer, loss_fn, reg_fn, args.lambda_reg, args.results_dir)
+             else:
+                 train_loop_survival(epoch, model, train_loader, optimizer, args.n_classes, writer, loss_fn, reg_fn, args.lambda_reg, args.gc)
+                 stop = validate_survival(cur, epoch, model, val_loader, args.n_classes, early_stopping, monitor_cindex, writer, loss_fn, reg_fn, args.lambda_reg, args.results_dir)
  
      torch.save(model.state_dict(), os.path.join(args.results_dir, "s_{}_checkpoint.pt".format(cur)))
      model.load_state_dict(torch.load(os.path.join(args.results_dir, "s_{}_checkpoint.pt".format(cur))))
 -    results_val_dict, val_cindex = summary_survival(model, val_loader, args.n_classes)
 +    # minimal patch: official code forgot the coattn branch here (train loop has it; summary did not)
 +    if args.mode == 'coattn':
-+        results_val_dict, val_cindex = summary_survival_coattn(model, val_loader, args.n_classes)
++        if batched_collate:
++            results_val_dict, val_cindex = summary_survival_coattn_batched(model, val_loader, args.n_classes)
++        else:
++            results_val_dict, val_cindex = summary_survival_coattn(model, val_loader, args.n_classes)
 +    else:
 +        results_val_dict, val_cindex = summary_survival(model, val_loader, args.n_classes)
      print('Val c-Index: {:.4f}'.format(val_cindex))
      writer.close()
      return results_val_dict, val_cindex
-@@ -339,9 +343,9 @@ def summary_survival(model, loader, n_classes):
+ 
+ 
++def _step_sample_mean_gradients(model, optimizer, accumulated_samples):
++    if accumulated_samples <= 0:
++        raise ValueError('accumulated_samples must be positive before optimizer.step')
++    for parameter in model.parameters():
++        if parameter.grad is not None:
++            parameter.grad.div_(accumulated_samples)
++    optimizer.step()
++    optimizer.zero_grad()
++
++
++def train_loop_survival_coattn_batched(epoch, model, loader, optimizer, n_classes, writer=None, loss_fn=None, reg_fn=None, lambda_reg=0., gc=16):
++    if gc <= 0:
++        raise ValueError('gc must be positive')
++    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
++    model.train()
++    optimizer.zero_grad()
++    train_loss_surv, train_loss = 0., 0.
++    total_samples = 0
++    accumulated_samples = 0
++    all_risk_scores, all_censorships, all_event_times = [], [], []
++
++    for batch_idx, batch in enumerate(loader):
++        (data_WSI, path_mask, data_omic1, data_omic2, data_omic3,
++         data_omic4, data_omic5, data_omic6, label, event_time, c) = batch
++        data_WSI = data_WSI.to(device)
++        path_mask = path_mask.to(device)
++        omics = [
++            data_omic1.to(device), data_omic2.to(device), data_omic3.to(device),
++            data_omic4.to(device), data_omic5.to(device), data_omic6.to(device),
++        ]
++        label = label.to(device=device, dtype=torch.long)
++        c = c.to(device=device, dtype=torch.float32)
++        batch_size = label.numel()
++
++        hazards, S, Y_hat, A = model(
++            x_path=data_WSI,
++            path_mask=path_mask,
++            **{'x_omic{}'.format(index + 1): omic for index, omic in enumerate(omics)}
++        )
++        loss = loss_fn(hazards=hazards, S=S, Y=label, c=c)
++        loss_value = loss.item()
++        loss_reg = 0 if reg_fn is None else reg_fn(model) * lambda_reg
++        loss_reg_value = loss_reg.item() if torch.is_tensor(loss_reg) else float(loss_reg)
++
++        risk = -torch.sum(S, dim=1).detach().cpu().numpy()
++        all_risk_scores.append(risk)
++        all_censorships.append(c.detach().cpu().numpy())
++        all_event_times.append(torch.as_tensor(event_time).reshape(-1).cpu().numpy())
++
++        train_loss_surv += loss_value * batch_size
++        train_loss += (loss_value + loss_reg_value) * batch_size
++        total_samples += batch_size
++        accumulated_samples += batch_size
++
++        ((loss + loss_reg) * batch_size).backward()
++        if (batch_idx + 1) % gc == 0 or (batch_idx + 1) == len(loader):
++            _step_sample_mean_gradients(model, optimizer, accumulated_samples)
++            accumulated_samples = 0
++
++    train_loss_surv /= total_samples
++    train_loss /= total_samples
++    all_risk_scores = np.concatenate(all_risk_scores)
++    all_censorships = np.concatenate(all_censorships)
++    all_event_times = np.concatenate(all_event_times)
++    c_index = concordance_index_censored(
++        (1-all_censorships).astype(bool), all_event_times, all_risk_scores,
++        tied_tol=1e-08)[0]
++
++    print('Epoch: {}, train_loss_surv: {:.4f}, train_loss: {:.4f}, train_c_index: {:.4f}'.format(epoch, train_loss_surv, train_loss, c_index))
++    if writer:
++        writer.add_scalar('train/loss_surv', train_loss_surv, epoch)
++        writer.add_scalar('train/loss', train_loss, epoch)
++        writer.add_scalar('train/c_index', c_index, epoch)
++
++
++def validate_survival_coattn_batched(cur, epoch, model, loader, n_classes, early_stopping=None, monitor_cindex=None, writer=None, loss_fn=None, reg_fn=None, lambda_reg=0., results_dir=None):
++    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
++    model.eval()
++    val_loss_surv, val_loss = 0., 0.
++    total_samples = 0
++    all_risk_scores, all_censorships, all_event_times = [], [], []
++
++    for batch in loader:
++        (data_WSI, path_mask, data_omic1, data_omic2, data_omic3,
++         data_omic4, data_omic5, data_omic6, label, event_time, c) = batch
++        data_WSI = data_WSI.to(device)
++        path_mask = path_mask.to(device)
++        omics = [
++            data_omic1.to(device), data_omic2.to(device), data_omic3.to(device),
++            data_omic4.to(device), data_omic5.to(device), data_omic6.to(device),
++        ]
++        label = label.to(device=device, dtype=torch.long)
++        c = c.to(device=device, dtype=torch.float32)
++        batch_size = label.numel()
++
++        with torch.no_grad():
++            hazards, S, Y_hat, A = model(
++                x_path=data_WSI,
++                path_mask=path_mask,
++                **{'x_omic{}'.format(index + 1): omic for index, omic in enumerate(omics)}
++            )
++        loss = loss_fn(hazards=hazards, S=S, Y=label, c=c, alpha=0)
++        loss_value = loss.item()
++        loss_reg = 0 if reg_fn is None else reg_fn(model) * lambda_reg
++        loss_reg_value = loss_reg.item() if torch.is_tensor(loss_reg) else float(loss_reg)
++
++        all_risk_scores.append(-torch.sum(S, dim=1).cpu().numpy())
++        all_censorships.append(c.cpu().numpy())
++        all_event_times.append(torch.as_tensor(event_time).reshape(-1).cpu().numpy())
++        val_loss_surv += loss_value * batch_size
++        val_loss += (loss_value + loss_reg_value) * batch_size
++        total_samples += batch_size
++
++    val_loss_surv /= total_samples
++    val_loss /= total_samples
++    all_risk_scores = np.concatenate(all_risk_scores)
++    all_censorships = np.concatenate(all_censorships)
++    all_event_times = np.concatenate(all_event_times)
++    c_index = concordance_index_censored(
++        (1-all_censorships).astype(bool), all_event_times, all_risk_scores,
++        tied_tol=1e-08)[0]
++
++    if writer:
++        writer.add_scalar('val/loss_surv', val_loss_surv, epoch)
++        writer.add_scalar('val/loss', val_loss, epoch)
++        writer.add_scalar('val/c-index', c_index, epoch)
++    if early_stopping:
++        assert results_dir
++        early_stopping(epoch, val_loss_surv, model, ckpt_name=os.path.join(results_dir, 's_{}_minloss_checkpoint.pt'.format(cur)))
++        if early_stopping.early_stop:
++            print('Early stopping')
++            return True
++    return False
++
++
++def summary_survival_coattn_batched(model, loader, n_classes):
++    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
++    model.eval()
++    slide_ids = loader.dataset.slide_data['slide_id']
++    patient_results = {}
++    all_risk_scores, all_censorships, all_event_times = [], [], []
++    sample_offset = 0
++
++    for batch in loader:
++        (data_WSI, path_mask, data_omic1, data_omic2, data_omic3,
++         data_omic4, data_omic5, data_omic6, label, event_time, c) = batch
++        data_WSI = data_WSI.to(device)
++        path_mask = path_mask.to(device)
++        omics = [
++            data_omic1.to(device), data_omic2.to(device), data_omic3.to(device),
++            data_omic4.to(device), data_omic5.to(device), data_omic6.to(device),
++        ]
++        label = label.to(device=device, dtype=torch.long)
++        with torch.no_grad():
++            hazards, survival, Y_hat, A = model(
++                x_path=data_WSI,
++                path_mask=path_mask,
++                **{'x_omic{}'.format(index + 1): omic for index, omic in enumerate(omics)}
++            )
++
++        risks = -torch.sum(survival, dim=1).cpu().numpy()
++        times = torch.as_tensor(event_time).reshape(-1).cpu().numpy()
++        censors = torch.as_tensor(c).reshape(-1).cpu().numpy()
++        labels = label.cpu().numpy()
++        all_risk_scores.append(risks)
++        all_censorships.append(censors)
++        all_event_times.append(times)
++        for index in range(len(risks)):
++            slide_id = slide_ids.iloc[sample_offset + index]
++            patient_results.update({slide_id: {
++                'slide_id': np.array(slide_id),
++                'risk': float(risks[index]),
++                'disc_label': int(labels[index]),
++                'survival': float(times[index]),
++                'censorship': float(censors[index]),
++            }})
++        sample_offset += len(risks)
++
++    all_risk_scores = np.concatenate(all_risk_scores)
++    all_censorships = np.concatenate(all_censorships)
++    all_event_times = np.concatenate(all_event_times)
++    c_index = concordance_index_censored(
++        (1-all_censorships).astype(bool), all_event_times, all_risk_scores,
++        tied_tol=1e-08)[0]
++    return patient_results, c_index
++
++
+ def train_loop_survival(epoch, model, loader, optimizer, n_classes, writer=None, loss_fn=None, reg_fn=None, lambda_reg=0., gc=16):   
+     device=torch.device("cuda" if torch.cuda.is_available() else "cpu") 
+     model.train()
+@@ -339,9 +540,9 @@ def summary_survival(model, loader, n_classes):
          with torch.no_grad():
              hazards, survival, Y_hat, _, _ = model(x_path=data_WSI, x_omic=data_omic)
  
@@ -225,3 +527,102 @@ index 97ee9f9..6347e3d 100755
          all_risk_scores[batch_idx] = risk
          all_censorships[batch_idx] = c
          all_event_times[batch_idx] = event_time
+diff --git a/utils/utils.py b/utils/utils.py
+index 3c707a8..20085ad 100755
+--- a/utils/utils.py
++++ b/utils/utils.py
+@@ -47,6 +47,40 @@ def collate_features(batch):
+     coords = np.vstack([item[1] for item in batch])
+     return [img, coords]
+ 
++def _pad_path_features(batch):
++    if not batch:
++        raise ValueError('batched collate requires at least one patient')
++
++    paths = [item[0] for item in batch]
++    if any(not torch.is_tensor(path) or path.dim() != 2 or path.size(0) == 0 for path in paths):
++        raise ValueError('each path feature bag must be a non-empty [L, D] tensor')
++    feature_dim = paths[0].size(1)
++    if any(path.size(1) != feature_dim for path in paths):
++        raise ValueError('all path feature bags must use the same feature dimension')
++
++    lengths = torch.tensor([path.size(0) for path in paths], dtype=torch.long)
++    max_length = int(lengths.max().item())
++    padded = paths[0].new_zeros((len(paths), max_length, feature_dim))
++    padding_mask = torch.ones((len(paths), max_length), dtype=torch.bool)
++    for index, path in enumerate(paths):
++        length = path.size(0)
++        padded[index, :length].copy_(path)
++        padding_mask[index, :length] = False
++    return padded, padding_mask
++
++def _stack_patient_vectors(values, dtype):
++    vectors = [torch.as_tensor(value).reshape(-1) for value in values]
++    return torch.stack(vectors, dim=0).to(dtype=dtype)
++
++def _stack_patient_scalars(values, dtype):
++    scalars = []
++    for value in values:
++        tensor = torch.as_tensor(value)
++        if tensor.numel() != 1:
++            raise ValueError('patient label/time/censorship must contain exactly one value')
++        scalars.append(tensor.reshape(()))
++    return torch.stack(scalars, dim=0).to(dtype=dtype)
++
+ def collate_MIL_survival(batch):
+     img = torch.cat([item[0] for item in batch], dim = 0)
+     omic = torch.cat([item[1] for item in batch], dim = 0).type(torch.FloatTensor)
+@@ -78,16 +112,41 @@ def collate_MIL_survival_sig(batch):
+     c = torch.FloatTensor([item[9] for item in batch])
+     return [img, omic1, omic2, omic3, omic4, omic5, omic6, label, event_time, c]
+ 
++def collate_MIL_survival_batched(batch):
++    img, path_mask = _pad_path_features(batch)
++    omic = _stack_patient_vectors([item[1] for item in batch], torch.float32)
++    label = _stack_patient_scalars([item[2] for item in batch], torch.long)
++    event_time = _stack_patient_scalars([item[3] for item in batch], torch.float32)
++    c = _stack_patient_scalars([item[4] for item in batch], torch.float32)
++    return [img, path_mask, omic, label, event_time, c]
++
++def collate_MIL_survival_sig_batched(batch):
++    img, path_mask = _pad_path_features(batch)
++    omics = [
++        _stack_patient_vectors([item[index] for item in batch], torch.float32)
++        for index in range(1, 7)
++    ]
++    label = _stack_patient_scalars([item[7] for item in batch], torch.long)
++    event_time = _stack_patient_scalars([item[8] for item in batch], torch.float32)
++    c = _stack_patient_scalars([item[9] for item in batch], torch.float32)
++    return [img, path_mask, *omics, label, event_time, c]
++
+ def get_simple_loader(dataset, batch_size=1):
+     kwargs = {'num_workers': 4} if device.type == "cuda" else {}
+     loader = DataLoader(dataset, batch_size=batch_size, sampler = sampler.SequentialSampler(dataset), collate_fn = collate_MIL, **kwargs)
+     return loader 
+ 
+-def get_split_loader(split_dataset, training = False, testing = False, weighted = False, mode='coattn', batch_size=1):
++def get_split_loader(split_dataset, training = False, testing = False, weighted = False, mode='coattn', batch_size=1, batched_collate=False):
+     """
+         return either the validation loader or training loader 
+     """
+-    if mode == 'coattn':
++    if batched_collate and mode == 'coattn':
++        collate = collate_MIL_survival_sig_batched
++    elif batched_collate and mode in ('path', 'pathomic'):
++        collate = collate_MIL_survival_batched
++    elif batched_collate:
++        raise ValueError('batched collate is only supported for coattn/path/pathomic modes')
++    elif mode == 'coattn':
+         collate = collate_MIL_survival_sig
+     elif mode == 'cluster':
+         collate = collate_MIL_survival_cluster
+@@ -107,7 +166,8 @@ def get_split_loader(split_dataset, training = False, testing = False, weighted
+     
+     else:
+         ids = np.random.choice(np.arange(len(split_dataset), int(len(split_dataset)*0.1)), replace = False)
+-        loader = DataLoader(split_dataset, batch_size=1, sampler = SubsetSequentialSampler(ids), collate_fn = collate, **kwargs )
++        testing_batch_size = batch_size if batched_collate else 1
++        loader = DataLoader(split_dataset, batch_size=testing_batch_size, sampler = SubsetSequentialSampler(ids), collate_fn = collate, **kwargs )
+ 
+     return loader
+ 

@@ -8,6 +8,7 @@ mkdir -p $UNITS_DIR
 for u in $QUEUE; do
   M=${u%%:*}; C=${u##*:}
   [ -f "$UNITS_DIR/${M}_${C}.done" ] && { echo "[$LANE] skip ${M}_${C} (done)"; continue; }
+  mkdir "$UNITS_DIR/${M}_${C}.claim" 2>/dev/null || { echo "[$LANE] skip ${M}_${C} (claimed by other lane)"; continue; }
   echo "===== [$LANE] UNIT ${M}_${C} start $(date +%F_%T) GPU=$GPU ====="
   bash /home/wuhao/NPJ/s4_run_method_cancer.sh $GPU $M $C
   if [ $? -eq 0 ]; then date +%F_%T > "$UNITS_DIR/${M}_${C}.done"; else date +%F_%T > "$UNITS_DIR/${M}_${C}.failed"; echo "[$LANE] UNIT ${M}_${C} FAILED，停该线继续下一单元"; fi
