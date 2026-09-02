@@ -2,6 +2,18 @@
 
 Claude Code 与 Codex/Codex Companion 都必须遵守本文件。冲突时以本文件为准。
 
+## 执行前必读（坑台账）
+
+开始任何实现、复现、评测、派单或修 bug 之前，必须先完整阅读：
+
+`collab/pitfalls.md`
+
+这是本仓库唯一的坑台账。读完再动手。禁止凭记忆声称已经知道这些约束。
+新发现的失效模式收单时追加到同一文件：一行一条，含 ID、一句话坑、一句话 Prevention Rule、出处。
+不要另起清单，不要把同一 Post-Mortem 重复入账。
+
+最小执行口径：以本小节 + `collab/pitfalls.md` 为准。不再要求每次手工挑 3–5 条写入 plan.md。
+
 ## 角色
 
 - Claude Code 是唯一指挥官：定策略、监视任务、控制停机门、验收、部署下一步。
@@ -19,6 +31,7 @@ Claude Code 与 Codex/Codex Companion 都必须遵守本文件。冲突时以本
 ## 执行纪律
 
 - 通道超时先查进程；禁止把通道断当成任务死亡；禁止二次派单。
+- Codex 执行派单前必读 plan.md「相关坑」节并遵守其中 Prevention Rule；产出的新教训按 Post-Mortem 格式写入 notes.md。
 - 监视器默认只报警，不自动重启。
 - 新下载 / 训练 / 转换必须经 landau 的 `jobrun.sh` 启动。
 - 不改 `tmp_sur_cache/`，不覆盖已有结果目录。
