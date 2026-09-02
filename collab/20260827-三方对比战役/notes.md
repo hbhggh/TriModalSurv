@@ -568,3 +568,9 @@
 - PORPOISE 25 评估败于 `attention_net.module.*` 键不匹配：官方 `relocate()` 只把 attention_net 子模块包进 DataParallel，ckpt 键呈中缀形态；评估器原只处理整体 `module.` 前缀。
 - 修复：`_load_checkpoint` 增加两行中缀归一（`.module.` → `.`），MCAT 无中缀不受影响，strict=True 兜底不变。已同步 landau 部署位并重发（MCAT 25 个 json 已产出，批跑加 SKIP 防重跑）。
 - 另记：批跑第四轮 50 连败真因是 `--features-root` 语义为癌种级目录（评估器直接拼 root/pt_files/），非资源竞争；诊断期间的 `EXIT=$?` 曾因管道取到 tail 的退出码造成误判，后以无管道重跑纠正。
+
+## 2026-09-02 — 指挥官注记：bs=1 裁决的效力范围澄清（不改历史行）
+
+- 本档案 2026-08-27 15:40 节「bs=1 + gc=32 + 每卡 5 lane」裁决对**已收官的 S5 三方对比**仍为有效历史事实（判定报告如实记录，不追溯）。
+- 对**后续新实验**（NPJ 骨架的对比/消融/创新臂），该裁决自 2026-09-02 起**作废**，改按 `AGENTS.md`「正式实验 GPU 合同」执行（能加大 batch 就加大，实证阻断须写 `BATCH_SIZE_BLOCKED_REASON`）。
+- 附注：当日 bench（:501-511）是在 I/O 未调优配置（pin_memory=False、无 persistent_workers、热循环每 step 5 次同步）下测得，其结论不自动适用于 I/O 修复后的环境；相关教训已入台账 V17。
