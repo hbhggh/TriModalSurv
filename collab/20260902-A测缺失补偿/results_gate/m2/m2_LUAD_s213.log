@@ -1,0 +1,16 @@
+['LUAD'] cancer_types
+Loading split test:   0%|          | 0/172 [00:00<?, ?it/s]Loading split test: 100%|██████████| 172/172 [00:00<00:00, 6541.12it/s]
+none: A=0.570200 B=0.570551 n=172 rna=0 text=0
+rna_25: A=0.541945 B=0.542822 n=172 rna=43 text=0
+rna_50: A=0.575290 B=0.569323 n=172 rna=86 text=0
+rna_75: A=0.552826 B=0.557564 n=172 rna=129 text=0
+text_25: A=0.569147 B=0.570025 n=172 rna=0 text=43
+text_50: A=0.580204 B=0.580204 n=172 rna=0 text=86
+text_75: A=0.584942 B=0.591260 n=172 rna=0 text=129
+both_25: A=0.523868 B=0.547385 n=172 rna=43 text=43
+both_50: A=0.562829 B=0.581959 n=172 rna=86 text=86
+both_75: A=0.609337 B=0.608108 n=172 rna=129 text=129
+rna_100: A=0.547912 B=0.556511 n=172 rna=172 text=0
+text_100: A=0.604072 B=0.606353 n=172 rna=0 text=172
+both_100: A=0.607231 B=0.608284 n=172 rna=172 text=172
+OUTPUT_JSON=/home/wuhao/amiss_eval_v2/m2/m0real_LUAD_s213.json

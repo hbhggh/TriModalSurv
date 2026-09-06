@@ -1,0 +1,118 @@
+{
+  "arm": "m0real",
+  "cancer": "LGG",
+  "checkpoint": "/home/wuhao/NPJ/out/213/tcga_uni2_img_1536text_768rna_256_MainModalityMoE_LGG_surv.pth",
+  "grids": {
+    "both_100": {
+      "cindex_A": 0.694271911663216,
+      "cindex_B": 0.7301587301587301,
+      "grid_sha": "31e12e38987f7667def3044a814f1b64cf8516a2f03ffa5e4fb0a07abf779015",
+      "n_masked_rna": 166,
+      "n_masked_text": 166,
+      "n_test": 166
+    },
+    "both_25": {
+      "cindex_A": 0.6739130434782609,
+      "cindex_B": 0.6897860593512768,
+      "grid_sha": "e5d3770558c2c19540e578b976be95d50d7df0e412c15e76250ffb1750a3c3e4",
+      "n_masked_rna": 41,
+      "n_masked_text": 41,
+      "n_test": 166
+    },
+    "both_50": {
+      "cindex_A": 0.6880607315389924,
+      "cindex_B": 0.7070393374741201,
+      "grid_sha": "06a2f82799660b97305cf2265790d0138e4fb291ea8b1dd0ef7cc56f9f8d127c",
+      "n_masked_rna": 83,
+      "n_masked_text": 83,
+      "n_test": 166
+    },
+    "both_75": {
+      "cindex_A": 0.7070393374741201,
+      "cindex_B": 0.7246376811594203,
+      "grid_sha": "9f6b98ae2e061560c65961ad742d64308b5049dff1016ffb37464873cc78e936",
+      "n_masked_rna": 124,
+      "n_masked_text": 124,
+      "n_test": 166
+    },
+    "none": {
+      "cindex_A": 0.6973775017253279,
+      "cindex_B": 0.717391304347826,
+      "grid_sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "n_masked_rna": 0,
+      "n_masked_text": 0,
+      "n_test": 166
+    },
+    "rna_100": {
+      "cindex_A": 0.6821946169772257,
+      "cindex_B": 0.7198067632850241,
+      "grid_sha": "16b3813ef1d47205a5da1d1afdcf23599dc684befc5a6bcc80fc951157100a51",
+      "n_masked_rna": 166,
+      "n_masked_text": 0,
+      "n_test": 166
+    },
+    "rna_25": {
+      "cindex_A": 0.699447895100069,
+      "cindex_B": 0.7232574189095928,
+      "grid_sha": "9fcce97b314252f4b41d55810a86dc9cfc7ad4532e606cc62a01e63a7d93175a",
+      "n_masked_rna": 41,
+      "n_masked_text": 0,
+      "n_test": 166
+    },
+    "rna_50": {
+      "cindex_A": 0.689095928226363,
+      "cindex_B": 0.714975845410628,
+      "grid_sha": "f9b22b8dc9c3372004a994585cebf5ed1904e19011845d61283f73d6c6050d87",
+      "n_masked_rna": 83,
+      "n_masked_text": 0,
+      "n_test": 166
+    },
+    "rna_75": {
+      "cindex_A": 0.689095928226363,
+      "cindex_B": 0.7139406487232575,
+      "grid_sha": "49ca335c63c1be8695c65850a140dad6325354ffdb4395d813d09d340f5ffbbd",
+      "n_masked_rna": 124,
+      "n_masked_text": 0,
+      "n_test": 166
+    },
+    "text_100": {
+      "cindex_A": 0.6959972394755003,
+      "cindex_B": 0.717391304347826,
+      "grid_sha": "87e5b603c5ad851ef3bfa63b675f93825e835beb4c29ade5eba75c9bff9d26c4",
+      "n_masked_rna": 0,
+      "n_masked_text": 166,
+      "n_test": 166
+    },
+    "text_25": {
+      "cindex_A": 0.6980676328502415,
+      "cindex_B": 0.7184265010351967,
+      "grid_sha": "5de3f09044b76f6e115ac9bf009537e1d5ccc31605bb69b04fb4424d69d7ac81",
+      "n_masked_rna": 0,
+      "n_masked_text": 41,
+      "n_test": 166
+    },
+    "text_50": {
+      "cindex_A": 0.7004830917874396,
+      "cindex_B": 0.7246376811594203,
+      "grid_sha": "7c647dbda250b857b28c2cebf2f765ebbaadf8790b4049855631d31a726b48b3",
+      "n_masked_rna": 0,
+      "n_masked_text": 83,
+      "n_test": 166
+    },
+    "text_75": {
+      "cindex_A": 0.699447895100069,
+      "cindex_B": 0.7208419599723948,
+      "grid_sha": "3b371ff2e1ccad5f4950f03b1e1c15b5662005657867ae5258203d84200e2809",
+      "n_masked_rna": 0,
+      "n_masked_text": 124,
+      "n_test": 166
+    }
+  },
+  "hidden_size": 256,
+  "label": "/home/wuhao/NPJ/data/TCGA_9523_ex12.csv",
+  "m1_train_nonmissing_counts": {},
+  "manifest": "/home/wuhao/NPJ/data/missing_manifest_v1.csv",
+  "manifest_sha256": "c789eae9a5b1517d82cfa137a92dfa8cc7ffae58e5f300163b25729ffc5d8156",
+  "model_config": "/home/wuhao/NPJ/model/config/surv_multimodal_mainmoe_uni2.yml",
+  "seed": 213
+}

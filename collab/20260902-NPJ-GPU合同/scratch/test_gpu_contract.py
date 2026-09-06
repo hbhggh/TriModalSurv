@@ -303,7 +303,10 @@ class ConfigAndLoopTests(unittest.TestCase):
 
     def test_gpu_yaml_has_contract_defaults(self):
         config = yaml.safe_load(GPU_CONFIG_PATH.read_text(encoding="utf-8"))
-        self.assertIsNone(config["batch_size"])
+        batch = config["batch_size"]
+        self.assertTrue(batch is None or batch > 1, batch)  # 合同：禁止默认为 1
+        if config.get("allow_low_gpu_util"):
+            self.assertTrue(str(config.get("low_gpu_util_reason", "")).strip())
         self.assertEqual(config["gradient_accumulation_steps"], 1)
         self.assertEqual(config["num_workers"], 4)
         self.assertIs(config["pin_memory"], True)
@@ -506,7 +509,7 @@ class LaunchGateTests(unittest.TestCase):
         allow,
         reason,
         warmup=0,
-        training_command="sleep 1; exit 0",
+        training_command="sleep 3; exit 0",  # 须长于 gate 启动，避免误入早退放行分支
     ):
         with tempfile.TemporaryDirectory() as temp_dir:
             temp = Path(temp_dir)

@@ -1,0 +1,16 @@
+['LGG'] cancer_types
+Loading split test:   0%|          | 0/166 [00:00<?, ?it/s]Loading split test: 100%|██████████| 166/166 [00:00<00:00, 6781.48it/s]
+none: A=0.674948 B=0.704624 n=166 rna=0 text=0
+rna_25: A=0.672878 B=0.699448 n=166 rna=41 text=0
+rna_50: A=0.670807 B=0.699448 n=166 rna=83 text=0
+rna_75: A=0.681504 B=0.705659 n=166 rna=124 text=0
+text_25: A=0.671843 B=0.703934 n=166 rna=0 text=41
+text_50: A=0.666322 B=0.705314 n=166 rna=0 text=83
+text_75: A=0.667357 B=0.704624 n=166 rna=0 text=124
+both_25: A=0.661836 B=0.690476 n=166 rna=41 text=41
+both_50: A=0.672878 B=0.703244 n=166 rna=83 text=83
+both_75: A=0.673568 B=0.715321 n=166 rna=124 text=124
+rna_100: A=0.691166 B=0.710145 n=166 rna=166 text=0
+text_100: A=0.667357 B=0.708765 n=166 rna=0 text=166
+both_100: A=0.672878 B=0.698758 n=166 rna=166 text=166
+OUTPUT_JSON=/home/wuhao/amiss_eval_v2/m1b/m0real_LGG_s231.json

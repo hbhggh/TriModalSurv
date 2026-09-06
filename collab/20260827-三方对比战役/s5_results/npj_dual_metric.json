@@ -1,0 +1,202 @@
+[
+ {
+  "cancer": "BLCA",
+  "seed": 123,
+  "cindex_A_raw": 0.5985426786953505,
+  "cindex_B_sigmoid": 0.5985426786953505,
+  "n_test": 138,
+  "frac_abs_logit_ge1": 0.38224637508392334
+ },
+ {
+  "cancer": "BLCA",
+  "seed": 132,
+  "cindex_A_raw": 0.6356696738376127,
+  "cindex_B_sigmoid": 0.6341082581540597,
+  "n_test": 138,
+  "frac_abs_logit_ge1": 0.3442029058933258
+ },
+ {
+  "cancer": "BLCA",
+  "seed": 213,
+  "cindex_A_raw": 0.6183206106870229,
+  "cindex_B_sigmoid": 0.6183206106870229,
+  "n_test": 138,
+  "frac_abs_logit_ge1": 0.2807970941066742
+ },
+ {
+  "cancer": "BLCA",
+  "seed": 231,
+  "cindex_A_raw": 0.6165857043719639,
+  "cindex_B_sigmoid": 0.6103400416377516,
+  "n_test": 138,
+  "frac_abs_logit_ge1": 0.36775362491607666
+ },
+ {
+  "cancer": "BLCA",
+  "seed": 321,
+  "cindex_A_raw": 0.630117973629424,
+  "cindex_B_sigmoid": 0.6250867453157529,
+  "n_test": 138,
+  "frac_abs_logit_ge1": 0.375
+ },
+ {
+  "cancer": "BRCA",
+  "seed": 123,
+  "cindex_A_raw": 0.6837742704666743,
+  "cindex_B_sigmoid": 0.6945611445441127,
+  "n_test": 383,
+  "frac_abs_logit_ge1": 0.4556135833263397
+ },
+ {
+  "cancer": "BRCA",
+  "seed": 132,
+  "cindex_A_raw": 0.6746905870330419,
+  "cindex_B_sigmoid": 0.6825252639945498,
+  "n_test": 383,
+  "frac_abs_logit_ge1": 0.4928198456764221
+ },
+ {
+  "cancer": "BRCA",
+  "seed": 213,
+  "cindex_A_raw": 0.6794595208356988,
+  "cindex_B_sigmoid": 0.6852503690246395,
+  "n_test": 383,
+  "frac_abs_logit_ge1": 0.5469973683357239
+ },
+ {
+  "cancer": "BRCA",
+  "seed": 231,
+  "cindex_A_raw": 0.7081866696945611,
+  "cindex_B_sigmoid": 0.7004655387759736,
+  "n_test": 383,
+  "frac_abs_logit_ge1": 0.41971278190612793
+ },
+ {
+  "cancer": "BRCA",
+  "seed": 321,
+  "cindex_A_raw": 0.6400590439423186,
+  "cindex_B_sigmoid": 0.6530032928352447,
+  "n_test": 383,
+  "frac_abs_logit_ge1": 0.44908615946769714
+ },
+ {
+  "cancer": "LUAD",
+  "seed": 123,
+  "cindex_A_raw": 0.5865215865215865,
+  "cindex_B_sigmoid": 0.5895050895050895,
+  "n_test": 172,
+  "frac_abs_logit_ge1": 0.3982558250427246
+ },
+ {
+  "cancer": "LUAD",
+  "seed": 132,
+  "cindex_A_raw": 0.5410670410670411,
+  "cindex_B_sigmoid": 0.5403650403650404,
+  "n_test": 172,
+  "frac_abs_logit_ge1": 0.3488371968269348
+ },
+ {
+  "cancer": "LUAD",
+  "seed": 213,
+  "cindex_A_raw": 0.5572130572130573,
+  "cindex_B_sigmoid": 0.547911547911548,
+  "n_test": 172,
+  "frac_abs_logit_ge1": 0.39389535784721375
+ },
+ {
+  "cancer": "LUAD",
+  "seed": 231,
+  "cindex_A_raw": 0.565988065988066,
+  "cindex_B_sigmoid": 0.5672165672165672,
+  "n_test": 172,
+  "frac_abs_logit_ge1": 0.3517441749572754
+ },
+ {
+  "cancer": "LUAD",
+  "seed": 321,
+  "cindex_A_raw": 0.5840645840645841,
+  "cindex_B_sigmoid": 0.5833625833625834,
+  "n_test": 172,
+  "frac_abs_logit_ge1": 0.3502906858921051
+ },
+ {
+  "cancer": "LGG",
+  "seed": 123,
+  "cindex_A_raw": 0.7643202208419599,
+  "cindex_B_sigmoid": 0.8081435472739821,
+  "n_test": 166,
+  "frac_abs_logit_ge1": 0.3780120611190796
+ },
+ {
+  "cancer": "LGG",
+  "seed": 132,
+  "cindex_A_raw": 0.665976535541753,
+  "cindex_B_sigmoid": 0.6904761904761905,
+  "n_test": 166,
+  "frac_abs_logit_ge1": 0.5466867685317993
+ },
+ {
+  "cancer": "LGG",
+  "seed": 213,
+  "cindex_A_raw": 0.6973775017253279,
+  "cindex_B_sigmoid": 0.717391304347826,
+  "n_test": 166,
+  "frac_abs_logit_ge1": 0.5873494148254395
+ },
+ {
+  "cancer": "LGG",
+  "seed": 231,
+  "cindex_A_raw": 0.6970324361628709,
+  "cindex_B_sigmoid": 0.7267080745341615,
+  "n_test": 166,
+  "frac_abs_logit_ge1": 0.5647590160369873
+ },
+ {
+  "cancer": "LGG",
+  "seed": 321,
+  "cindex_A_raw": 0.6642512077294686,
+  "cindex_B_sigmoid": 0.6808143547273982,
+  "n_test": 166,
+  "frac_abs_logit_ge1": 0.6234939694404602
+ },
+ {
+  "cancer": "UCEC",
+  "seed": 123,
+  "cindex_A_raw": 0.5501891831738259,
+  "cindex_B_sigmoid": 0.5248163810371689,
+  "n_test": 198,
+  "frac_abs_logit_ge1": 0.1666666716337204
+ },
+ {
+  "cancer": "UCEC",
+  "seed": 132,
+  "cindex_A_raw": 0.664811929668373,
+  "cindex_B_sigmoid": 0.6636990874693969,
+  "n_test": 198,
+  "frac_abs_logit_ge1": 0.5202020406723022
+ },
+ {
+  "cancer": "UCEC",
+  "seed": 213,
+  "cindex_A_raw": 0.5557533941687068,
+  "cindex_B_sigmoid": 0.5882483863788115,
+  "n_test": 198,
+  "frac_abs_logit_ge1": 0.4898989796638489
+ },
+ {
+  "cancer": "UCEC",
+  "seed": 231,
+  "cindex_A_raw": 0.6305363899399066,
+  "cindex_B_sigmoid": 0.6407745381704875,
+  "n_test": 198,
+  "frac_abs_logit_ge1": 0.5
+ },
+ {
+  "cancer": "UCEC",
+  "seed": 321,
+  "cindex_A_raw": 0.5786779434676163,
+  "cindex_B_sigmoid": 0.6156243044736256,
+  "n_test": 198,
+  "frac_abs_logit_ge1": 0.2234848439693451
+ }
+]

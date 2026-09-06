@@ -1,0 +1,17 @@
+['BLCA'] cancer_types
+Loading split train:   0%|          | 0/136 [00:00<?, ?it/s]Loading split train: 100%|██████████| 136/136 [00:00<00:00, 6732.83it/s]
+Loading split test:   0%|          | 0/138 [00:00<?, ?it/s]Loading split test: 100%|██████████| 138/138 [00:00<00:00, 6876.89it/s]
+none: A=0.635670 B=0.634108 n=138 rna=0 text=0
+rna_25: A=0.635843 B=0.633414 n=138 rna=34 text=0
+rna_50: A=0.635323 B=0.633414 n=138 rna=69 text=0
+rna_75: A=0.635323 B=0.633588 n=138 rna=103 text=0
+text_25: A=0.638272 B=0.629598 n=138 rna=0 text=34
+text_50: A=0.634629 B=0.621096 n=138 rna=0 text=69
+text_75: A=0.622658 B=0.605482 n=138 rna=0 text=103
+both_25: A=0.629251 B=0.624393 n=138 rna=34 text=34
+both_50: A=0.626995 B=0.615198 n=138 rna=69 text=69
+both_75: A=0.626301 B=0.604094 n=138 rna=103 text=103
+rna_100: A=0.637058 B=0.633761 n=138 rna=138 text=0
+text_100: A=0.616065 B=0.597155 n=138 rna=0 text=138
+both_100: A=0.616759 B=0.596114 n=138 rna=138 text=138
+OUTPUT_JSON=/home/wuhao/amiss_eval_v2/m1/m1_BLCA_s132.json

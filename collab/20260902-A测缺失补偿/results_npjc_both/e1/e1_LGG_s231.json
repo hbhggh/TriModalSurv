@@ -1,0 +1,22 @@
+{
+  "arm": "m0real",
+  "cancer": "LGG",
+  "checkpoint": "/home/wuhao/NPJ/out_capr/231/tcga_uni2_capr_img_1536text_768rna_256_NPJC_LGG_surv.pth",
+  "grids": {
+    "both_100": {
+      "cindex_A": 0.6080055210489993,
+      "cindex_B": 0.6155969634230504,
+      "grid_sha": "31e12e38987f7667def3044a814f1b64cf8516a2f03ffa5e4fb0a07abf779015",
+      "n_masked_rna": 166,
+      "n_masked_text": 166,
+      "n_test": 166
+    }
+  },
+  "hidden_size": 256,
+  "label": "/home/wuhao/NPJ/data/TCGA_9523_ex12.csv",
+  "m1_train_nonmissing_counts": {},
+  "manifest": "/home/wuhao/NPJ/data/missing_manifest_v1.csv",
+  "manifest_sha256": "c789eae9a5b1517d82cfa137a92dfa8cc7ffae58e5f300163b25729ffc5d8156",
+  "model_config": "/home/wuhao/NPJ/model/config/surv_multimodal_mainmoe_uni2.yml",
+  "seed": 231
+}

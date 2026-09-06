@@ -18,6 +18,7 @@
 - Claude 不直接大改训练代码；几行级小修与基础设施脚本除外，改完必须说明。
 - Codex 完成任务后，Claude 必须复查三件事：改了哪些文件（git diff 逐文件）、有没有越权开训练、有没有重复派单。
 - Routines / 巡检只做只读检查；发现异常先报告用户，不自动重启。
+- 正式训练发车只走 `NPJ/scripts/train_launcher.py`（经 jobrun 托管）：发车前 `--dry_run` 核对计划/槽位/label=ex12；评测用 `scripts/eval_missing.py` 新版（一次构建多格点）+ `run_eval_parallel.sh` 并行，不再串行逐格点重建。
 - 派单一律在项目根目录发起（保证 Codex 读到本目录 AGENTS.md），每次派单后 90 秒内验证会话真正启动。
 - 项目上下文：三方对比战役（MCAT / PORPOISE / NPJ 骨架，5 癌种 4:2:4，5 seeds 逐值呈现），执行细节见 `collab/20260827-三方对比战役/plan.md` 与 `~/.claude/plans/twinkling-greeting-kahan.md`。
 - 派单标准通道：codex-companion（`node <plugin>/scripts/codex-companion.mjs task`），**每单必须显式传 `--model` 与 `--effort`**（sol/terra 无别名必须写全名 slug；companion 的 effort 白名单不含 `max`）：
@@ -27,9 +28,10 @@
   | 机械小改 / 批量替换 / 跑脚本 | `gpt-5.3-codex-spark` | `low` |
   | 常规实现（单模块、明确 spec） | `gpt-5.6-terra` | `medium` |
   | 复杂实现 / 多文件联动 | `gpt-5.6-sol` | `high` |
-  | 对抗审查 / 逻辑修复 / 疑难诊断 | `gpt-5.6-sol` | `xhigh` |
+  | 逻辑修复 / 疑难诊断 | `gpt-5.6-sol` | `xhigh` |
+  | **对抗审查**（用户裁决 2026-09-02：一律走 companion 原生子命令，不用 task prompt 自造审查单） | `adversarial-review --cwd <目标仓> --scope working-tree --model gpt-5.6-sol --json [focus 文本]` | 不接受 `--effort`（会静默拼进 focus） |
 
 - 长任务后台化：预计 >10 分钟的单一律 `--background` 发；jobId 与完整派单命令（含 model/effort）写入该战役 notes.md（保证事后可追溯"这单用的哪档"）；追踪用 `status <jobId> --wait --timeout-ms`；巡检对 running 任务做 idle 检测，**45 分钟无输出 → 报告用户**（只报警不杀，遵守 AGENTS.md）。
 - **串行发单**（一次一单、90 秒启动验证后再发下一单），并发多任务时降级用 `codex exec` 独立单命令。质量护栏恒定：验收命令实跑 + 白名单核查。
-- companion 用法坑：task 默认只读沙箱，写任务必须首启带 `--write`；`--resume-last` 继承原线程沙箱、无法中途升权——升权=不带 `--resume-last` 开新会话（`--fresh` 实为空操作，可省略）；companion 对不认识的 `--flag` 会**静默拼进 prompt 正文**，发单前自查参数拼写。
+- companion 用法坑：task 默认只读沙箱，写任务必须首启带 `--write`；`--resume-last` 继承原线程沙箱、无法中途升权——升权=不带 `--resume-last` 开新会话（`--fresh` 实为空操作，可省略）；companion 对不认识的 `--flag` 会**静默拼进 prompt 正文**，发单前自查参数拼写。 `review`/`adversarial-review` 是**前台命令**（`--background` 无独立 worker），须 `setsid nohup … --json > 审查目录/raw.json 2>stderr &` 脱离会话再用 Monitor 等文件；其 `--model` 原样透传须写全名 slug。
 - 坑台账回流（防重复 bug）：台账在 `collab/pitfalls.md`，一行一坑。①**注入**——每份派单 plan.md 必须含「相关坑」节，从台账挑 3~5 条与本任务相关的条目抄入（无相关坑则写"无"）；②**入账**——收单 review 固定动作：读 notes.md/result.md 新增 Post-Mortem，各提炼一行追加进台账；③**升级**——影响所有后续任务的坑，经用户确认后固化进 CLAUDE.md/AGENTS.md。

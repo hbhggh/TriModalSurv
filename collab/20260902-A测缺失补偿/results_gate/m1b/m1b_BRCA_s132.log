@@ -1,0 +1,16 @@
+['BRCA'] cancer_types
+Loading split test:   0%|          | 0/383 [00:00<?, ?it/s]Loading split test: 100%|██████████| 383/383 [00:00<00:00, 6622.63it/s]
+none: A=0.675940 B=0.684228 n=383 rna=0 text=0
+rna_25: A=0.682525 B=0.688543 n=383 rna=95 text=0
+rna_50: A=0.679914 B=0.683547 n=383 rna=191 text=0
+rna_75: A=0.674691 B=0.676734 n=383 rna=287 text=0
+text_25: A=0.702964 B=0.701942 n=383 rna=0 text=95
+text_50: A=0.668218 B=0.662428 n=383 rna=0 text=191
+text_75: A=0.639605 B=0.633814 n=383 rna=0 text=287
+both_25: A=0.625185 B=0.639491 n=383 rna=95 text=95
+both_50: A=0.614171 B=0.622232 n=383 rna=191 text=191
+both_75: A=0.615760 B=0.609856 n=383 rna=287 text=287
+rna_100: A=0.685818 B=0.689111 n=383 rna=383 text=0
+text_100: A=0.621778 B=0.614852 n=383 rna=0 text=383
+both_100: A=0.634382 B=0.618372 n=383 rna=383 text=383
+OUTPUT_JSON=/home/wuhao/amiss_eval_v2/m1b/m0real_BRCA_s132.json

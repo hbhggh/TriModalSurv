@@ -1,0 +1,121 @@
+{
+  "arm": "m1",
+  "cancer": "LUAD",
+  "checkpoint": "/home/wuhao/NPJ/out/132/tcga_uni2_img_1536text_768rna_256_MainModalityMoE_LUAD_surv.pth",
+  "grids": {
+    "both_100": {
+      "cindex_A": 0.5868725868725869,
+      "cindex_B": 0.5875745875745876,
+      "grid_sha": "f51c4f8da7fa61dc32624be7154d0a64e61ed8a94781f4babffdde7b57e988dd",
+      "n_masked_rna": 172,
+      "n_masked_text": 172,
+      "n_test": 172
+    },
+    "both_25": {
+      "cindex_A": 0.5336960336960337,
+      "cindex_B": 0.5351000351000351,
+      "grid_sha": "f42c6af90115d267bd2bfa67ef9244fb3ae2b087f9874206866af28db66066f9",
+      "n_masked_rna": 43,
+      "n_masked_text": 43,
+      "n_test": 172
+    },
+    "both_50": {
+      "cindex_A": 0.5607230607230608,
+      "cindex_B": 0.5596700596700597,
+      "grid_sha": "cfda35f5979d28852e0ce9ca1d345ec5b3d5a34ccd4acd884b7454766d46b8bf",
+      "n_masked_rna": 86,
+      "n_masked_text": 86,
+      "n_test": 172
+    },
+    "both_75": {
+      "cindex_A": 0.5826605826605826,
+      "cindex_B": 0.583011583011583,
+      "grid_sha": "d8e0eb549485d06b9fc98e00b8b358edb4ab84d98d7decdef08deea829ce746a",
+      "n_masked_rna": 129,
+      "n_masked_text": 129,
+      "n_test": 172
+    },
+    "none": {
+      "cindex_A": 0.54001404001404,
+      "cindex_B": 0.5391365391365391,
+      "grid_sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "n_masked_rna": 0,
+      "n_masked_text": 0,
+      "n_test": 172
+    },
+    "rna_100": {
+      "cindex_A": 0.5375570375570375,
+      "cindex_B": 0.5343980343980343,
+      "grid_sha": "054bd43eb46e3ee55c5f93113d63068e41e626ebcb1c6f3112772d88f124b9a8",
+      "n_masked_rna": 172,
+      "n_masked_text": 0,
+      "n_test": 172
+    },
+    "rna_25": {
+      "cindex_A": 0.5391365391365391,
+      "cindex_B": 0.5363285363285363,
+      "grid_sha": "e7574cb6f325416b4f3c6add2e8025040953ccbb5ff3b6955c8b424c1e876a09",
+      "n_masked_rna": 43,
+      "n_masked_text": 0,
+      "n_test": 172
+    },
+    "rna_50": {
+      "cindex_A": 0.5373815373815374,
+      "cindex_B": 0.5336960336960337,
+      "grid_sha": "a2b55856ba744d57752463ac85de5ff3c3732cf3881bdefdbe947e2b0814b962",
+      "n_masked_rna": 86,
+      "n_masked_text": 0,
+      "n_test": 172
+    },
+    "rna_75": {
+      "cindex_A": 0.537030537030537,
+      "cindex_B": 0.5326430326430326,
+      "grid_sha": "4c4fbea7dc105da805e4e0347970edfdd16ead3cd269336605f31c239a4d5908",
+      "n_masked_rna": 129,
+      "n_masked_text": 0,
+      "n_test": 172
+    },
+    "text_100": {
+      "cindex_A": 0.5907335907335908,
+      "cindex_B": 0.5961740961740962,
+      "grid_sha": "6326248a89c0c009ec9c5421a2f896b48ba9eb0e532d626978a5fa4193525d08",
+      "n_masked_rna": 0,
+      "n_masked_text": 172,
+      "n_test": 172
+    },
+    "text_25": {
+      "cindex_A": 0.532994032994033,
+      "cindex_B": 0.5365040365040366,
+      "grid_sha": "d7c80dcdc909d92167d4c8f2101ed007aae6b1c0897e804be018b72f03999583",
+      "n_masked_rna": 0,
+      "n_masked_text": 43,
+      "n_test": 172
+    },
+    "text_50": {
+      "cindex_A": 0.5544050544050544,
+      "cindex_B": 0.5605475605475605,
+      "grid_sha": "d0894322e1bf2207e6f6e92954f88de4f43ae3d28c48200fd6899982a67b3ebf",
+      "n_masked_rna": 0,
+      "n_masked_text": 86,
+      "n_test": 172
+    },
+    "text_75": {
+      "cindex_A": 0.5967005967005967,
+      "cindex_B": 0.6028431028431028,
+      "grid_sha": "ac2b07a43e9d0b6b92b435bc18ad4d02077bbca36d20d8cb58c118fa684a4e36",
+      "n_masked_rna": 0,
+      "n_masked_text": 129,
+      "n_test": 172
+    }
+  },
+  "hidden_size": 256,
+  "label": "/home/wuhao/NPJ/data/TCGA_9523_ex12.csv",
+  "m1_train_nonmissing_counts": {
+    "rna": 167,
+    "text": 165
+  },
+  "manifest": "/home/wuhao/NPJ/data/missing_manifest_v1.csv",
+  "manifest_sha256": "c789eae9a5b1517d82cfa137a92dfa8cc7ffae58e5f300163b25729ffc5d8156",
+  "model_config": "/home/wuhao/NPJ/model/config/surv_multimodal_mainmoe_uni2.yml",
+  "seed": 132
+}

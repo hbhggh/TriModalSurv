@@ -23,7 +23,9 @@
 | D11 | LUAD 被映射为 tcga_lung 而部署按 luad 命名，lane 假完成却 unit 已失败。 | 新癌种逐项核对 study→combined_study→路径，并以 unit `.done` 判成功。 | collab/20260827-三方对比战役/notes.md |
 | D12 | NLL 与 CE survival loss 的签名/风险语义被混同，产生接口错误或错误 risk shape。 | 每种 loss 均核对真实 `__call__` 签名和预测语义，不能按类名猜接口。 | collab/20260827-三方对比战役/notes.md |
 | D13 | dataset 发 `{mm}_valid` 而模型读 `{mm}_mask`，缺失零向量仍参与融合。 | 统一键名，将逐样本 mask 传至 gate softmax 前屏蔽，并做混合缺失 batch 测试。 | collab/20260826-NPJ三模态复现/审查/codex-对抗审查报告-20260826.md |
-
+| D14 | dataset 缓存键含 network_type，换骨架名触发全量逐 patient 冷重建（3 s/人）。 | 缓存键只含数据相关维度；新骨架名上机前核对缓存命中（δ 已去 network_type 并回退旧后缀）。 | collab/20260902-A测缺失补偿/notes.md |
+| D15 | 多条 lane 并发冷重建同一 dataset 缓存，一方读到半写 pkl（EOFError），单 seed 失败被"两败才停线"放过、unit 假 done。 | 共享缓存先独占预热再并发（launcher 内置）；unit done 以全部 seed ckpt 存在判定；缓存写入临时文件+原子 rename。 | collab/20260902-A测缺失补偿/notes.md |
+| D16 | 发车器契约只写 arm→compensator 映射未列训练超参，`--dry_run` 生成的命令缺 `--lr 1e-4 --epochs 50 --batch_size 32`，将以默认 lr=5e-4 跑出与既有正式训练不同口径。 | 发车器契约逐项列出与既有正式训练命令（`c_unit.sh`/`s4_run_method_cancer.sh`）的参数对齐清单，发车前 dry-run 逐参 diff 断言。 | collab/20260902-A测缺失补偿/notes.md |
 ## 通道与派单
 
 | ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
@@ -37,7 +39,12 @@
 | C7 | companion task 前台模式无任何超时/watchdog，空转任务可挂 7+ 小时无人拦截。 | >10 分钟任务一律 `--background` 发单，`status --wait --timeout-ms` 追踪，45 分钟无输出报告用户。 | collab/monitor/routine-sweep.md |
 | C8 | companion 对不认识的 `--flag` 不报错，静默拼进 prompt 正文，拼错参数无声失效。 | 发单前自查参数拼写；发单后 status 核对 prompt 未混入 flag 文本。 | CLAUDE.md（20260902 调查固化） |
 | C9 | companion effort 白名单不含 `max`（config.toml 却接受），模型别名仅 spark，`--model sol` 会原样透传成非法 slug。 | effort 只用 none/minimal/low/medium/high/xhigh；模型写全名 `gpt-5.6-sol`/`gpt-5.6-terra`/`gpt-5.3-codex-spark`。 | CLAUDE.md（20260902 调查固化） |
-| C10 | `--fresh` 实为空操作（源码不消费该 flag），"升权靠 --fresh"是幻觉。 | 升权=不带 `--resume-last` 开新会话并首启 `--write`；`--fresh` 可省略。 | CLAUDE.md（20260902 调查固化） |
+| C10 | `--fresh` 实为空操作；且 `task --resume-last` **不继承** 原线程的 `--write`（job json `write:false`，会话内三处 READ_ONLY），"续接可写"是幻觉。 | 需要写的续接一律不带 `--resume-last` 开新会话并首启 `--write`，prompt 交代磁盘现状；`--resume-last` 只用于只读问答。 | CLAUDE.md（20260902 调查固化）；collab/20260902-A测缺失补偿/notes.md（20260904 实测修订） |
+| C11 | 用 task prompt 自造 Codex 审查单代替 companion 原生 `adversarial-review`，丢失内置攻击面框架与结构化 JSON 输出，且单次被进程退出杀掉即全丢。 | 对抗审查一律走 `adversarial-review --cwd <仓> --scope working-tree --model gpt-5.6-sol --json`，用 setsid 脱离会话、输出直接落审查目录；该子命令不接受 `--effort`。 | collab/20260902-NPJ-GPU合同/notes.md |
+| C12 | companion task 遇 Codex"请回复确认"即结束会话（exit 0 零改动）。 | 派单 prompt 必含"无需确认直接实现"；需续接用 --resume-last。 | collab/20260902-A测缺失补偿/notes.md |
+| C13 | companion 后台作业 worker 死亡后 job json 仍 `running`，`status` 照报 running/editing 且 Elapsed 递增；`--resume-last` 被以"still running"拒绝。 | 存活判定=job json 的 pid 存活 + 日志 mtime 15 min 内；死作业先 `cancel` 清状态再续接，不信 status 字段。 | collab/20260902-A测缺失补偿/notes.md |
+| C14 | 用户指令与论文主贡献或既有证据冲突时未先提异议直接执行，导致 batch 测速空转、主贡献由"原型补偿"改向"拆伪门控"、A/B 口径三改返工。 | 可能偏离主贡献或与既有证据相悖的指令，先给一句预测/反对（含代价估计）再执行；主贡献改向必须显式征求用户裁决。 | collab/20260902-A测缺失补偿/notes.md |
+| C15 | 单个 `apply_patch` 对同一路径同时发 Delete 与 Add 两个互斥操作，补丁被编辑器整体拒绝。 | 完整替换已有文件只用一个 Update 操作；新增文件另起独立补丁。 | collab/20260902-A测缺失补偿/notes_eps_codex.md |
 
 ## 沙箱与权限
 
@@ -47,6 +54,7 @@
 | S2 | 用 `rm -rf` 清理已核对的 scratch 缓存仍会被安全策略拒绝。 | 缓存优先写 `/private/tmp`；清理用精确目标的可恢复移动或逐文件删除，不递归强删。 | collab/20260827-三方对比战役/notes.md |
 | S3 | JavaScript 模板正文含未转义 Markdown 反引号，命令封装在执行前被截断。 | 模板正文不放未转义反引号；复杂文本改用安全参数或无反引号前缀。 | collab/20260902-A测缺失补偿/notes.md |
 | S4 | 被限制只读的交叉审核 Agent 在仓库根创建白名单外文件。 | 严格白名单任务不委派会落盘的通用审核；必要时前后比较完整 Git 状态，越界即中断并恢复基线。 | collab/20260826-NPJ三模态复现/notes.md |
+| S5 | 沙箱禁止创建 Torch shared-memory object，显式 `fork` 的多 worker 夹具报 `Operation not permitted`，拿不到真实 DataLoader 证据。 | 连续两次被 multiprocessing 环境阻断即停止该路线，改用 `copy.deepcopy` 等可审计的状态复制最小模型并写明证据边界；禁止把沙箱失败报成生产失败。 | collab/20260902-A测缺失补偿/notes.md |
 
 ## 环境与依赖
 
@@ -62,6 +70,14 @@
 | E8 | CLI 契约测试被无关的 Matplotlib/easydict 顶层导入截断。 | 在测试进程边界替代无关模块，只保留解析器所需符号，不改生产导入结构。 | collab/20260902-A测缺失补偿/notes.md |
 | E9 | 隔离测试的最小 `tqdm` 替身触发 Torch Dynamo 插件发现而失败。 | 函数级测试只提供目标协议所需的最小真实替代，避免触发框架级编译/发现。 | collab/20260902-A测缺失补偿/notes.md |
 | E10 | 缺失非业务展示依赖时，导入错误被误当成业务 RED。 | 先用 find_spec 定位；只在测试进程边界做最小替代，不改生产依赖。 | collab/20260902-A测缺失补偿/notes.md |
+| E11 | macOS 默认 `spawn` 下，here-doc/`<stdin>` 内联夹具无法被 DataLoader worker 子进程重新导入，报 `FileNotFoundError: .../<stdin>`。 | 需要 spawn 的多 worker 测试必须写成白名单内可导入的真实脚本文件入口；`<stdin>` 内联夹具只用于单进程测试。 | collab/20260902-A测缺失补偿/notes.md |
+| E12 | 远端 `pkill -f "<字面>"` 匹配到承载自身的 ssh bash，会话自杀 exit 255 无输出。 | 远端 pkill 用 `[x]` 正则技巧或 pgrep 精确 pid。 | collab/20260902-A测缺失补偿/notes.md |
+| E13 | zsh 对以 `=` 开头的裸词做 =command 展开，`echo ===` 使整条命令未执行。 | 分隔符一律加引号。 | collab/20260902-A测缺失补偿/notes.md |
+| E14 | 评估器 `os.chdir(临时目录)` 使 dataset 相对路径缓存 `tmp_sur_cache` 永不命中，每次评测冷重建 5–8 min 且缓存写进临时目录丢失。 | 包装脚本 chdir 前核对被包装代码的相对路径依赖并做符号链接/绝对化；性能异常先查 `/proc/<pid>/cwd` 与缓存命中。 | collab/20260902-A测缺失补偿/notes.md |
+| E15 | zsh 测试封装用 `status` 承接退出码，触发 `read-only variable: status`，业务 RED 被外层报错污染。 | zsh 封装的退出码变量一律用任务前缀专名（如 `red_exit`），禁止使用 `status` 等 shell 特殊参数名。 | collab/20260902-A测缺失补偿/notes.md |
+| E16 | 自制标准库 YAML fallback 沿用 Python 习惯把 `none` 解析为空值，`compensator: none` 被误报为未提供。 | 自制兼容解析器按目标格式标准定义字面量（只有 `null`/`~` 为空），每个领域关键字配一条回归样例。 | collab/20260902-A测缺失补偿/notes.md |
+| E17 | 本机 `python` 仅是交互 zsh 别名，非交互 shell（bash -c / 沙箱）下 `command not found`，派单命令写 `python` 会让引擎假失败。 | 派单契约、脚本与验收命令一律写 `python3`；契约环境节写明可用解释器与依赖清单。 | collab/20260902-A测缺失补偿/plan.md 单 ε 审查 |
+| E18 | 不同引擎的 shell PATH 不同：Codex 会话里 `python3` 解析为 Homebrew 3.14（无 matplotlib），Claude 侧为 `/usr/bin/python3` 3.9；同一契约在两边跑出不同解释器。 | 契约与验收命令写绝对解释器路径（`/usr/bin/python3`）或首步打印 `which python3` + 版本并断言；派单前用目标引擎实跑一次 `python3 -c 'import matplotlib'`。 | collab/20260902-A测缺失补偿/notes_eps_codex.md |
 
 ## 评测与复现
 
@@ -86,6 +102,16 @@
 | V17 | 在 I/O 未调优环境下测的 batch bench（bs=1 最快）被固化为长期配置决策，环境修复后未复测。 | 影响长期配置的性能 bench 必须在 I/O 合同达标环境下测；环境改变后旧 bench 结论过期，须复测再定档。 | collab/20260827-三方对比战役/notes.md |
 | V18 | 冒烟脚本验证行查 `out/` 但 `--compensator` 自动把输出改到 `out_capr/`，训练成功被记 fail.flag 假失败。 | 验证断言的产物路径必须与代码实际输出路径推导一致（含自动后缀），断言前先打印实际输出目录。 | collab/20260902-NPJ-GPU合同/notes.md |
 | V19 | 固定 warmup 窗口的门禁不感知被监控进程生命周期，正常提前完成的短训练被结束后的空闲采样拉低中位数误杀。 | 采样类门禁必须 watch 目标进程存活，进程早退时按其真实退出码判定，不用采样统计裁决。 | collab/20260902-NPJ-GPU合同/notes.md |
+| V20 | 同一工作树多战役并行，回归基线取 git HEAD 会把另一战役的等价重构（surv_heads 批量路径 3.6e-7）误判为本单回归失败。 | 回归基线取本单派发前工作树快照；等价重构用 allclose(1e-6) 而非 torch.equal。 | collab/20260902-A测缺失补偿/notes.md |
+| V21 | 单 seed 冒烟的正向信号（+0.02）在 5 seeds 下翻转为 1:4。 | 冒烟只判通/不崩；效果方向必须 ≥5 seeds 严格 `>` 计数。 | collab/20260902-A测缺失补偿/notes.md |
+| V22 | `cmd \| tail; echo $?` 取到的是 tail 的退出码，掩盖真实失败。 | 取退出码禁止管道，或用 PIPESTATUS。 | collab/20260902-A测缺失补偿/notes.md |
+| V23 | 判定报告手算派生数字（胜负计数/Δ中位/中位差混用/平局计负/抄错基线中位）在两份报告中重复出错，均被 decision-reviewer 重算抓出。 | 进结论的数字必须来自脚本生成的留档表并可指回文件行；成文前跑对账脚本；平局规则显式声明。 | collab/20260902-A测缺失补偿/notes.md |
+| V24 | 外部 CLI 的测试替身按 Python dest 名拼参数（`--out_dir`），与真实解析器的 `--out-dir` 不符，接力测试 exit 2 假失败。 | 测试替身的参数名逐项从真实解析器镜像抄写，不按 dest 名反推命令行拼写。 | collab/20260902-A测缺失补偿/notes.md |
+| V25 | 测试按 `ALL_GRIDS` 插入顺序断言 JSON keys，而生产 `_atomic_json_dump(sort_keys=True)` 按字母排序，把表示顺序当业务语义导致假失败。 | JSON mapping 验收断言键集合相等与字段值，只有格式契约明文规定顺序时才断言顺序。 | collab/20260902-A测缺失补偿/notes.md |
+| V26 | matplotlib SVG 默认写入 `<dc:date>` 与随机 `svg.hashsalt` 生成的 clip id，同图两跑字节不同，"确定性"断言假失败；只设 `metadata={'Date': None}` 仍不够。 | 绘图脚本首部固定 `rcParams['svg.hashsalt']` 并保存时传 `metadata={'Date': None}`；确定性定义为同机连跑两次字节一致，不跨机器/引擎比字节。 | collab/20260902-A测缺失补偿/plan.md 单 ε 审查 |
+| V27 | 修订版报告标"r(n−1) 不变"的段落实际按记忆复述并删了限定语（两轮 reviewer 各抓一次），且把共享中间臂的两个配对Δ中位当可加份额分解。 | "不变/原文保留"必须由 diff 证明逐字相同、删改必进修订记录；两分量共享中间臂时只做方向判定，禁止 "X% 来自 A" 式分解；成文前先列上一版闭合项保留清单逐项勾选。 | collab/20260902-A测缺失补偿/notes.md |
+| V28 | 格式契约同时要求"每臂块尾随空行"与"文件无末尾换行"，最后一块上两者互斥，落盘文件多出末尾换行。 | 块级与文件级格式约束冲突时以文件级为准，序列化前裁掉尾部空元素，并用 `open(...,"rb").read().endswith(b"\n")` 实测而非目视。 | collab/20260902-A测缺失补偿/notes_eps_opus.md |
+| V29 | 图形交付只核对 figsize/dpi/像素尺寸与元素集合，x 轴刻度标签实际首尾相接、`rna_100` 被挤成 `ma_100`。 | 图形验收除机器断言外必须对刻度标签/图例/图注做一次裁图目视复检，并把"刻度间距 px vs 标签估算宽度 px"当硬指标算一次。 | collab/20260902-A测缺失补偿/notes_eps_opus.md |
 
 ## 监控与运维
 
@@ -96,6 +122,8 @@
 | M3 | kill tmux 外层 bash 误杀整个进程组，且瞬时速度把剩余时长严重高估。 | 操作前用 `ps -o pgid` 查信号传播；需保活用 setsid/disown；按已完成单元实测均值估时。 | collab/20260826-NPJ三模态复现/notes.md |
 | M4 | GPU 瞬时空闲被当作全场停机，漏杀 lane runner 后实验复活并双写 unit。 | 以 `pgrep -af "queue|run_method|main.py"` 全空判停机；删除 `.claim` 前确认 runner 全死。 | collab/20260827-三方对比战役/notes.md |
 | M5 | 部署评估器未核对模式互斥、root 推导和输出白名单，跨机连续失败。 | 部署前读 root/白名单逻辑，保持源仓库相对深度，评估输出放 baselines 树外。 | collab/20260827-三方对比战役/notes.md |
+| M6 | Claude 进程重启后 Monitor/后台任务全部 stopped，训练/评测无人盯。 | 会话恢复第一动作：盘点 flags/pgrep 后重挂哨兵。 | collab/20260902-A测缺失补偿/notes.md |
+| M7 | 产出留档表/对账数字的脚本只写在 scratchpad，进程重启后 scratchpad 清空，脚本随之丢失，只能从会话记录逐字找回。 | 任何生成留档表/数字的脚本写完立即复制进战役目录 `tools/`，与留档表同目录同提交。 | collab/20260902-A测缺失补偿/notes.md |
 
 ## 合并映射
 
@@ -104,4 +132,7 @@
 - `20260827-三方对比战役/notes.md`：PM `51、462` → S1；`84` → V8；`90` → C1；`104` → D1；`134` → E2；`151、479` → S2；`181` → V9；`195` → M1；`218` → M2；`252` → V10；`266` → V11；`279、286、429` → E3；`293` → D10；`300` → E4；`330` → V12；`344` → D9；`359` → E5；`384` → E6；`391` → E7；`398` → C2；`405` → C3；`455` → D12；`493` → M4；`523` → D11；`555` → C5；`561` → M5。
 - `20260827-三方对比战役/result.md` 的全部 11 条 PM 均为 notes 转载：`400→S1`，`727→E2`，`734→S2`，`929→V9`，`1116→V10`，`1243→D9`，`1328→E5`，`1677→E6`，`1684→E7`，`1691→C2`，`1698→C3`；不重复入账。
 - `20260828-A测缺失补偿/` 已扫描全部 `.md`（`notes.md`、`plan.md`）：无 `### Bug Post-Mortem`；不产生原始 PM 映射。
-- `20260902-A测缺失补偿/notes.md`：PM `20` → E10；`45` → V13；`63` → S3；`92、160` → C4；`99` → E8；`132` → E9；`167` → V14。`result.md` 仅摘要转载这些问题，未含独立 PM，故不重复入账。
+- `20260902-A测缺失补偿/notes.md`：PM `20、279` → E10（`279` 为 tqdm 展示依赖截断 RED 的同一根因，另一次出现）；`45` → V13；`63` → S3；`92、160` → C4；`99` → E8；`132` → E9；`167` → V14；`195` → E11；`202` → S5；`286` → E15；`302` → E1（发车器把 PyYAML 作顶层硬依赖阻断 dry-run，缺 PyYAML 截断断言的同一根因，另一次出现；修复为惰性导入+标准库 fallback）；`309` → E16；`325` → V24；`332` → V25；`368` → D14；`373` → V20；`378` → V21；`383` → E12 与 V22；`388` → E13；`392` → C12 与 M6；`404` → D15；`410` → D16；`418` → E14；`435` → V23。`result.md` 仅摘要转载这些问题，未含独立 PM，故不重复入账。
+- `20260902-NPJ-GPU合同/notes.md`：PM `15` → V18；`102` → V19；`76` → E9（Torch Dynamo 对无 `__spec__` 模块替身的同一根因，另一次出现）；`88` → S1（导入生产模块在源码旁写 `.pyc` 的同一根因，非 `py_compile` 触发）。C11 出自该文件正文裁决记录，无对应 PM 标题。
+- `20260902-A测缺失补偿/notes.md`（20260905 续扫，9-03/9-04 新增段）：PM `446` → C14；`459` → M7；`477` → C13；`484` → C10（实测修订，出处列已含）；`500、510` → V27（同一 ID 已合并这两处出现）。
+- `20260902-A测缺失补偿/notes_eps_codex.md` / `notes_eps_opus.md`（A/B 首单双引擎过程档）：codex PM `118` → C15；opus PM `347` → V28、`354` → V29；E18 出自 codex 文件正文环境记录，无对应 PM 标题。

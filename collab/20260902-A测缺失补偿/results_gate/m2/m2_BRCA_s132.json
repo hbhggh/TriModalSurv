@@ -1,0 +1,118 @@
+{
+  "arm": "m0real",
+  "cancer": "BRCA",
+  "checkpoint": "/home/wuhao/NPJ/out_capr/132/tcga_uni2_capr_img_1536text_768rna_256_MainModalityMoE_BRCA_surv.pth",
+  "grids": {
+    "both_100": {
+      "cindex_A": 0.6682184625865789,
+      "cindex_B": 0.6640172589985239,
+      "grid_sha": "afc433881ea02201c6a6b9971f0e39f276f1adf3ac06eaa2166d18af6d46582a",
+      "n_masked_rna": 383,
+      "n_masked_text": 383,
+      "n_test": 383
+    },
+    "both_25": {
+      "cindex_A": 0.678096968320654,
+      "cindex_B": 0.6745770409901215,
+      "grid_sha": "d45cb5f084e03e11c132e16613ee0e7c6cda42f7df7d7135d2150359d7bc9bc4",
+      "n_masked_rna": 95,
+      "n_masked_text": 95,
+      "n_test": 383
+    },
+    "both_50": {
+      "cindex_A": 0.6729873963892359,
+      "cindex_B": 0.6645849892131259,
+      "grid_sha": "451f510ef462bc30f1c28e5f82af9a51e1323392e65c5dde95f3345f1dd24bd7",
+      "n_masked_rna": 191,
+      "n_masked_text": 191,
+      "n_test": 383
+    },
+    "both_75": {
+      "cindex_A": 0.6769615078914499,
+      "cindex_B": 0.675826047462246,
+      "grid_sha": "fe46f435be6caf0a0aec8786c43a21c059a8cdee21845e9033a726c89119607b",
+      "n_masked_rna": 287,
+      "n_masked_text": 287,
+      "n_test": 383
+    },
+    "none": {
+      "cindex_A": 0.7080731236516408,
+      "cindex_B": 0.7026229135914613,
+      "grid_sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "n_masked_rna": 0,
+      "n_masked_text": 0,
+      "n_test": 383
+    },
+    "rna_100": {
+      "cindex_A": 0.710116952424208,
+      "cindex_B": 0.7097763142954469,
+      "grid_sha": "528ba500dec09d48b33c04cad5b34af562d0af1cb90d9bea42309ad370fe3529",
+      "n_masked_rna": 383,
+      "n_masked_text": 0,
+      "n_test": 383
+    },
+    "rna_25": {
+      "cindex_A": 0.689905756784376,
+      "cindex_B": 0.6783240604064948,
+      "grid_sha": "252ac643a125d52bcd3539af682e45c3c8c7bf7dceba9a1a1dc5340674cee848",
+      "n_masked_rna": 95,
+      "n_masked_text": 0,
+      "n_test": 383
+    },
+    "rna_50": {
+      "cindex_A": 0.6978539797888044,
+      "cindex_B": 0.6825252639945498,
+      "grid_sha": "b1128f075cf887ad9d8a6188407eb6687391c11a1f93076e1db717d8cc6516af",
+      "n_masked_rna": 191,
+      "n_masked_text": 0,
+      "n_test": 383
+    },
+    "rna_75": {
+      "cindex_A": 0.7065970250936755,
+      "cindex_B": 0.7058022027932327,
+      "grid_sha": "34ee0fa6b770dbf4576e8669a09ee31f08e2f8aede78ce093cefd367de12fed5",
+      "n_masked_rna": 287,
+      "n_masked_text": 0,
+      "n_test": 383
+    },
+    "text_100": {
+      "cindex_A": 0.666288179856932,
+      "cindex_B": 0.6595889633246281,
+      "grid_sha": "1cf4a458b8142da33499c37f9b32f1e65a682a2837bba0d2d08dd3bdac2bf7f2",
+      "n_masked_rna": 0,
+      "n_masked_text": 383,
+      "n_test": 383
+    },
+    "text_25": {
+      "cindex_A": 0.7138639718405814,
+      "cindex_B": 0.6972862495742024,
+      "grid_sha": "6290d1626855078e7613615b30a09f1dc2152f22d964ee36142a10f395d56bc4",
+      "n_masked_rna": 0,
+      "n_masked_text": 95,
+      "n_test": 383
+    },
+    "text_50": {
+      "cindex_A": 0.6903599409560577,
+      "cindex_B": 0.6853639150675599,
+      "grid_sha": "d9699adf4b5c6d97f66a8ae39000e1e3f0436e462d9b6eed3b38ed241c22a30f",
+      "n_masked_rna": 0,
+      "n_masked_text": 191,
+      "n_test": 383
+    },
+    "text_75": {
+      "cindex_A": 0.6757125014193255,
+      "cindex_B": 0.6687861928011809,
+      "grid_sha": "ef921503fa7042d5ad732f2a759ba8e89cf01deec30b1c989fa9628bd68cca14",
+      "n_masked_rna": 0,
+      "n_masked_text": 287,
+      "n_test": 383
+    }
+  },
+  "hidden_size": 256,
+  "label": "/home/wuhao/NPJ/data/TCGA_9523_ex12.csv",
+  "m1_train_nonmissing_counts": {},
+  "manifest": "/home/wuhao/NPJ/data/missing_manifest_v1.csv",
+  "manifest_sha256": "c789eae9a5b1517d82cfa137a92dfa8cc7ffae58e5f300163b25729ffc5d8156",
+  "model_config": "/home/wuhao/NPJ/model/config/surv_multimodal_mainmoe_uni2.yml",
+  "seed": 132
+}

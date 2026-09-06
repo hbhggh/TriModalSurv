@@ -1,0 +1,16 @@
+['UCEC'] cancer_types
+Loading split test:   0%|          | 0/198 [00:00<?, ?it/s]Loading split test: 100%|██████████| 198/198 [00:00<00:00, 5955.55it/s]
+none: A=0.578678 B=0.615624 n=198 rna=0 text=0
+rna_25: A=0.564434 B=0.590252 n=198 rna=49 text=0
+rna_50: A=0.587581 B=0.592255 n=198 rna=99 text=0
+rna_75: A=0.585578 B=0.604941 n=198 rna=148 text=0
+text_25: A=0.553305 B=0.601157 n=198 rna=0 text=49
+text_50: A=0.547741 B=0.587803 n=198 rna=0 text=99
+text_75: A=0.525484 B=0.566659 n=198 rna=0 text=148
+both_25: A=0.570220 B=0.584910 n=198 rna=49 text=49
+both_50: A=0.553750 B=0.567104 n=198 rna=99 text=99
+both_75: A=0.514801 B=0.524594 n=198 rna=148 text=148
+rna_100: A=0.542177 B=0.587358 n=198 rna=198 text=0
+text_100: A=0.625640 B=0.650568 n=198 rna=0 text=198
+both_100: A=0.511240 B=0.527487 n=198 rna=198 text=198
+OUTPUT_JSON=/home/wuhao/amiss_eval_v2/m0real/m0real_UCEC_s321.json

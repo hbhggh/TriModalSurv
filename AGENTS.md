@@ -47,6 +47,7 @@ Claude Code 与 Codex/Codex Companion 都必须遵守本文件。冲突时以本
 - Codex 执行派单前必读 plan.md「相关坑」节并遵守其中 Prevention Rule；产出的新教训按 Post-Mortem 格式写入 notes.md。
 - 监视器默认只报警，不自动重启。
 - 新下载 / 训练 / 转换必须经 landau 的 `jobrun.sh` 启动。
+- **正式训练一律经 `NPJ/scripts/train_launcher.py` 发车**（用户裁决 2026-09-02；仍由 `jobrun.sh` 托管）：清单驱动（臂×癌×seed）、缓存预热、每卡并发上限、幂等跳过、完成即评测；禁止手写 bash lane 串行 seed 发正式训练。默认 label=`data/TCGA_9523_ex12.csv`；dataset 缓存键已去 network_type，换骨架名不再触发冷重建。
 - 不改 `tmp_sur_cache/`，不覆盖已有结果目录。
 - 不把"窗口还在"当成"任务还在"。
 

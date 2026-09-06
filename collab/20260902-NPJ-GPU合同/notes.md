@@ -104,3 +104,38 @@ node /Users/wuhao/.claude/plugins/cache/openai-codex/codex/1.0.6/scripts/codex-c
 - **根因**: 采样器生命周期只绑定固定 wall-clock deadline，没有绑定被监视训练进程；launcher 也没有“训练先结束”的独立状态和退出码通道。
 - **修复**: gate 增加 `--watch-pid` 与 early-exit exit 4；launcher 对 exit 4 执行 `wait` 并以训练真实退出码裁决。
 - **Prevention Rule**: 监控/门禁必须同时观察指标窗口与被监视任务生命周期；任务先结束时停止采样，并保留任务自身退出码，禁止用后续空闲指标覆盖任务结果。
+
+## r2 阶段（2026-09-02 下午，Claude）
+
+### 背景与讨论结论
+- 用户粘贴「成熟团队榨 GPU」框架并要求继续讨论。结论：框架的「util 低+显存低→数据管道」在 NPJ 被 Phase D 实测推翻；NPJ 属于模型相对硬件过小（百万级参数、序列长 1）、每 step 被 launch/Python 开销主导。
+- 本轮新查出三个真实可疑点：①V100 实测 `torch.cuda.is_bf16_supported()=False`（cap 7.0，torch 2.5.0），`Accelerator(mixed_precision='bf16')` 静默走模拟路径、日志零警告；②`main_survival.py:658-659` 单卡也无条件 DataParallel；③50 epoch 每 epoch 全量 valid。
+- 顺带观察：`main_survival.py:698` `weight_decay=1` 为上游原值（异常大），未裁决不改，仅在 yaml 双摊中显性化。
+- 遗留：β 事后审查单 `task-mtjjmrtp-z0n25q` 随上个 Claude Code 进程退出被杀（companion job 记录清空、报告目录空）；留痕显示 accum/head 对拍通过，另发现 2 项测试期望漂移（Claude 改 yaml 裁决值后引入）。
+- 用户裁决：①profile + 三组对照短跑；②补 yaml 双摊、不新建 train.py；③重新派审查单 + Claude 修测试漂移。
+
+### Phase 0（Claude 几行级小修，已亲跑 exit 0）
+- `scratch/test_gpu_contract.py`：yaml defaults 断言改为 batch_size 为 null 或 >1 且豁免须有原因；gate 四态用例默认训练命令 `sleep 1`→`sleep 3`（原值短于慢机器上 gate 启动开销，会误入早退放行分支——时序脆弱）。四态码 2/0/0/2、早退 0/7 全部复现。
+
+### Phase 1 派单留档
+- jobId: `task-mtjmkwnv-ciessx`
+- 完整派单命令：
+
+```
+node /Users/wuhao/.claude/plugins/cache/openai-codex/codex/1.0.6/scripts/codex-companion.mjs task --write --background --cwd /Users/wuhao/Desktop/TriModalSurv --model gpt-5.6-sol --effort high "读取并严格执行 collab/20260902-NPJ-GPU合同/plan-r2.md 派单契约（r2 增量单，叠加在 r1 已交付代码之上）：gpu_train.yaml 重组为 optimizer/perf 双摊并向后兼容平铺键；main_survival.py 的 lr/epochs 走 CLI>yaml>默认优先级、mixed_precision 三值接 Accelerator、data_parallel 三值控制 DP 包裹、eval_every 评估降频、--profile_epochs N 可选 torch.profiler 钩子（默认 0 零开销）；默认组合下 loss 与 r1 逐位等价为硬验收；测试全部适配并新增契约列出的用例。执行前必读 plan-r2.md 的「相关坑」节与 collab/pitfalls.md 全账。白名单以 plan-r2.md 为准；禁止碰 compensator 语义与 baselines/、禁止改 weight_decay 值、禁止 git commit/push、禁止 ssh、禁止启动 GPU 训练。验收命令亲跑并把原始输出写入 result.md 新增 r2 节。"
+```
+
+- 档位依据：复杂实现 / 多文件联动 → `gpt-5.6-sol` + `--effort high`；`--write`；`--background`。
+
+## 2026-09-02 13:59:25 JST｜Codex r2 执行预检
+
+- 已完整读取 `plan-r2.md`（含“相关坑”）与 `collab/pitfalls.md` 全账；本轮重点执行 V3、V15、E8/E9/E10、S1，并保持 V19 已有门禁行为。
+- 已确认 r2 是叠加于 r1 的增量实现；根工作树中 `notes.md` 与 `scratch/test_gpu_contract.py` 已含 Claude 前置改动，其他无关脏文件均不触碰、不回滚。
+- 实施采用 TDD：先补齐双摊解析、三值 mixed precision、三值 DataParallel、评估降频、CPU profiler 产物及 lr/epochs 三态优先级测试并取得有效业务 RED，再修改生产代码。
+- 硬边界：仅修改 `plan-r2.md` 白名单；`weight_decay` 保持 `1`；不改 compensator/CAP-Recall/bank 语义，不碰 `baselines/`，不 SSH、不启动 GPU 训练、不 commit/push。
+
+### 用户裁决：审查通道切换（2026-09-02）
+- 用户指示：β 事后审查直接用 codex 插件原生 adversarial review（companion `adversarial-review` 子命令），不用自造 task prompt 审查单，也不用手敲 `/codex:adversarial-review`。
+- 只读核实子命令：`adversarial-review [--wait|--background] [--base <ref>] [--scope auto|working-tree|branch] [--model <m>] [--cwd <dir>] [focus]`；prompt 模板 `prompts/adversarial-review.md`（攻击面 + finding bar + 结构化 JSON 合同：needs-attention/approve + findings{file,line_start,line_end,confidence,recommendation}）；`--scope working-tree` 审 uncommittedChanges；**前台命令**（handleReviewCommand 直接 runForegroundCommand，`--background` 无 worker 分支）；valueOptions 无 `effort`（传了会静默拼进 focus，坑 C8）；`--model` 原样透传。
+- 决定：Phase 1 收单后，`setsid nohup … adversarial-review --cwd NPJ --scope working-tree --model gpt-5.6-sol --json "<focus>" > collab/20260902-A测缺失补偿/审查/adversarial-review-raw.json &`，Monitor 等文件终态；审 NPJ 全部未提交改动（β + r1/r2 GPU 合同），focus 权重压在 compensator 语义与 am_* 结果可信度。
+- 已固化：CLAUDE.md 派单矩阵「对抗审查」行改为原生子命令用法 + 用法坑补充；台账入账 C11。

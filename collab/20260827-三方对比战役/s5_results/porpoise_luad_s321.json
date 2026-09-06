@@ -1,0 +1,1395 @@
+{
+  "adapted_full_csv": "/home/wuhao/baselines/p3_eval/csv/PORPOISE_tcga_LUAD_adapted.csv.zip",
+  "applied_bins": [
+    1.0999990000000002,
+    10.583333333333332,
+    19.866666666666667,
+    33.56666666666666,
+    235.400001
+  ],
+  "bin_source_patient_ids_sha256": "557442a568dac7d441dde39fd4c93868d8230030b00949b50b3a818de870704d",
+  "bin_source_splits": [
+    "train",
+    "valid"
+  ],
+  "c_index": 0.5472935006555535,
+  "cancer": "LUAD",
+  "checkpoint": "/home/wuhao/baselines/s4_porpoise_luad/results/custom424r2/PorpoiseMMF_nll_surv_a0.0_custom424r2_gc32_mutsig_concat/tcga_luad_PorpoiseMMF_nll_surv_a0.0_custom424r2_gc32_mutsig_concat_s321/s_0_checkpoint.pt",
+  "dataset_class": "Generic_Split",
+  "dataset_module": "/home/wuhao/baselines/PORPOISE/datasets/dataset_survival.py",
+  "dataset_utils_import_shimmed": false,
+  "device": "cpu",
+  "feature_tensor_shape_checked_per_patient": true,
+  "features_root": "/home/wuhao/baselines/features/tcga_luad_20x_features",
+  "labels": "/home/wuhao/NPJ/data/labels_424_ex12.csv",
+  "lib": "PORPOISE",
+  "model_class": "PorpoiseMMF",
+  "model_config": {
+    "dropinput": 0.0,
+    "fusion": "concat",
+    "gate_omic": false,
+    "gate_path": false,
+    "n_classes": 4,
+    "omic_input_dim": 2936,
+    "path_input_dim": 1536,
+    "scale_dim1": 8,
+    "scale_dim2": 8,
+    "skip": false,
+    "use_mlp": false
+  },
+  "model_module": "/home/wuhao/baselines/PORPOISE/models/model_porpoise.py",
+  "n_bin_source_uncensored": 88,
+  "n_scaler_source": 165,
+  "n_test": 167,
+  "n_test_slides_checked": 186,
+  "path_input_dim": 1536,
+  "patients": [
+    {
+      "censorship": 0,
+      "disc_label": 0,
+      "event_observed": true,
+      "patient_id": "TCGA-05-4396",
+      "risk": -3.8650827407836914,
+      "survival_months": 10.1
+    },
+    {
+      "censorship": 0,
+      "disc_label": 2,
+      "event_observed": true,
+      "patient_id": "TCGA-05-4397",
+      "risk": -2.1466739177703857,
+      "survival_months": 24.366666666666667
+    },
+    {
+      "censorship": 0,
+      "disc_label": 0,
+      "event_observed": true,
+      "patient_id": "TCGA-05-4415",
+      "risk": -0.0014657689025625587,
+      "survival_months": 3.033333333333333
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-05-4417",
+      "risk": -3.6412177085876465,
+      "survival_months": 15.166666666666666
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-05-4420",
+      "risk": -3.8950486183166504,
+      "survival_months": 30.4
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-05-4426",
+      "risk": -2.3976333141326904,
+      "survival_months": 26.366666666666667
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-05-4427",
+      "risk": -3.9428861141204834,
+      "survival_months": 26.366666666666667
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-05-4430",
+      "risk": -2.370166063308716,
+      "survival_months": 25.366666666666667
+    },
+    {
+      "censorship": 0,
+      "disc_label": 1,
+      "event_observed": true,
+      "patient_id": "TCGA-05-4434",
+      "risk": -2.2414395809173584,
+      "survival_months": 15.233333333333333
+    },
+    {
+      "censorship": 1,
+      "disc_label": 0,
+      "event_observed": false,
+      "patient_id": "TCGA-35-5375",
+      "risk": -2.1697347164154053,
+      "survival_months": 8.8
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-38-4625",
+      "risk": -2.9287607669830322,
+      "survival_months": 99.1
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-38-4626",
+      "risk": -3.1138923168182373,
+      "survival_months": 122.46666666666668
+    },
+    {
+      "censorship": 0,
+      "disc_label": 2,
+      "event_observed": true,
+      "patient_id": "TCGA-38-4629",
+      "risk": -1.8825198411941528,
+      "survival_months": 28.8
+    },
+    {
+      "censorship": 0,
+      "disc_label": 2,
+      "event_observed": true,
+      "patient_id": "TCGA-38-7271",
+      "risk": -3.670644521713257,
+      "survival_months": 26.666666666666668
+    },
+    {
+      "censorship": 1,
+      "disc_label": 0,
+      "event_observed": false,
+      "patient_id": "TCGA-38-A44F",
+      "risk": -3.2641005516052246,
+      "survival_months": 4.433333333333334
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-44-2655",
+      "risk": -2.082726240158081,
+      "survival_months": 44.13333333333333
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-44-2656",
+      "risk": -3.5293474197387695,
+      "survival_months": 47.63333333333333
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-44-2659",
+      "risk": -3.8699281215667725,
+      "survival_months": 45.56666666666667
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-44-2661",
+      "risk": -3.163074493408203,
+      "survival_months": 38.63333333333333
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-44-2662",
+      "risk": -1.8539901971817017,
+      "survival_months": 42.66666666666666
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-44-2665",
+      "risk": -2.0949695110321045,
+      "survival_months": 43.36666666666667
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-44-3919",
+      "risk": -3.325237989425659,
+      "survival_months": 34.2
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-44-5645",
+      "risk": -3.7226157188415527,
+      "survival_months": 28.4
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-44-6145",
+      "risk": -2.80597186088562,
+      "survival_months": 19.83333333333333
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-44-6146",
+      "risk": -3.248915672302246,
+      "survival_months": 24.266666666666666
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-44-6148",
+      "risk": -3.8937389850616455,
+      "survival_months": 23.466666666666665
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-44-6776",
+      "risk": -2.921093702316284,
+      "survival_months": 87.2
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-44-6778",
+      "risk": -2.791558265686035,
+      "survival_months": 62.13333333333333
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-44-7659",
+      "risk": -3.856800079345703,
+      "survival_months": 23.03333333333333
+    },
+    {
+      "censorship": 1,
+      "disc_label": 0,
+      "event_observed": false,
+      "patient_id": "TCGA-44-7662",
+      "risk": -2.320457935333252,
+      "survival_months": 7.266666666666667
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-44-7667",
+      "risk": -3.9331259727478027,
+      "survival_months": 36.56666666666667
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-44-7670",
+      "risk": -3.909105062484741,
+      "survival_months": 29.4
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-44-A47G",
+      "risk": -3.2747302055358887,
+      "survival_months": 11.7
+    },
+    {
+      "censorship": 0,
+      "disc_label": 1,
+      "event_observed": true,
+      "patient_id": "TCGA-49-4490",
+      "risk": -1.875817894935608,
+      "survival_months": 12.833333333333334
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-49-4501",
+      "risk": -2.13615345954895,
+      "survival_months": 47.36666666666667
+    },
+    {
+      "censorship": 0,
+      "disc_label": 1,
+      "event_observed": true,
+      "patient_id": "TCGA-49-4505",
+      "risk": -2.0907273292541504,
+      "survival_months": 14.266666666666667
+    },
+    {
+      "censorship": 0,
+      "disc_label": 2,
+      "event_observed": true,
+      "patient_id": "TCGA-49-4506",
+      "risk": -0.15705445408821106,
+      "survival_months": 33.3
+    },
+    {
+      "censorship": 0,
+      "disc_label": 1,
+      "event_observed": true,
+      "patient_id": "TCGA-49-6742",
+      "risk": -1.340856909751892,
+      "survival_months": 16.266666666666666
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-49-AAR0",
+      "risk": -2.910757303237915,
+      "survival_months": 158.83333333333334
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-49-AARE",
+      "risk": -3.965959310531616,
+      "survival_months": 40.96666666666667
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-49-AARN",
+      "risk": -3.9984521865844727,
+      "survival_months": 37.833333333333336
+    },
+    {
+      "censorship": 0,
+      "disc_label": 0,
+      "event_observed": true,
+      "patient_id": "TCGA-4B-A93V",
+      "risk": -3.880864143371582,
+      "survival_months": 10.0
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-50-5045",
+      "risk": -3.180584669113159,
+      "survival_months": 72.46666666666667
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-50-5068",
+      "risk": -2.925786256790161,
+      "survival_months": 49.96666666666667
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-50-6590",
+      "risk": -1.7269362211227417,
+      "survival_months": 42.93333333333333
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-50-6597",
+      "risk": -2.8531999588012695,
+      "survival_months": 42.266666666666666
+    },
+    {
+      "censorship": 0,
+      "disc_label": 0,
+      "event_observed": true,
+      "patient_id": "TCGA-50-7109",
+      "risk": -3.353353500366211,
+      "survival_months": 10.266666666666667
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-50-8459",
+      "risk": -1.6803996562957764,
+      "survival_months": 37.3
+    },
+    {
+      "censorship": 0,
+      "disc_label": 2,
+      "event_observed": true,
+      "patient_id": "TCGA-53-7626",
+      "risk": -3.8842413425445557,
+      "survival_months": 30.966666666666665
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-53-7813",
+      "risk": -3.760807991027832,
+      "survival_months": 14.133333333333333
+    },
+    {
+      "censorship": 0,
+      "disc_label": 2,
+      "event_observed": true,
+      "patient_id": "TCGA-55-1592",
+      "risk": -3.7554287910461426,
+      "survival_months": 23.366666666666667
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-55-1596",
+      "risk": -3.251222610473633,
+      "survival_months": 68.83333333333333
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-55-6642",
+      "risk": -3.2711129188537598,
+      "survival_months": 81.63333333333334
+    },
+    {
+      "censorship": 0,
+      "disc_label": 0,
+      "event_observed": true,
+      "patient_id": "TCGA-55-6712",
+      "risk": -0.8157838582992554,
+      "survival_months": 5.7
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-55-6969",
+      "risk": -3.680563449859619,
+      "survival_months": 41.3
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-55-6972",
+      "risk": -3.1406445503234863,
+      "survival_months": 54.4
+    },
+    {
+      "censorship": 0,
+      "disc_label": 0,
+      "event_observed": true,
+      "patient_id": "TCGA-55-6979",
+      "risk": -2.693138837814331,
+      "survival_months": 7.9
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-55-6980",
+      "risk": -2.129167079925537,
+      "survival_months": 70.3
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-55-7573",
+      "risk": -3.7283682823181152,
+      "survival_months": 16.233333333333334
+    },
+    {
+      "censorship": 0,
+      "disc_label": 2,
+      "event_observed": true,
+      "patient_id": "TCGA-55-7574",
+      "risk": -3.654810667037964,
+      "survival_months": 33.166666666666664
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-55-7724",
+      "risk": -3.4442298412323,
+      "survival_months": 23.5
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-55-7726",
+      "risk": -1.909895420074463,
+      "survival_months": 21.73333333333333
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-55-7910",
+      "risk": -3.8527870178222656,
+      "survival_months": 34.666666666666664
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-55-7994",
+      "risk": -3.903005361557007,
+      "survival_months": 20.1
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-55-8087",
+      "risk": -3.6906251907348633,
+      "survival_months": 15.4
+    },
+    {
+      "censorship": 0,
+      "disc_label": 2,
+      "event_observed": true,
+      "patient_id": "TCGA-55-8089",
+      "risk": -3.727161169052124,
+      "survival_months": 23.4
+    },
+    {
+      "censorship": 0,
+      "disc_label": 0,
+      "event_observed": true,
+      "patient_id": "TCGA-55-8092",
+      "risk": -3.7310917377471924,
+      "survival_months": 5.133333333333334
+    },
+    {
+      "censorship": 0,
+      "disc_label": 2,
+      "event_observed": true,
+      "patient_id": "TCGA-55-8096",
+      "risk": -2.108095645904541,
+      "survival_months": 23.966666666666665
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-55-8207",
+      "risk": -3.657931089401245,
+      "survival_months": 32.56666666666667
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-55-8301",
+      "risk": -3.1328158378601074,
+      "survival_months": 17.8
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-55-8505",
+      "risk": -0.910304605960846,
+      "survival_months": 14.666666666666666
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-55-8507",
+      "risk": -3.9511446952819824,
+      "survival_months": 13.933333333333334
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-55-8614",
+      "risk": -2.9779200553894043,
+      "survival_months": 17.866666666666667
+    },
+    {
+      "censorship": 0,
+      "disc_label": 0,
+      "event_observed": true,
+      "patient_id": "TCGA-55-A490",
+      "risk": -3.9723026752471924,
+      "survival_months": 3.3
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-55-A491",
+      "risk": -3.333556652069092,
+      "survival_months": 20.866666666666667
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-62-A46S",
+      "risk": -3.672232151031494,
+      "survival_months": 55.1
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-62-A46V",
+      "risk": -3.0242347717285156,
+      "survival_months": 73.3
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-62-A471",
+      "risk": -1.4222838878631592,
+      "survival_months": 41.53333333333333
+    },
+    {
+      "censorship": 0,
+      "disc_label": 2,
+      "event_observed": true,
+      "patient_id": "TCGA-64-1677",
+      "risk": -2.6735830307006836,
+      "survival_months": 20.933333333333334
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-64-1680",
+      "risk": -2.562180757522583,
+      "survival_months": 37.53333333333333
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-64-1681",
+      "risk": -2.207988739013672,
+      "survival_months": 38.9
+    },
+    {
+      "censorship": 0,
+      "disc_label": 0,
+      "event_observed": true,
+      "patient_id": "TCGA-64-5775",
+      "risk": -3.947467088699341,
+      "survival_months": 2.066666666666667
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-67-3771",
+      "risk": -3.3765463829040527,
+      "survival_months": 20.33333333333333
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-67-3774",
+      "risk": -3.320796251296997,
+      "survival_months": 12.833333333333334
+    },
+    {
+      "censorship": 1,
+      "disc_label": 0,
+      "event_observed": false,
+      "patient_id": "TCGA-67-6215",
+      "risk": -2.4475955963134766,
+      "survival_months": 5.8
+    },
+    {
+      "censorship": 1,
+      "disc_label": 0,
+      "event_observed": false,
+      "patient_id": "TCGA-67-6216",
+      "risk": -2.7414989471435547,
+      "survival_months": 4.7
+    },
+    {
+      "censorship": 1,
+      "disc_label": 0,
+      "event_observed": false,
+      "patient_id": "TCGA-69-7761",
+      "risk": -2.822178363800049,
+      "survival_months": 6.2
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-69-7763",
+      "risk": -0.28698861598968506,
+      "survival_months": 23.0
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-69-7764",
+      "risk": -3.903489828109741,
+      "survival_months": 13.8
+    },
+    {
+      "censorship": 1,
+      "disc_label": 0,
+      "event_observed": false,
+      "patient_id": "TCGA-69-7765",
+      "risk": -3.0114173889160156,
+      "survival_months": 5.5
+    },
+    {
+      "censorship": 1,
+      "disc_label": 0,
+      "event_observed": false,
+      "patient_id": "TCGA-69-7974",
+      "risk": -3.777036428451538,
+      "survival_months": 6.133333333333334
+    },
+    {
+      "censorship": 1,
+      "disc_label": 0,
+      "event_observed": false,
+      "patient_id": "TCGA-69-7978",
+      "risk": -2.3664445877075195,
+      "survival_months": 4.466666666666667
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-69-7980",
+      "risk": -3.8673977851867676,
+      "survival_months": 13.7
+    },
+    {
+      "censorship": 0,
+      "disc_label": 2,
+      "event_observed": true,
+      "patient_id": "TCGA-73-4659",
+      "risk": -3.093395948410034,
+      "survival_months": 23.7
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-73-4666",
+      "risk": -2.7202727794647217,
+      "survival_months": 26.666666666666668
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-73-4668",
+      "risk": -3.2060978412628174,
+      "survival_months": 15.566666666666666
+    },
+    {
+      "censorship": 1,
+      "disc_label": 0,
+      "event_observed": false,
+      "patient_id": "TCGA-73-4670",
+      "risk": -0.3349474370479584,
+      "survival_months": 4.366666666666666
+    },
+    {
+      "censorship": 0,
+      "disc_label": 2,
+      "event_observed": true,
+      "patient_id": "TCGA-73-4675",
+      "risk": -2.5211668014526367,
+      "survival_months": 30.73333333333333
+    },
+    {
+      "censorship": 0,
+      "disc_label": 0,
+      "event_observed": true,
+      "patient_id": "TCGA-73-4676",
+      "risk": -0.24392031133174896,
+      "survival_months": 9.366666666666667
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-73-7498",
+      "risk": -3.7555534839630127,
+      "survival_months": 39.63333333333333
+    },
+    {
+      "censorship": 0,
+      "disc_label": 1,
+      "event_observed": true,
+      "patient_id": "TCGA-73-A9RS",
+      "risk": -2.086135149002075,
+      "survival_months": 11.333333333333334
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-75-5125",
+      "risk": -1.5667004585266113,
+      "survival_months": 67.56666666666666
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-75-5146",
+      "risk": -3.5548794269561768,
+      "survival_months": 78.93333333333334
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-75-6206",
+      "risk": -0.9257938265800476,
+      "survival_months": 86.33333333333333
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-75-6214",
+      "risk": -1.9005720615386963,
+      "survival_months": 37.16666666666666
+    },
+    {
+      "censorship": 0,
+      "disc_label": 1,
+      "event_observed": true,
+      "patient_id": "TCGA-78-7147",
+      "risk": -3.2592175006866455,
+      "survival_months": 19.53333333333333
+    },
+    {
+      "censorship": 0,
+      "disc_label": 2,
+      "event_observed": true,
+      "patient_id": "TCGA-78-7148",
+      "risk": -2.1289355754852295,
+      "survival_months": 20.866666666666667
+    },
+    {
+      "censorship": 0,
+      "disc_label": 2,
+      "event_observed": true,
+      "patient_id": "TCGA-78-7150",
+      "risk": -0.3289370536804199,
+      "survival_months": 22.2
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-78-7152",
+      "risk": -3.0678935050964355,
+      "survival_months": 40.5
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-78-7153",
+      "risk": -0.24850082397460938,
+      "survival_months": 121.16666666666669
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-78-7155",
+      "risk": -3.898700475692749,
+      "survival_months": 39.03333333333333
+    },
+    {
+      "censorship": 0,
+      "disc_label": 2,
+      "event_observed": true,
+      "patient_id": "TCGA-78-7156",
+      "risk": -3.718502998352051,
+      "survival_months": 32.53333333333333
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-78-7159",
+      "risk": -3.9634501934051514,
+      "survival_months": 65.8
+    },
+    {
+      "censorship": 0,
+      "disc_label": 0,
+      "event_observed": true,
+      "patient_id": "TCGA-78-7161",
+      "risk": -3.659956932067871,
+      "survival_months": 9.7
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-78-7163",
+      "risk": -0.7832404375076294,
+      "survival_months": 241.6
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-78-7167",
+      "risk": -3.6001806259155273,
+      "survival_months": 89.36666666666666
+    },
+    {
+      "censorship": 0,
+      "disc_label": 2,
+      "event_observed": true,
+      "patient_id": "TCGA-78-7220",
+      "risk": -3.5398619174957275,
+      "survival_months": 26.9
+    },
+    {
+      "censorship": 0,
+      "disc_label": 2,
+      "event_observed": true,
+      "patient_id": "TCGA-78-7535",
+      "risk": -1.5459164381027222,
+      "survival_months": 31.633333333333333
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-78-7539",
+      "risk": -3.4577808380126953,
+      "survival_months": 26.366666666666667
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-78-8648",
+      "risk": -1.7789210081100464,
+      "survival_months": 40.3
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-78-8662",
+      "risk": -3.8712990283966064,
+      "survival_months": 112.03333333333332
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-80-5608",
+      "risk": -3.9195427894592285,
+      "survival_months": 94.4
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-80-5611",
+      "risk": -1.0565630197525024,
+      "survival_months": 86.5
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-83-5908",
+      "risk": -2.529182195663452,
+      "survival_months": 27.466666666666665
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-86-7711",
+      "risk": -1.0067737102508545,
+      "survival_months": 34.86666666666667
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-86-7953",
+      "risk": -3.996791362762451,
+      "survival_months": 33.233333333333334
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-86-8054",
+      "risk": -0.873772919178009,
+      "survival_months": 38.266666666666666
+    },
+    {
+      "censorship": 0,
+      "disc_label": 0,
+      "event_observed": true,
+      "patient_id": "TCGA-86-8055",
+      "risk": -1.616686463356018,
+      "survival_months": 4.133333333333334
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-86-8073",
+      "risk": -3.981623411178589,
+      "survival_months": 24.666666666666668
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-86-8076",
+      "risk": -3.4330008029937744,
+      "survival_months": 33.1
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-86-8358",
+      "risk": -3.388071060180664,
+      "survival_months": 21.766666666666666
+    },
+    {
+      "censorship": 0,
+      "disc_label": 1,
+      "event_observed": true,
+      "patient_id": "TCGA-86-8359",
+      "risk": -3.5074782371520996,
+      "survival_months": 14.8
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-86-8585",
+      "risk": -3.2638325691223145,
+      "survival_months": 11.766666666666667
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-86-A4P8",
+      "risk": -2.496063709259033,
+      "survival_months": 26.83333333333333
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-93-A4JQ",
+      "risk": -2.1579787731170654,
+      "survival_months": 17.533333333333335
+    },
+    {
+      "censorship": 0,
+      "disc_label": 1,
+      "event_observed": true,
+      "patient_id": "TCGA-95-7043",
+      "risk": -3.824355125427246,
+      "survival_months": 16.766666666666666
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-95-7947",
+      "risk": -3.7023825645446777,
+      "survival_months": 15.9
+    },
+    {
+      "censorship": 1,
+      "disc_label": 0,
+      "event_observed": false,
+      "patient_id": "TCGA-95-8494",
+      "risk": -1.5718750953674316,
+      "survival_months": 2.8
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-95-A4VK",
+      "risk": -0.5410038232803345,
+      "survival_months": 21.7
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-95-A4VP",
+      "risk": -3.4036145210266113,
+      "survival_months": 20.166666666666668
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-97-7546",
+      "risk": -3.943478584289551,
+      "survival_months": 42.833333333333336
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-97-7553",
+      "risk": -2.4032676219940186,
+      "survival_months": 62.333333333333336
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-97-7937",
+      "risk": -3.337778091430664,
+      "survival_months": 18.8
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-97-8171",
+      "risk": -2.0756540298461914,
+      "survival_months": 18.933333333333334
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-97-8172",
+      "risk": -3.9669995307922363,
+      "survival_months": 18.166666666666668
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-97-8175",
+      "risk": -2.783029317855835,
+      "survival_months": 18.366666666666667
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-97-A4LX",
+      "risk": -3.1691503524780273,
+      "survival_months": 20.466666666666665
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-97-A4M0",
+      "risk": -3.7033820152282715,
+      "survival_months": 21.73333333333333
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-97-A4M1",
+      "risk": -3.399667501449585,
+      "survival_months": 20.03333333333333
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-97-A4M2",
+      "risk": -3.3519108295440674,
+      "survival_months": 20.8
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-99-7458",
+      "risk": -3.885334014892578,
+      "survival_months": 24.9
+    },
+    {
+      "censorship": 1,
+      "disc_label": 3,
+      "event_observed": false,
+      "patient_id": "TCGA-99-8028",
+      "risk": -3.5696523189544678,
+      "survival_months": 37.266666666666666
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-99-AA5R",
+      "risk": -2.80911922454834,
+      "survival_months": 21.933333333333334
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-J2-8192",
+      "risk": -2.0548934936523438,
+      "survival_months": 24.633333333333333
+    },
+    {
+      "censorship": 0,
+      "disc_label": 1,
+      "event_observed": true,
+      "patient_id": "TCGA-J2-A4AD",
+      "risk": -0.5006431937217712,
+      "survival_months": 18.33333333333333
+    },
+    {
+      "censorship": 0,
+      "disc_label": 0,
+      "event_observed": true,
+      "patient_id": "TCGA-L9-A443",
+      "risk": -3.5689096450805664,
+      "survival_months": 6.433333333333334
+    },
+    {
+      "censorship": 1,
+      "disc_label": 0,
+      "event_observed": false,
+      "patient_id": "TCGA-L9-A444",
+      "risk": -3.736330270767212,
+      "survival_months": 10.233333333333333
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-L9-A8F4",
+      "risk": -3.392956256866455,
+      "survival_months": 15.866666666666667
+    },
+    {
+      "censorship": 1,
+      "disc_label": 0,
+      "event_observed": false,
+      "patient_id": "TCGA-MN-A4N5",
+      "risk": -3.5321621894836426,
+      "survival_months": 2.8
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-MP-A4T6",
+      "risk": -3.8574137687683105,
+      "survival_months": 59.66666666666666
+    },
+    {
+      "censorship": 0,
+      "disc_label": 0,
+      "event_observed": true,
+      "patient_id": "TCGA-MP-A4T8",
+      "risk": -0.5881653428077698,
+      "survival_months": 5.366666666666666
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-MP-A4T9",
+      "risk": -1.1385942697525024,
+      "survival_months": 42.16666666666666
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-MP-A4TH",
+      "risk": -3.862621307373047,
+      "survival_months": 24.7
+    },
+    {
+      "censorship": 0,
+      "disc_label": 1,
+      "event_observed": true,
+      "patient_id": "TCGA-MP-A4TJ",
+      "risk": -3.4591736793518066,
+      "survival_months": 11.3
+    },
+    {
+      "censorship": 1,
+      "disc_label": 2,
+      "event_observed": false,
+      "patient_id": "TCGA-NJ-A7XG",
+      "risk": -0.4277624487876892,
+      "survival_months": 20.566666666666663
+    },
+    {
+      "censorship": 0,
+      "disc_label": 3,
+      "event_observed": true,
+      "patient_id": "TCGA-O1-A52J",
+      "risk": -2.993014335632324,
+      "survival_months": 59.93333333333333
+    },
+    {
+      "censorship": 1,
+      "disc_label": 1,
+      "event_observed": false,
+      "patient_id": "TCGA-S2-AA1A",
+      "risk": -3.7112371921539307,
+      "survival_months": 17.1
+    }
+  ],
+  "qcut_edges": [
+    1.1,
+    10.583333333333332,
+    19.866666666666667,
+    33.56666666666666,
+    87.33333333333333
+  ],
+  "scaler_source_split": "train",
+  "schema_version": 1,
+  "sksurv_import_source": "environment",
+  "test_excluded_from_bins": true
+}

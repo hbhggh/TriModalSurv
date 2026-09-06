@@ -1,0 +1,17 @@
+['LGG'] cancer_types
+Loading split train:   0%|          | 0/166 [00:00<?, ?it/s]Loading split train: 100%|██████████| 166/166 [00:00<00:00, 6696.94it/s]
+Loading split test:   0%|          | 0/166 [00:00<?, ?it/s]Loading split test: 100%|██████████| 166/166 [00:00<00:00, 6519.60it/s]
+none: A=0.665286 B=0.681504 n=166 rna=0 text=0
+rna_25: A=0.668392 B=0.687371 n=166 rna=41 text=0
+rna_50: A=0.668047 B=0.685645 n=166 rna=83 text=0
+rna_75: A=0.668047 B=0.686335 n=166 rna=124 text=0
+text_25: A=0.673223 B=0.687371 n=166 rna=0 text=41
+text_50: A=0.670462 B=0.684610 n=166 rna=0 text=83
+text_75: A=0.655970 B=0.663561 n=166 rna=0 text=124
+both_25: A=0.660801 B=0.680814 n=166 rna=41 text=41
+both_50: A=0.665286 B=0.684610 n=166 rna=83 text=83
+both_75: A=0.669082 B=0.685300 n=166 rna=124 text=124
+rna_100: A=0.668737 B=0.689096 n=166 rna=166 text=0
+text_100: A=0.653899 B=0.657350 n=166 rna=0 text=166
+both_100: A=0.655970 B=0.659765 n=166 rna=166 text=166
+OUTPUT_JSON=/home/wuhao/amiss_eval_v2/m1/m1_LGG_s321.json

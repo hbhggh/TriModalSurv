@@ -1,0 +1,70 @@
+{
+  "counts": {
+    "BLCA": {
+      "both_25": 34,
+      "both_50": 69,
+      "both_75": 103,
+      "rna_25": 34,
+      "rna_50": 69,
+      "rna_75": 103,
+      "text_25": 34,
+      "text_50": 69,
+      "text_75": 103
+    },
+    "BRCA": {
+      "both_25": 95,
+      "both_50": 191,
+      "both_75": 287,
+      "rna_25": 95,
+      "rna_50": 191,
+      "rna_75": 287,
+      "text_25": 95,
+      "text_50": 191,
+      "text_75": 287
+    },
+    "LGG": {
+      "both_25": 41,
+      "both_50": 83,
+      "both_75": 124,
+      "rna_25": 41,
+      "rna_50": 83,
+      "rna_75": 124,
+      "text_25": 41,
+      "text_50": 83,
+      "text_75": 124
+    },
+    "LUAD": {
+      "both_25": 43,
+      "both_50": 86,
+      "both_75": 129,
+      "rna_25": 43,
+      "rna_50": 86,
+      "rna_75": 129,
+      "text_25": 43,
+      "text_50": 86,
+      "text_75": 129
+    },
+    "UCEC": {
+      "both_25": 49,
+      "both_50": 99,
+      "both_75": 148,
+      "rna_25": 49,
+      "rna_50": 99,
+      "rna_75": 148,
+      "text_25": 49,
+      "text_50": 99,
+      "text_75": 148
+    }
+  },
+  "labels": "collab/20260827-三方对比战役/labels_424_ex12.csv",
+  "manifest": "collab/20260902-A测缺失补偿/missing_manifest_v1.csv",
+  "manifest_sha256": "c789eae9a5b1517d82cfa137a92dfa8cc7ffae58e5f300163b25729ffc5d8156",
+  "n_test": {
+    "BLCA": 138,
+    "BRCA": 383,
+    "LGG": 166,
+    "LUAD": 172,
+    "UCEC": 198
+  },
+  "seed": 20260902
+}
