@@ -1,5 +1,23 @@
-NPJ/
-__pycache__/
 .DS_Store
-NPJ/
-baselines/
+__pycache__/
+*.pyc
+*.so
+
+# 嵌套独立 git 克隆（不跟踪）；NPJ 工作树快照见 code/NPJ/（含对上游 patch），基线只留 collab/**/*_patch.diff
+/NPJ/
+/baselines/
+
+# scratch 重资产（可再生 / 第三方 / 原始数据），按子路径而非整个 scratch/（scratch 内的测试脚本与 split 小表保留）
+collab/**/scratch/*pycache*/
+collab/**/scratch/pyc_verify/
+collab/**/scratch/r2_outcome/adapted_csv/
+collab/**/scratch/ex12_outcome/
+collab/**/scratch/e_sksurv_vendor/
+collab/**/scratch/gdc_test/*.tsv
+collab/**/scratch/e_eval_frozen_synthetic/**/*.pt
+collab/**/scratch/e_eval_frozen_synthetic/**/*.csv.zip
+
+# 巡检运行态（非过程文本）
+collab/monitor/.last_status.json
+collab/monitor/.stall_counts
+tmp_*/
