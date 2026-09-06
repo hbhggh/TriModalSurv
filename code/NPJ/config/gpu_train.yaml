@@ -1,0 +1,20 @@
+# 正式实验 GPU 配置（合同见仓库根 AGENTS.md「正式实验 GPU 合同」）
+# batch_size: 32 为用户裁决（2026-09-02）——实测阻断原因（非对齐论文类理由）：
+#   V100 探测 bs 32/64/128/256 全档活跃 util 中位恒 11-15%、墙钟随 bs 反增 77%、
+#   优化器更新次数骤减需重调 lr；OOM 前一档为 256（显存峰 3.5GB）但零收益。
+#   探测数据：collab/20260902-NPJ-GPU合同/notes.md Phase D。设回 null 可恢复发车时自动探测。
+batch_size: 32
+gradient_accumulation_steps: 1
+num_workers: 4
+pin_memory: true
+persistent_workers: true
+prefetch_factor: 4
+non_blocking: true
+concurrent_runs: 1
+gpu_util_warmup_sec: 120
+gpu_util_min_percent: 50
+gpu_util_target_percent: 80
+# NPJ 现架构成文豁免（用户裁决 2026-09-02）：50% 门禁对本模型物理不可达（计算图过小），
+# 豁免仅限 MainModalityMoE 现架构；模型显著加大后应改回 false 重测。
+allow_low_gpu_util: true
+low_gpu_util_reason: "NPJ small compute graph: measured active-util median 11-15%, peak 31% across bs 32-256 on V100; wall time increases with larger bs (probe 2026-09-02, collab/20260902-NPJ-GPU合同/notes.md)"
