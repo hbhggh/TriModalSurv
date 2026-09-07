@@ -1,0 +1,7 @@
+['BLCA'] cancer_types
+Loading split test:   0%|          | 0/138 [00:00<?, ?it/s]Loading split test: 100%|██████████| 138/138 [00:00<00:00, 3732.19it/s]
+none: A=0.526197 B=0.514053 n=138 rna=0 text=0
+rna_100: A=0.517002 B=0.511103 n=138 rna=138 text=0
+text_100: A=0.515441 B=0.521339 n=138 rna=0 text=138
+both_100: A=0.527412 B=0.530881 n=138 rna=138 text=138
+OUTPUT_JSON=/home/wuhao/npjd_eval_d0/.d0_BLCA_s3.vtn880eu/m0real_BLCA_s3.json

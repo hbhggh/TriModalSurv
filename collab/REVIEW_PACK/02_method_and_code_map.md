@@ -43,16 +43,18 @@ scripts/eval_missing.py（冻结 ckpt 一次性多格点评测）
 | 声称 | 代码位置 | 触发 flag | 用在哪些臂 |
 |---|---|---|---|
 | 拆 gate，token 进 attention | `model/fusion_model.py:1078-1180 NPJC` | `--network_type NPJC` | E0 / E0d / E1 |
+| **去 gate 改等权均值（NPJ-D，2026-09-06）** | `model/fusion_model.py` `class MeanFusion`（零参数，`torch.stack(...).mean(1)`）；`MainModalityMoE.__init__(..., fusion_type="gate"|"mean")`；gate 路径逐字不变（S5 ckpt 对拍 PARITY_PASS） | `--network_type MainModalityMoE --fusion_type mean`（launcher 预设 `d0`；评测 `eval_missing.py --fusion_type mean`） | D（E0 底座 D 线）、Dm（同 ckpt + `--arm m1`） |
 | CAP-Recall 原型召回 | `model/compensator.py:34-172 CAPRecall`；插入 `fusion_model.py:1137-1168`（NPJC）与 `:1017-1049`（MainModalityMoE） | `--compensator capr` | E1（NPJC）、M2（gate 版） |
 | MissingBank | `model/compensator.py:175-221` | `--compensator bank` | M1b（gate 版） |
 | 一致性 loss | `compensator.py:18-32,223-226`；消费 `main_survival.py:483-492` | `--consistency_lambda 0.1`（需 `--modality_dropout>0` 才有 pair） | E1、M2 |
 | modality dropout | `tcga_dataset.py:471-483,573-589` | `--modality_dropout 0.15` | E0d、E1、M1b、M2 |
 | 评测期均值盲补 | `scripts/eval_missing.py:192,224` | `--arm m1` | M1（gate 版） |
+| 评测期均值盲补 + 填充位标记 valid（NPJC 不再屏蔽填充 token） | `scripts/eval_missing.py:409-414`（`--m1-mark-valid`，默认关） | `--arm m1 --network_type NPJC --m1-mark-valid` | E0m（NPJ-C 版，2026-09-06） |
 | 原型更新只在训练 | `compensator.py:72-119`（`@torch.no_grad`，`bin_labels` 由 `main_survival.py:470-471` 注入） | — | E1、M2 |
 
 ## 发车器与门禁
 
-- `scripts/train_launcher.py:56 ARM_PRESETS`：`e0` = NPJC + none；`e0d` = NPJC + none + `--modality_dropout 0.15`；`e1` = NPJC + capr + `--modality_dropout 0.15 --consistency_lambda 0.1`。`:383` 固定注入 `--lr 1e-4 --epochs 50 --batch_size 32`；`:601 _run_eval` 完成即评测。
+- `scripts/train_launcher.py:58 ARM_PRESETS`：`e0` = NPJC + none；`e0d` = NPJC + none + `--modality_dropout 0.15`；`e1` = NPJC + capr + `--modality_dropout 0.15 --consistency_lambda 0.1`；**`d0` = MainModalityMoE + none + `--fusion_type mean`**（评测命令由纯函数 `build_eval_command` 组装并透传 `--fusion_type`；e0/e0d/e1 评测命令逐字不变）。已知缺陷（对抗审查，未修）：YAML plan 模式不继承预设 `extra_args`（坑 D17）；默认 `cpt-name/result-path` 下 d0 与 NPJ-A ckpt 同址（本战役固定 `out_d0`）。`:383` 固定注入 `--lr 1e-4 --epochs 50 --batch_size 32`；`:601 _run_eval` 完成即评测。
 - `scripts/launch_formal.sh` + `scripts/gpu_util_gate.py`：warmup 采样 GPU util 门禁；`config/gpu_train.yaml:19-20` `allow_low_gpu_util: true` + 原因（NPJ 计算图小，实测 util 11–15%，用户裁决豁免）。
 - S5 三方训练脚本在 `collab/20260827-三方对比战役/s4/`（landau 路径），非 launcher。
 

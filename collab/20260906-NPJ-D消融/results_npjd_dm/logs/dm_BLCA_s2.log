@@ -1,0 +1,8 @@
+['BLCA'] cancer_types
+Loading split train:   0%|          | 0/136 [00:00<?, ?it/s]Loading split train: 100%|██████████| 136/136 [00:00<00:00, 6633.47it/s]
+Loading split test:   0%|          | 0/138 [00:00<?, ?it/s]Loading split test: 100%|██████████| 138/138 [00:00<00:00, 6948.13it/s]
+none: A=0.533831 B=0.517696 n=138 rna=0 text=0
+rna_100: A=0.497051 B=0.494275 n=138 rna=138 text=0
+text_100: A=0.578765 B=0.550139 n=138 rna=0 text=138
+both_100: A=0.504858 B=0.497051 n=138 rna=138 text=138
+OUTPUT_JSON=/home/wuhao/npjd_eval_dm/m1_BLCA_s2.json

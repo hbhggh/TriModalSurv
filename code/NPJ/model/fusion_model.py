@@ -949,6 +949,22 @@ class GatedFusion(nn.Module):
         gate_weights = gate_weights.unsqueeze(-1)  # [B, M, 1]
         return (gate_weights * gated).sum(dim=1)  # [B, D]
 
+class MeanFusion(nn.Module):
+    """等权均值融合（NPJ-D 消融，2026-09-06）：与 GatedFusion 同接口，无可学习参数。
+
+    输入长度 M 的列表（元素 [B, D] 或 None），输出 [B, D]。
+    对非 None 的元素做等权算术平均；None 元素跳过（与 GatedFusion 用 -1e9
+    屏蔽 None 的效果一致）；只有一个非 None 时直接返回它。
+    """
+
+    def forward(self, reps):
+        reps_list = [r for r in reps if r is not None]
+        if not reps_list:
+            raise ValueError("MeanFusion 至少需要一个非 None 的模态表征")
+        if len(reps_list) == 1:
+            return reps_list[0]  # only one valid modality
+        return torch.stack(reps_list, dim=1).mean(dim=1)  # [B, D]
+
 class SurvivalHead(nn.Module):  
     def __init__(self, input_dim, n_bins):
         super().__init__()
@@ -963,7 +979,7 @@ class MainModalityMoE(nn.Module):
     def __init__(self, device, modalities, hidden_size, dropout_rate=0.1, 
                  pred_dim=15, mlp_ratio=4, n_token=16, n_backbone=1, 
                  n_head=4, num_experts=4, topk=1, cancer_types=None,
-                 compensator=None):
+                 compensator=None, fusion_type: str = "gate"):
         super(MainModalityMoE, self).__init__()
         self.device = device
         self.modalities = list(modalities.keys())
@@ -978,7 +994,14 @@ class MainModalityMoE(nn.Module):
             ) for mm in self.modalities
         })
 
-        self.fusion = GatedFusion(hidden_size, num_modalities=len(self.modalities))
+        # 指挥官小修（NPJ-D 消融，2026-09-06）：gate = 原 NPJ-A；mean = 去 GatedFusion 的等权均值对照臂
+        self.fusion_type = fusion_type
+        if fusion_type == 'gate':
+            self.fusion = GatedFusion(hidden_size, num_modalities=len(self.modalities))
+        elif fusion_type == 'mean':
+            self.fusion = MeanFusion()
+        else:
+            raise ValueError(f"Unsupported fusion_type: {fusion_type!r} (expected 'gate' or 'mean')")
 
         self.backbone = nn.Sequential(
             *[nn.TransformerEncoderLayer(

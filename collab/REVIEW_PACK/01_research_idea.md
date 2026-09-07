@@ -29,7 +29,7 @@
 | 一致性 loss | `compensator.py:223`：仅对训练期被 dropout 的位置，召回 token 与原 token 的 `1 − cosine`；λ=0.1 | 随 E1/M2 一起，**未单独消融** |
 | modality dropout | `loc_utils_3yr/tcga_dataset.py:471-483`：训练期按 (patient, modality) 确定性丢弃 | E0d（单独消融）、E1、M1b、M2 |
 | MissingBank（可学习常量补偿） | `compensator.py:175` | M1b（gate 版） |
-| 评测期均值盲补 | `scripts/eval_missing.py:192,224`（`--arm m1`） | M1（gate 版）；**NPJ-C 版 E0m 未跑** |
+| 评测期均值盲补 | `scripts/eval_missing.py:192,224`（`--arm m1`；NPJ-C 版加 `--m1-mark-valid`） | M1（gate 版）；**E0m（NPJ-C 版，2026-09-06 已跑）** |
 | 作者 gate 的缺失判据死代码 | `fusion_model.py:1011-1015` 读 `{mm}_mask`，数据集只产 `{mm}_valid`（`tcga_dataset.py:591`）→ 条件恒假，缺失模态以"全零特征过 projector 得到常量 token"参与 gate 加权 | 探针实证（`probe/`），**未修复、未当创新** |
 
 ## 主线改向史（如实记录）
@@ -41,8 +41,13 @@
 
 ## 明确没做的
 
-- E0m（E0 ckpt + 评测期均值盲补）：用于验证"学习式召回 vs 任何填充"，**未跑**（等裁决）。
+- E0m（E0 ckpt + 评测期均值盲补）：**已跑（2026-09-06，r5 二 c）**；结论：原型相对均值填仅 UCEC 成立。E0dm（E0d + 均值填）未跑。
 - bootstrap CI / 配对检验：未做。
 - E0 去 attention 仅 masked-mean 消融、E1 去一致性 loss 消融：未做。
 - 编码器升级（UNI2-h、自制 BulkRNABert）已用于所有臂，但**不作为创新声称**。
 - 5 癌以外的癌种、外部验证集：无。
+
+## r6 追加（2026-09-07）：NPJ-D 底座线
+
+- 代码里真做了的（新增）：`MeanFusion` + `MainModalityMoE(fusion_type="mean")`（`model/fusion_model.py`），即 NPJ-A 去 GatedFusion、其余逐字相同；`--fusion_type` 透传训练/评测；launcher 预设 `d0`。用作更弱的 E0 底座 D；Dm = D ckpt 评测期均值填（零训练）；E1 补至 25 seed。
+- 主线改向（如实）：用户明言动机是"NPJ-C 太强、E1 打不过，换更弱的 E0"；指挥官异议留档（E1 vs D 相差五项 → 只能称系统级对比；以 Dm 为护栏），用户裁决 C 线作附录、D 线为主。结果：原型相对均值填的增量在 C 底座落在 UCEC、在 D 底座落在 BLCA，两线不重合；去 gate 本身改善 4/5 癌（D vs NPJ-A）。主贡献措辞待用户裁决（见报告 r6 六节）。

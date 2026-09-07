@@ -1,0 +1,7 @@
+['BRCA'] cancer_types
+Loading split test:   0%|          | 0/383 [00:00<?, ?it/s]Loading split test:  96%|█████████▋| 369/383 [00:00<00:00, 3465.71it/s]Loading split test: 100%|██████████| 383/383 [00:00<00:00, 3517.22it/s]
+none: A=0.579312 B=0.579085 n=383 rna=0 text=0
+rna_100: A=0.582151 B=0.584194 n=383 rna=383 text=0
+text_100: A=0.467242 B=0.470194 n=383 rna=0 text=383
+both_100: A=0.440899 B=0.471670 n=383 rna=383 text=383
+OUTPUT_JSON=/home/wuhao/npjc_eval_e1_25/.e1_BRCA_s17.0_epoelt/m0real_BRCA_s17.json

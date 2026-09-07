@@ -1,0 +1,7 @@
+['LUAD'] cancer_types
+Loading split test:   0%|          | 0/172 [00:00<?, ?it/s]Loading split test:  75%|███████▌  | 129/172 [00:00<00:00, 1274.74it/s]Loading split test: 100%|██████████| 172/172 [00:00<00:00, 1598.38it/s]
+none: A=0.602141 B=0.598807 n=172 rna=0 text=0
+rna_100: A=0.585469 B=0.582485 n=172 rna=172 text=0
+text_100: A=0.623026 B=0.624781 n=172 rna=0 text=172
+both_100: A=0.619165 B=0.611443 n=172 rna=172 text=172
+OUTPUT_JSON=/home/wuhao/npjd_eval_d0/.d0_LUAD_s9.whmzpac9/m0real_LUAD_s9.json

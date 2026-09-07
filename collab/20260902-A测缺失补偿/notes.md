@@ -512,3 +512,19 @@
 - **根因**: 改写时按记忆复述旧段落而非复制原文；"不变"标签未经 diff 核验。
 - **修复**: 逐字恢复；标签改为"r3 原文逐字保留"并以 diff 核验。
 - **Prevention Rule**: 声称"不变/原文保留"的段落必须由 `diff` 证明逐字相同；任何删改必须进修订记录。
+
+## 2026-09-06 20:43:31 JST — 用户裁决：NPJ-D 定义钉死 + E0m 先行 + 成功线预注册（讨论回合，未开跑）
+- **代码事实（只读核对）**：sigmoid 只在训练 loss 内（`loss_func.py:70`）；选 ckpt 与 test 风险公式对所有 network_type 都是 A 公式（`main_survival.py:518/585/759`）；B 口径只是 `eval_missing.py:139-145` 的第二种读数。因此"NPJ-C = 去 gate + 改 sigmoid"不成立：NPJC ckpt 就是"训练/选 ckpt/test 全同 A、只是没有 gate"的模型；口径意义的 NPJ-D 读数已存在（E0 的 `cindex_A`：vs S5 NPJ-A 逐 seed 19:6:0；E1 vs E0 在 A 口径下图像不变）。
+- **裁决 1（D 的定义）= 结构 D**：gate → 带 `{mm}_valid` mask 的三 token 均值，无跨 token attention、无模态嵌入；训练/选 ckpt/test 全同 A。它回答"拆 gate 的收益来自去 gate 还是 attention"（主贡献归因），不服务原型。**尚未授权训练**。
+- **裁决 2 = 先做 E0m**（C 上：E0 ckpt + 评测期均值盲补）作为最小判别"原型 vs 均值填"；零训练。
+- **裁决 3（成功线预注册）**：逐癌配对、同底座 E1 vs E0m；both_100 与单模态缺失分开报；每癌 胜:负:平 + 配对Δ中位，0.02 噪声带；不设跨癌合计阈值（明确拒绝 4/5 癌规则）；结论按癌种写成条件性。
+- 旧 E1（C 线）留作附录，不删（删=换分母）。
+- 指挥官已认：旧 E1 不能拿来打 NPJ-D；4/5 癌不写进成功线。
+- 2026-09-06 20:47:50 JST 用户点头执行 E0m。本地补丁：`NPJ/scripts/eval_missing.py` 新增 `--m1-mark-valid`（默认关），`_collect_logits` 在 `apply_m1_feature_means` 后把 text/rna 的 `{mm}_valid` 置 1（NPJC 不再屏蔽填充 token）；`n_masked_*` 来自 manifest（:133），不受影响。landau 侧脚本备好：`tools/eval_e0m_one.sh`、`tools/run_e0m.sh`、对拍 `tools/parity_e0m.py`。**landau SSH 在 kex 阶段被对端重置（TCP 通）**，疑似连接频率限制；后台等待恢复，未开跑。
+- 2026-09-06 20:52:28 JST landau 恢复（用户处理连接）。补丁部署（远端原 md5 c855ed50… 与本地改前一致后覆盖）；对拍 A（gate 版 m1 关开关，none/rna_100）与留档逐位一致、对拍 B（E0 ckpt 开开关，none）与留档逐位一致，填充格点变化 BLCA s123 rna_100 −0.0029 / text_100 −0.0007 → PARITY_PASS。20:52:00 经 jobrun 发 `run_e0m.sh`（25 任务，xargs -P 10，双卡奇偶；卡 0 有他人 88% 占用），产物 `/home/wuhao/npjc_eval_e0m/`；完成后拉回 `results_npjc_e0m/`。
+- 2026-09-06 20:57:50 JST **E0m 收官**：25/25（54 s）拉回 `results_npjc_e0m/`；表 `table_npjc_E0_E0m_E1_4grids.md`、`table_npjc_E1_E0d_vs_E0m_4grids.md`、`table_both100_vs_E0m.md`；派生量 `tools/r5_numbers.py` → `r5_numbers.txt`。预注册判定（E1 vs E0m，B）：UCEC 四格点超带正（5:0，+0.023/+0.033/+0.071/+0.063）；LUAD 四格点带内；LGG 完整/缺 RNA 超带负、全缺带内（+0.006）；BRCA 缺文本/全缺超带负；BLCA 完整/缺 RNA 超带负。E0m vs E0：LGG 全缺 +0.070（5:0）> E1 的 +0.054 → LGG 全缺收益由任何填充解释。报告升 r5（二 c 节）；REVIEW_PACK 00/01/03/04/A 同步；check_numbers 全部命中。
+### Bug Post-Mortem（对拍样本未覆盖自然缺失）
+- **现象**: 对拍 B 用 BLCA s123 `none` 格点逐位一致判通过；全量后 r5 自检发现 BRCA/LUAD/LGG/UCEC 的 `none` 格点 E0m≠E0（最大 0.011）。
+- **根因**: 这些癌种 test 集存在自然缺失（无 manifest 遮挡也缺 RNA/文本），均值填对其生效；BLCA test 无自然缺失。gate 版 M1 vs M0-real 在 none 呈同一模式（BLCA 全平）。
+- **修复**: 自检改写为按癌种报告并说明预期；报告二 c 加"自然缺失"注记。
+- **Prevention Rule**: 对拍样本必须同时覆盖"填充会触发/不会触发"的癌种；"应为 0"的自检先核对天然触发条件。（V31）

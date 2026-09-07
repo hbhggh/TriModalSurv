@@ -1,0 +1,7 @@
+['LGG'] cancer_types
+Loading split test:   0%|          | 0/166 [00:00<?, ?it/s]Loading split test: 100%|██████████| 166/166 [00:00<00:00, 2336.30it/s]
+none: A=0.748792 B=0.747412 n=166 rna=0 text=0
+rna_100: A=0.743271 B=0.750173 n=166 rna=166 text=0
+text_100: A=0.626294 B=0.624224 n=166 rna=0 text=166
+both_100: A=0.609041 B=0.612491 n=166 rna=166 text=166
+OUTPUT_JSON=/home/wuhao/npjc_eval_e1_25/.e1_LGG_s10.66xh9syv/m0real_LGG_s10.json

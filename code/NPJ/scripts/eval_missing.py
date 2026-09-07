@@ -398,7 +398,7 @@ def iter_reused_grid_datasets(
         yield grid, dataset, members
 
 
-def _collect_logits(model, loader, device, arm: str, means):
+def _collect_logits(model, loader, device, arm: str, means, m1_mark_valid: bool = False):
     import torch
 
     logits_list = []
@@ -408,6 +408,11 @@ def _collect_logits(model, loader, device, arm: str, means):
         for batch in loader:
             if arm == "m1":
                 apply_m1_feature_means(batch, means)
+                if m1_mark_valid:
+                    # 指挥官小修（E0m，2026-09-06）：均值盲补后标记 valid，
+                    # 使 NPJC 的 key_padding_mask 不再屏蔽填充 token（默认关，gate 版 M1 行为不变）。
+                    for modality in MASKABLE_MODALITIES:
+                        batch[f"{modality}_valid"] = torch.ones_like(batch[f"{modality}_valid"])
 
             survival_months = batch.pop("survival_months")
             batch.pop("survival_months_bin")
@@ -497,6 +502,7 @@ def run_evaluation(args: argparse.Namespace) -> Path:
         n_token=int(config.obj.network.n_token),
         cancer_types=[cancer],
         compensator=getattr(args, "compensator", "none"),
+        fusion_type=getattr(args, "fusion_type", "gate"),
     )
     load_checkpoint(model, checkpoint_path, device)
     model.to(device)
@@ -559,7 +565,8 @@ def run_evaluation(args: argparse.Namespace) -> Path:
                     num_workers=0,
                 )
                 logits, times, censorship = _collect_logits(
-                    model, loader, device, args.arm, means
+                    model, loader, device, args.arm, means,
+                    m1_mark_valid=bool(getattr(args, "m1_mark_valid", False)),
                 )
                 cindex_a, cindex_b = dual_cindex(logits, times, censorship)
                 counts = grid_mask_counts(grid, expected_members)
@@ -611,6 +618,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--compensator", default="none", choices=("none", "capr", "bank"))
     # 指挥官小修（单 γ 配套）：评测 NPJ-C 骨架 ckpt
     parser.add_argument("--network_type", default="MainModalityMoE", choices=("MainModalityMoE", "NPJC"))
+    # 指挥官小修（NPJ-D 消融，2026-09-06）：评测 d0（去 GatedFusion 等权均值）ckpt 时构建同结构模型
+    parser.add_argument("--fusion_type", default="gate", choices=("gate", "mean"))
+    # 指挥官小修（E0m，2026-09-06）：m1 均值盲补后把 text/rna 标记为 valid（NPJC 专用；默认关）
+    parser.add_argument("--m1-mark-valid", dest="m1_mark_valid", action="store_true")
     return parser.parse_args()
 
 

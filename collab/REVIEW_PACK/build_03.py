@@ -82,6 +82,12 @@ blocks.append("\n---\n")
 blocks.append(f"## [源: `{rel(AT)}` §二 b E0d 消融（E0d vs E0，E1 vs E0d）]\n")
 blocks += section(at, "## 二 b、")
 blocks.append("\n---\n")
+blocks.append(f"## [源: `{rel(AT)}` §二 c E0m 同底座判别（原型 vs 均值填；预注册规则）]\n")
+blocks += section(at, "## 二 c、")
+blocks.append("\n---\n")
+blocks.append(f"## [源: `{rel(AT)}` §二 d NPJ-D 底座 25-seed 系统级对比 + 填充护栏（r6；预注册规则）]\n")
+blocks += section(at, "## 二 d、")
+blocks.append("\n---\n")
 blocks.append(f"## [源: `{rel(AT)}` §三 与 S5 三方对照（完整模态中位 + A 口径行）]\n")
 blocks += section(at, "## 三、")
 blocks.append("\n---\n")
@@ -89,6 +95,13 @@ blocks.append(f"## [源: `{rel(AT)}` §四 机理证据（含 gate 版 M1 盲补
 blocks += section(at, "## 四、")
 blocks.append("\n---\n")
 
+R6 = ROOT / "collab/20260906-NPJ-D消融/r6_numbers.txt"
+r6 = read(R6)
+blocks.append(f"## [源: `{rel(R6)}` r6 派生量留档（B 口径主判定五节 + 自检 + 异常 seed；脚本 `tools/r6_numbers.py` 生成）]\n")
+for hp in ["### [cindex_B] 覆盖", "### [cindex_B] E1_vs_D", "### [cindex_B] E1_vs_Dm", "### [cindex_B] Dm_vs_D", "### [cindex_B] E0(C)_vs_D", "### [cindex_B] D_vs_S5", "### [cindex_B] 各臂中位", "### [cindex_B] 自检", "### [cindex_B] 异常 seed"]:
+    blocks += r4_block(r6, hp)
+    blocks.append("")
+blocks.append("\n---\n")
 blocks.append(f"## [源: `{rel(R4)}` 派生量留档（脚本 `tools/r4_numbers.py` 生成）]\n")
 for hp in ["### 中位（B）", "### 异常 seed 扫描", "### 5-seed 极差", "### both_100 相对 none 的中位跌幅", "### 十、", "### 十三、", "### 十四、", "### 平局明细"]:
     blocks += r4_block(r4, hp)
@@ -107,7 +120,9 @@ blocks.append("""## 不理想处明写（手写，数字均出自上文区块）
 - 最低单格：S5 表 NPJ-B UCEC s123 = 0.5248；A 测表 E0d BRCA s321 both_100 = 0.4845；gate 版附录 BLCA m2 s213 = 0.4311、UCEC m2 s231 = 0.4803。最高单格：PORPOISE LGG s213 = 0.8370；创新臂最高 E0 LGG none s123 = s213 = 0.8081。
 - CAP-Recall（E1 vs E0）：BLCA 四格点 1:4 全负、BRCA 四格点全负（缺文本 −0.0674）、LGG 单模态缺失时 0:5 / 2:3 / 0:5；只有 UCEC 20/20 全胜、LUAD 小幅偏正（噪声带内）；两模态全缺时 LGG 5:0（+0.0535）。
 - 消融（E0d）：dropout 协议本身 20 格点中 16 格在噪声带；UCEC 系统性正向（3 格超带），LGG 缺文本 −0.0504（1:4）。
-- 跨骨架：单模态 100% 缺失 6 个比较有 3 个反号；gate 版 both_100 的均值盲补 M1 五癌全正、LGG/UCEC/LUAD 上不低于学习式召回 M2 → 学习式召回相对任何填充的优势未验证。
+- 跨骨架：单模态 100% 缺失 6 个比较有 3 个反号；gate 版 both_100 的均值盲补 M1 五癌全正、LGG/UCEC/LUAD 上不低于学习式召回 M2。
+- 同底座判别（E0m，r5）：原型相对均值填的增量只在 UCEC 成立（四格点 5:0）；LGG 全缺收益由任何填充解释（E0m vs E0 +0.0700，E1 vs E0m +0.0055 带内）；BLCA/BRCA 原型相对均值填仍为负；均值填在缺文本时 BRCA −0.0312、LGG −0.0390 超带负。
+- NPJ-D 底座线（r6，25 seed）：E1 相对 D 在完整模态 BRCA/LGG/UCEC 超带负；"原型有效"（E1 vs Dm 超带正）仅 BLCA 缺文本/全缺；UCEC 全缺收益由均值填即可达到且更高（Dm vs D +0.0719，E1 vs Dm −0.0314）；LGG 缺文本 E1 0:25 全败（−0.0997）；D 在 BLCA 有 3 个 seed 完整模态 <0.5（不剔除）。去 gate 改等权均值本身相对 NPJ-A 改善 4/5 癌完整模态。
 - 全部判定为方向判定，无置信区间。
 
 ## 数字冲突 / 口径提示（并排列出，不裁决）

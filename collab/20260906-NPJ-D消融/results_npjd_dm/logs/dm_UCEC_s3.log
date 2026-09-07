@@ -1,0 +1,8 @@
+['UCEC'] cancer_types
+Loading split train:   0%|          | 0/197 [00:00<?, ?it/s]Loading split train: 100%|██████████| 197/197 [00:00<00:00, 6656.45it/s]
+Loading split test:   0%|          | 0/198 [00:00<?, ?it/s]Loading split test: 100%|██████████| 198/198 [00:00<00:00, 5293.07it/s]
+none: A=0.707100 B=0.701758 n=198 rna=0 text=0
+rna_100: A=0.698197 B=0.696862 n=198 rna=198 text=0
+text_100: A=0.668150 B=0.663031 n=198 rna=0 text=198
+both_100: A=0.652793 B=0.653016 n=198 rna=198 text=198
+OUTPUT_JSON=/home/wuhao/npjd_eval_dm/m1_UCEC_s3.json

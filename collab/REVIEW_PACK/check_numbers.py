@@ -9,7 +9,8 @@ import pathlib, re, sys
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 A = ROOT / "collab/20260902-A测缺失补偿"
 S = ROOT / "collab/20260827-三方对比战役"
-SOURCES = [S / "s5_report.md", A / "a_test_report.md", A / "r4_numbers.txt", A / "r2_numbers.txt", A / "s5_full_reference.csv"] + sorted(A.glob("table_*.md"))
+ND = ROOT / "collab/20260906-NPJ-D消融"
+SOURCES = [S / "s5_report.md", A / "a_test_report.md", A / "r4_numbers.txt", A / "r5_numbers.txt", A / "r2_numbers.txt", A / "s5_full_reference.csv", ND / "r6_numbers.txt"] + sorted(A.glob("table_*.md")) + sorted(ND.glob("table_npjd_*.md"))
 TARGETS = [ROOT / "collab/REVIEW_PACK" / f for f in ("00_README.md", "01_research_idea.md", "03_results.md", "04_honest_conclusions.md")]
 
 norm = lambda s: s.replace("−", "-").replace("—", "-")

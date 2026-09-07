@@ -73,6 +73,8 @@ def parsing_args(argv=None):
     parser.add_argument('--finetune_head_only', action='store_true', help='Only finetune the head; freeze the rest of the model')
     parser.add_argument('--simulate_missing_modality',type=str,default='')
     parser.add_argument('--compensator', choices=['none', 'capr', 'bank'], default='none')
+    # 指挥官小修（NPJ-D 消融，2026-09-06）：mean = MainModalityMoE 去 GatedFusion 的等权均值对照臂
+    parser.add_argument('--fusion_type', choices=['gate', 'mean'], default='gate')
     parser.add_argument('--modality_dropout', type=float, default=0.0)
     parser.add_argument('--consistency_lambda', type=float, default=0.1)
 
@@ -166,8 +168,14 @@ def _print_resolved_gpu_config(config):
 
 def load_model(network_type, device, modalities, hidden_size, pred_dim, dropout_rate=0.1, mlp_ratio=4, 
                n_token=16, n_backbone=1, n_head=4, num_experts=4, topk=2,
-               cancer_types=None, compensator='none'):
+               cancer_types=None, compensator='none', fusion_type='gate'):
     print (cancer_types,"cancer_types")
+    # 指挥官小修（NPJ-D 消融，2026-09-06）：fusion_type 仅 MainModalityMoE 支持
+    if fusion_type != 'gate' and network_type != 'MainModalityMoE':
+        raise ValueError(
+            f"fusion_type={fusion_type!r} requires network_type='MainModalityMoE', "
+            f"got network_type={network_type!r}"
+        )
     if compensator != 'none' and network_type not in {
         'MainModalityMoE', 'NPJC'
     }:
@@ -199,7 +207,8 @@ def load_model(network_type, device, modalities, hidden_size, pred_dim, dropout_
         return MainModalityMoE(
             device, modalities, hidden_size, dropout_rate, pred_dim, mlp_ratio, 
             n_token, n_backbone, n_head, num_experts, topk,
-            cancer_types=cancer_types, compensator=compensator_module
+            cancer_types=cancer_types, compensator=compensator_module,
+            fusion_type=fusion_type
         )
     elif network_type == 'NPJC':
         return NPJC(
@@ -661,7 +670,8 @@ def main(args):
         pred_dim=model_config.obj.network.pred_dim,
         n_token=model_config.obj.network.n_token,
         cancer_types=args.cancer_types.split('_') if args.cancer_types != 'None' else None,
-        compensator=getattr(args, 'compensator', 'none')
+        compensator=getattr(args, 'compensator', 'none'),
+        fusion_type=args.fusion_type
     )
     if torch.cuda.device_count() > 1:
         print(f"✅ Using {torch.cuda.device_count()} GPUs for training (DataParallel)")

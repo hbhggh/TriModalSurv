@@ -22,7 +22,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 CANCERS = ["BLCA", "BRCA", "LUAD", "LGG", "UCEC"]
-SEEDS = [123, 132, 213, 231, 321]
+SEEDS = [123, 132, 213, 231, 321]  # 默认 5 seed；--seeds 可覆盖（指挥官小修 2026-09-06，25 seed 战役）
 NA = "\u2014"  # em dash
 
 FNAME_RX = re.compile(
@@ -229,7 +229,10 @@ def main():
     ap.add_argument("--legacy-winloss", dest="legacy_winloss", action="store_true")
     ap.add_argument("--pairwise-grid", dest="pairwise_grid", default=None)
     ap.add_argument("--pairwise-out", dest="pairwise_out", default=None)
+    ap.add_argument("--seeds", default=None, help="逗号分隔 seed 列表；默认 123,132,213,231,321")
     a = ap.parse_args()
+    if a.seeds:
+        SEEDS[:] = [int(s) for s in a.seeds.split(",")]
 
     if (a.pairwise_grid is None) != (a.pairwise_out is None):
         ap.error("--pairwise-grid and --pairwise-out must be given together")

@@ -1,0 +1,7 @@
+['BLCA'] cancer_types
+Loading split test:   0%|          | 0/138 [00:00<?, ?it/s]Loading split test: 100%|██████████| 138/138 [00:00<00:00, 7332.14it/s]
+none: A=0.598543 B=0.598543 n=138 rna=0 text=0
+rna_100: A=0.612942 B=0.624393 n=138 rna=138 text=0
+text_100: A=0.593858 B=0.585704 n=138 rna=0 text=138
+both_100: A=0.583102 B=0.578071 n=138 rna=138 text=138
+OUTPUT_JSON=/home/wuhao/npjd_parity/m0real_BLCA_s123.json

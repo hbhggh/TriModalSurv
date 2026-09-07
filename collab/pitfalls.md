@@ -26,6 +26,7 @@
 | D14 | dataset 缓存键含 network_type，换骨架名触发全量逐 patient 冷重建（3 s/人）。 | 缓存键只含数据相关维度；新骨架名上机前核对缓存命中（δ 已去 network_type 并回退旧后缀）。 | collab/20260902-A测缺失补偿/notes.md |
 | D15 | 多条 lane 并发冷重建同一 dataset 缓存，一方读到半写 pkl（EOFError），单 seed 失败被"两败才停线"放过、unit 假 done。 | 共享缓存先独占预热再并发（launcher 内置）；unit done 以全部 seed ckpt 存在判定；缓存写入临时文件+原子 rename。 | collab/20260902-A测缺失补偿/notes.md |
 | D16 | 发车器契约只写 arm→compensator 映射未列训练超参，`--dry_run` 生成的命令缺 `--lr 1e-4 --epochs 50 --batch_size 32`，将以默认 lr=5e-4 跑出与既有正式训练不同口径。 | 发车器契约逐项列出与既有正式训练命令（`c_unit.sh`/`s4_run_method_cancer.sh`）的参数对齐清单，发车前 dry-run 逐参 diff 断言。 | collab/20260902-A测缺失补偿/notes.md |
+| D17 | `train_launcher.py` YAML plan 模式只从 ARM_PRESETS 继承 network_type/compensator，不继承 `extra_args`：`arm: d0` 会静默变 gate，`arm: e1` 会丢 `--modality_dropout/--consistency_lambda`，且幂等跳过会复用错误 ckpt。 | 正式发车只走 CLI `--arms`；plan 模式必须显式写 extra_args；发车前 dry-run 逐条断言臂身份参数（fusion_type/dropout/λ）；加固：plan 缺省继承 preset.extra_args + 身份断言。 | collab/20260906-NPJ-D消融/审查/adversarial-review-findings.md |
 ## 通道与派单
 
 | ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
@@ -55,6 +56,7 @@
 | S3 | JavaScript 模板正文含未转义 Markdown 反引号，命令封装在执行前被截断。 | 模板正文不放未转义反引号；复杂文本改用安全参数或无反引号前缀。 | collab/20260902-A测缺失补偿/notes.md |
 | S4 | 被限制只读的交叉审核 Agent 在仓库根创建白名单外文件。 | 严格白名单任务不委派会落盘的通用审核；必要时前后比较完整 Git 状态，越界即中断并恢复基线。 | collab/20260826-NPJ三模态复现/notes.md |
 | S5 | 沙箱禁止创建 Torch shared-memory object，显式 `fork` 的多 worker 夹具报 `Operation not permitted`，拿不到真实 DataLoader 证据。 | 连续两次被 multiprocessing 环境阻断即停止该路线，改用 `copy.deepcopy` 等可审计的状态复制最小模型并写明证据边界；禁止把沙箱失败报成生产失败。 | collab/20260902-A测缺失补偿/notes.md |
+| S6 | 全局 PostToolUse hook `~/.claude/hooks/py_compile_check.py` 对 Write/Edit 的 `.py` 裸调 `py_compile.compile()`（独立进程，不受会话内 PYTHONDONTWRITEBYTECODE 约束），在源码旁 `__pycache__/` 落 `.pyc`，越出白名单。 | 白名单任务交付前必跑 `find <仓> -name '*.pyc' -newer <基准标记>` 精确清理（`rm` 单文件 + `rmdir`，不 `rm -rf`）；或用 Bash heredoc 写 `.py` 绕开该 hook。 | collab/20260906-NPJ-D消融/notes.md |
 
 ## 环境与依赖
 
@@ -112,7 +114,9 @@
 | V27 | 修订版报告标"r(n−1) 不变"的段落实际按记忆复述并删了限定语（两轮 reviewer 各抓一次），且把共享中间臂的两个配对Δ中位当可加份额分解。 | "不变/原文保留"必须由 diff 证明逐字相同、删改必进修订记录；两分量共享中间臂时只做方向判定，禁止 "X% 来自 A" 式分解；成文前先列上一版闭合项保留清单逐项勾选。 | collab/20260902-A测缺失补偿/notes.md |
 | V28 | 格式契约同时要求"每臂块尾随空行"与"文件无末尾换行"，最后一块上两者互斥，落盘文件多出末尾换行。 | 块级与文件级格式约束冲突时以文件级为准，序列化前裁掉尾部空元素，并用 `open(...,"rb").read().endswith(b"\n")` 实测而非目视。 | collab/20260902-A测缺失补偿/notes_eps_opus.md |
 | V29 | 图形交付只核对 figsize/dpi/像素尺寸与元素集合，x 轴刻度标签实际首尾相接、`rna_100` 被挤成 `ma_100`。 | 图形验收除机器断言外必须对刻度标签/图例/图注做一次裁图目视复检，并把"刻度间距 px vs 标签估算宽度 px"当硬指标算一次。 | collab/20260902-A测缺失补偿/notes_eps_opus.md |
-| V28 | `git ls-files`/`git status` 对含非 ASCII 的路径默认加引号并转义（core.quotePath），`grep -c '\.log$'`/`'\.pyc$'` 这类按行尾匹配的门禁会把中文目录下的文件全部漏计（249 个 log 只计到 1）。 | 涉及路径过滤/计数的 git 命令一律加 `-c core.quotePath=false`，并用一个已知存在的样本文件做正样本自检。 | collab/REVIEW_PACK（20260906 归档） |
+| V30 | `git ls-files`/`git status` 对含非 ASCII 的路径默认加引号并转义（core.quotePath），`grep -c '\.log$'`/`'\.pyc$'` 这类按行尾匹配的门禁会把中文目录下的文件全部漏计（249 个 log 只计到 1）。 | 涉及路径过滤/计数的 git 命令一律加 `-c core.quotePath=false`，并用一个已知存在的样本文件做正样本自检。 | collab/REVIEW_PACK（20260906 归档） |
+| V31 | 评测侧填充开关的对拍只用了无自然缺失的 BLCA（none 格点逐位一致即判通过），全量后才发现 BRCA/LUAD/LGG/UCEC 的 test 集有自然缺失，`none` 格点也会因填充而变化，自检脚本按"应为 0"写错。 | 对拍样本必须同时覆盖"填充会触发"与"不会触发"两类（含有自然缺失的癌种）；任何"应为 0"的自检先核对数据里是否存在天然触发条件。 | collab/20260902-A测缺失补偿/notes.md（20260906 E0m） |
+| V32 | 消融臂删掉带参数模块（如 GatedFusion）后不再消耗其初始化随机数，同 seed 下共享层初始化与后续 shuffle/dropout 随机流都变了：「同 seed 配对」只是协议配对，不是初始化配对。 | 报告里写明配对口径；需要初始化配对时让消融分支消耗同样的 RNG（构造后丢弃）并用测试断言共享 state_dict 逐位相同；否则靠 seed 数量平均随机性。 | collab/20260906-NPJ-D消融/审查/adversarial-review-findings.md |
 
 ## 监控与运维
 
@@ -125,6 +129,7 @@
 | M5 | 部署评估器未核对模式互斥、root 推导和输出白名单，跨机连续失败。 | 部署前读 root/白名单逻辑，保持源仓库相对深度，评估输出放 baselines 树外。 | collab/20260827-三方对比战役/notes.md |
 | M6 | Claude 进程重启后 Monitor/后台任务全部 stopped，训练/评测无人盯。 | 会话恢复第一动作：盘点 flags/pgrep 后重挂哨兵。 | collab/20260902-A测缺失补偿/notes.md |
 | M7 | 产出留档表/对账数字的脚本只写在 scratchpad，进程重启后 scratchpad 清空，脚本随之丢失，只能从会话记录逐字找回。 | 任何生成留档表/数字的脚本写完立即复制进战役目录 `tools/`，与留档表同目录同提交。 | collab/20260902-A测缺失补偿/notes.md |
+| M8 | 多阶段战役只部署当步用到的脚本，接力阶段脚本（launch_e1_seeds.sh/run_dm.sh）留在本地，收官接力时才发现缺文件。 | 部署以战役 `tools/` 目录全量 md5 对比为准；每个接力脚本发车前先远端 `--dry_run`。 | collab/20260906-NPJ-D消融/notes.md |
 
 ## 合并映射
 

@@ -1,0 +1,8 @@
+['LGG'] cancer_types
+Loading split train:   0%|          | 0/166 [00:00<?, ?it/s]Loading split train: 100%|██████████| 166/166 [00:00<00:00, 6586.77it/s]
+Loading split test:   0%|          | 0/166 [00:00<?, ?it/s]Loading split test: 100%|██████████| 166/166 [00:00<00:00, 6537.66it/s]
+none: A=0.792616 B=0.797447 n=166 rna=0 text=0
+rna_100: A=0.749482 B=0.758109 n=166 rna=166 text=0
+text_100: A=0.750518 B=0.747067 n=166 rna=0 text=166
+both_100: A=0.676674 B=0.654589 n=166 rna=166 text=166
+OUTPUT_JSON=/home/wuhao/npjd_eval_dm/m1_LGG_s11.json

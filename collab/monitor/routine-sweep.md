@@ -1771,3 +1771,182 @@
 卡住: 无
 通道异常: CHANNEL_DOWN — landau status.json 读不到，通道断了，任务未必死，禁止判死
 需要我看的: landau 通道（CHANNEL_DOWN，远端任务状态本轮不可观测）
+
+## 2026-09-06 19:45
+[19:45] 窗口/后台巡检
+运行中: 无
+卡住: task=ab4b6882b8e3f0fc8 idle=41min, task=a556ebd6a451ee272 idle=47min, task=a35bc9740411ff1d4 idle=47min, task=a7c552c6abbcc67d2 idle=47min（均属 sess=38e445d3，尾部无 exited/killed）
+通道异常: CHANNEL_DOWN（landau status.json 读不到；通道断了，任务未必死，禁止判死）
+需要我看的: sess=38e445d3 的 4 个后台任务——idle ≥20 分钟且未退出，疑似卡住；landau 通道 CHANNEL_DOWN 需人工确认远端状态
+
+## 2026-09-06 10:46
+[10:46] 窗口/后台巡检
+运行中: 无
+卡住: task=ab4b6882b8e3f0fc8 idle=71min, task=a556ebd6a451ee272 idle=77min, task=a35bc9740411ff1d4 idle=77min, task=a7c552c6abbcc67d2 idle=77min（均属 sess=38e445d3，尾部无 exited/killed）
+通道异常: landau status.json = CHANNEL_DOWN——通道断了，任务未必死，不判死
+需要我看的: sess=38e445d3 的 4 个后台任务（idle ≥20min 且无退出标记）；landau 通道 CHANNEL_DOWN
+
+## 2026-09-06 20:45
+[20:45] 窗口/后台巡检
+运行中: 无
+卡住: task=ab4b6882b8e3f0fc8 idle=101min, task=a556ebd6a451ee272 idle=107min, task=a35bc9740411ff1d4 idle=107min, task=a7c552c6abbcc67d2 idle=107min（均属 sess=38e445d3 luminous-meandering-moler，尾部无退出标记）
+通道异常: CHANNEL_DOWN（landau status.json 读不到；通道断了，任务未必死，禁止判死）
+需要我看的: sess=38e445d3 的 4 个后台任务 — idle 均 ≥100 分钟且无退出标记，疑似卡住；landau 通道 — CHANNEL_DOWN 需人工确认远端状态
+
+## 2026-09-06 21:16
+[21:16] 窗口/后台巡检
+运行中: task=af1ee4c81665529c7 idle=17min（sess=39ab8862）
+卡住: task=ab4b6882b8e3f0fc8 idle=131min, task=a556ebd6a451ee272 idle=137min, task=a35bc9740411ff1d4 idle=137min, task=a7c552c6abbcc67d2 idle=137min（均属 sess=38e445d3 luminous-meandering-moler，尾部无 exited/killed）
+通道异常: 无（landau status.json 本轮恢复，ts=2026-09-06 21:10:01；70 done / 3 failed / 2 gone）
+需要我看的: sess=38e445d3 的 4 个后台任务 — idle ≥130 分钟且无退出标记，疑似卡住；landau 历史 failed/gone 5 个（am_eval gone、c_eval gone、d_verify_blca5 failed、m2_smoke failed、s4_stage2 failed，日志年龄 4–10 天，为陈旧记录非本轮新增）
+
+## 2026-09-06 21:45
+[21:45] 窗口/后台巡检
+运行中: task=b9t49du5u(本次采集) idle=0min
+卡住: task=af1ee4c81665529c7 sess=39ab8862 idle=47min，task=b2dc0gqwh sess=c85c7063 idle=29min，task=ab4b6882b8e3f0fc8/a556ebd6a451ee272/a35bc9740411ff1d4/a7c552c6abbcc67d2 sess=38e445d3 idle=161-167min
+通道异常: 无（landau status.json ts=2026-09-06 21:40:01 正常返回）
+需要我看的: landau 历史 job state 非 done——am_eval/c_eval=gone，d_verify_blca5/m2_smoke/s4_stage2=failed；ALERT.md 无告警；当日 cron 无记录
+
+## 2026-09-06 22:15
+[22:15] 窗口/后台巡检
+运行中: task=bkso03o1h(本次采集) idle=0min，task=bn0oo1cc8 sess=39ab8862 idle=13min，task=a0de30da69234fe58 sess=39ab8862 idle=14min
+卡住: task=b9t49du5u sess=817b6780 idle=30min，task=b2dc0gqwh sess=c85c7063 idle=60min，task=af1ee4c81665529c7 sess=39ab8862 idle=77min，task=ab4b6882b8e3f0fc8 idle=191min / a556ebd6a451ee272 / a35bc9740411ff1d4 / a7c552c6abbcc67d2 均 sess=38e445d3 idle=197min（尾部无 exited/killed）
+通道异常: 无（landau status.json ts=2026-09-06 22:10:01 正常，70 done / 3 failed / 2 gone）
+需要我看的: sess=38e445d3 的 4 个后台任务 — idle ≥190 分钟且无退出标记，疑似卡住；sess=39ab8862 的 af1ee4c81665529c7 — idle 77 分钟；landau 非 done job（am_eval/c_eval=gone，d_verify_blca5/m2_smoke/s4_stage2=failed，日志年龄 4–10 天，陈旧记录非本轮新增）
+
+## 2026-09-07 00:35
+[00:35] 窗口/后台巡检
+运行中: task=b1jvpwstt idle=0min（本轮巡检自身）
+卡住: task=bkso03o1h idle=85min, task=bn0oo1cc8 idle=99min, task=af1ee4c81665529c7 idle=162min, task=a0de30da69234fe58 idle=99min, task=b9t49du5u idle=115min, task=b2dc0gqwh idle=145min, task=ab4b6882b8e3f0fc8 idle=276min, task=a556ebd6a451ee272 idle=283min, task=a35bc9740411ff1d4 idle=282min, task=a7c552c6abbcc67d2 idle=283min
+通道异常: [B] CHANNEL_DOWN——landau status.json 取不到；通道断了，任务未必死，不判死
+需要我看的: sess=39ab8862 的 4 个无退出标记任务（idle 99-162min，含 2 个 agent 任务）；sess=38e445d3 的 4 个 agent 任务（idle 276-283min）；landau 通道 CHANNEL_DOWN
+
+## 2026-09-07 08:28:04
+[08:28] 窗口/后台巡检
+运行中: task=bj01yu58b idle=0min（本次巡检自身）
+卡住: bkso03o1h(281min,sess 7aed364a), bn0oo1cc8(295min)/af1ee4c81665529c7(358min)/a0de30da69234fe58(295min)(sess 39ab8862), b9t49du5u(311min,sess 817b6780), b2dc0gqwh(341min,sess c85c7063), ab4b6882b8e3f0fc8(472min)/a556ebd6a451ee272(479min)/a35bc9740411ff1d4(478min)/a7c552c6abbcc67d2(478min)(sess 38e445d3)
+通道异常: [B] CHANNEL_DOWN —— landau status.json 拉不到；通道断了，任务未必死，不判死
+需要我看的: landau 通道 CHANNEL_DOWN（无法确认远端任务状态）；上列 10 个 stale 任务无退出标记且 idle 178min 以上（多为历史会话残留）
+
+## 2026-09-07 08:29
+[08:29] 窗口/后台巡检
+运行中: task=btdnzb9q7 idle=0min（本次巡检自身）
+卡住: task=bkso03o1h idle=613min, task=bn0oo1cc8 idle=627min, task=af1ee4c81665529c7 idle=690min, task=a0de30da69234fe58 idle=627min, task=b9t49du5u idle=643min, task=b2dc0gqwh idle=673min, task=b6ofq5627 idle=253min, task=ab4b6882b8e3f0fc8 idle=804min, task=a556ebd6a451ee272 idle=810min, task=a35bc9740411ff1d4 idle=810min, task=a7c552c6abbcc67d2 idle=810min
+通道异常: CHANNEL_DOWN（landau status.json 读不到；通道断了，任务未必死，禁止判死）
+需要我看的: 11 个后台任务无退出标记且 idle 均 ≥253min（疑似残留巡检/派单壳进程）；landau 通道 CHANNEL_DOWN
+
+## 2026-09-07 08:42
+[08:42] 窗口/后台巡检
+运行中: task=bgmuy7b89 idle=0min（本次巡检自身）
+卡住: bkso03o1h(630min,sess 7aed364a), bn0oo1cc8(644min)/af1ee4c81665529c7(707min)/a0de30da69234fe58(644min)(sess 39ab8862), b9t49du5u(660min,sess 817b6780), b2dc0gqwh(690min,sess c85c7063), b6ofq5627(271min,sess ad2dbad6), ab4b6882b8e3f0fc8(821min)/a556ebd6a451ee272(828min)/a35bc9740411ff1d4(827min)/a7c552c6abbcc67d2(827min)(sess 38e445d3)
+通道异常: 无（landau status.json ts=2026-09-07 08:40:01 正常返回，76 job：71 done / 3 failed / 2 gone，无 dup）
+需要我看的: 11 个后台任务无退出标记且 idle ≥271min（历史会话残留巡检/派单壳，非本轮新增）；landau 非 done job——am_eval/c_eval=gone，d_verify_blca5/m2_smoke/s4_stage2=failed（日志年龄 4–11 天，陈旧记录）；ALERT.md 无告警；当日 cron 无记录
+
+## 2026-09-07 09:16
+[09:16] 窗口/后台巡检
+运行中: task=b6745drmb idle=3min（D0_PROGRESS done=72/running=12/pending=40 failed=0），task=baq7zytm0 idle=0min（本次巡检自身）
+卡住: task=bgmuy7b89 idle=29min；另有 10 个 idle 300-1360min 的历史巡检/会话日志尾（bkso03o1h 660, bn0oo1cc8 674, a0de30da 674, b9t49du5u 690, b2dc0gqwh 720, af1ee4c8 737, ab4b6882 851, a35bc974 857, a7c552c6 857, a556ebd6 858, b6ofq5627 301），无退出标记
+通道异常: 无（landau status.json ts=2026-09-07 09:10:01 正常）
+需要我看的: task=b5kpk1lc4 [killed] idle=7min（尾部 D0_PROGRESS done=48 running=12 pending=64 eval_done=0，疑似 D0 监视被杀，同事项已由 b6745drmb 接管）；landau `_adhoc_npj_train` dup_count=113（重复进程）；landau `npjd_full_d0` state=stalled（log 静默 1350s，但 mac 侧 D0 进度仍在推进）；历史遗留 failed/gone：d_verify_blca5、m2_smoke、s4_stage2、am_eval、c_eval（log 龄 9-11 天，非本轮新增）
+
+## 2026-09-07 09:45
+[09:45] 窗口/后台巡检
+运行中: task=b653usjrh sess=d9b60c11 idle=4min（E1_PROGRESS done=32 running=12 pending=57 failed=0），task=bove3fc0s idle=0min（本次巡检自身）
+卡住: bgmuy7b89(59min), baq7zytm0(29min), b6ofq5627(331min), bkso03o1h(690min), bn0oo1cc8(704min)/a0de30da69234fe58(704min)/af1ee4c81665529c7(767min)(sess 39ab8862), b9t49du5u(720min), b2dc0gqwh(750min), ab4b6882b8e3f0fc8(881min)/a35bc9740411ff1d4(887min)/a7c552c6abbcc67d2(887min)/a556ebd6a451ee272(888min)(sess 38e445d3) —— 均无退出标记
+通道异常: 无（landau status.json ts=2026-09-07 09:40:02 正常，77 job：72 done / 3 failed / 2 gone / 2 running）
+需要我看的: task=b5kpk1lc4 [killed] idle=37min（尾部 D0_PROGRESS done=48 running=12 pending=64 eval_done=0，D0 监视被杀，已由 b6745drmb 走到 STAGE_DONE done=124 flag=DONE 收尾）；landau `_adhoc_npj_train` dup_count=99（重复进程）；历史遗留 failed/gone：d_verify_blca5、m2_smoke、s4_stage2、am_eval、c_eval（日志龄 4-11 天，非本轮新增）；13 个 stale 后台任务多为历史会话残留壳
+
+## 2026-09-07 10:16 巡检
+[10:16] 窗口/后台巡检
+运行中: 无（除本轮巡检自身 task=bcwmj7gsy）
+卡住: 14 个后台任务无结束标记且 idle≥20min — bove3fc0s(30) baq7zytm0(60) bgmuy7b89(90) b6ofq5627(361) bkso03o1h(720) bn0oo1cc8(734) a0de30da69234fe58(734) b9t49du5u(750) b2dc0gqwh(780) af1ee4c81665529c7(797) ab4b6882b8e3f0fc8(911) a35bc9740411ff1d4(917) a7c552c6abbcc67d2(917) a556ebd6a451ee272(918)
+通道异常: 无（landau status.json ts=2026-09-07 10:10:01，79 jobs，无 dup）
+需要我看的:
+- task=b5kpk1lc4 (sess=39ab8862) [killed]，idle=67min，尾部 "D0_PROGRESS done=48 running=12 pending=64 failed=0 skipped=1 eval_done=0 json=47 flag=none" — 近 2 小时内被杀，清单未跑完
+- landau state=failed: d_verify_blca5 / m2_smoke / s4_stage2（日志分别 10.8 天前、无时间戳、10.7 天前，均为历史遗留）
+- landau state=gone: am_eval（无日志）/ c_eval（日志 4.6 天前，停在 "train done (failed=0). eval..."）
+
+## 2026-09-07 10:46 巡检
+[10:46] 窗口/后台巡检
+运行中: task=bghvi2ptb idle=0min（本轮巡检自身）；无其他活跃任务
+卡住: 15 个后台任务无结束标记且 idle≥20min — bcwmj7gsy(30) bove3fc0s(60) baq7zytm0(90) bgmuy7b89(120) b6ofq5627(391) bkso03o1h(750) bn0oo1cc8(764) a0de30da69234fe58(764) b9t49du5u(780) b2dc0gqwh(810) af1ee4c81665529c7(827) ab4b6882b8e3f0fc8(941) a35bc9740411ff1d4(947) a7c552c6abbcc67d2(947) a556ebd6a451ee272(948)
+通道异常: 无（landau status.json ts=2026-09-07 10:40:01，79 jobs，无 dup，无 alive）
+需要我看的:
+- task=b5kpk1lc4 (sess=39ab8862) [killed]，idle=97min，尾部 "D0_PROGRESS done=48 running=12 pending=64 failed=0 skipped=1 eval_done=0 json=47 flag=none" — 近 2 小时内被杀，清单未跑完（同事项此前记录已由 b6745drmb 走到 STAGE_DONE flag=DONE）
+- landau state=failed: d_verify_blca5 / m2_smoke / s4_stage2（日志龄 10.7-10.9 天或无时间戳，历史遗留）
+- landau state=gone: am_eval（无日志）/ c_eval（日志 4.6 天前，停在 "train done (failed=0). eval..."）
+- sess=d9b60c11 的 b6745drmb / blj7tu9t3 / b653usjrh 均 [exited with code 0]（DM_STAGE_DONE json=125 evalfail=0、STAGE_DONE flag=DONE），不提醒
+
+## 2026-09-07 11:10
+[11:10] 窗口/后台巡检
+运行中: task=bgeg8jt5g idle=0（本轮巡检自身）
+卡住: 16 个后台任务无 exit 标记且 idle≥20min，绝大多数是历史巡检/agent 残留 —— bghvi2ptb(29) bcwmj7gsy(59) bove3fc0s(90) baq7zytm0(120) bgmuy7b89(150) b6ofq5627(421) bkso03o1h(780) bn0oo1cc8(794) a0de30da69234fe58(794) b9t49du5u(810) b2dc0gqwh(840) af1ee4c81665529c7(857) ab4b6882b8e3f0fc8(971) a556ebd6a451ee272(978) a35bc9740411ff1d4(977) a7c552c6abbcc67d2(977)
+通道异常: 无（landau status.json ts=11:10:01，79 job：done 74 / gone 2 / failed 3；无 dup）
+需要我看的:
+- task=b5kpk1lc4 [killed] idle=127min，尾部 D0_PROGRESS done=48 running=12 pending=64 —— 消融 D0 清单在跑到一半时被杀，刚出 2 小时窗口，需确认是否人为停机
+- landau am_eval / c_eval state=gone（c_eval 日志已 4.7 天无更新，尾部停在 "train done (failed=0). eval..."）
+- landau failed 三项：d_verify_blca5（RNA_BLCA pkl identifier/embedding 非列表）、s4_stage2（manifests/tsv-dirs/cancers 数量 4/4/5 不一致）、m2_smoke（无日志）—— 均为约 10 天前旧账，非本轮新增
+
+## 2026-09-07 11:41 巡检
+[11:41] 窗口/后台巡检
+运行中: task=bm7ony1n6 idle=0min（本轮巡检自身）
+卡住: 历史残留 18 项（tail 无 exit 标记且 idle≥20min）——巡检自身残留 9 项 task=bkso03o1h/810、b9t49du5u/840、b2dc0gqwh/870、bgmuy7b89/179、baq7zytm0/150、bove3fc0s/120、bcwmj7gsy/89、bghvi2ptb/59、bgeg8jt5g/29；其他 9 项（tail 均为已完成文本/会话 JSON）task=bn0oo1cc8/824、b6ofq5627/451、af1ee4c81665529c7/887、a0de30da69234fe58/824、ab4b6882b8e3f0fc8/1001、a556ebd6a451ee272/1008、a35bc9740411ff1d4/1007、a7c552c6abbcc67d2/1007、bta35e967 已 exit 0 不计
+通道异常: 无（[B] status.json ts=2026-09-07 11:40:01，79 jobs：done 74 / gone 2 / failed 3；无 dup）
+需要我看的: landau 历史失败项 3 个——d_verify_blca5（RNA pkl identifier/embedding 非列表，日志 10.9 天前）、s4_stage2（RNA_INFER_FAILED ec=1，10.8 天前）、m2_smoke（无日志）；gone 2 个——c_eval（4.7 天前 train done 后评测中断）、am_eval（无日志）。均为历史遗留，非本轮新增。b5kpk1lc4 [killed] idle=157min 超 2 小时窗口，按表不提醒。
+
+## 2026-09-07 12:16 巡检
+[12:16] 窗口/后台巡检
+运行中: task=bpuljvbb7 idle=0min（本轮巡检自身）；无其他活跃任务
+卡住: 历史残留 18 项（tail 无 exit 标记且 idle≥20min）——巡检自身残留 9 项 task=bm7ony1n6/29、bgeg8jt5g/59、bghvi2ptb/89、bcwmj7gsy/119、bove3fc0s/150、baq7zytm0/180、bgmuy7b89/209、bkso03o1h/840、b9t49du5u/870、b2dc0gqwh/900；其他 8 项（tail 为已完成文本/会话 JSON）task=b6ofq5627/481、bn0oo1cc8/854、a0de30da69234fe58/854、af1ee4c81665529c7/917、ab4b6882b8e3f0fc8/1031、a35bc9740411ff1d4/1037、a7c552c6abbcc67d2/1037、a556ebd6a451ee272/1038
+通道异常: 无（[B] status.json ts=2026-09-07 12:10:01，79 jobs：done 74 / gone 2 / failed 3；无 dup、无重名）
+需要我看的: landau 历史遗留 5 项——failed: d_verify_blca5（RNA_BLCA pkl identifier/embedding 非列表，日志 10.9 天前）、s4_stage2（manifests/tsv-dirs/cancers 4/4/5 不一致，RNA_INFER_FAILED，10.8 天前）、m2_smoke（无日志）；gone: c_eval（日志 4.7 天前，停在 "train done (failed=0). eval..."）、am_eval（无日志）。均非本轮新增。b5kpk1lc4 [killed] idle=187min 已出 2 小时窗口，按表不提醒；sess=d9b60c11 三个任务均 [exited with code 0]，不提醒。
+
+## 2026-09-07 12:46 巡检
+[12:46] 窗口/后台巡检
+运行中: task=btcao1jvx idle=0min（本轮巡检自身）；无其他活跃任务
+卡住: 历史残留 20 项（tail 无 exit 标记且 idle≥20min）——巡检自身残留 11 项 task=bpuljvbb7/30、bg4xmagu8/29、bm7ony1n6/60、bgeg8jt5g/90、bghvi2ptb/120、bcwmj7gsy/150、bove3fc0s/180、baq7zytm0/210、bgmuy7b89/240、bkso03o1h/870、b9t49du5u/900、b2dc0gqwh/930；其他 8 项（tail 为已完成文本/会话 JSON）task=b6ofq5627/511、bn0oo1cc8/884、a0de30da69234fe58/884、af1ee4c81665529c7/947、ab4b6882b8e3f0fc8/1061、a35bc9740411ff1d4/1067、a7c552c6abbcc67d2/1067、a556ebd6a451ee272/1068
+通道异常: 无（[B] status.json ts=2026-09-07 12:40:01，79 jobs：done 74 / gone 2 / failed 3；无 dup_count、无重名）
+需要我看的: landau 历史遗留 5 项——failed: d_verify_blca5（RNA_BLCA pkl identifier/embedding 非列表，日志 10.9 天前）、s4_stage2（manifests/tsv-dirs/cancers 4/4/5 不一致，RNA_INFER_FAILED，10.8 天前）、m2_smoke（无日志）；gone: c_eval（日志 4.7 天前，停在 "train done (failed=0). eval..."）、am_eval（无日志）。均非本轮新增。b5kpk1lc4 [killed] idle=217min 已出 2 小时窗口，按表不提醒；sess=d9b60c11 三个任务均 [exited with code 0]，不提醒。[C] 无 ALERT，[D] 当日 cron 无记录。
+
+## 2026-09-07 13:16 巡检
+[13:16] 窗口/后台巡检
+运行中: task=boyao99xi idle=0min（本轮巡检自身）；无其他活跃任务
+卡住: 历史残留 22 项（tail 无 exit 标记且 idle≥20min）——巡检自身残留 13 项 task=btcao1jvx/29、bg4xmagu8/59、bpuljvbb7/60、bm7ony1n6/90、bgeg8jt5g/120、bghvi2ptb/150、bcwmj7gsy/180、bove3fc0s/210、baq7zytm0/240、bgmuy7b89/270、bkso03o1h/900、b9t49du5u/930、b2dc0gqwh/960；其他 9 项（tail 为已完成文本/会话 JSON）task=b6ofq5627/541、bn0oo1cc8/914、a0de30da69234fe58/914、af1ee4c81665529c7/977、ab4b6882b8e3f0fc8/1091、a35bc9740411ff1d4/1097、a7c552c6abbcc67d2/1097、a556ebd6a451ee272/1098
+通道异常: 无（[B] status.json ts=2026-09-07 13:10:01，79 jobs：done 74 / gone 2 / failed 3；无 dup_count、无重名）
+需要我看的: landau 历史遗留 5 项——failed: d_verify_blca5、s4_stage2、m2_smoke；gone: c_eval、am_eval。与前几轮完全一致，非本轮新增。b5kpk1lc4 [killed] idle=247min 已出 2 小时窗口，按表不提醒；sess=d9b60c11 三个任务与 b4zyhsant/bxfu6kg8z/bq4793q6t/br2zatjnc 均 [exited with code 0]，不提醒。[C] 无 ALERT，[D] 当日 cron 无记录。
+
+## 2026-09-07 05:39 巡检
+[05:39] 窗口/后台巡检
+运行中: task=bjkzmr0e8 idle=0min（本轮巡检自身）
+卡住: 22 个后台任务 idle≥20min 且无退出标记，绝大多数尾部是历史巡检脚本自身输出（残留 orphan）——boyao99xi(65) btcao1jvx(95) bpuljvbb7(125) bg4xmagu8(125) bm7ony1n6(155) bgeg8jt5g(185) bghvi2ptb(215) bcwmj7gsy(245) bove3fc0s(275) baq7zytm0(305) bgmuy7b89(335) b6ofq5627(606) bkso03o1h(965) bn0oo1cc8(979) a0de30da…(980) b9t49du5u(995) b2dc0gqwh(1025) af1ee4c8…(1042) ab4b6882…/a556ebd6…/a35bc974…/a7c552c6…(≈1160)
+通道异常: [B] CHANNEL_DOWN——landau status.json 取不到；通道断了，任务未必死，不判死
+需要我看的: landau 通道（CHANNEL_DOWN，需人工确认远端任务状态）；后台 orphan 堆积（22 个 stale，多为巡检自身残留，建议清理）
+备注: b5kpk1lc4 [killed] idle=312min，超出近 2 小时窗口，按表不提醒；其余 [exited with code 0] 正常结束。
+
+## 2026-09-07 14:43 巡检
+[14:43] 窗口/后台巡检
+运行中: task=besgjydzw idle=0min（本轮巡检自身）；无其他活跃任务
+卡住: 历史残留 22 项（tail 无 exit 标记且 idle≥20min）——巡检自身残留 13 项 task=boyao99xi/86、btcao1jvx/116、bpuljvbb7/146、bg4xmagu8/146、bm7ony1n6/176、bgeg8jt5g/206、bghvi2ptb/236、bcwmj7gsy/266、bove3fc0s/296、baq7zytm0/326、bgmuy7b89/356、bkso03o1h/987、b9t49du5u/1017、b2dc0gqwh/1047；其他 8 项（tail 为已完成文本/会话 JSON）task=b6ofq5627/627、bn0oo1cc8/1001、a0de30da69234fe58/1001、af1ee4c81665529c7/1064、ab4b6882b8e3f0fc8/1178、a556ebd6a451ee272/1184、a35bc9740411ff1d4/1184、a7c552c6abbcc67d2/1184
+通道异常: 无（[B] status.json ts=2026-09-07 14:40:01，79 jobs：done 74 / gone 2 / failed 3；无 dup_count、无重名）
+需要我看的: landau 历史遗留 5 项——failed: d_verify_blca5（日志 11.0 天前）、s4_stage2（10.9 天前）、m2_smoke（无日志）；gone: c_eval（日志 4.8 天前）、am_eval（无日志）。与前几轮完全一致，非本轮新增。b5kpk1lc4 [killed] idle=334min 已出 2 小时窗口，按表不提醒；其余带 [exited with code 0] 的任务不提醒。[C] 无 ALERT，[D] 当日 cron 无记录。
+
+## 2026-09-07 15:13 巡检
+[15:13] 窗口/后台巡检
+运行中: task=b62q0pa93 idle=0min（本轮巡检自身）；无其他活跃任务
+卡住: 历史残留 23 项（tail 无 exit 标记且 idle≥20min）——巡检自身残留 14 项 task=besgjydzw/33、boyao99xi/119、btcao1jvx/149、bpuljvbb7/179、bg4xmagu8/179、bm7ony1n6/209、bgeg8jt5g/239、bghvi2ptb/269、bcwmj7gsy/299、bove3fc0s/329、baq7zytm0/359、bgmuy7b89/389、bkso03o1h/1020、b9t49du5u/1050、b2dc0gqwh/1080；其他 8 项（tail 为已完成文本/会话 JSON）task=b6ofq5627/661、bn0oo1cc8/1034、a0de30da69234fe58/1034、af1ee4c81665529c7/1097、ab4b6882b8e3f0fc8/1211、a35bc9740411ff1d4/1217、a7c552c6abbcc67d2/1217、a556ebd6a451ee272/1218
+通道异常: 无（[B] status.json ts=2026-09-07 15:10:01，79 jobs：done 74 / gone 2 / failed 3；无 dup_count、无重名）
+需要我看的: landau 历史遗留 5 项——failed: d_verify_blca5（日志 11.1 天前）、s4_stage2（10.9 天前）、m2_smoke（无日志）；gone: c_eval（日志 4.8 天前）、am_eval（无日志）。与前几轮完全一致，非本轮新增。b5kpk1lc4 [killed] idle=367min 已出 2 小时窗口，按表不提醒；其余带 [exited with code 0] 的任务不提醒。[C] 无 ALERT，[D] 当日 cron 无记录。
+
+## 2026-09-07 15:46 巡检
+[15:46] 窗口/后台巡检
+运行中: task=bgu3kib16 idle=0min（本轮巡检自身）；无其他活跃任务
+卡住: 历史残留 24 项（tail 无 exit 标记且 idle≥20min）——巡检自身残留 16 项 task=b62q0pa93/29、besgjydzw/63、boyao99xi/149、btcao1jvx/179、bpuljvbb7/209、bg4xmagu8/209、bm7ony1n6/239、bgeg8jt5g/269、bghvi2ptb/299、bcwmj7gsy/329、bove3fc0s/359、baq7zytm0/389、bgmuy7b89/419、bkso03o1h/1050、b9t49du5u/1080、b2dc0gqwh/1110；其他 8 项（tail 为已完成文本/会话 JSON）task=b6ofq5627/690、bn0oo1cc8/1064、a0de30da69234fe58/1064、af1ee4c81665529c7/1127、ab4b6882b8e3f0fc8/1241、a35bc9740411ff1d4/1247、a7c552c6abbcc67d2/1247、a556ebd6a451ee272/1248
+通道异常: 无（[B] status.json ts=2026-09-07 15:40:01，79 jobs：done 74 / gone 2 / failed 3；无 dup_count、无重名）
+需要我看的: landau 历史遗留 5 项——failed: d_verify_blca5、s4_stage2、m2_smoke；gone: c_eval、am_eval。与前几轮完全一致，非本轮新增。b5kpk1lc4 [killed] idle=397min 已出 2 小时窗口，按表不提醒；其余带 [exited with code 0] 的任务不提醒。[C] 无 ALERT，[D] 当日 cron 无记录。
+
+## 2026-09-07 16:16 巡检
+[16:16] 窗口/后台巡检
+运行中: task=byozdwwkl idle=0min（本轮巡检自身）；无其他活跃任务
+卡住: 历史残留 25 项（tail 无 exit 标记且 idle≥20min）——巡检自身残留 17 项 task=bgytat9h3/29、bgu3kib16/30、b62q0pa93/59、besgjydzw/93、boyao99xi/179、btcao1jvx/209、bpuljvbb7/239、bg4xmagu8/239、bm7ony1n6/269、bgeg8jt5g/299、bcwmj7gsy/359、bove3fc0s/390、baq7zytm0/419、bgmuy7b89/449、bkso03o1h/1080、b9t49du5u/1110、b2dc0gqwh/1140；其他 8 项（tail 为已完成文本/会话 JSON）task=b6ofq5627/721、bn0oo1cc8/1094、a0de30da69234fe58/1094、af1ee4c81665529c7/1157、ab4b6882b8e3f0fc8/1271、a35bc9740411ff1d4/1277、a7c552c6abbcc67d2/1277、a556ebd6a451ee272/1278
+通道异常: 无（[B] status.json ts=2026-09-07 16:10:01，79 jobs：done 74 / gone 2 / failed 3；无 dup_count、无重名）
+需要我看的: landau 历史遗留 5 项——failed: d_verify_blca5、s4_stage2、m2_smoke；gone: c_eval、am_eval。与前几轮完全一致，非本轮新增。b5kpk1lc4 [killed] idle=427min 已出 2 小时窗口，按表不提醒；其余带 [exited with code 0] 的任务不提醒。[C] 无 ALERT，[D] 当日 cron 无记录。会话列表：local_39723dd3「补充方法-选择」isRunning=true，其余为历史巡检窗口。

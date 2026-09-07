@@ -52,6 +52,7 @@
 | `collab/20260902-A测缺失补偿/results_npjc_both/{e0,e1}/` | E0/E1 both_100 补评测 | 50 json |
 | `collab/20260902-A测缺失补偿/results_npjc_e0d/` | E0d 四格点评测 json + 25 训练 log + 25 评测 log + `runs_state_snapshot.json` | 25 json |
 | `collab/20260902-A测缺失补偿/results_gate/{m0real,m1,m1b,m2}/` | gate 版四臂 13 格点评测 json | 100 json |
+| `collab/20260902-A测缺失补偿/results_npjc_e0m/` | E0m（E0 ckpt + 评测期均值盲补）四格点评测 json + log（2026-09-06） | 25 json |
 | `collab/20260902-A测缺失补偿/table_*.md` | 汇总表（脚本生成） | 10 |
 | `collab/20260902-A测缺失补偿/r2_numbers.txt`、`r4_numbers.txt` | 对账留档（脚本生成；r4 版十七节） | 2 |
 | `collab/20260902-A测缺失补偿/figures/` | `npjc_e0_e1_4grids.{png,svg}`、`gate_missing_curves.{png,svg}` | 4 |
@@ -87,4 +88,5 @@
 - `tmp_sur_cache/`（dataset 缓存）：本地未找到，仅 landau。
 - NPJ 训练 ckpt、UNI2-h/BulkRNABert/文本特征、原始 WSI/RNA：仓库内无。
 - 统计推断（bootstrap CI / 配对检验）结果：未做，无文件。
-- E0m（E0 + 评测期均值盲补）结果：未跑，无文件。
+- E0dm（E0d + 评测期均值盲补）结果：未跑，无文件（E0m 已跑，见 `results_npjc_e0m/`）。
+- （r6，2026-09-07）NPJ-D 线：`collab/20260906-NPJ-D消融/results_npjd_d0/`（125 JSON + `logs/` 250 log + runs_state 快照）、`results_npjd_dm/`（125 JSON + 125 log）、`results_npjc_e1_25/`（100 JSON + 200 log）、`table_npjd_D_Dm_E1_3grids_{A,B}.md`、`table_npjd_D_Dm_E1_both100_{A,B}.md`、`table_npjd_D_Dm_E1_absolute_25seed.md`（绝对值逐 seed，`tools/abs_table.py`）、`r6_numbers.txt`、`smoke/`、`审查/adversarial-review-{raw.json,findings.md,focus.txt}`、`tools/`（`launch_d0.sh`、`launch_e1_seeds.sh`、`eval_dm_one.sh`、`run_dm.sh`、`parity_d.py`、`count_natural_missing.py`、`r6_numbers.py`）。landau 侧（不在仓库）：`out_d0/` 125 ckpt、`backup_20260906_npjd/`。D+原型单因素臂、E0dm：未跑，无文件。

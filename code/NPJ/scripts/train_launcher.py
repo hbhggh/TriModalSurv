@@ -36,6 +36,8 @@ DEFAULT_LABEL = NPJ_ROOT / "data" / "TCGA_9523_ex12.csv"
 CACHE_MODALITIES: Tuple[str, ...] = ("img", "text", "rna")
 CACHE_SPLITS: Tuple[str, ...] = ("train", "valid", "test")
 RUN_STATUSES = {"pending", "running", "done", "failed", "skipped"}
+# 指挥官小修（NPJ-D 消融，2026-09-06）：训练 extra_args 中需要原样透传给评测器的开关
+EVAL_FORWARDED_OPTIONS: Tuple[str, ...] = ("--fusion_type",)
 
 GPU_POLICY_DEFAULTS = {
     "batch_size": None,
@@ -73,6 +75,12 @@ ARM_PRESETS: Mapping[str, Mapping[str, object]] = {
             "--consistency_lambda",
             "0.1",
         ),
+    },
+    # 指挥官小修（NPJ-D 消融，2026-09-06）：d0 = NPJ-A 去 GatedFusion（等权均值融合）
+    "d0": {
+        "network_type": "MainModalityMoE",
+        "compensator": "none",
+        "extra_args": ("--fusion_type", "mean"),
     },
 }
 
@@ -598,40 +606,69 @@ def _terminate_active(active_runs: Iterable[ActiveRun]) -> None:
                 pass
 
 
+def eval_arm_of(spec: RunSpec) -> str:
+    return "m1" if spec.arm == "m1" else "m0real"
+
+
+def _forwarded_eval_args(spec: RunSpec) -> List[str]:
+    """指挥官小修（NPJ-D 消融，2026-09-06）：把训练侧 extra_args 里评测器也认识的开关透传过去。
+
+    当前只有 `--fusion_type`（d0 臂）；未声明该开关的臂（e0/e0d/e1）逐字不变。
+    """
+    forwarded: List[str] = []
+    for option in EVAL_FORWARDED_OPTIONS:
+        value = _option_value(spec.extra_args, option)
+        if value:
+            forwarded.extend([option, value])
+    return forwarded
+
+
+def build_eval_command(
+    args: argparse.Namespace,
+    spec: RunSpec,
+    checkpoint: Path,
+    out_dir: Path,
+) -> List[str]:
+    """组装 eval_missing.py 命令（纯函数，无副作用，便于 dry-run 断言）。"""
+    command = [
+        args.python,
+        str(EVAL_SCRIPT),
+        "--arm",
+        eval_arm_of(spec),
+        "--cancer",
+        spec.cancer,
+        "--seed",
+        str(spec.seed),
+        "--ckpt",
+        str(checkpoint),
+        "--manifest",
+        str(args.eval_manifest),
+        "--grids",
+        args.eval_grids,
+        "--label",
+        str(args.label),
+        "--out-dir",
+        str(out_dir),
+        "--network_type",
+        spec.network_type,
+        "--compensator",
+        spec.compensator,
+    ]
+    command.extend(_forwarded_eval_args(spec))
+    return command
+
+
 def _run_eval(
     args: argparse.Namespace,
     active: ActiveRun,
 ) -> Path:
-    eval_arm = "m1" if active.spec.arm == "m1" else "m0real"
+    eval_arm = eval_arm_of(active.spec)
     eval_out = args.eval_out.resolve()
     eval_out.mkdir(parents=True, exist_ok=True)
     eval_log = active.log_path.with_suffix(".eval.log")
     with tempfile.TemporaryDirectory(prefix=f".{active.spec.name}.", dir=eval_out) as temp:
         temporary_out = Path(temp)
-        command = [
-            args.python,
-            str(EVAL_SCRIPT),
-            "--arm",
-            eval_arm,
-            "--cancer",
-            active.spec.cancer,
-            "--seed",
-            str(active.spec.seed),
-            "--ckpt",
-            str(active.checkpoint),
-            "--manifest",
-            str(args.eval_manifest),
-            "--grids",
-            args.eval_grids,
-            "--label",
-            str(args.label),
-            "--out-dir",
-            str(temporary_out),
-            "--network_type",
-            active.spec.network_type,
-            "--compensator",
-            active.spec.compensator,
-        ]
+        command = build_eval_command(args, active.spec, active.checkpoint, temporary_out)
         environment = os.environ.copy()
         environment["CUDA_VISIBLE_DEVICES"] = active.slot.gpu
         with eval_log.open("wb") as handle:

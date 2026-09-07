@@ -1,0 +1,8 @@
+['BRCA'] cancer_types
+Loading split train:   0%|          | 0/383 [00:00<?, ?it/s]Loading split train: 100%|██████████| 383/383 [00:00<00:00, 6728.20it/s]
+Loading split test:   0%|          | 0/383 [00:00<?, ?it/s]Loading split test: 100%|██████████| 383/383 [00:00<00:00, 6790.51it/s]
+none: A=0.695470 B=0.689452 n=383 rna=0 text=0
+rna_100: A=0.691268 B=0.687181 n=383 rna=383 text=0
+text_100: A=0.641762 B=0.633814 n=383 rna=0 text=383
+both_100: A=0.632338 B=0.625866 n=383 rna=383 text=383
+OUTPUT_JSON=/home/wuhao/npjc_eval_e0m/m1_BRCA_s213.json

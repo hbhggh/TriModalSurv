@@ -1,0 +1,46 @@
+{
+  "arm": "e1",
+  "cancer": "UCEC",
+  "checkpoint": "/home/wuhao/NPJ/out_capr/6/tcga_uni2_capr_img_1536text_768rna_256_NPJC_UCEC_surv.pth",
+  "grids": {
+    "both_100": {
+      "cindex_A": 0.587803249499221,
+      "cindex_B": 0.5902515023369687,
+      "grid_sha": "3694a253b9580f27573349e1352271eb4fd49255793e16a0bc2edf20a1c8a546",
+      "n_masked_rna": 198,
+      "n_masked_text": 198,
+      "n_test": 198
+    },
+    "none": {
+      "cindex_A": 0.6472290229245493,
+      "cindex_B": 0.6421099488092589,
+      "grid_sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "n_masked_rna": 0,
+      "n_masked_text": 0,
+      "n_test": 198
+    },
+    "rna_100": {
+      "cindex_A": 0.6565768973959493,
+      "cindex_B": 0.6527932339194302,
+      "grid_sha": "71b3b5edb1b81700ed3cf33870bbc164f1b93ee4210107527b75a748a05ade9e",
+      "n_masked_rna": 198,
+      "n_masked_text": 0,
+      "n_test": 198
+    },
+    "text_100": {
+      "cindex_A": 0.5869129757400401,
+      "cindex_B": 0.5862452704206543,
+      "grid_sha": "eadc8b583cdceff59179893b1076fcc0caf625d1e05f2da4c5ba4025d03aefb0",
+      "n_masked_rna": 0,
+      "n_masked_text": 198,
+      "n_test": 198
+    }
+  },
+  "hidden_size": 256,
+  "label": "/home/wuhao/NPJ/data/TCGA_9523_ex12.csv",
+  "m1_train_nonmissing_counts": {},
+  "manifest": "/home/wuhao/NPJ/data/missing_manifest_v1.csv",
+  "manifest_sha256": "c789eae9a5b1517d82cfa137a92dfa8cc7ffae58e5f300163b25729ffc5d8156",
+  "model_config": "/home/wuhao/NPJ/model/config/surv_multimodal_mainmoe_uni2.yml",
+  "seed": 6
+}
