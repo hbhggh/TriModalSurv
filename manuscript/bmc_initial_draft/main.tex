@@ -1,0 +1,279 @@
+% !TEX program = pdflatex
+% 结构来源（BMC Bioinformatics Research article）：
+% https://link.springer.com/journal/12859/submission-guidelines/research-article
+% 官方模板下载：
+% https://www.springernature.com/gp/authors/campaigns/latex-author-support
+% 将官网 ZIP 中 sn-jnl.cls 和 sn-vancouver-num.bst 放入本目录后，
+% 自动使用官方类；未放入时用 article 生成可编译的工作稿。
+% article 回退版本不是官方投稿样式；投稿前必须使用官网 ZIP。
+% 编译：pdflatex main; bibtex main; pdflatex main; pdflatex main
+% 本稿只提供填表骨架；不自动确定任务、指标、第三模态或算法细节。
+
+\newif\ifSNtemplate
+\IfFileExists{sn-jnl.cls}{%
+  \IfFileExists{sn-vancouver-num.bst}{\SNtemplatetrue}{\SNtemplatefalse}%
+}{\SNtemplatefalse}
+\ifSNtemplate
+  \documentclass[pdflatex,sn-vancouver-num]{sn-jnl}
+\else
+  \documentclass[11pt,a4paper]{article}
+  \usepackage[margin=25mm]{geometry}
+  \usepackage[numbers,sort&compress]{natbib}
+  \usepackage{hyperref}
+  \bibliographystyle{unsrtnat}
+\fi
+
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{booktabs}
+% ### Bug Post-Mortem
+% - 现象: sn-jnl 标题页缺宏命令，缩放表格出现分组错误。
+% - 根因: 遗漏 xcolor；resizebox 嵌套干扰类内 threeparttable。
+% - 修复: 加载 xcolor，使用不缩放的 tabular*。
+% - Prevention Rule: 官方类与 article 回退分支分别完整编译。
+\hypersetup{hidelinks}
+\setlength{\emergencystretch}{2em}
+
+\newcommand{\TODO}[1]{\textbf{[TODO: #1]}}
+% 每个 -- 均为待填单元格，不表示零或已确认的不适用。
+% 若最终采用均值和标准差，可用 \result{均值}{标准差} 替换 --。
+\newcommand{\result}[2]{\shortstack{#1\\$\pm$#2}}
+\newcommand{\draftabstract}{%
+  \textbf{Background:} \TODO{State the cancer prediction task, motivation,
+  study objective, and model name.}\par
+  \textbf{Results:} \TODO{Summarize the completed comparisons in Tables
+  1 and 2, if Table 2 is retained; insert only documented results.}\par
+  \textbf{Conclusions:} \TODO{State conclusions supported by the completed
+  comparisons. Do not insert a performance or novelty claim yet.}}
+\newcommand{\draftkeywords}{Multimodal learning; cancer prediction;
+  textual data; genomic data; multimodal fusion}
+
+\ifSNtemplate
+  \title[Multimodal cancer prediction]{TODO: Title of the multimodal
+  cancer prediction study}
+  \author*[1]{\fnm{TODO} \sur{Author}}
+  \email{TODO}
+  \affil*[1]{\orgname{TODO: institution},
+    \orgaddress{TODO: full institutional address}}
+  \abstract{\draftabstract}
+  \keywords{\draftkeywords}
+\else
+  \title{TODO: Title of the multimodal cancer prediction study}
+  \author{TODO: author names\\TODO: institutions and addresses\\
+    TODO: corresponding author and email}
+  \date{}
+\fi
+
+\begin{document}
+\maketitle
+\ifSNtemplate\else
+  \begin{abstract}
+    \draftabstract
+  \end{abstract}
+  \noindent\textbf{Keywords:} \draftkeywords
+\fi
+
+\section{Background}
+\TODO{Introduce the clinical prediction task and the motivation for
+combining textual and genomic information.}
+
+The Cancer Genome Atlas (TCGA) provides the data-source context for this
+draft~\cite{tcga2013pan_cancer}.
+\TODO{Describe the specific data used and the research question.}
+
+The baseline reporting framework uses Table 1 of Song et
+al.~\cite{song2026cancer_type_aware} as the planned source of published
+comparison values.
+\TODO{Add the study rationale and a factual description of Ours once
+the method has been specified.}
+
+\section{Methods}
+\label{sec:methods}
+
+\subsection{Data and input checklist}
+\begin{itemize}
+  \item Cohort columns: BLCA, BRCA, GBMLGG, LUAD, UCEC, CRAD, HNSC,
+  and STAD. \TODO{Record cohort definitions, sample counts, inclusion
+  criteria, and data versions.}
+  \item Two-modality inputs: text and genomics.
+  \TODO{Record data fields, preprocessing, and feature representations.}
+  \item Optional three-modality inputs: text, genomics, and
+  \TODO{third modality and its representation}.
+  \item Prediction target: \TODO{survival or classification, outcome
+  definition, labels, and prediction time point if applicable}.
+\end{itemize}
+
+\subsection{Baseline comparison checklist}
+\begin{itemize}
+  \item Table~\ref{tab:two}: Cross-Attn Fusion, Early Fusion,
+  Late Fusion, and Ours.
+  \item Table~\ref{tab:three}, if retained: LIMOE, MAGGate, MulT,
+  TF, Cross-Attn Fusion, Early Fusion, Late Fusion, and Ours.
+  \item Ours: \TODO{model name, existing implementation identifier,
+  and a short factual method description}.
+\end{itemize}
+
+Bibliographic slots are reserved for Cross-Attn Fusion,
+Early Fusion, and Late Fusion~\cite{todo_cross_attention_fusion,
+todo_early_fusion,todo_late_fusion}, and for LIMOE, MAGGate, and
+Transformer Fusion (TF)~\cite{todo_limoe,todo_maggate,
+todo_transformer_fusion}.
+MulT has a candidate original reference~\cite{tsai2019mult}.
+\TODO{Resolve each TODO-CITE and confirm the mapping from each
+table label to its cited method.}
+
+\subsection{Evaluation and filling checklist}
+\begin{itemize}
+  \item Validation for Ours: five-fold evaluation.
+  \TODO{Record split files, fold identifiers, and their relationship
+  to the source study.}
+  \item Per-cohort reporting: fill the eight cohort columns in
+  Table~\ref{tab:two} and, if retained, Table~\ref{tab:three}.
+  \item Metric: \TODO{full metric name, abbreviation, implementation,
+  and whether higher or lower values are better}.
+  \item Summary within each cohort: \TODO{aggregation across folds
+  and the uncertainty measure reported beside the point estimate}.
+  \item Overall: \TODO{aggregation definition, weighting, and
+  source or calculation record for each row}.
+  \item Ours result records: \TODO{paths to existing per-fold results,
+  configurations, and the checkpoint-selection rule}.
+\end{itemize}
+
+\subsection{Provenance of comparison values}
+Non-Ours values in Tables~\ref{tab:two} and~\ref{tab:three} are planned
+to be transcribed from Table 1 of Song et
+al.~\cite{song2026cancer_type_aware}. These are literature-reported
+results; they are not experiments reproduced by the authors of this
+study. Ours rows are reserved for the authors' own experimental results.
+
+\TODO{Record the source row, column, and setting for each transcribed
+value. Record the calculation used for any derived Overall entry.}
+All numerical entries remain unfilled in this draft.
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Two-modality comparison}
+\TODO{Fill Table 1 from the designated sources and the existing Ours
+results, then describe the observed per-cohort and Overall comparisons.}
+
+\begin{table}[htbp]
+\centering
+\caption{Two-modality comparison using text and genomics.
+Metric and uncertainty summary: TODO.}
+\label{tab:two}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}l*{9}{c}@{}}
+\toprule
+Method & BLCA & BRCA & GBMLGG & LUAD & UCEC & CRAD & HNSC & STAD & Overall \\
+\midrule
+Cross-Attn Fusion & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+Early Fusion     & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+Late Fusion      & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+\textbf{Ours}    & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+\bottomrule
+\end{tabular*}
+\par\smallskip
+\begin{minipage}{\textwidth}
+\footnotesize
+Non-Ours values are planned to be taken from Table 1 of
+Song et al.~\cite{song2026cancer_type_aware}, not reproduced in this
+study. Ours values will be supplied from the authors' own experiments.
+The symbol -- denotes an unfilled entry. Overall: TODO, including
+whether it is transcribed or calculated.
+\end{minipage}
+\end{table}
+
+\subsection{Three-modality comparison: optional}
+\TODO{Confirm whether Table 2 is retained and specify the third
+modality. If retained, fill its entries and describe the comparisons.}
+
+\begin{table}[htbp]
+\centering
+\caption{Optional three-modality comparison using text, genomics,
+and a third modality (TODO). Metric and uncertainty summary: TODO.}
+\label{tab:three}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}l*{9}{c}@{}}
+\toprule
+Method & BLCA & BRCA & GBMLGG & LUAD & UCEC & CRAD & HNSC & STAD & Overall \\
+\midrule
+LIMOE            & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+MAGGate          & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+MulT             & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+TF               & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+Cross-Attn Fusion & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+Early Fusion     & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+Late Fusion      & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+\textbf{Ours}    & -- & -- & -- & -- & -- & -- & -- & -- & -- \\
+\bottomrule
+\end{tabular*}
+\par\smallskip
+\begin{minipage}{\textwidth}
+\footnotesize
+Non-Ours values are planned to be taken from Table 1 of
+Song et al.~\cite{song2026cancer_type_aware}, not reproduced in this
+study. Ours values will be supplied from the authors' own experiments.
+TF denotes Transformer Fusion. The symbol -- denotes an unfilled entry.
+Overall: TODO, including whether it is transcribed or calculated.
+\end{minipage}
+\end{table}
+
+\section{Discussion}
+\TODO{Interpret the completed comparisons without inventing a
+mechanistic explanation or claiming an unmeasured improvement.}
+
+\TODO{Discuss the findings in relation to the cited methods,
+distinguishing literature-reported values from the authors' results.}
+
+\TODO{State the limitations supported by the final study design
+and completed evidence.}
+
+\section{Conclusions}
+\TODO{Summarize the findings and their scope after the result tables
+have been completed.}
+
+\section*{Abbreviations}
+\begin{description}
+  \item[TCGA] The Cancer Genome Atlas.
+  \item[TF] Transformer Fusion.
+  \item[Cross-Attn] Cross-Attention.
+\end{description}
+\TODO{Add the full names of the reported metric, cohort labels,
+and remaining method abbreviations; confirm the definition of CRAD.}
+
+\section*{Declarations}
+\subsection*{Ethics approval and consent to participate}
+\TODO{Author-confirmed ethics and consent statement, including
+approval, exemption, or applicability details.}
+
+\subsection*{Consent for publication}
+\TODO{Author-confirmed consent-for-publication statement.}
+
+\subsection*{Availability of data and materials}
+\TODO{Dataset access details and links to available code, split
+files, and result records. State any actual access restrictions.}
+
+\subsection*{Competing interests}
+\TODO{Author-confirmed declaration of competing interests.}
+
+\subsection*{Funding}
+\TODO{Funding bodies, grant identifiers, and funder roles,
+or an author-confirmed statement of no funding.}
+
+\subsection*{Authors' contributions}
+\TODO{Author names or initials and their actual contributions.}
+
+\subsection*{Acknowledgements}
+\TODO{Acknowledgements and any required disclosure of writing
+assistance, after author confirmation.}
+
+\clearpage
+\bibliography{references}
+\end{document}

@@ -1771,3 +1771,66 @@
 卡住: 无
 通道异常: CHANNEL_DOWN — landau status.json 读不到，通道断了，任务未必死，禁止判死
 需要我看的: landau 通道（CHANNEL_DOWN，远端任务状态本轮不可观测）
+
+## 2026-09-10 16:46
+[16:46] 窗口/后台巡检
+运行中: task=bs65de97h idle=0min（本轮采集自身）
+卡住: task=b71z4uyx6 idle=30min, task=bfw443f6g idle=59min, task=btsqou1ae idle=90min, task=bl4d86ms3 idle=120min, task=b5t4i4br7 idle=150min, task=bq6p4ma2e idle=170min（均为历史巡检自身任务，尾部无 exited/killed）
+通道异常: 无（landau status.json ts=2026-09-10 16:40:02 可读，81 job 无 dup）
+需要我看的: 历史巡检后台任务 6 个 — idle≥20min 且无退出标记；landau failed/gone 5 条 — am_eval(gone)/c_eval(gone,~7.9天前)/d_verify_blca5(failed,~14天前)/m2_smoke(failed)/s4_stage2(failed,~14天前)，沿用 status.json 判定
+
+## 2026-09-10 17:09
+[17:09] 窗口/后台巡检
+运行中: task=bnjksfnxy idle=0min（本轮巡检自身）
+卡住: task=bttjd01g9 idle=23min, task=bs65de97h idle=23min, task=b71z4uyx6 idle=53min, task=bfw443f6g idle=83min, task=btsqou1ae idle=113min, task=bl4d86ms3 idle=143min, task=b5t4i4br7 idle=173min, task=bq6p4ma2e idle=193min（尾部均为 sweep.sh 自身输出，属历次巡检会话遗留后台条目，无 exited/killed 标记）
+通道异常: CHANNEL_DOWN — landau status.json 读不到；按纪律仅代表通道断，不得判定任务已死
+需要我看的: landau 通道（CHANNEL_DOWN，需人工确认远端任务状态）；上述 8 个 stale 后台条目（疑为巡检自身遗留，未见退出码，建议确认是否需清理）
+
+## 2026-09-10 17:46
+[17:46] 窗口/后台巡检
+运行中: task=bg9oneyz2 idle=0min（本轮巡检自身）
+卡住: task=bttjd01g9 idle=60min, task=bs65de97h idle=60min, task=b71z4uyx6 idle=90min, task=bfw443f6g idle=120min, task=btsqou1ae idle=150min, task=bl4d86ms3 idle=180min, task=b5t4i4br7 idle=210min, task=bq6p4ma2e idle=230min（尾部均为 sweep.sh 自身输出，属历次巡检会话遗留后台条目，无 exited/killed 标记）
+通道异常: 无（landau status.json ts=2026-09-10 17:40:01 可读，81 job，无 dup，无 running）
+需要我看的: 上述 8 个 stale 巡检遗留后台条目（疑为巡检自身残留，建议确认是否清理）；landau failed/gone 5 条沿用 status.json 判定 — am_eval(gone)/c_eval(gone)/d_verify_blca5(failed)/m2_smoke(failed)/s4_stage2(failed)，均为历史旧 job，无新增失败
+
+## 2026-09-10 18:16
+[18:16] 窗口/后台巡检
+运行中: task=b6tqdjocf idle=0min（本轮巡检自身）
+卡住: task=bg9oneyz2 idle=30min, task=bttjd01g9 idle=90min, task=bs65de97h idle=90min, task=b71z4uyx6 idle=120min, task=bfw443f6g idle=150min, task=btsqou1ae idle=180min, task=bl4d86ms3 idle=210min, task=b5t4i4br7 idle=240min, task=bq6p4ma2e idle=260min（尾部均为 sweep.sh 自身输出，属历次巡检会话遗留后台条目，无 exited/killed 标记）
+通道异常: 无（landau status.json ts=2026-09-10 18:10:01 可读，81 job，无 dup，无 running）
+需要我看的: 上述 9 个 stale 巡检遗留后台条目（疑为巡检自身残留，建议确认是否清理）；landau failed/gone 5 条沿用 status.json 判定 — am_eval(gone)/c_eval(gone)/d_verify_blca5(failed)/m2_smoke(failed)/s4_stage2(failed)，均为历史旧 job，本轮无新增失败
+
+## 2026-09-10 18:47
+[18:47] 窗口/后台巡检
+运行中: task=bvsh0ctk8 idle=0min（本轮巡检自身）
+卡住: task=bg9oneyz2 idle=59min, task=bttjd01g9 idle=120min, task=bs65de97h idle=120min, task=b71z4uyx6 idle=150min, task=bfw443f6g idle=180min, task=btsqou1ae idle=210min, task=bl4d86ms3 idle=240min, task=b5t4i4br7 idle=270min, task=bq6p4ma2e idle=290min（尾部均为 sweep.sh 自身输出，属历次巡检会话遗留后台条目，无 exited/killed 标记）
+通道异常: 无（landau status.json ts=2026-09-10 18:40:01 可读，81 job，无 dup，无 alive/running）
+需要我看的: 上述 9 个 stale 巡检遗留后台条目（疑为巡检自身残留，建议确认是否清理）；landau failed/gone 5 条沿用 status.json 判定 — am_eval(gone)/c_eval(gone)/d_verify_blca5(failed)/m2_smoke(failed)/s4_stage2(failed)，均为历史旧 job，本轮无新增失败
+
+## 2026-09-10 19:17
+[19:17] 窗口/后台巡检
+运行中: task=bn7rd4a1v idle=0min（本轮巡检自身）
+卡住: task=bvsh0ctk8 idle=29min, task=bezjgu7yp idle=29min, task=bg9oneyz2 idle=89min, task=bttjd01g9 idle=150min, task=bs65de97h idle=150min, task=b71z4uyx6 idle=180min, task=bfw443f6g idle=210min, task=btsqou1ae idle=240min, task=bl4d86ms3 idle=270min, task=b5t4i4br7 idle=300min, task=bq6p4ma2e idle=320min（尾部均为 sweep.sh 自身输出，属历次巡检会话遗留后台条目，无 exited/killed 标记；ps 查无存活 sweep.sh 进程）
+通道异常: 无（landau status.json ts=2026-09-10 19:10:01 可读，81 job，无 dup，无 alive/running）
+需要我看的: 上述 11 个 stale 巡检遗留后台条目（疑为巡检自身残留，建议确认是否清理）；landau failed/gone 5 条沿用 status.json 判定 — am_eval(gone)/c_eval(gone)/d_verify_blca5(failed)/m2_smoke(failed)/s4_stage2(failed)，均为历史旧 job（log 年龄 8~14 天），本轮无新增失败
+
+## 2026-09-10 19:47
+[19:47] 窗口/后台巡检
+运行中: task=by4231zau idle=0min（本轮巡检自身）
+卡住: task=bn7rd4a1v idle=29min, task=bvsh0ctk8 idle=59min, task=bezjgu7yp idle=59min, task=bg9oneyz2 idle=119min, task=bttjd01g9 idle=180min, task=bs65de97h idle=180min, task=b71z4uyx6 idle=210min, task=bfw443f6g idle=240min, task=btsqou1ae idle=270min, task=bl4d86ms3 idle=300min, task=b5t4i4br7 idle=330min, task=bq6p4ma2e idle=350min（尾部均为 sweep.sh 自身输出，属历次巡检会话遗留后台条目，无 exited/killed 标记）
+通道异常: 无（landau status.json ts=2026-09-10 19:40:01 可读，81 job，无 dup，无 alive/running）
+需要我看的: 上述 12 个 stale 巡检遗留后台条目（疑为巡检自身残留，建议确认是否清理）；landau failed/gone 5 条沿用 status.json 判定 — am_eval(gone)/c_eval(gone)/d_verify_blca5(failed)/m2_smoke(failed)/s4_stage2(failed)，均为历史旧 job（log 年龄 8~14 天），本轮无新增失败
+
+## 2026-09-10 20:16
+[20:16] 窗口/后台巡检
+运行中: task=by7uh3g9f idle=0min（本轮巡检自身）
+卡住: task=by4231zau idle=30min, task=bn7rd4a1v idle=60min, task=bvsh0ctk8 idle=89min, task=bezjgu7yp idle=89min, task=bg9oneyz2 idle=149min, task=bttjd01g9 idle=210min, task=bs65de97h idle=210min, task=b71z4uyx6 idle=240min, task=bfw443f6g idle=270min, task=btsqou1ae idle=300min, task=bl4d86ms3 idle=330min, task=b5t4i4br7 idle=360min, task=bq6p4ma2e idle=380min（尾部均为 sweep.sh 自身输出，属历次巡检会话遗留后台条目，无 exited/killed 标记）
+通道异常: 无（landau status.json ts=2026-09-10 20:10:01 可读，81 job，无 dup，无 alive/running）
+需要我看的: 上述 13 个 stale 巡检遗留后台条目（疑为巡检自身残留，建议确认是否清理）；landau failed/gone 5 条沿用 status.json 判定 — am_eval(gone)/c_eval(gone)/d_verify_blca5(failed)/m2_smoke(failed)/s4_stage2(failed)，均为历史旧 job（log 年龄 8~14 天），本轮无新增失败
+
+## 2026-09-10 20:46
+[20:46] 窗口/后台巡检
+运行中: task=bef7m9yv4 idle=0min（本轮巡检自身）
+卡住: task=by7uh3g9f idle=29min, task=by4231zau idle=60min, task=bn7rd4a1v idle=90min, task=bvsh0ctk8 idle=119min, task=bezjgu7yp idle=119min, task=bg9oneyz2 idle=179min, task=bttjd01g9 idle=240min, task=bs65de97h idle=240min, task=b71z4uyx6 idle=270min, task=bfw443f6g idle=300min, task=btsqou1ae idle=330min, task=bl4d86ms3 idle=360min, task=b5t4i4br7 idle=390min, task=bq6p4ma2e idle=410min（尾部均为 sweep.sh 自身输出，属历次巡检会话遗留后台条目，无 exited/killed 标记）
+通道异常: 无（landau status.json ts=2026-09-10 20:40:01 可读，81 job，无 dup，无 alive/running）
+需要我看的: 上述 14 个 stale 巡检遗留后台条目（疑为巡检自身残留，建议确认是否清理）；landau failed/gone 5 条沿用 status.json 判定 — am_eval(gone)/c_eval(gone)/d_verify_blca5(failed)/m2_smoke(failed)/s4_stage2(failed)，均为历史旧 job（log 年龄 8~14 天），本轮无新增失败
