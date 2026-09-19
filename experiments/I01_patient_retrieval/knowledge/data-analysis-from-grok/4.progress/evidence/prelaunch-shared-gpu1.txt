@@ -1,0 +1,11 @@
+2026-09-17T12:12:31+09:00
+target_processes_before
+1505973 bash -c set -e run_evidence=/home/wuhao/npj_strategy0_force_luad_20260917/result/evidence mkdir -p "$run_evidence" test -d "$run_evidence" {   date -Iseconds   printf "target_processes_before\\n"   pgrep -af "[n]pj_strategy0_force_luad|[l]uad_m1_force|[s]ource/run.py" || true   printf "existing_complete_before\\n"   test -f /home/wuhao/npj_strategy0_force_luad_20260917/result/runs/test/complete.json && printf "PRESENT\\n" || printf "ABSENT\\n"   printf "gpu1_sample_1\\n"   nvidia-smi -i 1 --query-gpu=index,utilization.gpu,memory.free,memory.total --format=csv,noheader,nounits   sleep 2   printf "gpu1_sample_2\\n"   nvidia-smi -i 1 --query-gpu=index,utilization.gpu,memory.free,memory.total --format=csv,noheader,nounits } | tee "$run_evidence/prelaunch-shared-gpu1.txt"
+1505975 bash -c set -e run_evidence=/home/wuhao/npj_strategy0_force_luad_20260917/result/evidence mkdir -p "$run_evidence" test -d "$run_evidence" {   date -Iseconds   printf "target_processes_before\\n"   pgrep -af "[n]pj_strategy0_force_luad|[l]uad_m1_force|[s]ource/run.py" || true   printf "existing_complete_before\\n"   test -f /home/wuhao/npj_strategy0_force_luad_20260917/result/runs/test/complete.json && printf "PRESENT\\n" || printf "ABSENT\\n"   printf "gpu1_sample_1\\n"   nvidia-smi -i 1 --query-gpu=index,utilization.gpu,memory.free,memory.total --format=csv,noheader,nounits   sleep 2   printf "gpu1_sample_2\\n"   nvidia-smi -i 1 --query-gpu=index,utilization.gpu,memory.free,memory.total --format=csv,noheader,nounits } | tee "$run_evidence/prelaunch-shared-gpu1.txt"
+1505976 tee /home/wuhao/npj_strategy0_force_luad_20260917/result/evidence/prelaunch-shared-gpu1.txt
+existing_complete_before
+ABSENT
+gpu1_sample_1
+1, 97, 17743, 32768
+gpu1_sample_2
+1, 0, 17743, 32768

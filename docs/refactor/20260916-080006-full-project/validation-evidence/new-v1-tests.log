@@ -1,0 +1,45 @@
+ss........s..........F.................................................. [ 85%]
+............                                                             [100%]
+=================================== FAILURES ===================================
+_ MigrationContracts.test_experiment_overrides_defaults_but_cannot_change_locked_model _
+
+self = <experiments.I01_patient_retrieval.tests.test_migration_contracts.MigrationContracts testMethod=test_experiment_overrides_defaults_but_cannot_change_locked_model>
+
+    def test_experiment_overrides_defaults_but_cannot_change_locked_model(self):
+        with tempfile.TemporaryDirectory() as directory:
+            config = Path(directory) / 'config.yaml'
+            config.write_text(json.dumps({'batch_size': 7, 'model': evaluate.MODEL_SPEC,
+                                         'protocol_id': evaluate.PROTOCOL_ID, 'cancers': ['BLCA'], 'seeds': [123]}))
+            argv = ['--data-root', directory, '--out-dir', directory + '/run', '--config', str(config)]
+>           self.assertEqual(evaluate.resolve_args(argv).batch_size, 7)
+
+experiments/I01_patient_retrieval/tests/test_migration_contracts.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+argv = ['--data-root', '/tmp/tmp0i6vpwr0', '--out-dir', '/tmp/tmp0i6vpwr0/run', '--config', '/tmp/tmp0i6vpwr0/config.yaml']
+
+    def resolve_args(argv=None):
+        cli = parser().parse_args(argv)
+        config_path = getattr(cli, 'config', Path(__file__).with_name('config.yaml'))
+        config = resolve_config(ROOT / 'configs/refactor_defaults.yaml', config_path, cli)
+        config['config'] = config_path
+        allowed = set(vars(parser().parse_args(['--data-root', '.', '--out-dir', '.']))) | {
+            'data_root', 'out_dir', 'checkpoint_root', 'label', 'manifest', 'review_record',
+            'cancers', 'seeds', 'stage', 'device', 'batch_size', 'cpu_threads', 'config',
+            'formal_approved', 'experiment', 'protocol_id', 'model', 'bin_mode'}
+        if set(config) - allowed:
+            raise ValueError(f'未知配置字段: {sorted(set(config) - allowed)}')
+        if config.get('bin_mode') != 'author':
+>           raise ValueError('I01 历史协议要求显式 bin_mode=author')
+E           ValueError: I01 历史协议要求显式 bin_mode=author
+
+experiments/I01_patient_retrieval/evaluate.py:381: ValueError
+=============================== warnings summary ===============================
+experiments/I01_patient_retrieval/tests/test_patient_retrieval_eval.py::EvaluationContract::test_actual_npjc_forward_identity_mask_and_strict_checkpoint
+  /home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/nn/modules/transformer.py:502: UserWarning: The PyTorch API of nested tensors is in prototype stage and will change in the near future. (Triggered internally at /opt/conda/conda-bld/pytorch_1728945388038/work/aten/src/ATen/NestedTensorImpl.cpp:178.)
+    output = torch._nested_tensor_from_mask(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED experiments/I01_patient_retrieval/tests/test_migration_contracts.py::MigrationContracts::test_experiment_overrides_defaults_but_cannot_change_locked_model
+1 failed, 80 passed, 3 skipped, 1 warning in 10.43s

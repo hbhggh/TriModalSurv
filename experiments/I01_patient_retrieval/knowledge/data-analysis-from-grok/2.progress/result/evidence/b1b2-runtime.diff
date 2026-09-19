@@ -1,0 +1,20 @@
+--- evidence/b1b2-before-source/runtime.py	2026-09-16 19:15:27
++++ runtime.py	2026-09-16 21:29:06
+@@ -124,12 +124,17 @@
+         if actual != expected:
+             raise ValueError(f'公共源码已改变: {relative}')
+     for path in sorted((repo / 'src' / 'trimodalsurv').rglob('*.py')):
++        # AppleDouble及隐藏目录不是执行源码，不能混入跨平台审计指纹。
++        if any(part.startswith('.') for part in path.relative_to(repo / 'src' / 'trimodalsurv').parts):
++            continue
+         result['repo/' + path.relative_to(repo).as_posix()] = file_sha256(path)
+     for name in ('model.py', 'evaluate.py', 'config.yaml'):
+         relative = 'experiments/I01_patient_retrieval/' + name
+         result['repo/' + relative] = file_sha256(repo / relative)
+     # 只绑定可执行实现及规则配置，不把随执行更新的报告/日志放进源码指纹。
+     for path in sorted(ROOT.glob('*.py')):
++        if path.name.startswith('.'):
++            continue
+         result['rules/' + path.name] = file_sha256(path)
+     for folder in config['rules']:
+         for name in ('model.py', 'config.yaml'):

@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "atol": 1e-06,
+  "rtol": 0,
+  "cases": [
+    {
+      "case": "npjc",
+      "tensor_checks": 66,
+      "max_abs": 0
+    },
+    {
+      "case": "gate",
+      "tensor_checks": 69,
+      "max_abs": 0
+    },
+    {
+      "case": "mean",
+      "tensor_checks": 63,
+      "max_abs": 0
+    },
+    {
+      "case": "capr",
+      "tensor_checks": 107,
+      "max_abs": 0
+    },
+    {
+      "case": "bank",
+      "tensor_checks": 69,
+      "max_abs": 0
+    },
+    {
+      "case": "capl",
+      "tensor_checks": 117,
+      "max_abs": 0
+    },
+    {
+      "case": "population",
+      "tensor_checks": 76,
+      "max_abs": 0
+    }
+  ]
+}

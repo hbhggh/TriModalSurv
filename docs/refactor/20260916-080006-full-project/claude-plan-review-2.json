@@ -1,0 +1,80 @@
+{
+  "is_error": false,
+  "duration_api_ms": 91859,
+  "num_turns": 1,
+  "stop_reason": "end_turn",
+  "session_id": "0d14db9f-da65-4d77-b104-23b79c83ebfb",
+  "total_cost_usd": 0.33906000000000003,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 18947,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 5348,
+    "output_tokens_details": {
+      "thinking_tokens": 3656
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 18947,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 5348,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 18947,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 18947
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 15755,
+      "outputTokens": 25,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.015880000000000002,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty"
+    },
+    "claude-opus-5": {
+      "inputTokens": 2,
+      "outputTokens": 5348,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 18947,
+      "webSearchRequests": 0,
+      "costUSD": 0.32318,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "canonicalModel": "claude-opus-5",
+      "provider": "firstParty"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "```json\n{\n  \"verdict\": \"PASS\",\n  \"remaining_blockers\": [],\n  \"dispositions\": [\n    {\"id\": \"B01\", \"status\": \"已解决：A.3 对 0eb0abc/f2e2358 建不覆盖现有引用的保护 tag 并验证，774f/684e 沿用保护分支，bundle 含 refs，按你的更正不改全局 gc、不动外部 worktree。\"},\n    {\"id\": \"B02\", \"status\": \"已解决：A.4 定死 MCAT/PORPOISE 原位保留、维持现有 ignore、无 submodule/gitlink、本轮不提交，只做本地全备份＋单独 diff；根 NPJ 连 .git 整体可恢复归档。用户待定项消解。\"},\n    {\"id\": \"B03\", \"status\": \"已解决：A.5/A.6 给出 planned→执行→verified 操作日志、同文件系统 rename、逆序回滚与临时夹具演练，且不用 reset --hard/clean/rm。\"},\n    {\"id\": \"B04\", \"status\": \"已解决：B.7 结合你的只读解析结论，仍要求逐份 weights_only=True 真实加载与键/shape/dtype 校验，禁止静默 remap、strict=False 与不安全回退。用户待定项消解。\"},\n    {\"id\": \"B05\", \"status\": \"已按更正改写：B.1/B.2 以 root/src 现行含 compensator 行为为默认契约，合并 684e 无参数编码与 inference_only，I02 走 compensator 槽组合注入，不改 state_dict 键；C.2/C.5 补 train/eval 分支与调用计数断言。\"},\n    {\"id\": \"B06\", \"status\": \"已解决：B.3 写死去重判据（AST＋依赖＋输入输出与状态变化＋行为对拍），分类旧工具整体归档，产出逐符号来源/差异/去向表。\"},\n    {\"id\": \"B07\", \"status\": \"已解决：B.4 保留 bin_mode，逐实验显式预设取值，新入口缺参数拒绝启动，历史未记录仍标 unknown，不追认 effective。\"},\n    {\"id\": \"B08\", \"status\": \"已解决：B.5/B.6 定死安装包仅 trimodalsurv、experiments 作 repo-checkout 下合法包、pytest 显式五路径＋--import-mode=importlib，并要求旧→新测试节点逐项映射而非只比数量。用户待定项消解。\"},\n    {\"id\": \"B09\", \"status\": \"已解决：C.2 固定隔离 CPU/FP32、seed123、单线程、关 autocast/TF32、确定性算法，不支持即停门而非放宽阈值。\"},\n    {\"id\": \"B10\", \"status\": \"已解决：C.3 先在冻结旧源跑基线并区分既有失败与新增回归，测试 diff 与 collect-only 单独审核；B.6 禁改断言/阈值/skip；D.6 不接受总结性结论。\"},\n    {\"id\": \"B11\", \"status\": \"已解决：D.2 明列活动链接集合并排除 archive、原始证据、JSON 历史字段与 SVG 可见文字；D.5 禁止活动代码依赖 archive，且静态检查外还核实际导入来源。\"},\n    {\"id\": \"B12\", \"status\": \"已解决：C.7 定义复算＝仅聚合既有 JSON/CSV、零前向、点名 5 组并冻结输入 hash 与舍入规则。用户待定项消解。\"},\n    {\"id\": \"B13\", \"status\": \"已解决：A.1/A.2 冻结 T0、lstat 不解引用、记录链接目标、Unicode 归一化＋casefold 冲突检测、可再生文件入册不抹分母、T0 后新产物单列。\"},\n    {\"id\": \"B14\", \"status\": \"已解决：D.4 真实数据缓存原地不搬不改路径不重建预热，历史测试缓存单独归档不入 Git，发现活跃写入即停该项报告。用户待定项消解。\"},\n    {\"id\": \"B15\", \"status\": \"已解决：A.7 环境/权重/结果/备份默认不入 Git、仅按显式 staged 清单提交并拒绝凭据、私钥、.env；落地时建议顺手在 .gitignore 显式列出 archive/runtime_artifacts/**（非阻塞）。\"}\n  ],\n  \"summary\": \"B01–B15 全部闭环，其中 B01/B02/B05/B14 按你的事实更正采用了更贴合现状的方案，四个原用户待定项（B02/B04/B08/B12/B14）均已由末节 A–D 定死，无遗留阻塞项。末节与前文的冲突点（gc 策略、baselines 处理、compensator 权威版本、缓存去向、复算边界）以末节为准且自洽，未发现新的内部矛盾。计划可进入实施准备；本次仅为计划通过，不构成实施验收或开训授权。\"\n}\n```",
+  "ttft_ms": 67498,
+  "ttft_stream_ms": 887,
+  "time_to_request_ms": 13,
+  "type": "result",
+  "duration_ms": 90379,
+  "uuid": "740bf5fb-4a01-4798-b8eb-c7d2290e7155"
+}

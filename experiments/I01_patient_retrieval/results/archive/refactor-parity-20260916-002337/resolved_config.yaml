@@ -1,0 +1,43 @@
+kind: refactor_parity
+model:
+  network_type: NPJC
+  compensator: none
+  hidden_size: 256
+  pred_dim: 4
+  dropout_rate: 0.1
+  n_backbone: 1
+  n_head: 4
+  mlp_ratio: 4
+  modality_order:
+  - img
+  - text
+  - rna
+runtime:
+  cancer: BLCA
+  seed: 123
+  device: cpu
+  precision: float32
+  cpu_threads: 4
+  batch_size: 32
+  patient_selection: sorted test IDs, first 32
+  arms:
+  - m0real
+  - m1
+  - retrieval
+  grids:
+  - none
+  - rna_100
+  - text_100
+  - both_100
+tolerance:
+  atol: 1.0e-06
+  rtol: 0
+protocol_id: patient-fixed-padmask-v2
+checkpoint_sha256: 610c12f79b220f6e56c27eb3cd4df289b7e81c256b0b764d92dd38b8a226ef0b
+bank_fingerprint: 933dc9afaa9bea1bf5dba2f1876e0acbd4f52d7b36152c912348e538324b3253
+historical_training_parameters:
+  status: not_recorded_here
+  note: 本文件记录本次推理实际构造参数，不反推历史训练参数
+parameter_sources:
+  model: loaded model attributes
+  runtime: this executed harness; fixed user-approved scope

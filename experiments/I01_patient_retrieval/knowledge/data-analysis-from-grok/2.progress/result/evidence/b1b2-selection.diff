@@ -1,0 +1,40 @@
+--- evidence/b1b2-before-source/selection.py	2026-09-16 19:10:38
++++ selection.py	2026-09-16 21:29:06
+@@ -84,6 +84,19 @@
+     }
+ 
+ 
++def inactive_parameters(spec: dict[str, Any], ucec_exception: bool) -> list[str]:
++    """只标记规则/路由确定未生效的参数，不把其他参数宣称为有收益。"""
++    rules = spec["enabled_rules"]
++    inactive = []
++    if 3 not in rules:
++        inactive.append("lambda")
++    if 4 not in rules or (1 in rules and not ucec_exception):
++        inactive.append("alpha")
++    if 5 not in rules:
++        inactive.append("w")
++    return inactive
++
++
+ def build_candidates(config: dict[str, Any]) -> list[dict[str, Any]]:
+     """Return the locked 13 single-rule plus 45 joint candidate specs."""
+ 
+@@ -376,6 +389,7 @@
+             "ucec_m0real_mean": ucec_m0real_mean if has_rule1 else None,
+             "ucec_text_routed_mean": fmean(ucec_routed_values),
+             "ucec_exception_enabled": ucec_enabled,
++            "inactive_parameters": inactive_parameters(spec, ucec_enabled),
+         }
+         candidate_scores.append(score)
+         score_by_id[candidate_id] = score
+@@ -407,6 +421,9 @@
+         locked["ucec_exception"] = score_by_id[winner["candidate_id"]][
+             "ucec_exception_enabled"
+         ]
++        locked["inactive_parameters"] = list(
++            score_by_id[winner["candidate_id"]]["inactive_parameters"]
++        )
+         selected[protocol] = locked
+ 
+     return {

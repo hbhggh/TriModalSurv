@@ -1,0 +1,188 @@
+{
+  "grid": "none",
+  "patients": [
+    {
+      "candidate_count": 0,
+      "common_valid_rows": null,
+      "donor_id": null,
+      "donor_valid_rows": null,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": false
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": true
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-A5-A0G2",
+      "pool_weights": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "complete",
+      "score_rna": null,
+      "score_wsi": null,
+      "similarity": null
+    },
+    {
+      "candidate_count": 0,
+      "common_valid_rows": null,
+      "donor_id": null,
+      "donor_valid_rows": null,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": false
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": true
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-A5-A0GI",
+      "pool_weights": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "complete",
+      "score_rna": null,
+      "score_wsi": null,
+      "similarity": null
+    },
+    {
+      "candidate_count": 0,
+      "common_valid_rows": null,
+      "donor_id": null,
+      "donor_valid_rows": null,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": false
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": true
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-A5-A0GP",
+      "pool_weights": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "complete",
+      "score_rna": null,
+      "score_wsi": null,
+      "similarity": null
+    },
+    {
+      "candidate_count": 0,
+      "common_valid_rows": null,
+      "donor_id": null,
+      "donor_valid_rows": null,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": false
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": true
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-A5-A0GV",
+      "pool_weights": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "complete",
+      "score_rna": null,
+      "score_wsi": null,
+      "similarity": null
+    },
+    {
+      "candidate_count": 188,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A1DK",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A3K1",
+      "pool_weights": [
+        1.0,
+        0.3,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval",
+      "score_rna": null,
+      "score_wsi": 0.2637724339465937,
+      "similarity": 0.2637724339465937
+    }
+  ],
+  "run_fingerprint": "2af1f5e079292304e828d1a84eea8ce7d5ba10145635b755aed80d62ea23fe0a",
+  "spec": {
+    "alpha": 0.0,
+    "candidate_id": "single-r5-w0p3",
+    "enabled_rules": [
+      5
+    ],
+    "lambda": 1.0,
+    "protocol": "05_imputed_token_downweight",
+    "ucec_exception": false,
+    "w": 0.3
+  },
+  "split": "valid"
+}

@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "fixed_T0_entries": 21614,
+  "backup_entries_verified": 21614,
+  "backup_sha_verified": 21614,
+  "backup_symlinks_verified": 0,
+  "t0_entry_coverage": 1.0,
+  "root_destinations_present": 13331,
+  "archived_original_content_verified": 7956,
+  "active_content_verified_copies": 5820,
+  "active_content_verified_retained": 2669,
+  "authorized_transformation_checks": 4,
+  "active_existence_only": 2708,
+  "counter_note": "Copies may overlap retained originals; these content-check counters are not additive. Existence-only paths are listed separately.",
+  "link_only_documents": 2,
+  "STATUS_append_prefix": true,
+  "new_files": 2739,
+  "external_worktrees": "not touched by this batch; backup-verified only, in-place content not re-checked",
+  "app_runtime_git_refs_preserved_separately": 2
+}

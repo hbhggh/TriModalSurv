@@ -1,0 +1,17 @@
+{
+  "scope": "post-test reporting-only revision",
+  "test_fingerprint": "a825b3cc4df41cf56afe228be531a4fc13f69c520bf35a2f2305101652387ec2",
+  "assertion": "这些哈希只证明报告修订后本机与 Tako 源文件一致；它们不能回填或替代 test 发车时缺失的本轮源码指纹。",
+  "test_metrics_recomputed": false,
+  "training_or_checkpoint_action": false,
+  "sha256": {
+    "config.yaml": "69559a5cddfc9b6ff942e33e79fd0e0c70ffbb8f9ce3a4e2b82b7b81a8287d47",
+    "model.py": "0e2174d2fc5220c4f34c20470ca0a65c522a71780d2d855eef12802790ed0109",
+    "reporting.py": "a0a13192f7e7e7d278c691a1d6666722ee37e91f425ead153d3fb31f282ca4ab",
+    "run.py": "6b67ce284cbe49f219afbdf09341381e184f9e5c8302d72f727d2006a0246560"
+  },
+  "cross_host_match": {
+    "host": "tako",
+    "matched": true
+  }
+}

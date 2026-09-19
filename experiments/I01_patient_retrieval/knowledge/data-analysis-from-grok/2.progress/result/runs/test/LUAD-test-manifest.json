@@ -1,0 +1,8776 @@
+{
+  "patients": [
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "patient_id": "TCGA-05-4245",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "patient_id": "TCGA-05-4245",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "patient_id": "TCGA-05-4245",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "patient_id": "TCGA-05-4245",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4396",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4396",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4396",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4396",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4397",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4397",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4397",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4397",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4415",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4415",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4415",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4415",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4417",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4417",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4417",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4417",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4420",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4420",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4420",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4420",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4426",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4426",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4426",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4426",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4427",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4427",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4427",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4427",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4430",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4430",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4430",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4430",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4434",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4434",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4434",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-05-4434",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-35-5375",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-35-5375",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-35-5375",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-35-5375",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-38-4625",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-38-4625",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-38-4625",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-38-4625",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-38-4626",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-38-4626",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-38-4626",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-38-4626",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-38-4629",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-38-4629",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-38-4629",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-38-4629",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-38-7271",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-38-7271",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-38-7271",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-38-7271",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-38-A44F",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-38-A44F",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-38-A44F",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-38-A44F",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2655",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2655",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2655",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2655",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2656",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2656",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2656",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2656",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2659",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2659",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2659",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2659",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2661",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2661",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2661",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2661",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2662",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2662",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2662",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2662",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2665",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2665",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2665",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-2665",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-3919",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-3919",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-3919",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-3919",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-5645",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-5645",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-5645",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-5645",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-6145",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-6145",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-6145",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-6145",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-6146",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-6146",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-6146",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-6146",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-6148",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-6148",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-6148",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-6148",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-6776",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-6776",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-6776",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-6776",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-6778",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-6778",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-6778",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-6778",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-7659",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-7659",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-7659",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-7659",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-7662",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-7662",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-7662",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-7662",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-7667",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-7667",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-7667",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-7667",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-7670",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-7670",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-7670",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-7670",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-A47G",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-A47G",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-A47G",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-44-A47G",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-4490",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-4490",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-4490",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-4490",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-4501",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-4501",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-4501",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-4501",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-4505",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-4505",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-4505",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-4505",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-4506",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-4506",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-4506",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-4506",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-6742",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-6742",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-6742",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-6742",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-AAR0",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-AAR0",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-AAR0",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-AAR0",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-AARE",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-AARE",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-AARE",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-AARE",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-AARN",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-AARN",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-AARN",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-49-AARN",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-4B-A93V",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-4B-A93V",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-4B-A93V",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-4B-A93V",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-5045",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-5045",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-5045",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-5045",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-5068",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-5068",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-5068",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-5068",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-6590",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-6590",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-6590",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-6590",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-6597",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-6597",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-6597",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-6597",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-7109",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-7109",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-7109",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-7109",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-8459",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-8459",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-8459",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-50-8459",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-53-7626",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-53-7626",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-53-7626",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-53-7626",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-53-7813",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-53-7813",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-53-7813",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-53-7813",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-1592",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-1592",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-1592",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-1592",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-1596",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-1596",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-1596",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-1596",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6642",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6642",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6642",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6642",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6712",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6712",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6712",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6712",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6969",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6969",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6969",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6969",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6972",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6972",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6972",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6972",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6979",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6979",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6979",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6979",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6980",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6980",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6980",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-6980",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "patient_id": "TCGA-55-7227",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "patient_id": "TCGA-55-7227",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "patient_id": "TCGA-55-7227",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "patient_id": "TCGA-55-7227",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7573",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7573",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7573",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7573",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7574",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7574",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7574",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7574",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7724",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7724",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7724",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7724",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7726",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7726",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7726",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7726",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "patient_id": "TCGA-55-7816",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "patient_id": "TCGA-55-7816",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "patient_id": "TCGA-55-7816",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "patient_id": "TCGA-55-7816",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7910",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7910",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7910",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7910",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7994",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7994",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7994",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-7994",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8087",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8087",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8087",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8087",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8089",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8089",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8089",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8089",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8092",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8092",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8092",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8092",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8096",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8096",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8096",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8096",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8207",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8207",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8207",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8207",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8301",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8301",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8301",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8301",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8505",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8505",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8505",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8505",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8507",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8507",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8507",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8507",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8614",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8614",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8614",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-8614",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-A490",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-A490",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-A490",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-A490",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-A491",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-A491",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-A491",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-55-A491",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-62-A46S",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-62-A46S",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-62-A46S",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-62-A46S",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-62-A46V",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-62-A46V",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-62-A46V",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-62-A46V",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-62-A471",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-62-A471",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-62-A471",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-62-A471",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-64-1677",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-64-1677",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-64-1677",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-64-1677",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "patient_id": "TCGA-64-1678",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "patient_id": "TCGA-64-1678",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "patient_id": "TCGA-64-1678",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "patient_id": "TCGA-64-1678",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-64-1680",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-64-1680",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-64-1680",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-64-1680",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-64-1681",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-64-1681",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-64-1681",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-64-1681",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-64-5775",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-64-5775",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-64-5775",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-64-5775",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-67-3771",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-67-3771",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-67-3771",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-67-3771",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-67-3774",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-67-3774",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-67-3774",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-67-3774",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-67-6215",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-67-6215",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-67-6215",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-67-6215",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-67-6216",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-67-6216",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-67-6216",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-67-6216",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7761",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7761",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7761",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7761",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7763",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7763",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7763",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7763",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7764",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7764",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7764",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7764",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7765",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7765",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7765",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7765",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7974",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7974",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7974",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7974",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7978",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7978",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7978",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7978",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7980",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7980",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7980",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-69-7980",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "patient_id": "TCGA-69-8453",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "patient_id": "TCGA-69-8453",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "patient_id": "TCGA-69-8453",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "patient_id": "TCGA-69-8453",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4659",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4659",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4659",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4659",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4666",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4666",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4666",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4666",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4668",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4668",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4668",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4668",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4670",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4670",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4670",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4670",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4675",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4675",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4675",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4675",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4676",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4676",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4676",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-4676",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-7498",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-7498",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-7498",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-7498",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-A9RS",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-A9RS",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-A9RS",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-73-A9RS",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-75-5125",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-75-5125",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-75-5125",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-75-5125",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-75-5146",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-75-5146",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-75-5146",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-75-5146",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-75-6206",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-75-6206",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-75-6206",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-75-6206",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-75-6214",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-75-6214",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-75-6214",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-75-6214",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7147",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7147",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7147",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7147",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7148",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7148",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7148",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7148",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7150",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7150",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7150",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7150",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7152",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7152",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7152",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7152",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7153",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7153",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7153",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7153",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7155",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7155",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7155",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7155",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7156",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7156",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7156",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7156",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7159",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7159",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7159",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7159",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7161",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7161",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7161",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7161",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7163",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7163",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7163",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7163",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7167",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7167",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7167",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7167",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7220",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7220",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7220",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7220",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7535",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7535",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7535",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7535",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7539",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7539",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7539",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-7539",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-8648",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-8648",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-8648",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-8648",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-8662",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-8662",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-8662",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-78-8662",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-80-5608",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-80-5608",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-80-5608",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-80-5608",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-80-5611",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-80-5611",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-80-5611",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-80-5611",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-83-5908",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-83-5908",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-83-5908",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-83-5908",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-7711",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-7711",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-7711",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-7711",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-7953",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-7953",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-7953",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-7953",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8054",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8054",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8054",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8054",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8055",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8055",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8055",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8055",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8073",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8073",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8073",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8073",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8076",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8076",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8076",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8076",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8358",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8358",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8358",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8358",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8359",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8359",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8359",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8359",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8585",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8585",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8585",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-8585",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-A4P8",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-A4P8",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-A4P8",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-86-A4P8",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-93-A4JQ",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-93-A4JQ",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-93-A4JQ",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-93-A4JQ",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-95-7043",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-95-7043",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-95-7043",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-95-7043",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-95-7947",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-95-7947",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-95-7947",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-95-7947",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-95-8494",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-95-8494",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-95-8494",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-95-8494",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-95-A4VK",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-95-A4VK",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-95-A4VK",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-95-A4VK",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-95-A4VP",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-95-A4VP",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-95-A4VP",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-95-A4VP",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-7546",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-7546",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-7546",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-7546",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-7553",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-7553",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-7553",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-7553",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-7937",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-7937",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-7937",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-7937",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-8171",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-8171",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-8171",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-8171",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-8172",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-8172",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-8172",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-8172",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-8175",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-8175",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-8175",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-8175",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-A4LX",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-A4LX",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-A4LX",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-A4LX",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-A4M0",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-A4M0",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-A4M0",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-A4M0",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-A4M1",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-A4M1",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-A4M1",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-A4M1",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-A4M2",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-A4M2",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-A4M2",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-97-A4M2",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-99-7458",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-99-7458",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-99-7458",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-99-7458",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-99-8028",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-99-8028",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-99-8028",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-99-8028",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-99-AA5R",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-99-AA5R",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-99-AA5R",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-99-AA5R",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-J2-8192",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-J2-8192",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-J2-8192",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-J2-8192",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-J2-A4AD",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-J2-A4AD",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-J2-A4AD",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-J2-A4AD",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-L9-A443",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-L9-A443",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-L9-A443",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-L9-A443",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-L9-A444",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-L9-A444",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-L9-A444",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-L9-A444",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-L9-A8F4",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-L9-A8F4",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-L9-A8F4",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-L9-A8F4",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MN-A4N5",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MN-A4N5",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MN-A4N5",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MN-A4N5",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MP-A4T6",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MP-A4T6",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MP-A4T6",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MP-A4T6",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MP-A4T8",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MP-A4T8",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MP-A4T8",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MP-A4T8",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MP-A4T9",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MP-A4T9",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MP-A4T9",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MP-A4T9",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MP-A4TH",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MP-A4TH",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MP-A4TH",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MP-A4TH",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MP-A4TJ",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MP-A4TJ",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MP-A4TJ",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-MP-A4TJ",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-NJ-A7XG",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-NJ-A7XG",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-NJ-A7XG",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-NJ-A7XG",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-O1-A52J",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-O1-A52J",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-O1-A52J",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-O1-A52J",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [],
+      "cancer": "LUAD",
+      "grid": "none",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-S2-AA1A",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna"
+      ],
+      "cancer": "LUAD",
+      "grid": "rna_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-S2-AA1A",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "text_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-S2-AA1A",
+      "split": "test"
+    },
+    {
+      "artificial_masked": [
+        "rna",
+        "text"
+      ],
+      "cancer": "LUAD",
+      "grid": "both_100",
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "patient_id": "TCGA-S2-AA1A",
+      "split": "test"
+    }
+  ]
+}

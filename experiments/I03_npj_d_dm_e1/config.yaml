@@ -1,0 +1,36 @@
+{
+  "experiment": "I03_npj_d_dm_e1",
+  "bin_mode": "author",
+  "model": {
+    "hidden_size": 256,
+    "pred_dim": 4
+  },
+  "presets": {
+    "D": {
+      "network_type": "MainModalityMoE",
+      "fusion_type": "mean",
+      "compensator": "none"
+    },
+    "Dm": {
+      "network_type": "MainModalityMoE",
+      "fusion_type": "mean",
+      "compensator": "none"
+    },
+    "E1": {
+      "network_type": "NPJC",
+      "fusion_type": "gate",
+      "compensator": "capr",
+      "modality_dropout": 0.15,
+      "consistency_lambda": 0.1
+    }
+  },
+  "provenance": "root T0 launcher d0/e1 + historical r6; Dm reuses D checkpoint",
+  "evaluation": {
+    "D": {
+      "arm": "m0real"
+    },
+    "Dm": {
+      "arm": "m1"
+    }
+  }
+}

@@ -1,0 +1,77 @@
+[
+  {
+    "old": "NPJ/tests/test_mean_fusion.py::test_gate_path_bitwise_identical",
+    "new": "tests/test_mean_fusion.py::test_gate_path_bitwise_identical",
+    "assertions": "unchanged; import/path-only"
+  },
+  {
+    "old": "NPJ/tests/test_mean_fusion.py::test_mean_state_dict_drops_gate_params",
+    "new": "tests/test_mean_fusion.py::test_mean_state_dict_drops_gate_params",
+    "assertions": "unchanged; import/path-only"
+  },
+  {
+    "old": "NPJ/tests/test_mean_fusion.py::test_mean_forward_matches_manual_average",
+    "new": "tests/test_mean_fusion.py::test_mean_forward_matches_manual_average",
+    "assertions": "unchanged; import/path-only"
+  },
+  {
+    "old": "NPJ/tests/test_mean_fusion.py::test_zero_rna_constant_token_still_averaged",
+    "new": "tests/test_mean_fusion.py::test_zero_rna_constant_token_still_averaged",
+    "assertions": "unchanged; import/path-only"
+  },
+  {
+    "old": "NPJ/tests/test_mean_fusion.py::test_load_model_rejects_mean_for_npjc",
+    "new": "tests/test_mean_fusion.py::test_load_model_rejects_mean_for_npjc",
+    "assertions": "unchanged; import/path-only"
+  },
+  {
+    "old": "NPJ/tests/test_bin_mode.py::test_author_block_source_text_identical",
+    "new": "tests/test_bin_mode.py::test_author_block_source_text_identical",
+    "assertions": "unchanged; import/path-only"
+  },
+  {
+    "old": "NPJ/tests/test_bin_mode.py::test_author_block_output_bitwise_identical",
+    "new": "tests/test_bin_mode.py::test_author_block_output_bitwise_identical",
+    "assertions": "unchanged; import/path-only"
+  },
+  {
+    "old": "NPJ/tests/test_bin_mode.py::test_author_mode_ignores_bin_edges",
+    "new": "tests/test_bin_mode.py::test_author_mode_ignores_bin_edges",
+    "assertions": "unchanged; import/path-only"
+  },
+  {
+    "old": "NPJ/tests/test_bin_mode.py::test_unknown_bin_mode_rejected",
+    "new": "tests/test_bin_mode.py::test_unknown_bin_mode_rejected",
+    "assertions": "unchanged; import/path-only"
+  },
+  {
+    "old": "NPJ/tests/test_bin_mode.py::test_quantile_edges_match_manual",
+    "new": "tests/test_bin_mode.py::test_quantile_edges_match_manual",
+    "assertions": "unchanged; import/path-only"
+  },
+  {
+    "old": "NPJ/tests/test_bin_mode.py::test_quantile_edges_reject_all_censored",
+    "new": "tests/test_bin_mode.py::test_quantile_edges_reject_all_censored",
+    "assertions": "unchanged; import/path-only"
+  },
+  {
+    "old": "NPJ/tests/test_bin_mode.py::test_assign_bins_right_open_and_manual",
+    "new": "tests/test_bin_mode.py::test_assign_bins_right_open_and_manual",
+    "assertions": "unchanged; import/path-only"
+  },
+  {
+    "old": "NPJ/tests/test_bin_mode.py::test_train_quantile_block_train_and_valid_paths",
+    "new": "tests/test_bin_mode.py::test_train_quantile_block_train_and_valid_paths",
+    "assertions": "unchanged; import/path-only"
+  },
+  {
+    "old": "NPJ/tests/test_bin_mode.py::test_train_quantile_block_rejects_bad_edges",
+    "new": "tests/test_bin_mode.py::test_train_quantile_block_rejects_bad_edges",
+    "assertions": "unchanged; import/path-only"
+  },
+  {
+    "old": "NPJ/tests/test_bin_mode.py::test_signatures_default_to_author",
+    "new": "tests/test_bin_mode.py::test_signatures_default_to_author",
+    "assertions": "unchanged; import/path-only"
+  }
+]

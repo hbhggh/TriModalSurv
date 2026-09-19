@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trimodalsurv"
+version = "0.1.0"
+description = "Shared library; experiment and script entry points require a complete repository checkout"
+requires-python = ">=3.10"
+dependencies = ["numpy", "torch", "PyYAML"]
+
+[project.optional-dependencies]
+evaluation = ["scikit-survival"]
+test = ["pytest"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "."]
+testpaths = ["tests", "experiments/I01_patient_retrieval/tests", "experiments/I02_population_prototypes/tests", "experiments/I03_npj_d_dm_e1/tests", "experiments/I04_cap4_multi_prototypes/tests"]
+addopts = "--import-mode=importlib -p no:cacheprovider"

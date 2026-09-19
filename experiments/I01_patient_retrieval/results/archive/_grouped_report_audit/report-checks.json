@@ -1,0 +1,22 @@
+{
+  "scope": "仅既有 patient-fixed-padmask-v2 B口径结果的Markdown分组报告",
+  "include_none": true,
+  "detail_checks_per_report": {
+    "groups": 100,
+    "cindex_values": 300,
+    "paired_deltas": 200,
+    "red_score_cells": 110,
+    "tied_groups": 5
+  },
+  "historical_sample_std_checks": 60,
+  "source_json_files": 75,
+  "source_artifact_hashes": 600,
+  "independent_recalculation": "独立子Agent与主执行者重新读取原始JSON，结果一致；不等同于Claude复审",
+  "model_inference_rerun": false,
+  "training_started": false,
+  "gui_color_rendering_checked": false,
+  "report_sha256": {
+    "seed单位-实验结果.md": "511f7bcf7a3a5cb0d7ddd0a5bfb645ce5183b0a74e2f242b61583f0a8337eebb",
+    "癌症为单位.md": "1c5d80eb2edcd46256a59193c9b50032f4195098d39ff770775ec22ff029c9fd"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "checks": {
+    "validation-evidence/real-parity.json": "7b8354c74a0df626450d54081bfa979e3ddc3997262e542df72dd9e0e68de513",
+    "validation-evidence/synthetic-parity.json": "732324c8466ef96f7658b0bb1da375cbee4f0c85ce45c86c9372eddf203a1df5",
+    "validation-evidence/checkpoints-verified.json": "fcf2d6330567e686cd4b0d8f03743de1fdcd02d967f3b99b2e65a62ac30319f3",
+    "validation-evidence/epoch-parity.json": "70f5cbf3365afcba58a2e8280db1b1c6a92aab3b16277e43f9ee769ad0cb9b50",
+    "history-derived-03/summary.json": "c79fb8346b093aa349b88e6f2d492ba38807986cf5e42310cee1618977dc46a9",
+    "transaction-fixture.json": "697ac21718c26113cab99f76fe26084447d4587a7a15fb69d422e104f27cab4a",
+    "safeguard.json": "826bb80009c57a44922a11e6e90b64395d9507dc9b75dc51cbee01515575f0c1",
+    "npj-manifest-snapshot.json": "d3b8ffe324021e62fa5029397749b34152344f2e5fc4deb823f855f9ae42891f",
+    "candidate-v8-manifest.json": "0edb1153bbcc82223fc5e4492e4f099c5709c7124fe7b2df744a19b7f21f4d7e",
+    "claude-code-review-4.json": "a1b92d6785311ed97518a7e4b91d2b3d249193c3f22f205751ff561041bc838d"
+  },
+  "limits": "CPU only; no formal experiment or deployment; final links/assets audit follows rename"
+}

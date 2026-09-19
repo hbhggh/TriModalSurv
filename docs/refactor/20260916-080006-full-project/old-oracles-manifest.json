@@ -1,0 +1,1438 @@
+[
+  {
+    "path": "oracles/root/center_spilit.py",
+    "sha256": "4953ffb838b7bc49ba4fb2b223bda8f970ac7c0ccf9de389683f8ffe2d6f71bb"
+  },
+  {
+    "path": "oracles/root/config/cross_attn/luad_cls_multimodal.yml",
+    "sha256": "a4967a7042003d807c76690dc41d83745c9714a79ad5355ad3005d779d1dbf7f"
+  },
+  {
+    "path": "oracles/root/config/cross_attn/luad_surv_multimodal.yml",
+    "sha256": "a38a082bf9d7fe8876b71aad63560dc782ff5f8e457c9829a137b49273b0690a"
+  },
+  {
+    "path": "oracles/root/config/early_fusion/brca_cls_multimodal_early_fusion.yml",
+    "sha256": "5e2bd423e9984f5d2eb13852ddfdbdeb67030ddaf8669d4646e9783a7814b7b4"
+  },
+  {
+    "path": "oracles/root/config/early_fusion/brca_surv_multimodal_early_fusion.yml",
+    "sha256": "ea7ad834232aff9454bf729e67484f430ad9025b25c2ed226c373aba8613a70e"
+  },
+  {
+    "path": "oracles/root/config/early_fusion/lgg_cls_multimodal_early_fusion.yml",
+    "sha256": "da7e49052fd108bd17206285e1b65edaa2db4cb62c5dd1279a8805441a5851b5"
+  },
+  {
+    "path": "oracles/root/config/early_fusion/lgg_surv_multimodal_early_fusion.yml",
+    "sha256": "f6976224681dc220dff78af7ca22ae82f699c42041c1849cb355a695ec4527b6"
+  },
+  {
+    "path": "oracles/root/config/early_fusion/luad_cls_multimodal_early_fusion.yml",
+    "sha256": "82876060ab6dd65330ca66b58a1e783f67b60ea948d61a0ca12d81a508871387"
+  },
+  {
+    "path": "oracles/root/config/early_fusion/luad_surv_multimodal_early_fusion.yml",
+    "sha256": "d2f81c34b22b6b58f69f5496bddc21bf34f621ec0cabbc7a37a6f358928049f7"
+  },
+  {
+    "path": "oracles/root/config/early_fusion/ucec_cls_multimodal_early_fusion.yml",
+    "sha256": "a1c61467dfc495bc92dfae8bf02b650a3d9b3b6f26434300c284214e2e376a90"
+  },
+  {
+    "path": "oracles/root/config/early_fusion/ucec_surv_multimodal.yml",
+    "sha256": "1c669db4e32df59fc64118653962e1d35a83085481c942e0ac545323e1ece5cd"
+  },
+  {
+    "path": "oracles/root/config/gpu_train.yaml",
+    "sha256": "414adba7385a96ff56d38169455423870824c5a0e87577d1bf673acacbd07bb5"
+  },
+  {
+    "path": "oracles/root/config/late_fusion/luad_cls_multimodal.yml",
+    "sha256": "e2b2dc66d55513cca040042635fba64bc30e4f82265bc1bd347d0a0cb4303a0c"
+  },
+  {
+    "path": "oracles/root/config/late_fusion/luad_surv_multimodal.yml",
+    "sha256": "b96517fcb915426f929f75ed67da59e177cc82dbe8daabd71968f9bb6d234a0f"
+  },
+  {
+    "path": "oracles/root/config/late_fusion/ucec_surv_multimodal.yml",
+    "sha256": "e4adb08321e0cb10cbeac16db856856ce61c09f529294ab0d75f7b695073e833"
+  },
+  {
+    "path": "oracles/root/config/multimodal_early_fusion.yml",
+    "sha256": "94c6a63c3db283419c6300255166db89a75c32f170a6ea3422946d90c0592a29"
+  },
+  {
+    "path": "oracles/root/config/surv_multimodal_cancermoe.yml",
+    "sha256": "34e48e2498857cb8c3af229e5597270f2dc2049800cd4227b6c9cee8045e4450"
+  },
+  {
+    "path": "oracles/root/config/surv_multimodal_cross_attn.yml",
+    "sha256": "ab54d2e0f7818f68f5d9acb5fccb6becd2f7ad3d74b201eb591ca4c77b545694"
+  },
+  {
+    "path": "oracles/root/config/surv_multimodal_limoe.yml",
+    "sha256": "0a8f3055933e9f0ede852f4008b8f87c568eeefa73cb68ec800ad19aca6006cc"
+  },
+  {
+    "path": "oracles/root/config/surv_multimodal_maggat.yml",
+    "sha256": "c99f878c37e804da7295278de6d2094b414908752908ac62ca62b2a86f9a07bf"
+  },
+  {
+    "path": "oracles/root/config/surv_multimodal_mult.yml",
+    "sha256": "871b78499a9d6b0bc835ec8984e704bec7e9a5e0c1465e4ad6eb5243d153b390"
+  },
+  {
+    "path": "oracles/root/config/surv_multimodal_tensorfusion.yml",
+    "sha256": "498027229b9dc907083083e4187406a5a1e786ead354a1ca88ebb49069373438"
+  },
+  {
+    "path": "oracles/root/config/ucec_surv_multimodal.yml",
+    "sha256": "1c669db4e32df59fc64118653962e1d35a83085481c942e0ac545323e1ece5cd"
+  },
+  {
+    "path": "oracles/root/examples/convert.py",
+    "sha256": "2231747add43f5082b08d21e483c1f7a0e4a9c11cf0328db705189cf37b09751"
+  },
+  {
+    "path": "oracles/root/examples/mixtral/__init__.py",
+    "sha256": "8d7bddb2a4edf447941c0295f337a7f20b5d516f460f6b8ebebb30e01d334975"
+  },
+  {
+    "path": "oracles/root/examples/mixtral/configuration_mixtral.py",
+    "sha256": "a98d2ebd7478b294dffed8d2e46641e4b453cbafa881e4188af0ceb890217a01"
+  },
+  {
+    "path": "oracles/root/examples/mixtral/modeling_mixtral.py",
+    "sha256": "eee9a3f151caa729740aa4c6b5ec966e9477ce5faced4f6b51761ee4d975c657"
+  },
+  {
+    "path": "oracles/root/loc_utils/common_tools.py",
+    "sha256": "b2a32c822b62398f5f043fea0b2a836ebd118873136e4419ded9c3da5e61de3f"
+  },
+  {
+    "path": "oracles/root/loc_utils/loss_func.py",
+    "sha256": "9928df69ed771c54c716058b93bac51984959c01004334f192dd960e280fec22"
+  },
+  {
+    "path": "oracles/root/loc_utils/model_util.py",
+    "sha256": "91d1304ec177e3c20d577e2622aafd7f7c12e74331c0033f2ff4916ae8d01605"
+  },
+  {
+    "path": "oracles/root/loc_utils/tcga_dataset.py",
+    "sha256": "e4e7a9009049959a9fb13012813df4df5ee1f7ddba59717e5d6e564f6ffc2428"
+  },
+  {
+    "path": "oracles/root/loc_utils_3yr/common_tools.py",
+    "sha256": "805328efe3ab78b8326393129e63c639dd98273454706cbae3c0557c82d381bd"
+  },
+  {
+    "path": "oracles/root/loc_utils_3yr/loss_func.py",
+    "sha256": "44e227eea9ad9f39f29437c24666e876565941556b1559a21bf732d64c1e0194"
+  },
+  {
+    "path": "oracles/root/loc_utils_3yr/model_util.py",
+    "sha256": "732d6638c3b0c421695dc4279e490d6fa70ec721c4db8ed5ddea312a089844a9"
+  },
+  {
+    "path": "oracles/root/loc_utils_3yr/tcga_dataset.py",
+    "sha256": "6876be9f6ddbda0b751aa91ada268ebce9242456840bfa1109344e5b1fe6527b"
+  },
+  {
+    "path": "oracles/root/main_survival.py",
+    "sha256": "20f5aae0b15691d4031a62ef54aef094b8c9b4abf9a732c4438b2d703d767e4c"
+  },
+  {
+    "path": "oracles/root/model/compensator.py",
+    "sha256": "a79db0a2bbac8e98eb698590b4e7c6e497744a88df4670c18a78e005ec60e2f1"
+  },
+  {
+    "path": "oracles/root/model/config/cancer_classification_moe.yml",
+    "sha256": "1d0aa105e2535b0065235712a607fa859493789bb15a8c88879d729ce2c58c94"
+  },
+  {
+    "path": "oracles/root/model/config/cross_attn/luad_cls_multimodal.yml",
+    "sha256": "a4967a7042003d807c76690dc41d83745c9714a79ad5355ad3005d779d1dbf7f"
+  },
+  {
+    "path": "oracles/root/model/config/cross_attn/luad_surv_multimodal.yml",
+    "sha256": "a38a082bf9d7fe8876b71aad63560dc782ff5f8e457c9829a137b49273b0690a"
+  },
+  {
+    "path": "oracles/root/model/config/early_fusion/brca_cls_multimodal_early_fusion.yml",
+    "sha256": "5e2bd423e9984f5d2eb13852ddfdbdeb67030ddaf8669d4646e9783a7814b7b4"
+  },
+  {
+    "path": "oracles/root/model/config/early_fusion/brca_surv_multimodal_early_fusion.yml",
+    "sha256": "ea7ad834232aff9454bf729e67484f430ad9025b25c2ed226c373aba8613a70e"
+  },
+  {
+    "path": "oracles/root/model/config/early_fusion/lgg_cls_multimodal_early_fusion.yml",
+    "sha256": "da7e49052fd108bd17206285e1b65edaa2db4cb62c5dd1279a8805441a5851b5"
+  },
+  {
+    "path": "oracles/root/model/config/early_fusion/lgg_surv_multimodal_early_fusion.yml",
+    "sha256": "f6976224681dc220dff78af7ca22ae82f699c42041c1849cb355a695ec4527b6"
+  },
+  {
+    "path": "oracles/root/model/config/early_fusion/luad_cls_multimodal_early_fusion.yml",
+    "sha256": "82876060ab6dd65330ca66b58a1e783f67b60ea948d61a0ca12d81a508871387"
+  },
+  {
+    "path": "oracles/root/model/config/early_fusion/luad_surv_multimodal_early_fusion.yml",
+    "sha256": "d2f81c34b22b6b58f69f5496bddc21bf34f621ec0cabbc7a37a6f358928049f7"
+  },
+  {
+    "path": "oracles/root/model/config/early_fusion/ucec_cls_multimodal_early_fusion.yml",
+    "sha256": "a1c61467dfc495bc92dfae8bf02b650a3d9b3b6f26434300c284214e2e376a90"
+  },
+  {
+    "path": "oracles/root/model/config/early_fusion/ucec_surv_multimodal.yml",
+    "sha256": "1c669db4e32df59fc64118653962e1d35a83085481c942e0ac545323e1ece5cd"
+  },
+  {
+    "path": "oracles/root/model/config/late_fusion/luad_cls_multimodal.yml",
+    "sha256": "e2b2dc66d55513cca040042635fba64bc30e4f82265bc1bd347d0a0cb4303a0c"
+  },
+  {
+    "path": "oracles/root/model/config/late_fusion/luad_surv_multimodal.yml",
+    "sha256": "b96517fcb915426f929f75ed67da59e177cc82dbe8daabd71968f9bb6d234a0f"
+  },
+  {
+    "path": "oracles/root/model/config/late_fusion/ucec_surv_multimodal.yml",
+    "sha256": "88cdd5030be059fb511d1e42352a1e84c25ed40df5d33447d60857cad8b5216e"
+  },
+  {
+    "path": "oracles/root/model/config/multimodal_early_fusion.yml",
+    "sha256": "aa60163888c04c482942deca50e3ca0448ede2ab26762ab565f87638657d2484"
+  },
+  {
+    "path": "oracles/root/model/config/surv_multimodal_3yr_cancermoe.yml",
+    "sha256": "1a9a781e07d27fc110c03b0ce9c4670bde41520f541362f3f0de88ff50013e39"
+  },
+  {
+    "path": "oracles/root/model/config/surv_multimodal_cancermoe.yml",
+    "sha256": "79054b6e6fa5bef65fe39e3ab67a8d84d39b973ee1318393a34387a4bc5b87b2"
+  },
+  {
+    "path": "oracles/root/model/config/surv_multimodal_cross_attn.yml",
+    "sha256": "f8d9bc298d7b3b29a549770a43c5a7e16e4e54c9e54ce0bd695041eae3494560"
+  },
+  {
+    "path": "oracles/root/model/config/surv_multimodal_limoe.yml",
+    "sha256": "25a4f16ca48e97262e3e0867d71586e97641c19e84f73417ddf4d3fc2cd8d78a"
+  },
+  {
+    "path": "oracles/root/model/config/surv_multimodal_maggat.yml",
+    "sha256": "a73dbbc233209c319adf0872e4971416530b2dc5874c39de466c8f3fbf292932"
+  },
+  {
+    "path": "oracles/root/model/config/surv_multimodal_main_cross.yml",
+    "sha256": "a65a6f7b394ae2c6361139f00fece2c2238025a55e2543a7e092c27981a0b9ad"
+  },
+  {
+    "path": "oracles/root/model/config/surv_multimodal_mainmoe.yml",
+    "sha256": "61f74b0627a7a3f186bb5e29c8c3c1a324775cb2dbf1844871c7c4b6812de84b"
+  },
+  {
+    "path": "oracles/root/model/config/surv_multimodal_mainmoe_uni2.yml",
+    "sha256": "189d177064a097fa8be3bab2a1020a1558b8553a48ee129ab7f040a86320e8c2"
+  },
+  {
+    "path": "oracles/root/model/config/surv_multimodal_mult.yml",
+    "sha256": "2b267ccb57d311c64ffd31b81853dec34565161cef98da668af9841cd396bae2"
+  },
+  {
+    "path": "oracles/root/model/config/surv_multimodal_tensorfusion.yml",
+    "sha256": "95609286f3fe295d25ae1a3ba7e0cee71d93072c6102f100530cdd5e0853f72d"
+  },
+  {
+    "path": "oracles/root/model/config/ucec_surv_multimodal.yml",
+    "sha256": "0e9c5efffa3cf2692ae0c16116d91beeed3f05f0534ee7edbfd69278d3c45b0d"
+  },
+  {
+    "path": "oracles/root/model/fusion_model.py",
+    "sha256": "03c4060232d2d18ca277205e5a3dc47a8e3617e930128c839b11402953a7a096"
+  },
+  {
+    "path": "oracles/root/running_scripts/cancer_classification_moe.sh",
+    "sha256": "b0acff8bcc2c4bcb2456294d80c2fcdbce636629ed1219058977390af3dcf39e"
+  },
+  {
+    "path": "oracles/root/running_scripts/mainmoe_stage_test.sh",
+    "sha256": "ca3914056289d794b5f54cfffdd8ad84d36bd7f5a6f25a4a1ec7262047196bff"
+  },
+  {
+    "path": "oracles/root/running_scripts/survival_prediction.sh",
+    "sha256": "5184ae9e65fb76352ba20b3648ef18fab3aaf7a2929a5ed87fe05722aaa3a958"
+  },
+  {
+    "path": "oracles/root/running_scripts/survival_prediction_3yr_cancermoe.sh",
+    "sha256": "39ee14ed7ed0ca1b14344ec06b5ceaf6def2015e5493f498a1428459c93ba187"
+  },
+  {
+    "path": "oracles/root/running_scripts/survival_prediction_cancermoe.sh",
+    "sha256": "52ea3fa293570297653aae30de8a4ec2be472a4e1fa007a1dbb8c01d493afd45"
+  },
+  {
+    "path": "oracles/root/running_scripts/survival_prediction_cross_attn.sh",
+    "sha256": "f0e6f5c6fd42a7b1b9d92c019c8daa95223258230c6e3c511f501e47b98c1e38"
+  },
+  {
+    "path": "oracles/root/running_scripts/survival_prediction_early_fusion.sh",
+    "sha256": "2877c19b0ad400df505310a3eee880f6a06c817d15abb7d12427c3e817b9fee7"
+  },
+  {
+    "path": "oracles/root/running_scripts/survival_prediction_late_fusion.sh",
+    "sha256": "cc561ab37124211417369d4269a5a3c2b2068d7c606b10837aab21ee8974e41b"
+  },
+  {
+    "path": "oracles/root/running_scripts/survival_prediction_limoe.sh",
+    "sha256": "f77383f21def4236bfaf2b43f11d3a660a2f246fa6856007f88b251bcd01b5bf"
+  },
+  {
+    "path": "oracles/root/running_scripts/survival_prediction_maggate.sh",
+    "sha256": "14e26039728898081301885958156747a19c3aa84e0b3d0de37a12ceda8b99de"
+  },
+  {
+    "path": "oracles/root/running_scripts/survival_prediction_maincross.sh",
+    "sha256": "bf20c84e95574796dba9c95642d1b63394b91be23f61219e23ae75ae2272c74c"
+  },
+  {
+    "path": "oracles/root/running_scripts/survival_prediction_mainmoe.sh",
+    "sha256": "2c5f02c63537015dde8818f3d0e28c756b791966891906f9c6de9bd1239ff635"
+  },
+  {
+    "path": "oracles/root/running_scripts/survival_prediction_mainmoe_all.sh",
+    "sha256": "986be260bf00a37e1750afff7be471452b90d58b25f8449158c3e86a8ff876e4"
+  },
+  {
+    "path": "oracles/root/running_scripts/survival_prediction_mainmoe_uni2.sh",
+    "sha256": "59e277f2d4493308131f1c4326165791e5aebfbe55c3b402cdc944468220771b"
+  },
+  {
+    "path": "oracles/root/running_scripts/survival_prediction_multifusion.sh",
+    "sha256": "7322094b4b47e268231f7ccd220a8bfa627695a76c83a16f97c8499f7811e6ca"
+  },
+  {
+    "path": "oracles/root/running_scripts/survival_prediction_rec_cancermoe.sh",
+    "sha256": "4ae67c234ff97884a3d1eab41e0a4f063d52401900e303bd5f7ae28e48101a35"
+  },
+  {
+    "path": "oracles/root/running_scripts/survival_prediction_tensorfusion.sh",
+    "sha256": "f782f3ed872884bbfcee793e1651e3f2436f24827386a4fe6cbaa6f398da2137"
+  },
+  {
+    "path": "oracles/root/scattermoe/__init__.py",
+    "sha256": "548004e21f0e20858613e177c3bbaa32ce7e84061dcb60440e243f4312f5efb7"
+  },
+  {
+    "path": "oracles/root/scattermoe/examples/convert.py",
+    "sha256": "2231747add43f5082b08d21e483c1f7a0e4a9c11cf0328db705189cf37b09751"
+  },
+  {
+    "path": "oracles/root/scattermoe/examples/mixtral/__init__.py",
+    "sha256": "8d7bddb2a4edf447941c0295f337a7f20b5d516f460f6b8ebebb30e01d334975"
+  },
+  {
+    "path": "oracles/root/scattermoe/examples/mixtral/configuration_mixtral.py",
+    "sha256": "a98d2ebd7478b294dffed8d2e46641e4b453cbafa881e4188af0ceb890217a01"
+  },
+  {
+    "path": "oracles/root/scattermoe/examples/mixtral/modeling_mixtral.py",
+    "sha256": "eee9a3f151caa729740aa4c6b5ec966e9477ce5faced4f6b51761ee4d975c657"
+  },
+  {
+    "path": "oracles/root/scattermoe/kernels/__init__.py",
+    "sha256": "7b0459e5f480bc5371a38b6762e09d591957c4e23fefaaf4f9edd72d236acade"
+  },
+  {
+    "path": "oracles/root/scattermoe/kernels/ops.py",
+    "sha256": "97ecdc278bc732ba9f14dfbb478c7549b36cc7dc9f92b319256d0743aa783e14"
+  },
+  {
+    "path": "oracles/root/scattermoe/kernels/single.py",
+    "sha256": "33a1fd843333a714301d2afc70087c4f8aa3a35e7fcf831d7a60ec4620ecf8f7"
+  },
+  {
+    "path": "oracles/root/scattermoe/mlp.py",
+    "sha256": "bf22f590bd9320300a40dddab26f536982dad9d33ce01617dfa699b8eb335627"
+  },
+  {
+    "path": "oracles/root/scattermoe/parallel_experts.py",
+    "sha256": "5645fd26770b132d24ae2af2045c9ffa39eb87410cec3f4c0324a2af2957a11e"
+  },
+  {
+    "path": "oracles/root/scattermoe/scattermoe/__init__.py",
+    "sha256": "548004e21f0e20858613e177c3bbaa32ce7e84061dcb60440e243f4312f5efb7"
+  },
+  {
+    "path": "oracles/root/scattermoe/scattermoe/kernels/__init__.py",
+    "sha256": "7b0459e5f480bc5371a38b6762e09d591957c4e23fefaaf4f9edd72d236acade"
+  },
+  {
+    "path": "oracles/root/scattermoe/scattermoe/kernels/ops.py",
+    "sha256": "97ecdc278bc732ba9f14dfbb478c7549b36cc7dc9f92b319256d0743aa783e14"
+  },
+  {
+    "path": "oracles/root/scattermoe/scattermoe/kernels/single.py",
+    "sha256": "33a1fd843333a714301d2afc70087c4f8aa3a35e7fcf831d7a60ec4620ecf8f7"
+  },
+  {
+    "path": "oracles/root/scattermoe/scattermoe/mlp.py",
+    "sha256": "bf22f590bd9320300a40dddab26f536982dad9d33ce01617dfa699b8eb335627"
+  },
+  {
+    "path": "oracles/root/scattermoe/scattermoe/parallel_experts.py",
+    "sha256": "5645fd26770b132d24ae2af2045c9ffa39eb87410cec3f4c0324a2af2957a11e"
+  },
+  {
+    "path": "oracles/root/scattermoe/setup.py",
+    "sha256": "7f43df99a87b93415b2bb10c34465182c96e7ca5a758bb9285e21255b7e1f9c2"
+  },
+  {
+    "path": "oracles/root/scattermoe/tests/test_mlp.py",
+    "sha256": "d847b05e9ddfc60ae3d6073b07a7749568848ca3218ca6aa8e680aae7e32c9c9"
+  },
+  {
+    "path": "oracles/root/scripts/eval_missing.py",
+    "sha256": "44f451e53a1188702b508e05f9e7e085279779ac23c0adcdf02769cdaf8e9d60"
+  },
+  {
+    "path": "oracles/root/scripts/gen_missing_manifest.py",
+    "sha256": "dcc404ce3843261af5a68b686fdb0578e858cac2ab5789325897e3bb60b27984"
+  },
+  {
+    "path": "oracles/root/scripts/gpu_util_gate.py",
+    "sha256": "a9082e37eab204f525a00d94ca1d341a27ddd4473639ebf1d20c366ae840ad33"
+  },
+  {
+    "path": "oracles/root/scripts/launch_formal.sh",
+    "sha256": "487c2d2f2edf7059593cc7c71c42a9b634769e5b4a31f30f3533ed54de9731df"
+  },
+  {
+    "path": "oracles/root/scripts/train_launcher.py",
+    "sha256": "5a48dc66f1ef8151c069a620b5879c1165efa44f50ce0794a6d3bfd78fcc7c47"
+  },
+  {
+    "path": "oracles/root/setup.py",
+    "sha256": "7f43df99a87b93415b2bb10c34465182c96e7ca5a758bb9285e21255b7e1f9c2"
+  },
+  {
+    "path": "oracles/root/summary_results.py",
+    "sha256": "0d0b4e149c89896a541b9a832d145a145ef61fa24b4ae10c30da4184b556ea9b"
+  },
+  {
+    "path": "oracles/root/summary_results_3yr.py",
+    "sha256": "83aea901ac52494cdd0fda7bacadbf80f3671e198a1219c20fc4fefc65523bc1"
+  },
+  {
+    "path": "oracles/root/survival_prediction.py",
+    "sha256": "77f9ae348cbf58a21cd61581c37d96d2f6c9e7eb047424b6f6208b5be21badf1"
+  },
+  {
+    "path": "oracles/root/survival_prediction_3yr.py",
+    "sha256": "b20a10e56f2f3e82e56f2becd126409df3c1756b8b01f33069883556975f4811"
+  },
+  {
+    "path": "oracles/root/survival_prediction_3yr_all.py",
+    "sha256": "f6fbdfb6f70bb675209ac1483fba443f44e51217392aa7ada347135e3b064554"
+  },
+  {
+    "path": "oracles/root/survival_prediction_all.py",
+    "sha256": "a8c5f4035616c15a2c062746e14f1bc0c99211150814d5d67dc7586a3a4d1a89"
+  },
+  {
+    "path": "oracles/root/tcga.yaml",
+    "sha256": "32ae4fbfb0a801c8beaed1c3b52f25710a847375977469e7161e7ed677787cdb"
+  },
+  {
+    "path": "oracles/root/tests/test_bin_mode.py",
+    "sha256": "c547d33d10bb991aca24921d24d8c3d1c6faccb7472a6c315a666879aa78495b"
+  },
+  {
+    "path": "oracles/root/tests/test_capl.py",
+    "sha256": "8e0f5de1aaa452187048c6c39ffca6757cacd879e7127718675483e9f6727d67"
+  },
+  {
+    "path": "oracles/root/tests/test_mean_fusion.py",
+    "sha256": "771ec5e9d48ad8d9953c73ab35ad4cd31ae613862ba9f4ac9f0dfa0a197a5150"
+  },
+  {
+    "path": "oracles/root/tests/test_mlp.py",
+    "sha256": "d847b05e9ddfc60ae3d6073b07a7749568848ca3218ca6aa8e680aae7e32c9c9"
+  },
+  {
+    "path": "oracles/684e/center_spilit.py",
+    "sha256": "4953ffb838b7bc49ba4fb2b223bda8f970ac7c0ccf9de389683f8ffe2d6f71bb"
+  },
+  {
+    "path": "oracles/684e/config/cross_attn/luad_cls_multimodal.yml",
+    "sha256": "a4967a7042003d807c76690dc41d83745c9714a79ad5355ad3005d779d1dbf7f"
+  },
+  {
+    "path": "oracles/684e/config/cross_attn/luad_surv_multimodal.yml",
+    "sha256": "a38a082bf9d7fe8876b71aad63560dc782ff5f8e457c9829a137b49273b0690a"
+  },
+  {
+    "path": "oracles/684e/config/early_fusion/brca_cls_multimodal_early_fusion.yml",
+    "sha256": "5e2bd423e9984f5d2eb13852ddfdbdeb67030ddaf8669d4646e9783a7814b7b4"
+  },
+  {
+    "path": "oracles/684e/config/early_fusion/brca_surv_multimodal_early_fusion.yml",
+    "sha256": "ea7ad834232aff9454bf729e67484f430ad9025b25c2ed226c373aba8613a70e"
+  },
+  {
+    "path": "oracles/684e/config/early_fusion/lgg_cls_multimodal_early_fusion.yml",
+    "sha256": "da7e49052fd108bd17206285e1b65edaa2db4cb62c5dd1279a8805441a5851b5"
+  },
+  {
+    "path": "oracles/684e/config/early_fusion/lgg_surv_multimodal_early_fusion.yml",
+    "sha256": "f6976224681dc220dff78af7ca22ae82f699c42041c1849cb355a695ec4527b6"
+  },
+  {
+    "path": "oracles/684e/config/early_fusion/luad_cls_multimodal_early_fusion.yml",
+    "sha256": "82876060ab6dd65330ca66b58a1e783f67b60ea948d61a0ca12d81a508871387"
+  },
+  {
+    "path": "oracles/684e/config/early_fusion/luad_surv_multimodal_early_fusion.yml",
+    "sha256": "d2f81c34b22b6b58f69f5496bddc21bf34f621ec0cabbc7a37a6f358928049f7"
+  },
+  {
+    "path": "oracles/684e/config/early_fusion/ucec_cls_multimodal_early_fusion.yml",
+    "sha256": "a1c61467dfc495bc92dfae8bf02b650a3d9b3b6f26434300c284214e2e376a90"
+  },
+  {
+    "path": "oracles/684e/config/early_fusion/ucec_surv_multimodal.yml",
+    "sha256": "1c669db4e32df59fc64118653962e1d35a83085481c942e0ac545323e1ece5cd"
+  },
+  {
+    "path": "oracles/684e/config/gpu_train.yaml",
+    "sha256": "414adba7385a96ff56d38169455423870824c5a0e87577d1bf673acacbd07bb5"
+  },
+  {
+    "path": "oracles/684e/config/late_fusion/luad_cls_multimodal.yml",
+    "sha256": "e2b2dc66d55513cca040042635fba64bc30e4f82265bc1bd347d0a0cb4303a0c"
+  },
+  {
+    "path": "oracles/684e/config/late_fusion/luad_surv_multimodal.yml",
+    "sha256": "b96517fcb915426f929f75ed67da59e177cc82dbe8daabd71968f9bb6d234a0f"
+  },
+  {
+    "path": "oracles/684e/config/late_fusion/ucec_surv_multimodal.yml",
+    "sha256": "e4adb08321e0cb10cbeac16db856856ce61c09f529294ab0d75f7b695073e833"
+  },
+  {
+    "path": "oracles/684e/config/multimodal_early_fusion.yml",
+    "sha256": "94c6a63c3db283419c6300255166db89a75c32f170a6ea3422946d90c0592a29"
+  },
+  {
+    "path": "oracles/684e/config/surv_multimodal_cancermoe.yml",
+    "sha256": "34e48e2498857cb8c3af229e5597270f2dc2049800cd4227b6c9cee8045e4450"
+  },
+  {
+    "path": "oracles/684e/config/surv_multimodal_cross_attn.yml",
+    "sha256": "ab54d2e0f7818f68f5d9acb5fccb6becd2f7ad3d74b201eb591ca4c77b545694"
+  },
+  {
+    "path": "oracles/684e/config/surv_multimodal_limoe.yml",
+    "sha256": "0a8f3055933e9f0ede852f4008b8f87c568eeefa73cb68ec800ad19aca6006cc"
+  },
+  {
+    "path": "oracles/684e/config/surv_multimodal_maggat.yml",
+    "sha256": "c99f878c37e804da7295278de6d2094b414908752908ac62ca62b2a86f9a07bf"
+  },
+  {
+    "path": "oracles/684e/config/surv_multimodal_mult.yml",
+    "sha256": "871b78499a9d6b0bc835ec8984e704bec7e9a5e0c1465e4ad6eb5243d153b390"
+  },
+  {
+    "path": "oracles/684e/config/surv_multimodal_tensorfusion.yml",
+    "sha256": "498027229b9dc907083083e4187406a5a1e786ead354a1ca88ebb49069373438"
+  },
+  {
+    "path": "oracles/684e/config/ucec_surv_multimodal.yml",
+    "sha256": "1c669db4e32df59fc64118653962e1d35a83085481c942e0ac545323e1ece5cd"
+  },
+  {
+    "path": "oracles/684e/examples/convert.py",
+    "sha256": "2231747add43f5082b08d21e483c1f7a0e4a9c11cf0328db705189cf37b09751"
+  },
+  {
+    "path": "oracles/684e/examples/mixtral/__init__.py",
+    "sha256": "8d7bddb2a4edf447941c0295f337a7f20b5d516f460f6b8ebebb30e01d334975"
+  },
+  {
+    "path": "oracles/684e/examples/mixtral/configuration_mixtral.py",
+    "sha256": "a98d2ebd7478b294dffed8d2e46641e4b453cbafa881e4188af0ceb890217a01"
+  },
+  {
+    "path": "oracles/684e/examples/mixtral/modeling_mixtral.py",
+    "sha256": "eee9a3f151caa729740aa4c6b5ec966e9477ce5faced4f6b51761ee4d975c657"
+  },
+  {
+    "path": "oracles/684e/loc_utils/common_tools.py",
+    "sha256": "b2a32c822b62398f5f043fea0b2a836ebd118873136e4419ded9c3da5e61de3f"
+  },
+  {
+    "path": "oracles/684e/loc_utils/loss_func.py",
+    "sha256": "9928df69ed771c54c716058b93bac51984959c01004334f192dd960e280fec22"
+  },
+  {
+    "path": "oracles/684e/loc_utils/model_util.py",
+    "sha256": "91d1304ec177e3c20d577e2622aafd7f7c12e74331c0033f2ff4916ae8d01605"
+  },
+  {
+    "path": "oracles/684e/loc_utils/tcga_dataset.py",
+    "sha256": "e4e7a9009049959a9fb13012813df4df5ee1f7ddba59717e5d6e564f6ffc2428"
+  },
+  {
+    "path": "oracles/684e/loc_utils_3yr/common_tools.py",
+    "sha256": "805328efe3ab78b8326393129e63c639dd98273454706cbae3c0557c82d381bd"
+  },
+  {
+    "path": "oracles/684e/loc_utils_3yr/loss_func.py",
+    "sha256": "44e227eea9ad9f39f29437c24666e876565941556b1559a21bf732d64c1e0194"
+  },
+  {
+    "path": "oracles/684e/loc_utils_3yr/model_util.py",
+    "sha256": "732d6638c3b0c421695dc4279e490d6fa70ec721c4db8ed5ddea312a089844a9"
+  },
+  {
+    "path": "oracles/684e/loc_utils_3yr/tcga_dataset.py",
+    "sha256": "6cc5fe211675241317f638e48ec232293a0291db58832c45b02361a265f91622"
+  },
+  {
+    "path": "oracles/684e/main_survival.py",
+    "sha256": "f527b8c8f6e1393d27422eedabdf70ba81f34be9ff5c01131293d2b0d37c6d52"
+  },
+  {
+    "path": "oracles/684e/model/compensator.py",
+    "sha256": "3fc09ccfc12442971897ac0e47b524cac8963400bfd505064a4ac12bef13ba2c"
+  },
+  {
+    "path": "oracles/684e/model/config/cancer_classification_moe.yml",
+    "sha256": "1d0aa105e2535b0065235712a607fa859493789bb15a8c88879d729ce2c58c94"
+  },
+  {
+    "path": "oracles/684e/model/config/cross_attn/luad_cls_multimodal.yml",
+    "sha256": "a4967a7042003d807c76690dc41d83745c9714a79ad5355ad3005d779d1dbf7f"
+  },
+  {
+    "path": "oracles/684e/model/config/cross_attn/luad_surv_multimodal.yml",
+    "sha256": "a38a082bf9d7fe8876b71aad63560dc782ff5f8e457c9829a137b49273b0690a"
+  },
+  {
+    "path": "oracles/684e/model/config/early_fusion/brca_cls_multimodal_early_fusion.yml",
+    "sha256": "5e2bd423e9984f5d2eb13852ddfdbdeb67030ddaf8669d4646e9783a7814b7b4"
+  },
+  {
+    "path": "oracles/684e/model/config/early_fusion/brca_surv_multimodal_early_fusion.yml",
+    "sha256": "ea7ad834232aff9454bf729e67484f430ad9025b25c2ed226c373aba8613a70e"
+  },
+  {
+    "path": "oracles/684e/model/config/early_fusion/lgg_cls_multimodal_early_fusion.yml",
+    "sha256": "da7e49052fd108bd17206285e1b65edaa2db4cb62c5dd1279a8805441a5851b5"
+  },
+  {
+    "path": "oracles/684e/model/config/early_fusion/lgg_surv_multimodal_early_fusion.yml",
+    "sha256": "f6976224681dc220dff78af7ca22ae82f699c42041c1849cb355a695ec4527b6"
+  },
+  {
+    "path": "oracles/684e/model/config/early_fusion/luad_cls_multimodal_early_fusion.yml",
+    "sha256": "82876060ab6dd65330ca66b58a1e783f67b60ea948d61a0ca12d81a508871387"
+  },
+  {
+    "path": "oracles/684e/model/config/early_fusion/luad_surv_multimodal_early_fusion.yml",
+    "sha256": "d2f81c34b22b6b58f69f5496bddc21bf34f621ec0cabbc7a37a6f358928049f7"
+  },
+  {
+    "path": "oracles/684e/model/config/early_fusion/ucec_cls_multimodal_early_fusion.yml",
+    "sha256": "a1c61467dfc495bc92dfae8bf02b650a3d9b3b6f26434300c284214e2e376a90"
+  },
+  {
+    "path": "oracles/684e/model/config/early_fusion/ucec_surv_multimodal.yml",
+    "sha256": "1c669db4e32df59fc64118653962e1d35a83085481c942e0ac545323e1ece5cd"
+  },
+  {
+    "path": "oracles/684e/model/config/late_fusion/luad_cls_multimodal.yml",
+    "sha256": "e2b2dc66d55513cca040042635fba64bc30e4f82265bc1bd347d0a0cb4303a0c"
+  },
+  {
+    "path": "oracles/684e/model/config/late_fusion/luad_surv_multimodal.yml",
+    "sha256": "b96517fcb915426f929f75ed67da59e177cc82dbe8daabd71968f9bb6d234a0f"
+  },
+  {
+    "path": "oracles/684e/model/config/late_fusion/ucec_surv_multimodal.yml",
+    "sha256": "88cdd5030be059fb511d1e42352a1e84c25ed40df5d33447d60857cad8b5216e"
+  },
+  {
+    "path": "oracles/684e/model/config/multimodal_early_fusion.yml",
+    "sha256": "aa60163888c04c482942deca50e3ca0448ede2ab26762ab565f87638657d2484"
+  },
+  {
+    "path": "oracles/684e/model/config/surv_multimodal_3yr_cancermoe.yml",
+    "sha256": "1a9a781e07d27fc110c03b0ce9c4670bde41520f541362f3f0de88ff50013e39"
+  },
+  {
+    "path": "oracles/684e/model/config/surv_multimodal_cancermoe.yml",
+    "sha256": "79054b6e6fa5bef65fe39e3ab67a8d84d39b973ee1318393a34387a4bc5b87b2"
+  },
+  {
+    "path": "oracles/684e/model/config/surv_multimodal_cross_attn.yml",
+    "sha256": "f8d9bc298d7b3b29a549770a43c5a7e16e4e54c9e54ce0bd695041eae3494560"
+  },
+  {
+    "path": "oracles/684e/model/config/surv_multimodal_limoe.yml",
+    "sha256": "25a4f16ca48e97262e3e0867d71586e97641c19e84f73417ddf4d3fc2cd8d78a"
+  },
+  {
+    "path": "oracles/684e/model/config/surv_multimodal_maggat.yml",
+    "sha256": "a73dbbc233209c319adf0872e4971416530b2dc5874c39de466c8f3fbf292932"
+  },
+  {
+    "path": "oracles/684e/model/config/surv_multimodal_main_cross.yml",
+    "sha256": "a65a6f7b394ae2c6361139f00fece2c2238025a55e2543a7e092c27981a0b9ad"
+  },
+  {
+    "path": "oracles/684e/model/config/surv_multimodal_mainmoe.yml",
+    "sha256": "61f74b0627a7a3f186bb5e29c8c3c1a324775cb2dbf1844871c7c4b6812de84b"
+  },
+  {
+    "path": "oracles/684e/model/config/surv_multimodal_mainmoe_uni2.yml",
+    "sha256": "189d177064a097fa8be3bab2a1020a1558b8553a48ee129ab7f040a86320e8c2"
+  },
+  {
+    "path": "oracles/684e/model/config/surv_multimodal_mult.yml",
+    "sha256": "2b267ccb57d311c64ffd31b81853dec34565161cef98da668af9841cd396bae2"
+  },
+  {
+    "path": "oracles/684e/model/config/surv_multimodal_tensorfusion.yml",
+    "sha256": "95609286f3fe295d25ae1a3ba7e0cee71d93072c6102f100530cdd5e0853f72d"
+  },
+  {
+    "path": "oracles/684e/model/config/ucec_surv_multimodal.yml",
+    "sha256": "0e9c5efffa3cf2692ae0c16116d91beeed3f05f0534ee7edbfd69278d3c45b0d"
+  },
+  {
+    "path": "oracles/684e/model/fusion_model.py",
+    "sha256": "e5876999fd9a2a3ea24c78b1e1e13db52fe159152bd57c34f081d6e21575de7f"
+  },
+  {
+    "path": "oracles/684e/model/population_prototypes.py",
+    "sha256": "6b4201f3ec3ca07963b94d96b746831ac62c79ade47cc6db6fd58b61e8028616"
+  },
+  {
+    "path": "oracles/684e/population_runtime.py",
+    "sha256": "08940dcdc6f964b36139a18d355e4779cbb7e5062704d1024b9b82cb5c2f1f96"
+  },
+  {
+    "path": "oracles/684e/running_scripts/cancer_classification_moe.sh",
+    "sha256": "b0acff8bcc2c4bcb2456294d80c2fcdbce636629ed1219058977390af3dcf39e"
+  },
+  {
+    "path": "oracles/684e/running_scripts/mainmoe_stage_test.sh",
+    "sha256": "ca3914056289d794b5f54cfffdd8ad84d36bd7f5a6f25a4a1ec7262047196bff"
+  },
+  {
+    "path": "oracles/684e/running_scripts/survival_prediction.sh",
+    "sha256": "5184ae9e65fb76352ba20b3648ef18fab3aaf7a2929a5ed87fe05722aaa3a958"
+  },
+  {
+    "path": "oracles/684e/running_scripts/survival_prediction_3yr_cancermoe.sh",
+    "sha256": "39ee14ed7ed0ca1b14344ec06b5ceaf6def2015e5493f498a1428459c93ba187"
+  },
+  {
+    "path": "oracles/684e/running_scripts/survival_prediction_cancermoe.sh",
+    "sha256": "52ea3fa293570297653aae30de8a4ec2be472a4e1fa007a1dbb8c01d493afd45"
+  },
+  {
+    "path": "oracles/684e/running_scripts/survival_prediction_cross_attn.sh",
+    "sha256": "f0e6f5c6fd42a7b1b9d92c019c8daa95223258230c6e3c511f501e47b98c1e38"
+  },
+  {
+    "path": "oracles/684e/running_scripts/survival_prediction_early_fusion.sh",
+    "sha256": "2877c19b0ad400df505310a3eee880f6a06c817d15abb7d12427c3e817b9fee7"
+  },
+  {
+    "path": "oracles/684e/running_scripts/survival_prediction_late_fusion.sh",
+    "sha256": "cc561ab37124211417369d4269a5a3c2b2068d7c606b10837aab21ee8974e41b"
+  },
+  {
+    "path": "oracles/684e/running_scripts/survival_prediction_limoe.sh",
+    "sha256": "f77383f21def4236bfaf2b43f11d3a660a2f246fa6856007f88b251bcd01b5bf"
+  },
+  {
+    "path": "oracles/684e/running_scripts/survival_prediction_maggate.sh",
+    "sha256": "14e26039728898081301885958156747a19c3aa84e0b3d0de37a12ceda8b99de"
+  },
+  {
+    "path": "oracles/684e/running_scripts/survival_prediction_maincross.sh",
+    "sha256": "bf20c84e95574796dba9c95642d1b63394b91be23f61219e23ae75ae2272c74c"
+  },
+  {
+    "path": "oracles/684e/running_scripts/survival_prediction_mainmoe.sh",
+    "sha256": "2c5f02c63537015dde8818f3d0e28c756b791966891906f9c6de9bd1239ff635"
+  },
+  {
+    "path": "oracles/684e/running_scripts/survival_prediction_mainmoe_all.sh",
+    "sha256": "986be260bf00a37e1750afff7be471452b90d58b25f8449158c3e86a8ff876e4"
+  },
+  {
+    "path": "oracles/684e/running_scripts/survival_prediction_mainmoe_uni2.sh",
+    "sha256": "59e277f2d4493308131f1c4326165791e5aebfbe55c3b402cdc944468220771b"
+  },
+  {
+    "path": "oracles/684e/running_scripts/survival_prediction_multifusion.sh",
+    "sha256": "7322094b4b47e268231f7ccd220a8bfa627695a76c83a16f97c8499f7811e6ca"
+  },
+  {
+    "path": "oracles/684e/running_scripts/survival_prediction_rec_cancermoe.sh",
+    "sha256": "4ae67c234ff97884a3d1eab41e0a4f063d52401900e303bd5f7ae28e48101a35"
+  },
+  {
+    "path": "oracles/684e/running_scripts/survival_prediction_tensorfusion.sh",
+    "sha256": "f782f3ed872884bbfcee793e1651e3f2436f24827386a4fe6cbaa6f398da2137"
+  },
+  {
+    "path": "oracles/684e/scattermoe/__init__.py",
+    "sha256": "548004e21f0e20858613e177c3bbaa32ce7e84061dcb60440e243f4312f5efb7"
+  },
+  {
+    "path": "oracles/684e/scattermoe/examples/convert.py",
+    "sha256": "2231747add43f5082b08d21e483c1f7a0e4a9c11cf0328db705189cf37b09751"
+  },
+  {
+    "path": "oracles/684e/scattermoe/examples/mixtral/__init__.py",
+    "sha256": "8d7bddb2a4edf447941c0295f337a7f20b5d516f460f6b8ebebb30e01d334975"
+  },
+  {
+    "path": "oracles/684e/scattermoe/examples/mixtral/configuration_mixtral.py",
+    "sha256": "a98d2ebd7478b294dffed8d2e46641e4b453cbafa881e4188af0ceb890217a01"
+  },
+  {
+    "path": "oracles/684e/scattermoe/examples/mixtral/modeling_mixtral.py",
+    "sha256": "eee9a3f151caa729740aa4c6b5ec966e9477ce5faced4f6b51761ee4d975c657"
+  },
+  {
+    "path": "oracles/684e/scattermoe/kernels/__init__.py",
+    "sha256": "7b0459e5f480bc5371a38b6762e09d591957c4e23fefaaf4f9edd72d236acade"
+  },
+  {
+    "path": "oracles/684e/scattermoe/kernels/ops.py",
+    "sha256": "97ecdc278bc732ba9f14dfbb478c7549b36cc7dc9f92b319256d0743aa783e14"
+  },
+  {
+    "path": "oracles/684e/scattermoe/kernels/single.py",
+    "sha256": "33a1fd843333a714301d2afc70087c4f8aa3a35e7fcf831d7a60ec4620ecf8f7"
+  },
+  {
+    "path": "oracles/684e/scattermoe/mlp.py",
+    "sha256": "bf22f590bd9320300a40dddab26f536982dad9d33ce01617dfa699b8eb335627"
+  },
+  {
+    "path": "oracles/684e/scattermoe/parallel_experts.py",
+    "sha256": "5645fd26770b132d24ae2af2045c9ffa39eb87410cec3f4c0324a2af2957a11e"
+  },
+  {
+    "path": "oracles/684e/scattermoe/scattermoe/__init__.py",
+    "sha256": "548004e21f0e20858613e177c3bbaa32ce7e84061dcb60440e243f4312f5efb7"
+  },
+  {
+    "path": "oracles/684e/scattermoe/scattermoe/kernels/__init__.py",
+    "sha256": "7b0459e5f480bc5371a38b6762e09d591957c4e23fefaaf4f9edd72d236acade"
+  },
+  {
+    "path": "oracles/684e/scattermoe/scattermoe/kernels/ops.py",
+    "sha256": "97ecdc278bc732ba9f14dfbb478c7549b36cc7dc9f92b319256d0743aa783e14"
+  },
+  {
+    "path": "oracles/684e/scattermoe/scattermoe/kernels/single.py",
+    "sha256": "33a1fd843333a714301d2afc70087c4f8aa3a35e7fcf831d7a60ec4620ecf8f7"
+  },
+  {
+    "path": "oracles/684e/scattermoe/scattermoe/mlp.py",
+    "sha256": "bf22f590bd9320300a40dddab26f536982dad9d33ce01617dfa699b8eb335627"
+  },
+  {
+    "path": "oracles/684e/scattermoe/scattermoe/parallel_experts.py",
+    "sha256": "5645fd26770b132d24ae2af2045c9ffa39eb87410cec3f4c0324a2af2957a11e"
+  },
+  {
+    "path": "oracles/684e/scattermoe/setup.py",
+    "sha256": "7f43df99a87b93415b2bb10c34465182c96e7ca5a758bb9285e21255b7e1f9c2"
+  },
+  {
+    "path": "oracles/684e/scattermoe/tests/test_mlp.py",
+    "sha256": "d847b05e9ddfc60ae3d6073b07a7749568848ca3218ca6aa8e680aae7e32c9c9"
+  },
+  {
+    "path": "oracles/684e/scripts/eval_missing.py",
+    "sha256": "86f8dfdf21226f625888c21982e1afd9e10050fbb6a237ba353b950b8fbe2a22"
+  },
+  {
+    "path": "oracles/684e/scripts/gen_missing_manifest.py",
+    "sha256": "dcc404ce3843261af5a68b686fdb0578e858cac2ab5789325897e3bb60b27984"
+  },
+  {
+    "path": "oracles/684e/scripts/gpu_util_gate.py",
+    "sha256": "a9082e37eab204f525a00d94ca1d341a27ddd4473639ebf1d20c366ae840ad33"
+  },
+  {
+    "path": "oracles/684e/scripts/launch_formal.sh",
+    "sha256": "487c2d2f2edf7059593cc7c71c42a9b634769e5b4a31f30f3533ed54de9731df"
+  },
+  {
+    "path": "oracles/684e/scripts/train_launcher.py",
+    "sha256": "046ddcc690025faffe7800a65fe49861a90c1137abbc6cb3391e1c98b20eabb7"
+  },
+  {
+    "path": "oracles/684e/setup.py",
+    "sha256": "7f43df99a87b93415b2bb10c34465182c96e7ca5a758bb9285e21255b7e1f9c2"
+  },
+  {
+    "path": "oracles/684e/summary_results.py",
+    "sha256": "0d0b4e149c89896a541b9a832d145a145ef61fa24b4ae10c30da4184b556ea9b"
+  },
+  {
+    "path": "oracles/684e/summary_results_3yr.py",
+    "sha256": "83aea901ac52494cdd0fda7bacadbf80f3671e198a1219c20fc4fefc65523bc1"
+  },
+  {
+    "path": "oracles/684e/survival_prediction.py",
+    "sha256": "77f9ae348cbf58a21cd61581c37d96d2f6c9e7eb047424b6f6208b5be21badf1"
+  },
+  {
+    "path": "oracles/684e/survival_prediction_3yr.py",
+    "sha256": "b20a10e56f2f3e82e56f2becd126409df3c1756b8b01f33069883556975f4811"
+  },
+  {
+    "path": "oracles/684e/survival_prediction_3yr_all.py",
+    "sha256": "f54631c5b3a8f59b076300d97cbcb88b1b320a1f10ed2bb31000244f896d2756"
+  },
+  {
+    "path": "oracles/684e/survival_prediction_all.py",
+    "sha256": "01daa8389f1051cf3cd746eed488c00ea88b3ecd0cf3c0e96a00f21699f3c8b7"
+  },
+  {
+    "path": "oracles/684e/tcga.yaml",
+    "sha256": "32ae4fbfb0a801c8beaed1c3b52f25710a847375977469e7161e7ed677787cdb"
+  },
+  {
+    "path": "oracles/684e/tests/population_smoke.py",
+    "sha256": "6a247ab820ab8e351c914bb6bfcd400924a0834d5865a3e0786766c5a96a7377"
+  },
+  {
+    "path": "oracles/684e/tests/test_mean_fusion.py",
+    "sha256": "771ec5e9d48ad8d9953c73ab35ad4cd31ae613862ba9f4ac9f0dfa0a197a5150"
+  },
+  {
+    "path": "oracles/684e/tests/test_mlp.py",
+    "sha256": "d847b05e9ddfc60ae3d6073b07a7749568848ca3218ca6aa8e680aae7e32c9c9"
+  },
+  {
+    "path": "oracles/684e/tests/test_population_early_stopping.py",
+    "sha256": "ea45366929fafda43893fa837c0e05f048973337710d59f5860b0ee42bf6e922"
+  },
+  {
+    "path": "oracles/684e/tests/test_population_entrypoints.py",
+    "sha256": "8d4ba3346a86019b4201d353675f09b25d86d356c8f90f9468bae12f5e2e0016"
+  },
+  {
+    "path": "oracles/684e/tests/test_population_launcher.py",
+    "sha256": "63aeba57ac1043834feec82eeb831086a219923ad8e44f5e9089bcdf072c4946"
+  },
+  {
+    "path": "oracles/684e/tests/test_population_prototypes.py",
+    "sha256": "2f8d56e8415838929098aa278cb89538ac36a84f7edf739fcc029dca7966b46b"
+  },
+  {
+    "path": "oracles/684e/tests/test_population_runtime.py",
+    "sha256": "641a933b2a8ca37373dd90a578f121bfbf9cd23430b7d190c98bc4e059ae43f7"
+  },
+  {
+    "path": "oracles/774f/center_spilit.py",
+    "sha256": "4953ffb838b7bc49ba4fb2b223bda8f970ac7c0ccf9de389683f8ffe2d6f71bb"
+  },
+  {
+    "path": "oracles/774f/config/cross_attn/luad_cls_multimodal.yml",
+    "sha256": "a4967a7042003d807c76690dc41d83745c9714a79ad5355ad3005d779d1dbf7f"
+  },
+  {
+    "path": "oracles/774f/config/cross_attn/luad_surv_multimodal.yml",
+    "sha256": "a38a082bf9d7fe8876b71aad63560dc782ff5f8e457c9829a137b49273b0690a"
+  },
+  {
+    "path": "oracles/774f/config/early_fusion/brca_cls_multimodal_early_fusion.yml",
+    "sha256": "5e2bd423e9984f5d2eb13852ddfdbdeb67030ddaf8669d4646e9783a7814b7b4"
+  },
+  {
+    "path": "oracles/774f/config/early_fusion/brca_surv_multimodal_early_fusion.yml",
+    "sha256": "ea7ad834232aff9454bf729e67484f430ad9025b25c2ed226c373aba8613a70e"
+  },
+  {
+    "path": "oracles/774f/config/early_fusion/lgg_cls_multimodal_early_fusion.yml",
+    "sha256": "da7e49052fd108bd17206285e1b65edaa2db4cb62c5dd1279a8805441a5851b5"
+  },
+  {
+    "path": "oracles/774f/config/early_fusion/lgg_surv_multimodal_early_fusion.yml",
+    "sha256": "f6976224681dc220dff78af7ca22ae82f699c42041c1849cb355a695ec4527b6"
+  },
+  {
+    "path": "oracles/774f/config/early_fusion/luad_cls_multimodal_early_fusion.yml",
+    "sha256": "82876060ab6dd65330ca66b58a1e783f67b60ea948d61a0ca12d81a508871387"
+  },
+  {
+    "path": "oracles/774f/config/early_fusion/luad_surv_multimodal_early_fusion.yml",
+    "sha256": "d2f81c34b22b6b58f69f5496bddc21bf34f621ec0cabbc7a37a6f358928049f7"
+  },
+  {
+    "path": "oracles/774f/config/early_fusion/ucec_cls_multimodal_early_fusion.yml",
+    "sha256": "a1c61467dfc495bc92dfae8bf02b650a3d9b3b6f26434300c284214e2e376a90"
+  },
+  {
+    "path": "oracles/774f/config/early_fusion/ucec_surv_multimodal.yml",
+    "sha256": "1c669db4e32df59fc64118653962e1d35a83085481c942e0ac545323e1ece5cd"
+  },
+  {
+    "path": "oracles/774f/config/gpu_train.yaml",
+    "sha256": "414adba7385a96ff56d38169455423870824c5a0e87577d1bf673acacbd07bb5"
+  },
+  {
+    "path": "oracles/774f/config/late_fusion/luad_cls_multimodal.yml",
+    "sha256": "e2b2dc66d55513cca040042635fba64bc30e4f82265bc1bd347d0a0cb4303a0c"
+  },
+  {
+    "path": "oracles/774f/config/late_fusion/luad_surv_multimodal.yml",
+    "sha256": "b96517fcb915426f929f75ed67da59e177cc82dbe8daabd71968f9bb6d234a0f"
+  },
+  {
+    "path": "oracles/774f/config/late_fusion/ucec_surv_multimodal.yml",
+    "sha256": "e4adb08321e0cb10cbeac16db856856ce61c09f529294ab0d75f7b695073e833"
+  },
+  {
+    "path": "oracles/774f/config/multimodal_early_fusion.yml",
+    "sha256": "94c6a63c3db283419c6300255166db89a75c32f170a6ea3422946d90c0592a29"
+  },
+  {
+    "path": "oracles/774f/config/surv_multimodal_cancermoe.yml",
+    "sha256": "34e48e2498857cb8c3af229e5597270f2dc2049800cd4227b6c9cee8045e4450"
+  },
+  {
+    "path": "oracles/774f/config/surv_multimodal_cross_attn.yml",
+    "sha256": "ab54d2e0f7818f68f5d9acb5fccb6becd2f7ad3d74b201eb591ca4c77b545694"
+  },
+  {
+    "path": "oracles/774f/config/surv_multimodal_limoe.yml",
+    "sha256": "0a8f3055933e9f0ede852f4008b8f87c568eeefa73cb68ec800ad19aca6006cc"
+  },
+  {
+    "path": "oracles/774f/config/surv_multimodal_maggat.yml",
+    "sha256": "c99f878c37e804da7295278de6d2094b414908752908ac62ca62b2a86f9a07bf"
+  },
+  {
+    "path": "oracles/774f/config/surv_multimodal_mult.yml",
+    "sha256": "871b78499a9d6b0bc835ec8984e704bec7e9a5e0c1465e4ad6eb5243d153b390"
+  },
+  {
+    "path": "oracles/774f/config/surv_multimodal_tensorfusion.yml",
+    "sha256": "498027229b9dc907083083e4187406a5a1e786ead354a1ca88ebb49069373438"
+  },
+  {
+    "path": "oracles/774f/config/ucec_surv_multimodal.yml",
+    "sha256": "1c669db4e32df59fc64118653962e1d35a83085481c942e0ac545323e1ece5cd"
+  },
+  {
+    "path": "oracles/774f/examples/convert.py",
+    "sha256": "2231747add43f5082b08d21e483c1f7a0e4a9c11cf0328db705189cf37b09751"
+  },
+  {
+    "path": "oracles/774f/examples/mixtral/__init__.py",
+    "sha256": "8d7bddb2a4edf447941c0295f337a7f20b5d516f460f6b8ebebb30e01d334975"
+  },
+  {
+    "path": "oracles/774f/examples/mixtral/configuration_mixtral.py",
+    "sha256": "a98d2ebd7478b294dffed8d2e46641e4b453cbafa881e4188af0ceb890217a01"
+  },
+  {
+    "path": "oracles/774f/examples/mixtral/modeling_mixtral.py",
+    "sha256": "eee9a3f151caa729740aa4c6b5ec966e9477ce5faced4f6b51761ee4d975c657"
+  },
+  {
+    "path": "oracles/774f/loc_utils/common_tools.py",
+    "sha256": "b2a32c822b62398f5f043fea0b2a836ebd118873136e4419ded9c3da5e61de3f"
+  },
+  {
+    "path": "oracles/774f/loc_utils/loss_func.py",
+    "sha256": "9928df69ed771c54c716058b93bac51984959c01004334f192dd960e280fec22"
+  },
+  {
+    "path": "oracles/774f/loc_utils/model_util.py",
+    "sha256": "91d1304ec177e3c20d577e2622aafd7f7c12e74331c0033f2ff4916ae8d01605"
+  },
+  {
+    "path": "oracles/774f/loc_utils/tcga_dataset.py",
+    "sha256": "e4e7a9009049959a9fb13012813df4df5ee1f7ddba59717e5d6e564f6ffc2428"
+  },
+  {
+    "path": "oracles/774f/loc_utils_3yr/common_tools.py",
+    "sha256": "805328efe3ab78b8326393129e63c639dd98273454706cbae3c0557c82d381bd"
+  },
+  {
+    "path": "oracles/774f/loc_utils_3yr/loss_func.py",
+    "sha256": "44e227eea9ad9f39f29437c24666e876565941556b1559a21bf732d64c1e0194"
+  },
+  {
+    "path": "oracles/774f/loc_utils_3yr/model_util.py",
+    "sha256": "732d6638c3b0c421695dc4279e490d6fa70ec721c4db8ed5ddea312a089844a9"
+  },
+  {
+    "path": "oracles/774f/loc_utils_3yr/tcga_dataset.py",
+    "sha256": "6cc5fe211675241317f638e48ec232293a0291db58832c45b02361a265f91622"
+  },
+  {
+    "path": "oracles/774f/main_survival.py",
+    "sha256": "52af76879125042d56f2184da77f8c673d2d4f12d305f60c6565ab63120a7c42"
+  },
+  {
+    "path": "oracles/774f/model/compensator.py",
+    "sha256": "3fc09ccfc12442971897ac0e47b524cac8963400bfd505064a4ac12bef13ba2c"
+  },
+  {
+    "path": "oracles/774f/model/config/cancer_classification_moe.yml",
+    "sha256": "1d0aa105e2535b0065235712a607fa859493789bb15a8c88879d729ce2c58c94"
+  },
+  {
+    "path": "oracles/774f/model/config/cross_attn/luad_cls_multimodal.yml",
+    "sha256": "a4967a7042003d807c76690dc41d83745c9714a79ad5355ad3005d779d1dbf7f"
+  },
+  {
+    "path": "oracles/774f/model/config/cross_attn/luad_surv_multimodal.yml",
+    "sha256": "a38a082bf9d7fe8876b71aad63560dc782ff5f8e457c9829a137b49273b0690a"
+  },
+  {
+    "path": "oracles/774f/model/config/early_fusion/brca_cls_multimodal_early_fusion.yml",
+    "sha256": "5e2bd423e9984f5d2eb13852ddfdbdeb67030ddaf8669d4646e9783a7814b7b4"
+  },
+  {
+    "path": "oracles/774f/model/config/early_fusion/brca_surv_multimodal_early_fusion.yml",
+    "sha256": "ea7ad834232aff9454bf729e67484f430ad9025b25c2ed226c373aba8613a70e"
+  },
+  {
+    "path": "oracles/774f/model/config/early_fusion/lgg_cls_multimodal_early_fusion.yml",
+    "sha256": "da7e49052fd108bd17206285e1b65edaa2db4cb62c5dd1279a8805441a5851b5"
+  },
+  {
+    "path": "oracles/774f/model/config/early_fusion/lgg_surv_multimodal_early_fusion.yml",
+    "sha256": "f6976224681dc220dff78af7ca22ae82f699c42041c1849cb355a695ec4527b6"
+  },
+  {
+    "path": "oracles/774f/model/config/early_fusion/luad_cls_multimodal_early_fusion.yml",
+    "sha256": "82876060ab6dd65330ca66b58a1e783f67b60ea948d61a0ca12d81a508871387"
+  },
+  {
+    "path": "oracles/774f/model/config/early_fusion/luad_surv_multimodal_early_fusion.yml",
+    "sha256": "d2f81c34b22b6b58f69f5496bddc21bf34f621ec0cabbc7a37a6f358928049f7"
+  },
+  {
+    "path": "oracles/774f/model/config/early_fusion/ucec_cls_multimodal_early_fusion.yml",
+    "sha256": "a1c61467dfc495bc92dfae8bf02b650a3d9b3b6f26434300c284214e2e376a90"
+  },
+  {
+    "path": "oracles/774f/model/config/early_fusion/ucec_surv_multimodal.yml",
+    "sha256": "1c669db4e32df59fc64118653962e1d35a83085481c942e0ac545323e1ece5cd"
+  },
+  {
+    "path": "oracles/774f/model/config/late_fusion/luad_cls_multimodal.yml",
+    "sha256": "e2b2dc66d55513cca040042635fba64bc30e4f82265bc1bd347d0a0cb4303a0c"
+  },
+  {
+    "path": "oracles/774f/model/config/late_fusion/luad_surv_multimodal.yml",
+    "sha256": "b96517fcb915426f929f75ed67da59e177cc82dbe8daabd71968f9bb6d234a0f"
+  },
+  {
+    "path": "oracles/774f/model/config/late_fusion/ucec_surv_multimodal.yml",
+    "sha256": "88cdd5030be059fb511d1e42352a1e84c25ed40df5d33447d60857cad8b5216e"
+  },
+  {
+    "path": "oracles/774f/model/config/multimodal_early_fusion.yml",
+    "sha256": "aa60163888c04c482942deca50e3ca0448ede2ab26762ab565f87638657d2484"
+  },
+  {
+    "path": "oracles/774f/model/config/surv_multimodal_3yr_cancermoe.yml",
+    "sha256": "1a9a781e07d27fc110c03b0ce9c4670bde41520f541362f3f0de88ff50013e39"
+  },
+  {
+    "path": "oracles/774f/model/config/surv_multimodal_cancermoe.yml",
+    "sha256": "79054b6e6fa5bef65fe39e3ab67a8d84d39b973ee1318393a34387a4bc5b87b2"
+  },
+  {
+    "path": "oracles/774f/model/config/surv_multimodal_cross_attn.yml",
+    "sha256": "f8d9bc298d7b3b29a549770a43c5a7e16e4e54c9e54ce0bd695041eae3494560"
+  },
+  {
+    "path": "oracles/774f/model/config/surv_multimodal_limoe.yml",
+    "sha256": "25a4f16ca48e97262e3e0867d71586e97641c19e84f73417ddf4d3fc2cd8d78a"
+  },
+  {
+    "path": "oracles/774f/model/config/surv_multimodal_maggat.yml",
+    "sha256": "a73dbbc233209c319adf0872e4971416530b2dc5874c39de466c8f3fbf292932"
+  },
+  {
+    "path": "oracles/774f/model/config/surv_multimodal_main_cross.yml",
+    "sha256": "a65a6f7b394ae2c6361139f00fece2c2238025a55e2543a7e092c27981a0b9ad"
+  },
+  {
+    "path": "oracles/774f/model/config/surv_multimodal_mainmoe.yml",
+    "sha256": "61f74b0627a7a3f186bb5e29c8c3c1a324775cb2dbf1844871c7c4b6812de84b"
+  },
+  {
+    "path": "oracles/774f/model/config/surv_multimodal_mainmoe_uni2.yml",
+    "sha256": "189d177064a097fa8be3bab2a1020a1558b8553a48ee129ab7f040a86320e8c2"
+  },
+  {
+    "path": "oracles/774f/model/config/surv_multimodal_mult.yml",
+    "sha256": "2b267ccb57d311c64ffd31b81853dec34565161cef98da668af9841cd396bae2"
+  },
+  {
+    "path": "oracles/774f/model/config/surv_multimodal_tensorfusion.yml",
+    "sha256": "95609286f3fe295d25ae1a3ba7e0cee71d93072c6102f100530cdd5e0853f72d"
+  },
+  {
+    "path": "oracles/774f/model/config/ucec_surv_multimodal.yml",
+    "sha256": "0e9c5efffa3cf2692ae0c16116d91beeed3f05f0534ee7edbfd69278d3c45b0d"
+  },
+  {
+    "path": "oracles/774f/model/fusion_model.py",
+    "sha256": "03c4060232d2d18ca277205e5a3dc47a8e3617e930128c839b11402953a7a096"
+  },
+  {
+    "path": "oracles/774f/model/patient_retrieval_bank.py",
+    "sha256": "1a87fd04dc4ec87591421b76424aba60b0bb523a6849eae2dcc5a6b921663bb0"
+  },
+  {
+    "path": "oracles/774f/running_scripts/cancer_classification_moe.sh",
+    "sha256": "b0acff8bcc2c4bcb2456294d80c2fcdbce636629ed1219058977390af3dcf39e"
+  },
+  {
+    "path": "oracles/774f/running_scripts/mainmoe_stage_test.sh",
+    "sha256": "ca3914056289d794b5f54cfffdd8ad84d36bd7f5a6f25a4a1ec7262047196bff"
+  },
+  {
+    "path": "oracles/774f/running_scripts/survival_prediction.sh",
+    "sha256": "5184ae9e65fb76352ba20b3648ef18fab3aaf7a2929a5ed87fe05722aaa3a958"
+  },
+  {
+    "path": "oracles/774f/running_scripts/survival_prediction_3yr_cancermoe.sh",
+    "sha256": "39ee14ed7ed0ca1b14344ec06b5ceaf6def2015e5493f498a1428459c93ba187"
+  },
+  {
+    "path": "oracles/774f/running_scripts/survival_prediction_cancermoe.sh",
+    "sha256": "52ea3fa293570297653aae30de8a4ec2be472a4e1fa007a1dbb8c01d493afd45"
+  },
+  {
+    "path": "oracles/774f/running_scripts/survival_prediction_cross_attn.sh",
+    "sha256": "f0e6f5c6fd42a7b1b9d92c019c8daa95223258230c6e3c511f501e47b98c1e38"
+  },
+  {
+    "path": "oracles/774f/running_scripts/survival_prediction_early_fusion.sh",
+    "sha256": "2877c19b0ad400df505310a3eee880f6a06c817d15abb7d12427c3e817b9fee7"
+  },
+  {
+    "path": "oracles/774f/running_scripts/survival_prediction_late_fusion.sh",
+    "sha256": "cc561ab37124211417369d4269a5a3c2b2068d7c606b10837aab21ee8974e41b"
+  },
+  {
+    "path": "oracles/774f/running_scripts/survival_prediction_limoe.sh",
+    "sha256": "f77383f21def4236bfaf2b43f11d3a660a2f246fa6856007f88b251bcd01b5bf"
+  },
+  {
+    "path": "oracles/774f/running_scripts/survival_prediction_maggate.sh",
+    "sha256": "14e26039728898081301885958156747a19c3aa84e0b3d0de37a12ceda8b99de"
+  },
+  {
+    "path": "oracles/774f/running_scripts/survival_prediction_maincross.sh",
+    "sha256": "bf20c84e95574796dba9c95642d1b63394b91be23f61219e23ae75ae2272c74c"
+  },
+  {
+    "path": "oracles/774f/running_scripts/survival_prediction_mainmoe.sh",
+    "sha256": "2c5f02c63537015dde8818f3d0e28c756b791966891906f9c6de9bd1239ff635"
+  },
+  {
+    "path": "oracles/774f/running_scripts/survival_prediction_mainmoe_all.sh",
+    "sha256": "986be260bf00a37e1750afff7be471452b90d58b25f8449158c3e86a8ff876e4"
+  },
+  {
+    "path": "oracles/774f/running_scripts/survival_prediction_mainmoe_uni2.sh",
+    "sha256": "59e277f2d4493308131f1c4326165791e5aebfbe55c3b402cdc944468220771b"
+  },
+  {
+    "path": "oracles/774f/running_scripts/survival_prediction_multifusion.sh",
+    "sha256": "7322094b4b47e268231f7ccd220a8bfa627695a76c83a16f97c8499f7811e6ca"
+  },
+  {
+    "path": "oracles/774f/running_scripts/survival_prediction_rec_cancermoe.sh",
+    "sha256": "4ae67c234ff97884a3d1eab41e0a4f063d52401900e303bd5f7ae28e48101a35"
+  },
+  {
+    "path": "oracles/774f/running_scripts/survival_prediction_tensorfusion.sh",
+    "sha256": "f782f3ed872884bbfcee793e1651e3f2436f24827386a4fe6cbaa6f398da2137"
+  },
+  {
+    "path": "oracles/774f/scattermoe/__init__.py",
+    "sha256": "548004e21f0e20858613e177c3bbaa32ce7e84061dcb60440e243f4312f5efb7"
+  },
+  {
+    "path": "oracles/774f/scattermoe/examples/convert.py",
+    "sha256": "2231747add43f5082b08d21e483c1f7a0e4a9c11cf0328db705189cf37b09751"
+  },
+  {
+    "path": "oracles/774f/scattermoe/examples/mixtral/__init__.py",
+    "sha256": "8d7bddb2a4edf447941c0295f337a7f20b5d516f460f6b8ebebb30e01d334975"
+  },
+  {
+    "path": "oracles/774f/scattermoe/examples/mixtral/configuration_mixtral.py",
+    "sha256": "a98d2ebd7478b294dffed8d2e46641e4b453cbafa881e4188af0ceb890217a01"
+  },
+  {
+    "path": "oracles/774f/scattermoe/examples/mixtral/modeling_mixtral.py",
+    "sha256": "eee9a3f151caa729740aa4c6b5ec966e9477ce5faced4f6b51761ee4d975c657"
+  },
+  {
+    "path": "oracles/774f/scattermoe/kernels/__init__.py",
+    "sha256": "7b0459e5f480bc5371a38b6762e09d591957c4e23fefaaf4f9edd72d236acade"
+  },
+  {
+    "path": "oracles/774f/scattermoe/kernels/ops.py",
+    "sha256": "97ecdc278bc732ba9f14dfbb478c7549b36cc7dc9f92b319256d0743aa783e14"
+  },
+  {
+    "path": "oracles/774f/scattermoe/kernels/single.py",
+    "sha256": "33a1fd843333a714301d2afc70087c4f8aa3a35e7fcf831d7a60ec4620ecf8f7"
+  },
+  {
+    "path": "oracles/774f/scattermoe/mlp.py",
+    "sha256": "bf22f590bd9320300a40dddab26f536982dad9d33ce01617dfa699b8eb335627"
+  },
+  {
+    "path": "oracles/774f/scattermoe/parallel_experts.py",
+    "sha256": "5645fd26770b132d24ae2af2045c9ffa39eb87410cec3f4c0324a2af2957a11e"
+  },
+  {
+    "path": "oracles/774f/scattermoe/scattermoe/__init__.py",
+    "sha256": "548004e21f0e20858613e177c3bbaa32ce7e84061dcb60440e243f4312f5efb7"
+  },
+  {
+    "path": "oracles/774f/scattermoe/scattermoe/kernels/__init__.py",
+    "sha256": "7b0459e5f480bc5371a38b6762e09d591957c4e23fefaaf4f9edd72d236acade"
+  },
+  {
+    "path": "oracles/774f/scattermoe/scattermoe/kernels/ops.py",
+    "sha256": "97ecdc278bc732ba9f14dfbb478c7549b36cc7dc9f92b319256d0743aa783e14"
+  },
+  {
+    "path": "oracles/774f/scattermoe/scattermoe/kernels/single.py",
+    "sha256": "33a1fd843333a714301d2afc70087c4f8aa3a35e7fcf831d7a60ec4620ecf8f7"
+  },
+  {
+    "path": "oracles/774f/scattermoe/scattermoe/mlp.py",
+    "sha256": "bf22f590bd9320300a40dddab26f536982dad9d33ce01617dfa699b8eb335627"
+  },
+  {
+    "path": "oracles/774f/scattermoe/scattermoe/parallel_experts.py",
+    "sha256": "5645fd26770b132d24ae2af2045c9ffa39eb87410cec3f4c0324a2af2957a11e"
+  },
+  {
+    "path": "oracles/774f/scattermoe/setup.py",
+    "sha256": "7f43df99a87b93415b2bb10c34465182c96e7ca5a758bb9285e21255b7e1f9c2"
+  },
+  {
+    "path": "oracles/774f/scattermoe/tests/test_mlp.py",
+    "sha256": "d847b05e9ddfc60ae3d6073b07a7749568848ca3218ca6aa8e680aae7e32c9c9"
+  },
+  {
+    "path": "oracles/774f/scripts/eval_missing.py",
+    "sha256": "e42d52c3a87e34ba77d293c61131046cff6bdeadf703c74dde3d2cf59f98ef93"
+  },
+  {
+    "path": "oracles/774f/scripts/eval_patient_retrieval.py",
+    "sha256": "76cf8f3e58703c4615910e8cc3457a6539e9feefc27dc937239ae89a57a334de"
+  },
+  {
+    "path": "oracles/774f/scripts/gen_missing_manifest.py",
+    "sha256": "dcc404ce3843261af5a68b686fdb0578e858cac2ab5789325897e3bb60b27984"
+  },
+  {
+    "path": "oracles/774f/scripts/gpu_util_gate.py",
+    "sha256": "a9082e37eab204f525a00d94ca1d341a27ddd4473639ebf1d20c366ae840ad33"
+  },
+  {
+    "path": "oracles/774f/scripts/launch_formal.sh",
+    "sha256": "487c2d2f2edf7059593cc7c71c42a9b634769e5b4a31f30f3533ed54de9731df"
+  },
+  {
+    "path": "oracles/774f/scripts/summarize_patient_retrieval.py",
+    "sha256": "598ed20473f236e3538503a41ceb8d68c1afa10bfa4723ec66471bef10f1a601"
+  },
+  {
+    "path": "oracles/774f/scripts/train_launcher.py",
+    "sha256": "4ff2542993f6b4190d0490a1cf41c70fd865b218a7b2b843b3d302e12940e8cf"
+  },
+  {
+    "path": "oracles/774f/setup.py",
+    "sha256": "7f43df99a87b93415b2bb10c34465182c96e7ca5a758bb9285e21255b7e1f9c2"
+  },
+  {
+    "path": "oracles/774f/summary_results.py",
+    "sha256": "0d0b4e149c89896a541b9a832d145a145ef61fa24b4ae10c30da4184b556ea9b"
+  },
+  {
+    "path": "oracles/774f/summary_results_3yr.py",
+    "sha256": "83aea901ac52494cdd0fda7bacadbf80f3671e198a1219c20fc4fefc65523bc1"
+  },
+  {
+    "path": "oracles/774f/survival_prediction.py",
+    "sha256": "77f9ae348cbf58a21cd61581c37d96d2f6c9e7eb047424b6f6208b5be21badf1"
+  },
+  {
+    "path": "oracles/774f/survival_prediction_3yr.py",
+    "sha256": "b20a10e56f2f3e82e56f2becd126409df3c1756b8b01f33069883556975f4811"
+  },
+  {
+    "path": "oracles/774f/survival_prediction_3yr_all.py",
+    "sha256": "f54631c5b3a8f59b076300d97cbcb88b1b320a1f10ed2bb31000244f896d2756"
+  },
+  {
+    "path": "oracles/774f/survival_prediction_all.py",
+    "sha256": "01daa8389f1051cf3cd746eed488c00ea88b3ecd0cf3c0e96a00f21699f3c8b7"
+  },
+  {
+    "path": "oracles/774f/tcga.yaml",
+    "sha256": "32ae4fbfb0a801c8beaed1c3b52f25710a847375977469e7161e7ed677787cdb"
+  },
+  {
+    "path": "oracles/774f/tests/test_mean_fusion.py",
+    "sha256": "771ec5e9d48ad8d9953c73ab35ad4cd31ae613862ba9f4ac9f0dfa0a197a5150"
+  },
+  {
+    "path": "oracles/774f/tests/test_mlp.py",
+    "sha256": "d847b05e9ddfc60ae3d6073b07a7749568848ca3218ca6aa8e680aae7e32c9c9"
+  },
+  {
+    "path": "oracles/774f/tests/test_patient_retrieval_bank.py",
+    "sha256": "196bd95856f97587bade4288b8df2cae1406041f97adc2fe56eebb48723579cb"
+  },
+  {
+    "path": "oracles/774f/tests/test_patient_retrieval_eval.py",
+    "sha256": "e43bd3c95a289eb2783546226d4306d1a3a674d43f2955243f6fa250f09d6436"
+  },
+  {
+    "path": "oracles/774f/tests/test_patient_retrieval_padding.py",
+    "sha256": "5d10593f74be915e9a715de7eb716da5b1e8284371c59aa4e198f64d4d09e121"
+  },
+  {
+    "path": "oracles/774f/tests/test_patient_retrieval_summary.py",
+    "sha256": "de2f23e9208632c57ae856de4517538b792ba71b82bdd109c574f863f582f619"
+  }
+]

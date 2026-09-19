@@ -1,0 +1,2435 @@
+ss........s.................s..s.s....FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF [ 86%]
+FFFFFFFFFFF                                                              [100%]
+=================================== FAILURES ===================================
+_____________ TestClass.test_mlp_correctness[1-128-256-8-2-dtype0] _____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9d89fd0>, length = 1
+x_dim = 128, h_dim = 256, E = 8, k = 2, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+_____________ TestClass.test_mlp_correctness[1-128-170-8-3-dtype1] _____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c94710>, length = 1
+x_dim = 128, h_dim = 170, E = 8, k = 3, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+_____________ TestClass.test_mlp_correctness[1-128-128-8-4-dtype2] _____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c946e0>, length = 1
+x_dim = 128, h_dim = 128, E = 8, k = 4, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+_____________ TestClass.test_mlp_correctness[1-256-512-8-2-dtype3] _____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c94920>, length = 1
+x_dim = 256, h_dim = 512, E = 8, k = 2, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+_____________ TestClass.test_mlp_correctness[1-256-341-8-3-dtype4] _____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c942c0>, length = 1
+x_dim = 256, h_dim = 341, E = 8, k = 3, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+_____________ TestClass.test_mlp_correctness[1-256-256-8-4-dtype5] _____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c94110>, length = 1
+x_dim = 256, h_dim = 256, E = 8, k = 4, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+____________ TestClass.test_mlp_correctness[1-512-1024-8-2-dtype6] _____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c944d0>, length = 1
+x_dim = 512, h_dim = 1024, E = 8, k = 2, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+_____________ TestClass.test_mlp_correctness[1-512-682-8-3-dtype7] _____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c95940>, length = 1
+x_dim = 512, h_dim = 682, E = 8, k = 3, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+_____________ TestClass.test_mlp_correctness[1-512-512-8-4-dtype8] _____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c96ba0>, length = 1
+x_dim = 512, h_dim = 512, E = 8, k = 4, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+____________ TestClass.test_mlp_correctness[1-600-1200-8-2-dtype9] _____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c96c60>, length = 1
+x_dim = 600, h_dim = 1200, E = 8, k = 2, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+____________ TestClass.test_mlp_correctness[1-600-800-8-3-dtype10] _____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c970b0>, length = 1
+x_dim = 600, h_dim = 800, E = 8, k = 3, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+____________ TestClass.test_mlp_correctness[1-600-600-8-4-dtype11] _____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c972f0>, length = 1
+x_dim = 600, h_dim = 600, E = 8, k = 4, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+____________ TestClass.test_mlp_correctness[1-100-200-8-2-dtype12] _____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c97440>, length = 1
+x_dim = 100, h_dim = 200, E = 8, k = 2, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+____________ TestClass.test_mlp_correctness[1-100-133-8-3-dtype13] _____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c97500>, length = 1
+x_dim = 100, h_dim = 133, E = 8, k = 3, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+____________ TestClass.test_mlp_correctness[1-100-100-8-4-dtype14] _____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c975c0>, length = 1
+x_dim = 100, h_dim = 100, E = 8, k = 4, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[256-128-256-8-2-dtype15] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c97680>, length = 256
+x_dim = 128, h_dim = 256, E = 8, k = 2, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[256-128-170-8-3-dtype16] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c97740>, length = 256
+x_dim = 128, h_dim = 170, E = 8, k = 3, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[256-128-128-8-4-dtype17] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c97830>, length = 256
+x_dim = 128, h_dim = 128, E = 8, k = 4, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[256-256-512-8-2-dtype18] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c978f0>, length = 256
+x_dim = 256, h_dim = 512, E = 8, k = 2, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[256-256-341-8-3-dtype19] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c979b0>, length = 256
+x_dim = 256, h_dim = 341, E = 8, k = 3, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[256-256-256-8-4-dtype20] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c97a70>, length = 256
+x_dim = 256, h_dim = 256, E = 8, k = 4, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[256-512-1024-8-2-dtype21] ___________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c97b30>, length = 256
+x_dim = 512, h_dim = 1024, E = 8, k = 2, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[256-512-682-8-3-dtype22] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c97bf0>, length = 256
+x_dim = 512, h_dim = 682, E = 8, k = 3, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[256-512-512-8-4-dtype23] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c97d10>, length = 256
+x_dim = 512, h_dim = 512, E = 8, k = 4, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[256-600-1200-8-2-dtype24] ___________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c97e00>, length = 256
+x_dim = 600, h_dim = 1200, E = 8, k = 2, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[256-600-800-8-3-dtype25] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c97ef0>, length = 256
+x_dim = 600, h_dim = 800, E = 8, k = 3, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[256-600-600-8-4-dtype26] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9c97fe0>, length = 256
+x_dim = 600, h_dim = 600, E = 8, k = 4, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[256-100-200-8-2-dtype27] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9cb40e0>, length = 256
+x_dim = 100, h_dim = 200, E = 8, k = 2, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[256-100-133-8-3-dtype28] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9cb43e0>, length = 256
+x_dim = 100, h_dim = 133, E = 8, k = 3, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[256-100-100-8-4-dtype29] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9cb4080>, length = 256
+x_dim = 100, h_dim = 100, E = 8, k = 4, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[512-128-256-8-2-dtype30] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9cb41a0>, length = 512
+x_dim = 128, h_dim = 256, E = 8, k = 2, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[512-128-170-8-3-dtype31] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9cb4290>, length = 512
+x_dim = 128, h_dim = 170, E = 8, k = 3, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[512-128-128-8-4-dtype32] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9cb43b0>, length = 512
+x_dim = 128, h_dim = 128, E = 8, k = 4, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[512-256-512-8-2-dtype33] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9cb44d0>, length = 512
+x_dim = 256, h_dim = 512, E = 8, k = 2, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[512-256-341-8-3-dtype34] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9cb45f0>, length = 512
+x_dim = 256, h_dim = 341, E = 8, k = 3, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[512-256-256-8-4-dtype35] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9cb46e0>, length = 512
+x_dim = 256, h_dim = 256, E = 8, k = 4, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[512-512-1024-8-2-dtype36] ___________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9cb47a0>, length = 512
+x_dim = 512, h_dim = 1024, E = 8, k = 2, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[512-512-682-8-3-dtype37] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9cb4890>, length = 512
+x_dim = 512, h_dim = 682, E = 8, k = 3, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[512-512-512-8-4-dtype38] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9cb4980>, length = 512
+x_dim = 512, h_dim = 512, E = 8, k = 4, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[512-600-1200-8-2-dtype39] ___________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9cb4a40>, length = 512
+x_dim = 600, h_dim = 1200, E = 8, k = 2, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[512-600-800-8-3-dtype40] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9cb4b00>, length = 512
+x_dim = 600, h_dim = 800, E = 8, k = 3, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[512-600-600-8-4-dtype41] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9cb4bc0>, length = 512
+x_dim = 600, h_dim = 600, E = 8, k = 4, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[512-100-200-8-2-dtype42] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9cb4c80>, length = 512
+x_dim = 100, h_dim = 200, E = 8, k = 2, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[512-100-133-8-3-dtype43] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9cb4d40>, length = 512
+x_dim = 100, h_dim = 133, E = 8, k = 3, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+___________ TestClass.test_mlp_correctness[512-100-100-8-4-dtype44] ____________
+
+self = <tests.test_mlp.TestClass object at 0x14b7b9cb4e30>, length = 512
+x_dim = 100, h_dim = 100, E = 8, k = 4, dtype = torch.float32
+
+    @pytest.mark.parametrize('length, x_dim, h_dim, E, k, dtype', [
+        (L, xd, (4 * xd) // k, 8, k, dt)
+        for L in [1, 256, 512]
+        for dt in [torch.float32]
+        for xd in [128, 256, 512, 600, 100]
+        for k in [2, 3, 4]
+    ])
+    def test_mlp_correctness(self, length, x_dim, h_dim, E, k, dtype):
+        logits = torch.randn(length, E, dtype=dtype)
+>       weights = torch.softmax(logits.float(), axis=-1).cuda().to(dtype)
+
+tests/test_mlp.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _lazy_init():
+        global _initialized, _queued_calls
+        if is_initialized() or hasattr(_tls, "is_initializing"):
+            return
+        with _initialization_lock:
+            # We be double-checked locking, boys!  This is OK because
+            # the above test was GIL protected anyway.  The inner test
+            # is for when a thread blocked on some other thread which was
+            # doing the initialization; when they get the lock, they will
+            # find there is nothing left to do.
+            if is_initialized():
+                return
+            # It is important to prevent other threads from entering _lazy_init
+            # immediately, while we are still guaranteed to have the GIL, because some
+            # of the C calls we make below will release the GIL
+            if _is_in_bad_fork():
+                raise RuntimeError(
+                    "Cannot re-initialize CUDA in forked subprocess. To use CUDA with "
+                    "multiprocessing, you must use the 'spawn' start method"
+                )
+            if not hasattr(torch._C, "_cuda_getDeviceCount"):
+                raise AssertionError("Torch not compiled with CUDA enabled")
+            if _cudart is None:
+                raise AssertionError(
+                    "libcudart functions unavailable. It looks like you have a broken build?"
+                )
+            # This function throws if there's a driver initialization error, no GPUs
+            # are found or any other error occurs
+            if "CUDA_MODULE_LOADING" not in os.environ:
+                os.environ["CUDA_MODULE_LOADING"] = "LAZY"
+>           torch._C._cuda_init()
+E           RuntimeError: No CUDA GPUs are available
+
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/cuda/__init__.py:319: RuntimeError
+=========================== short test summary info ============================
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[1-128-256-8-2-dtype0]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[1-128-170-8-3-dtype1]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[1-128-128-8-4-dtype2]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[1-256-512-8-2-dtype3]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[1-256-341-8-3-dtype4]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[1-256-256-8-4-dtype5]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[1-512-1024-8-2-dtype6]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[1-512-682-8-3-dtype7]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[1-512-512-8-4-dtype8]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[1-600-1200-8-2-dtype9]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[1-600-800-8-3-dtype10]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[1-600-600-8-4-dtype11]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[1-100-200-8-2-dtype12]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[1-100-133-8-3-dtype13]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[1-100-100-8-4-dtype14]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[256-128-256-8-2-dtype15]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[256-128-170-8-3-dtype16]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[256-128-128-8-4-dtype17]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[256-256-512-8-2-dtype18]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[256-256-341-8-3-dtype19]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[256-256-256-8-4-dtype20]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[256-512-1024-8-2-dtype21]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[256-512-682-8-3-dtype22]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[256-512-512-8-4-dtype23]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[256-600-1200-8-2-dtype24]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[256-600-800-8-3-dtype25]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[256-600-600-8-4-dtype26]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[256-100-200-8-2-dtype27]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[256-100-133-8-3-dtype28]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[256-100-100-8-4-dtype29]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[512-128-256-8-2-dtype30]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[512-128-170-8-3-dtype31]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[512-128-128-8-4-dtype32]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[512-256-512-8-2-dtype33]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[512-256-341-8-3-dtype34]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[512-256-256-8-4-dtype35]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[512-512-1024-8-2-dtype36]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[512-512-682-8-3-dtype37]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[512-512-512-8-4-dtype38]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[512-600-1200-8-2-dtype39]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[512-600-800-8-3-dtype40]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[512-600-600-8-4-dtype41]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[512-100-200-8-2-dtype42]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[512-100-133-8-3-dtype43]
+FAILED tests/test_mlp.py::TestClass::test_mlp_correctness[512-100-100-8-4-dtype44]
+45 failed, 32 passed, 6 skipped in 6.80s

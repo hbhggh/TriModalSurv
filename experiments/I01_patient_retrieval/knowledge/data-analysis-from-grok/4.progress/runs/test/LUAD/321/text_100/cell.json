@@ -1,0 +1,28 @@
+{
+  "artifacts": {
+    "strategy0.audit.json": "861e08b30e6f7350e6eeb7eba7ee7ae96c77c569e9c66d26076f2e1e23583a70",
+    "strategy0.npz": "e90520d8b289389f902964df11b085961489fc1e91a405b3cba4173ead4202f6"
+  },
+  "metrics_computed": true,
+  "rows": [
+    {
+      "audit_file": "strategy0.audit.json",
+      "c_index_b": 0.597051597051597,
+      "cancer": "LUAD",
+      "candidate_id": "strategy0",
+      "checkpoint_sha256": "2f3ea84621c44d2955b8b0bc17f0308f82e94da27b07dfc7fb85989ffaf86e20",
+      "complete_logit_atol": 1e-06,
+      "complete_max_logit_abs_diff": null,
+      "grid": "text_100",
+      "n_complete_checked": 0,
+      "n_patients": 172,
+      "prediction_file": "strategy0.npz",
+      "protocol": "strategy0",
+      "run_fingerprint": "a825b3cc4df41cf56afe228be531a4fc13f69c520bf35a2f2305101652387ec2",
+      "seed": 321,
+      "split": "test",
+      "strategy0_enabled": true
+    }
+  ],
+  "run_fingerprint": "a825b3cc4df41cf56afe228be531a4fc13f69c520bf35a2f2305101652387ec2"
+}

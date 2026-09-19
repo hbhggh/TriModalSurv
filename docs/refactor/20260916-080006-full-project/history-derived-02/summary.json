@@ -1,0 +1,50 @@
+{
+  "s5": {
+    "status": "PASS",
+    "raw_values": 100,
+    "cells": 20,
+    "historical_mean_available": false,
+    "rounding": "MD 4 decimals; CSV 6 decimals; newly derived means are not historical means",
+    "checks": 220,
+    "mismatches": 0,
+    "max_numeric_difference": 0.0
+  },
+  "missing_20260902": {
+    "status": "PASS",
+    "raw_values": 1600,
+    "historical_table_seed_values": 1600,
+    "tie_rules": "gate strict >; C/E0/E1/E0d EPS=1e-6",
+    "historical_mean_available": false,
+    "checks": 2390,
+    "mismatches": 0,
+    "max_numeric_difference": 0.0
+  },
+  "i01": {
+    "status": "PASS",
+    "units": 75,
+    "raw_values": 300,
+    "mean_cells": 60,
+    "paired_rows": 200,
+    "scope": "JSON aggregation only; no C-index recomputation from patient features",
+    "checks": 780,
+    "mismatches": 0,
+    "max_numeric_difference": 0
+  },
+  "i02": {
+    "status": "ERROR",
+    "error": "AssertionError(('no migrated copy mapped', '/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/collab/20260902-A测缺失补偿/results_npjc/e0/e0_BLCA_s123.json'))",
+    "checks": 0,
+    "mismatches": 0,
+    "max_numeric_difference": 0.0
+  },
+  "i03_r6": {
+    "status": "PASS",
+    "raw_B_values": 1500,
+    "cells": 60,
+    "historical_statistic": "median/min/max rounded to 4 decimals, not mean",
+    "new_means": "60 derived means; historical unrounded mean unavailable",
+    "checks": 1680,
+    "mismatches": 0,
+    "max_numeric_difference": 0.0
+  }
+}

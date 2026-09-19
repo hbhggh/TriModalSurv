@@ -1,0 +1,101 @@
+{
+  "syntax_files": 26,
+  "ast_checks": [
+    {
+      "symbol": "GatedFusion",
+      "source": "model/fusion_model.py",
+      "target": "models/fusion.py",
+      "ast_equal": true
+    },
+    {
+      "symbol": "MeanFusion",
+      "source": "model/fusion_model.py",
+      "target": "models/fusion.py",
+      "ast_equal": true
+    },
+    {
+      "symbol": "SurvivalHead",
+      "source": "model/fusion_model.py",
+      "target": "models/fusion.py",
+      "ast_equal": true
+    },
+    {
+      "symbol": "MainModalityMoE",
+      "source": "model/fusion_model.py",
+      "target": "models/fusion.py",
+      "ast_equal": true
+    },
+    {
+      "symbol": "compute_quantile_edges",
+      "source": "loc_utils_3yr/tcga_dataset.py",
+      "target": "data/tcga_dataset.py",
+      "ast_equal": true
+    },
+    {
+      "symbol": "assign_bins",
+      "source": "loc_utils_3yr/tcga_dataset.py",
+      "target": "data/tcga_dataset.py",
+      "ast_equal": true
+    },
+    {
+      "symbol": "TCGASurDataset",
+      "source": "loc_utils_3yr/tcga_dataset.py",
+      "target": "data/tcga_dataset.py",
+      "ast_equal": true
+    },
+    {
+      "symbol": "get_dataset_tcga_sur",
+      "source": "loc_utils_3yr/tcga_dataset.py",
+      "target": "data/tcga_dataset.py",
+      "ast_equal": true
+    },
+    {
+      "symbol": "CAPRecall",
+      "source": "model/compensator.py",
+      "target": "models/compensator.py",
+      "ast_equal": true
+    },
+    {
+      "symbol": "MissingBank",
+      "source": "model/compensator.py",
+      "target": "models/compensator.py",
+      "ast_equal": true
+    },
+    {
+      "symbol": "_sample_mask",
+      "source": "model/compensator.py",
+      "target": "models/compensator.py",
+      "ast_equal": true
+    },
+    {
+      "symbol": "_append_consistency_pair",
+      "source": "model/compensator.py",
+      "target": "models/compensator.py",
+      "ast_equal": true
+    },
+    {
+      "symbol": "finetune_epoch",
+      "source": "main_survival.py",
+      "target": "training/runtime.py",
+      "ast_equal": true
+    },
+    {
+      "symbol": "prediction",
+      "source": "main_survival.py",
+      "target": "training/runtime.py",
+      "ast_equal": true
+    },
+    {
+      "symbol": "probe_batch_size",
+      "source": "main_survival.py",
+      "target": "training/runtime.py",
+      "ast_equal": true
+    },
+    {
+      "symbol": "build_dataloader_kwargs",
+      "source": "main_survival.py",
+      "target": "training/runtime.py",
+      "ast_equal": true
+    }
+  ]
+}

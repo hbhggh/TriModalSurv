@@ -21,3 +21,16 @@ collab/**/scratch/e_eval_frozen_synthetic/**/*.csv.zip
 collab/monitor/.last_status.json
 collab/monitor/.stall_counts
 tmp_*/
+
+# 重构后的实验大文件：仅清单与分析入 Git，原始资产保留在磁盘。
+/experiments/**/results/**/checkpoints/
+/experiments/**/results/**/raw/
+/experiments/**/results/**/logs/
+/experiments/**/results/**/*.npz
+
+# 全项目重构：原始归档/仓库元数据/本轮传输包保留磁盘，不进源码提交。
+/archive/
+/docs/refactor/**/*.tar
+/docs/refactor/**/*.index
+/docs/refactor/**/*.bin
+/docs/refactor/**/validation-evidence/**/*.pt

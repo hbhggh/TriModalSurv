@@ -1,0 +1,160 @@
+{
+  "protocol": "patient-fixed-padmask-v2",
+  "metric": "cindex_B",
+  "include_none": true,
+  "units": 75,
+  "values": 300,
+  "groups": 100,
+  "artifact_hashes_checked": 600,
+  "source_sha256": {
+    "tako-formal/evidence/formal/diagnostics/campaign_status.json": "242d6f0f25734d9565b6f2a5e224048c13a7f069466dd4da18690b6a98096891",
+    "tako-formal/evidence/formal/m0real_BLCA_s123.json": "0c2b70b8e25b2765c60845f9a7e879f602f3a23dfb2f02c092a05f7000824159",
+    "tako-formal/evidence/formal/m0real_BLCA_s132.json": "16185ee7c19afe072c102bc10feec4b2f873322b6ad3d694d7992337376dc22e",
+    "tako-formal/evidence/formal/m0real_BLCA_s213.json": "85a5645702f908381917138062157a4c040d64ccff09c3eaf687b417d2e56ba5",
+    "tako-formal/evidence/formal/m0real_BLCA_s231.json": "6e9df81105bd2add6df68508fb68a58031c543e83c6e14439ae2bdd42bc10498",
+    "tako-formal/evidence/formal/m0real_BLCA_s321.json": "1f7fa857e600aea5b0990e777d9a89ea7ace138ebac310777c4ec02ec7b2122c",
+    "tako-formal/evidence/formal/m0real_BRCA_s123.json": "fb7ac1db6fde30f8683664b09996db23c0c1a0868d0ac054efd96233ed8d6ce1",
+    "tako-formal/evidence/formal/m0real_BRCA_s132.json": "c0d184138bf23ca0f2245c99d6433044289ff04091925e4b4330ab6b16207d5d",
+    "tako-formal/evidence/formal/m0real_BRCA_s213.json": "3e58f5ca3c9264481d3080409fc876a8659651250a2d6d5ca7b405de8aac8450",
+    "tako-formal/evidence/formal/m0real_BRCA_s231.json": "4ca7287daa0f329f7e30731914ccb4f084200d55138da4e56790ff9fdc92ad4d",
+    "tako-formal/evidence/formal/m0real_BRCA_s321.json": "29c8f69e4d6009e43fbec6df051974bac4d97dfc5d3e0f6d3facaa77e62681c1",
+    "tako-formal/evidence/formal/m0real_LGG_s123.json": "a0f979c06185ce24b5251ba4aa612722d06364e06d77c09ef4c7edec7c7daa29",
+    "tako-formal/evidence/formal/m0real_LGG_s132.json": "f52cabe1c09bb39747b3f4c04bf5c65e020ca00bd5648830010de933cd0b559a",
+    "tako-formal/evidence/formal/m0real_LGG_s213.json": "1e8491d31d2345bc0b99ba54d6c531396a6e25d3e9f00220c6642f3dbcaa8039",
+    "tako-formal/evidence/formal/m0real_LGG_s231.json": "bb778403c458ce312a30cbb9224e0b487e71d6b91fdffaa9085400789cf4b43f",
+    "tako-formal/evidence/formal/m0real_LGG_s321.json": "f13bcdd6367f4ca9460815cbf89b0bf58994213f6799de625ef64b36ec2212f1",
+    "tako-formal/evidence/formal/m0real_LUAD_s123.json": "c252d1060dde37266db5c55f423b2255f7884746daf22da333e7ace518df355d",
+    "tako-formal/evidence/formal/m0real_LUAD_s132.json": "bbfe79be23e08c7c2e86e3718a980297eedd056560248b9f5704f00d1c2f7ddc",
+    "tako-formal/evidence/formal/m0real_LUAD_s213.json": "1e7b421c8dcc82afaab038b1adc38130b51f2392daf1317fb4b2323de12f5f30",
+    "tako-formal/evidence/formal/m0real_LUAD_s231.json": "535d217c726e2e901038263163fe5447ed32d6837d74d32302967cb47147748b",
+    "tako-formal/evidence/formal/m0real_LUAD_s321.json": "9c87bcbde3d3a991e66ae34cb4aa1bc06763876e665f6b82887482195fb229fe",
+    "tako-formal/evidence/formal/m0real_UCEC_s123.json": "8d3b80e592a809fcb5079f4cd1db27f97b04f2a513bbbaf5a34e0d8f22b8ef03",
+    "tako-formal/evidence/formal/m0real_UCEC_s132.json": "658e4eb7c526c4bfcdb6930160a94789821a75a03cfafc180a8b3552817ae263",
+    "tako-formal/evidence/formal/m0real_UCEC_s213.json": "9f2b7ca3bc241e54cc757e472940ea00ae35e9ebe7879cae3de06a2bd0a64510",
+    "tako-formal/evidence/formal/m0real_UCEC_s231.json": "bbea4d853cf448beef515286b1b3e5ebe6432d9d1b9bec11dd1070dce0f0d55c",
+    "tako-formal/evidence/formal/m0real_UCEC_s321.json": "09a127d4264b3f9400b689b2e9354451400627d766310756513f7df639c956a2",
+    "tako-formal/evidence/formal/m1_BLCA_s123.json": "93943add04d28d904ee569cb1de6f6d1e5d47d4ea87133f826c85375d5c55c75",
+    "tako-formal/evidence/formal/m1_BLCA_s132.json": "cfcf2b1df4e9ba121afb4b975b8442dc43a794acb34d1c616f8c1b432d6b9521",
+    "tako-formal/evidence/formal/m1_BLCA_s213.json": "3e7fc15cae9d3d957858004d832a6a264a45f4be34d516a4485dfd28fd4883f1",
+    "tako-formal/evidence/formal/m1_BLCA_s231.json": "ac31fef12f02324a0af4754f4c27d63ec5d6f11e9de59b53eea04ddee73a8160",
+    "tako-formal/evidence/formal/m1_BLCA_s321.json": "819b979099a6ceca8d913b5c3464656038ae4afb68600a2fb8b7dc6de9c19d8f",
+    "tako-formal/evidence/formal/m1_BRCA_s123.json": "420abb7704bf57349126383fbd79e96e19990b7b8c3ce4adffbbc8a9d40c6079",
+    "tako-formal/evidence/formal/m1_BRCA_s132.json": "e3e1bc8ddf59283f3a81ef1533d6fcbf4448412df93956dd5856641776b51f81",
+    "tako-formal/evidence/formal/m1_BRCA_s213.json": "dc6c770b5c66b22e6bb0a11d4b33f3e1d51e10ea83411041a2bfd8fc597255f2",
+    "tako-formal/evidence/formal/m1_BRCA_s231.json": "be58e5275cc2c1a5e90b0ae9af98c925bf9820b9f1789817e83a944e8d993124",
+    "tako-formal/evidence/formal/m1_BRCA_s321.json": "b0998d6282f02154e0dfe88c1d8c5ae21607877396287a597d562ef6f4c0ea67",
+    "tako-formal/evidence/formal/m1_LGG_s123.json": "e16074107ba4cc0bd6ed8cc7aa6f85d82eb662afd86be4e07a1814e1f6f58646",
+    "tako-formal/evidence/formal/m1_LGG_s132.json": "124020080f28dc2be51e052c6bb0af522cc1c6d0b51880950d6e6971d391e31e",
+    "tako-formal/evidence/formal/m1_LGG_s213.json": "12b46a262a9236b51261160a6f6e0d27cf9e5c27ef66433bbbe43212bd349238",
+    "tako-formal/evidence/formal/m1_LGG_s231.json": "f650f34068c6fd92784658a534e1ae581897534565cc21f4aa8fa7e9c1e78f1c",
+    "tako-formal/evidence/formal/m1_LGG_s321.json": "71de020e85f5a9ec99a5caba454c57eec6abfab3b4d471d80eb1e4b7397e061d",
+    "tako-formal/evidence/formal/m1_LUAD_s123.json": "66a0c18e09f384709fbbfc070dec84f3e0ed0d0882fb99014f480e9f246caec7",
+    "tako-formal/evidence/formal/m1_LUAD_s132.json": "1d37ff1ac0f616075f474f2fbf123cedfe90ce2b17f148fa05e7b582fdd5fdaa",
+    "tako-formal/evidence/formal/m1_LUAD_s213.json": "de733ef76adc2b54354f9d07aaa274c5a10d683e1435f1deae46ca58b36a6589",
+    "tako-formal/evidence/formal/m1_LUAD_s231.json": "8f27e66a346557ccd2a3d3da39253f746b58346b4d01e159fb25288fc96556b5",
+    "tako-formal/evidence/formal/m1_LUAD_s321.json": "f2d887d70b34bb4181c17c0bf35acb9d0e39070ee47181cb8c20db42dcc3cb6c",
+    "tako-formal/evidence/formal/m1_UCEC_s123.json": "e2127bc6301fa69ec8ed42db91d08edbfb3dc237615c78a30c5e90959fff06b4",
+    "tako-formal/evidence/formal/m1_UCEC_s132.json": "a4779fd1e21e6fa7bb110ac89d0867ddd7fcde62bf80d5212ab73e51f3d4ed85",
+    "tako-formal/evidence/formal/m1_UCEC_s213.json": "9c425f95f7cc01df770fde1a4e5e7d5ccbbb9c5a658ad929f5199081a93f6ca8",
+    "tako-formal/evidence/formal/m1_UCEC_s231.json": "9a2a776854b01e06601982db48b56d20bfbb40352f076b12ffe227114ac8035d",
+    "tako-formal/evidence/formal/m1_UCEC_s321.json": "5c309fa0495a22a79a6dadfe4af016776899c027260d7a7502131806d88bcf25",
+    "tako-formal/evidence/formal/retrieval_BLCA_s123.json": "98197fa839854674a256651c8e85bd6ea7a627bf427acfec1bc9e37db7721fa4",
+    "tako-formal/evidence/formal/retrieval_BLCA_s132.json": "96d8e8b4d41a7146026a9a61a6a9893e281a9bf9c17d3a3e0c14ac87897175d2",
+    "tako-formal/evidence/formal/retrieval_BLCA_s213.json": "2f7804f8446d4b4c33c409c7521872ebc9904f196091ab14fde3c76f9c2e9820",
+    "tako-formal/evidence/formal/retrieval_BLCA_s231.json": "46e6bb9cf85326972fd608ebe88dc02c86fc24b23e54064367a352c4322dbe66",
+    "tako-formal/evidence/formal/retrieval_BLCA_s321.json": "0425d8459a4ea1030cc56c56c59c327e1b56f9f6e824e435e4feeabf5e136681",
+    "tako-formal/evidence/formal/retrieval_BRCA_s123.json": "d74327158c9fc66da6aceac0f6e6792db02122d9c14970d938401acd0eb7f5e7",
+    "tako-formal/evidence/formal/retrieval_BRCA_s132.json": "af3349596d24efaa2b2d64e65b76027955ec35a4b5fbb6b0d23112a9068da75c",
+    "tako-formal/evidence/formal/retrieval_BRCA_s213.json": "bb416bc6a19befca21bc177b48cb617003f6a18f291d66fd337f56e0718f866d",
+    "tako-formal/evidence/formal/retrieval_BRCA_s231.json": "0ebc11ba2cd0fb8250b142debb0e846bb853e3d343a2b089fe1b9b4fde2d53e6",
+    "tako-formal/evidence/formal/retrieval_BRCA_s321.json": "1b5d364d6b266e31bf766176de92205c288c1007e2636141c0bff6014403f444",
+    "tako-formal/evidence/formal/retrieval_LGG_s123.json": "4ee46d4b19c5dd84732b2c92b81409d22c8d97e183ba6c5da75e3f52f3b90737",
+    "tako-formal/evidence/formal/retrieval_LGG_s132.json": "8688e24fc3be0f0aad8aa4066f1f7dd96e26da1ade8097ed208c53bbc0a6fe23",
+    "tako-formal/evidence/formal/retrieval_LGG_s213.json": "c753c50d7e521825bacaa4edb6aa7a2482459fa667069f806e1e88a222a5df57",
+    "tako-formal/evidence/formal/retrieval_LGG_s231.json": "d6d30eed872f9f09c7540b5ddc84a1fb1be0e5247e2ed2983c85cf369ff583b5",
+    "tako-formal/evidence/formal/retrieval_LGG_s321.json": "56219bb31159b45adf428cbf885f9dd35810e697a55dadb22d82d897ca7e5b6b",
+    "tako-formal/evidence/formal/retrieval_LUAD_s123.json": "566fe3c5648ab159bc6074afe2d563df3a9031e0bfa6d774e1f203ad9d6a3dd6",
+    "tako-formal/evidence/formal/retrieval_LUAD_s132.json": "0e01790d6bc851c9d91d3720cf446cb7ee12ac2ae61d512fde07e2868c3ac208",
+    "tako-formal/evidence/formal/retrieval_LUAD_s213.json": "6748e8dfdb66a5a449160e44a484924f557e08f3f39d7b384afe5d9338996be2",
+    "tako-formal/evidence/formal/retrieval_LUAD_s231.json": "e6dd4e678abd4c5da5aeeba593cab4f8edf7fac870696bbd5d8a334e716ff871",
+    "tako-formal/evidence/formal/retrieval_LUAD_s321.json": "b1cbd590a05f16b201ae55d849ca3247c81462ae4a6ffeed5d9219ee25f89de8",
+    "tako-formal/evidence/formal/retrieval_UCEC_s123.json": "e354780a1c47627ad75026373bb06888968a154fbc82429fd82c2b6cab1c3080",
+    "tako-formal/evidence/formal/retrieval_UCEC_s132.json": "4f690445cba7d1a0fb0f888a10085a3232260fb845d6b32a0f3d86648c3ff13d",
+    "tako-formal/evidence/formal/retrieval_UCEC_s213.json": "af1ed4ed481a1fb6cf70af01f4f9322556138c5cfe9b41f383b08a169b246a1c",
+    "tako-formal/evidence/formal/retrieval_UCEC_s231.json": "e5ed4215cd231932e3fb674768a801b0e5a1c7dc9d89305162593b00aa420a72",
+    "tako-formal/evidence/formal/retrieval_UCEC_s321.json": "fc3cea54ce62186e6d2d990de4cbe34138606aa4b5086968ed1eda760142d318",
+    "tako-formal/evidence/summary/per_cell.csv": "33d255aba7a7cbc8f7716b881483708e1b362ef25112d99c1b5a0f1921b55851"
+  },
+  "manifest_sha256": "e33452fa078ee731d7220640286e5b261eb92c22e946ec327057216cc63d9cad",
+  "overall": {
+    "retrieval": 0.6289637990840953,
+    "m1": 0.6318247078964476,
+    "m0real": 0.630751400355783
+  },
+  "seed_scores": {
+    "123": {
+      "retrieval": 0.6306862379320002,
+      "m1": 0.6331968423172972,
+      "m0real": 0.632341876239848
+    },
+    "132": {
+      "retrieval": 0.6291208680162222,
+      "m1": 0.6367406154074372,
+      "m0real": 0.6394141601887234
+    },
+    "213": {
+      "retrieval": 0.6211580687388557,
+      "m1": 0.6164663867681858,
+      "m0real": 0.6135199457085011
+    },
+    "231": {
+      "retrieval": 0.6314300944641973,
+      "m1": 0.639490373112044,
+      "m0real": 0.6340744131539006
+    },
+    "321": {
+      "retrieval": 0.6324237262692012,
+      "m1": 0.6332293218772738,
+      "m0real": 0.6344066064879419
+    }
+  },
+  "cancer_scores": {
+    "BRCA": {
+      "retrieval": 0.6566594754172816,
+      "m1": 0.6511723628931532,
+      "m0real": 0.6565572839786533
+    },
+    "LUAD": {
+      "retrieval": 0.5784573534573535,
+      "m1": 0.587004212004212,
+      "m0real": 0.5862056862056862
+    },
+    "UCEC": {
+      "retrieval": 0.6239594925439573,
+      "m1": 0.6162920097930114,
+      "m0real": 0.6160805697752059
+    },
+    "BLCA": {
+      "retrieval": 0.570766828591256,
+      "m1": 0.5821911866759195,
+      "m0real": 0.5833882720333102
+    },
+    "LGG": {
+      "retrieval": 0.714975845410628,
+      "m1": 0.722463768115942,
+      "m0real": 0.7115251897860594
+    }
+  },
+  "best_retrieval_seed": 321,
+  "best_retrieval_cancer": "LGG",
+  "best_retrieval_cell": [
+    "LGG",
+    "none"
+  ],
+  "unique_wins": {
+    "retrieval": 17,
+    "m1": 39,
+    "m0real": 39
+  },
+  "tied_groups": 5
+}

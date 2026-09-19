@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "protocol_id": "patient-fixed-padmask-v2-infer-rules1to5-v1",
+  "base_protocol_id": "patient-fixed-padmask-v2",
+  "cancers": [
+    "BLCA",
+    "BRCA",
+    "LGG",
+    "LUAD",
+    "UCEC"
+  ],
+  "seeds": [
+    123,
+    132,
+    213,
+    231,
+    321
+  ],
+  "grids": [
+    "none",
+    "rna_100",
+    "text_100",
+    "both_100"
+  ],
+  "prototype_k": 128,
+  "rules": [
+    "01_text100_skip_compensate",
+    "02_wsi_meanpool_key",
+    "03_shrinkage_lambda",
+    "04_wsi_rna_joint_sim",
+    "05_imputed_token_downweight"
+  ],
+  "search": {
+    "lambda_grid": [
+      0,
+      0.25,
+      0.5,
+      0.75,
+      1
+    ],
+    "alpha_grid": [
+      0.5,
+      1,
+      2
+    ],
+    "weight_grid": [
+      0.2,
+      0.3,
+      0.5
+    ]
+  },
+  "numerics": {
+    "norm_epsilon": 1e-12,
+    "logit_atol": 0.000001,
+    "logit_rtol": 0,
+    "risk_clamp": 0.000001
+  },
+  "model": {
+    "network_type": "NPJC",
+    "compensator": "none",
+    "hidden_size": 256,
+    "pred_dim": 4,
+    "dropout_rate": 0.1,
+    "mlp_ratio": 4,
+    "n_backbone": 1,
+    "n_head": 4,
+    "modality_order": [
+      "img",
+      "text",
+      "rna"
+    ]
+  },
+  "shapes": {
+    "img": [
+      128,
+      1536
+    ],
+    "text": [
+      200,
+      768
+    ],
+    "rna": [
+      2048,
+      256
+    ]
+  },
+  "runtime": {
+    "stage": "smoke",
+    "device": "cuda",
+    "batch_size": 383,
+    "cpu_threads": 4,
+    "forward_dtype": "float32",
+    "num_workers": 0,
+    "pin_memory": false,
+    "persistent_workers": false,
+    "prefetch_factor": null,
+    "non_blocking": true,
+    "run_id": "infer-rules1to5-formal-20260916",
+    "require_idle_gpu": true,
+    "gpu_id": 4
+  },
+  "smoke": {
+    "seed": 123,
+    "base_ids": 4,
+    "include_all_padded": true,
+    "lambda": 0.5,
+    "alpha": 1,
+    "w": 0.3
+  },
+  "paths": {
+    "repo_root": "/home/wuhao/npj_rules15_formal_20260916_R0Q4Fg/repo",
+    "delivery_root": "/Users/wuhao/Desktop/TriModalSurv/experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result",
+    "execution_root": "/home/wuhao/npj_rules15_formal_20260916_R0Q4Fg/result",
+    "checkpoint_root": "/home/wuhao/npj_fixed_eval_20260915_HpSkli/assets/out",
+    "cache_roots": {
+      "train": "/home/wuhao/npj_fixed_eval_20260915_HpSkli/assets/tmp_sur_cache",
+      "test": "/home/wuhao/npj_fixed_eval_20260915_HpSkli/assets/tmp_sur_cache",
+      "valid": "/home/wuhao/npj_infer_rules15_20260916_V0VlXe/valid_cache"
+    },
+    "label": "/home/wuhao/npj_fixed_eval_20260915_HpSkli/assets/data/TCGA_9523_ex12.csv",
+    "manifest": "/home/wuhao/npj_fixed_eval_20260915_HpSkli/assets/data/missing_manifest_v1.csv",
+    "legacy_reference": "/home/wuhao/npj_rules15_formal_20260916_R0Q4Fg/result/evidence/legacy-preflight.json",
+    "source_snapshot": "/home/wuhao/npj_infer_rules15_20260916_V0VlXe/result/evidence/source-before.tar",
+    "review_record": null,
+    "user_approval_record": "/home/wuhao/npj_rules15_formal_20260916_R0Q4Fg/result/evidence/formal-user-approval.md",
+    "valid_source_manifest": "/home/wuhao/npj_rules15_formal_20260916_R0Q4Fg/result/evidence/valid-source.json",
+    "legacy_results_root": "/home/wuhao/npj_fixed_eval_20260915_HpSkli/formal",
+    "review_waiver_record": "/home/wuhao/npj_rules15_formal_20260916_R0Q4Fg/result/evidence/formal-user-waiver.json"
+  },
+  "authorization": {
+    "formal_approved": true,
+    "review_waived_by_user": true
+  },
+  "baseline_source_sha256": {
+    "experiments/I01_patient_retrieval/model.py": "e4e08b0c9ee78da8b2a7c4d01250516693fc087bf567d18ef6a944b27cc10c13",
+    "experiments/I01_patient_retrieval/evaluate.py": "e92812ef5316b3d0d212deda0e37793e3de84dd9b44410b25ebe7caecb658b5a",
+    "src/trimodalsurv/models/npjc.py": "f0c03c1516a3976ca71ac5f0b8a4b752f3f98a91f44e6abb7f0edcda399eac2f",
+    "src/trimodalsurv/evaluation/common.py": "179d878ef3be4639579a89b7d6b21d9908ebc7fb5d019500d45a85e94d982029",
+    "experiments/I01_patient_retrieval/config.yaml": "285ca9f918d4565cf2b1e58f321cc5430153371adf9e19f19bfa48ad8a2d4aa7"
+  }
+}

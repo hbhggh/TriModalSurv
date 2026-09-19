@@ -1,0 +1,43 @@
+test_both_parameter_tables_mark_inactive_not_optimal (test_review_fixes.ReviewFixTests.test_both_parameter_tables_mark_inactive_not_optimal) ... FAIL
+test_enabled_ucec_keeps_alpha_active (test_review_fixes.ReviewFixTests.test_enabled_ucec_keeps_alpha_active) ... FAIL
+test_inactive_alpha_tie_is_marked_in_candidate_and_lock (test_review_fixes.ReviewFixTests.test_inactive_alpha_tie_is_marked_in_candidate_and_lock) ... FAIL
+test_source_hash_ignores_metadata_but_detects_real_code_change (test_review_fixes.ReviewFixTests.test_source_hash_ignores_metadata_but_detects_real_code_change) ... FAIL
+
+======================================================================
+FAIL: test_both_parameter_tables_mark_inactive_not_optimal (test_review_fixes.ReviewFixTests.test_both_parameter_tables_mark_inactive_not_optimal)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/wuhao/Desktop/TriModalSurv/experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/tests/test_review_fixes.py", line 58, in test_both_parameter_tables_mark_inactive_not_optimal
+    self.assertIn('未生效', rows[0][4])  # 冻结参数表的alpha列。
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '未生效' not found in '0.5'
+
+======================================================================
+FAIL: test_enabled_ucec_keeps_alpha_active (test_review_fixes.ReviewFixTests.test_enabled_ucec_keeps_alpha_active)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/wuhao/Desktop/TriModalSurv/experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/tests/test_review_fixes.py", line 43, in test_enabled_ucec_keeps_alpha_active
+    self.assertEqual(result['selected']['combo'].get('inactive_parameters'), [])
+AssertionError: None != []
+
+======================================================================
+FAIL: test_inactive_alpha_tie_is_marked_in_candidate_and_lock (test_review_fixes.ReviewFixTests.test_inactive_alpha_tie_is_marked_in_candidate_and_lock)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/wuhao/Desktop/TriModalSurv/experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/tests/test_review_fixes.py", line 28, in test_inactive_alpha_tie_is_marked_in_candidate_and_lock
+    self.assertEqual(combo.get('inactive_parameters'), ['alpha'])
+AssertionError: None != ['alpha']
+
+======================================================================
+FAIL: test_source_hash_ignores_metadata_but_detects_real_code_change (test_review_fixes.ReviewFixTests.test_source_hash_ignores_metadata_but_detects_real_code_change)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/wuhao/Desktop/TriModalSurv/experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/tests/test_review_fixes.py", line 79, in test_source_hash_ignores_metadata_but_detects_real_code_change
+    self.assertEqual(runtime.source_hashes(cfg), before)
+AssertionError: {'rep[14 chars]surv/._real.py': '1560ff0b15ee8542814532283228[781 chars]be5'} != {'rep[14 chars]surv/real.py': '0682c5f2076f099c34cfdd15a9e063[478 chars]be5'}
+Diff is 875 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.063s
+
+FAILED (failures=4)

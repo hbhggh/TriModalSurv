@@ -1,0 +1,15 @@
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/nn/modules/transformer.py:502: UserWarning: The PyTorch API of nested tensors is in prototype stage and will change in the near future. (Triggered internally at /opt/conda/conda-bld/pytorch_1728945388038/work/aten/src/ATen/NestedTensorImpl.cpp:178.)
+  output = torch._nested_tensor_from_mask(
+{"arm": "m0real", "grid": "none", "patients": 32, "donor_mask_input_exact": true, "max_logit_abs_diff": 0.0, "max_risk_abs_diff": 0.0, "max_projector_abs_diff": 0.0}
+{"arm": "m1", "grid": "none", "patients": 32, "donor_mask_input_exact": true, "max_logit_abs_diff": 0.0, "max_risk_abs_diff": 0.0, "max_projector_abs_diff": 0.0}
+{"arm": "retrieval", "grid": "none", "patients": 32, "donor_mask_input_exact": true, "max_logit_abs_diff": 0.0, "max_risk_abs_diff": 0.0, "max_projector_abs_diff": 0.0}
+{"arm": "m0real", "grid": "rna_100", "patients": 32, "donor_mask_input_exact": true, "max_logit_abs_diff": 0.0, "max_risk_abs_diff": 0.0, "max_projector_abs_diff": 0.0}
+{"arm": "m1", "grid": "rna_100", "patients": 32, "donor_mask_input_exact": true, "max_logit_abs_diff": 0.0, "max_risk_abs_diff": 0.0, "max_projector_abs_diff": 0.0}
+{"arm": "retrieval", "grid": "rna_100", "patients": 32, "donor_mask_input_exact": true, "max_logit_abs_diff": 0.0, "max_risk_abs_diff": 0.0, "max_projector_abs_diff": 0.0}
+{"arm": "m0real", "grid": "text_100", "patients": 32, "donor_mask_input_exact": true, "max_logit_abs_diff": 0.0, "max_risk_abs_diff": 0.0, "max_projector_abs_diff": 0.0}
+{"arm": "m1", "grid": "text_100", "patients": 32, "donor_mask_input_exact": true, "max_logit_abs_diff": 0.0, "max_risk_abs_diff": 0.0, "max_projector_abs_diff": 0.0}
+{"arm": "retrieval", "grid": "text_100", "patients": 32, "donor_mask_input_exact": true, "max_logit_abs_diff": 0.0, "max_risk_abs_diff": 0.0, "max_projector_abs_diff": 0.0}
+{"arm": "m0real", "grid": "both_100", "patients": 32, "donor_mask_input_exact": true, "max_logit_abs_diff": 0.0, "max_risk_abs_diff": 0.0, "max_projector_abs_diff": 0.0}
+{"arm": "m1", "grid": "both_100", "patients": 32, "donor_mask_input_exact": true, "max_logit_abs_diff": 0.0, "max_risk_abs_diff": 0.0, "max_projector_abs_diff": 0.0}
+{"arm": "retrieval", "grid": "both_100", "patients": 32, "donor_mask_input_exact": true, "max_logit_abs_diff": 0.0, "max_risk_abs_diff": 0.0, "max_projector_abs_diff": 0.0}
+PARITY_PASS

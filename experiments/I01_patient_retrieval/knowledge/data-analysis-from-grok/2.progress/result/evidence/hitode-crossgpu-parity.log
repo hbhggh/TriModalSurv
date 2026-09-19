@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/tmp/npj_rules15_migrate_20260916_ZDKqbH/npj_rules15_accel_20260916_Ob6fjB/result/evidence/verify_migration.py", line 21, in <module>
+    np.testing.assert_allclose(x[key], y[key], atol=1e-6, rtol=0)
+  File "/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/numpy/testing/_private/utils.py", line 1684, in assert_allclose
+    assert_array_compare(compare, actual, desired, err_msg=str(err_msg),
+  File "/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/numpy/testing/_private/utils.py", line 885, in assert_array_compare
+    raise AssertionError(msg)
+AssertionError: 
+Not equal to tolerance rtol=0, atol=1e-06
+
+Mismatched elements: 2 / 24 (8.33%)
+Max absolute difference among violations: 2.1457672e-06
+Max relative difference among violations: 6.055407e-07
+ ACTUAL: array([[-4.320835, -0.950175, -0.825082, -0.764725],
+       [-4.33488 , -1.522555, -0.733808, -0.621733],
+       [-2.54964 , -2.192431, -0.925931, -0.260053],...
+ DESIRED: array([[-4.320835, -0.950175, -0.825082, -0.764725],
+       [-4.33488 , -1.522555, -0.733808, -0.621732],
+       [-2.549639, -2.19243 , -0.925931, -0.260053],...

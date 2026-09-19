@@ -1,0 +1,6755 @@
+{
+  "grid": "text_100",
+  "patients": [
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EO-A3KX",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-2E-A9G8",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9933662679399039,
+      "score_wsi": 0.4687221870982498,
+      "similarity": 1.4620884550381537
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A547",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-5S-A9Q8",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9914535921699282,
+      "score_wsi": 0.45918282034467245,
+      "similarity": 1.4506364125146007
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-A5-A0R9",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-A5-A0G5",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9872090429606263,
+      "score_wsi": 0.7290907295265029,
+      "similarity": 1.7162997724871292
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-A5-A0GW",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-A5-A0GA",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9949055632935179,
+      "score_wsi": 0.7332590731120272,
+      "similarity": 1.7281646364055452
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-A5-A0GU",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-A5-A0GD",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.994077738292692,
+      "score_wsi": 0.8677662562775533,
+      "similarity": 1.8618439945702452
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-A5-AB3J",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-A5-A0GE",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9827355749770191,
+      "score_wsi": 0.8092521139746683,
+      "similarity": 1.7919876889516875
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-A5-A0GQ",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-A5-A0GG",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9914056674602338,
+      "score_wsi": 0.737764686442682,
+      "similarity": 1.7291703539029157
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-A5-A0GQ",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-A5-A0GR",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9867950773115106,
+      "score_wsi": 0.7772384835189142,
+      "similarity": 1.7640335608304247
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-A5-A0GQ",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-A5-A0R8",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9975901641127123,
+      "score_wsi": 0.7113876205358751,
+      "similarity": 1.7089777846485874
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-A5-A0GQ",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-A5-A0VO",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.996500892115887,
+      "score_wsi": 0.6100306293156262,
+      "similarity": 1.6065315214315132
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BG-A2L7",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-A5-A0VP",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9955360895870858,
+      "score_wsi": 0.6821460144032375,
+      "similarity": 1.6776821039903234
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A0KB",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-A5-A0VQ",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.994807904711578,
+      "score_wsi": 0.5159828148060813,
+      "similarity": 1.5107907195176593
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AX-A06F",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-A5-A1OJ",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9727712807256507,
+      "score_wsi": 0.522270032274072,
+      "similarity": 1.4950413129997226
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-A5-A2K3",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-A5-A2K2",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9504040876923522,
+      "score_wsi": 0.5803277043642282,
+      "similarity": 1.5307317920565804
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-DI-A2QY",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-A5-A3LO",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9872545854679564,
+      "score_wsi": 0.5580761137537743,
+      "similarity": 1.5453306992217306
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-PG-A5BC",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-A5-A7WJ",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9916619448993531,
+      "score_wsi": 0.7546168713847884,
+      "similarity": 1.7462788162841414
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A212",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AJ-A23M",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9970954626673413,
+      "score_wsi": 0.6772792526110344,
+      "similarity": 1.6743747152783757
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AJ-A3TW",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AJ-A23N",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9900880775944525,
+      "score_wsi": 0.6878572900397353,
+      "similarity": 1.6779453676341878
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AJ-A3IA",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AJ-A2QM",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9953089598452025,
+      "score_wsi": 0.5534834052747096,
+      "similarity": 1.5487923651199123
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AJ-A3BF",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AJ-A3BD",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9955063476464554,
+      "score_wsi": 0.7188719008851685,
+      "similarity": 1.714378248531624
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AJ-A3BF",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AJ-A3EJ",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9981066191112675,
+      "score_wsi": 0.728623745835319,
+      "similarity": 1.7267303649465866
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AJ-A3BK",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AJ-A3EK",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.990660553171457,
+      "score_wsi": 0.8149614403557264,
+      "similarity": 1.8056219935271833
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AJ-A3QS",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AJ-A3NF",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9953868003756644,
+      "score_wsi": 0.5630383576411757,
+      "similarity": 1.5584251580168402
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AJ-A3BF",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AJ-A3OL",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9940055951952622,
+      "score_wsi": 0.5074437408762822,
+      "similarity": 1.5014493360715444
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AJ-A8CV",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AJ-A5DW",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9914746581341481,
+      "score_wsi": 0.6354474620278961,
+      "similarity": 1.6269221201620443
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AJ-A3TW",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AJ-A6NU",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9831742117413002,
+      "score_wsi": 0.5884398940132578,
+      "similarity": 1.5716141057545578
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AJ-A8CV",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AJ-A8CT",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9861276212063628,
+      "score_wsi": 0.5059628314368139,
+      "similarity": 1.4920904526431766
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A1E3",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A051",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9961738970549651,
+      "score_wsi": 0.5993245679545357,
+      "similarity": 1.5954984650095008
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A0LH",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A052",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9947527744359517,
+      "score_wsi": 0.5803609634657175,
+      "similarity": 1.575113737901669
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A1DK",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A053",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.991039489120208,
+      "score_wsi": 0.7052149080060409,
+      "similarity": 1.696254397126249
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A056",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A054",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9905297607474354,
+      "score_wsi": 0.7325336825738588,
+      "similarity": 1.7230634433212941
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A1E3",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A059",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9950477495712754,
+      "score_wsi": 0.6338843212952296,
+      "similarity": 1.628932070866505
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A0LV",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A05D",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9870749797804328,
+      "score_wsi": 0.6450638926980339,
+      "similarity": 1.6321388724784667
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A0LV",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A05J",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9793237880836444,
+      "score_wsi": 0.6614748999709015,
+      "similarity": 1.640798688054546
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A1E1",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A05N",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9916088847039021,
+      "score_wsi": 0.8901662702555806,
+      "similarity": 1.8817751549594828
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A1E1",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A05P",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.994055049500072,
+      "score_wsi": 0.838441141832866,
+      "similarity": 1.8324961913329378
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A05A",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A0L8",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.977906135718719,
+      "score_wsi": 0.8344118291846,
+      "similarity": 1.812317964903319
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A0LI",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A0L9",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9918763950244661,
+      "score_wsi": 0.8522381375203336,
+      "similarity": 1.8441145325447996
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A1DQ",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A0LJ",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9885363500499154,
+      "score_wsi": 0.6675465316869805,
+      "similarity": 1.656082881736896
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A1DV",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A0LM",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9884723919192833,
+      "score_wsi": 0.7053722162276335,
+      "similarity": 1.6938446081469167
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A1E1",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A0LN",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9910684940439255,
+      "score_wsi": 0.6717184339737626,
+      "similarity": 1.6627869280176881
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A0LV",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A0LO",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9952995869035098,
+      "score_wsi": 0.7195553372285353,
+      "similarity": 1.714854924132045
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A0LH",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A0LP",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.992953406844305,
+      "score_wsi": 0.685110300558167,
+      "similarity": 1.678063707402472
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A1E1",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": true,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": false,
+        "text": true
+      },
+      "original_valid": {
+        "rna": false,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A0LQ",
+      "pool_weights": [
+        1.0,
+        0.5,
+        0.5
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_meanpool",
+      "score_rna": null,
+      "score_wsi": 0.6647455385102262,
+      "similarity": 0.6647455385102262
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A1E1",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A1DM",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.992093278612081,
+      "score_wsi": 0.6598182067099178,
+      "similarity": 1.6519114853219987
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A1DK",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A1DO",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9921024615173788,
+      "score_wsi": 0.7205614890029824,
+      "similarity": 1.7126639505203611
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A0LV",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A1DP",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9895424400637901,
+      "score_wsi": 0.672040799289021,
+      "similarity": 1.6615832393528112
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A0LT",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A1DR",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9973262695261872,
+      "score_wsi": 0.7004231900934564,
+      "similarity": 1.6977494596196436
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A1DK",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AP-A1E4",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9914843843369203,
+      "score_wsi": 0.71712558699788,
+      "similarity": 1.7086099713348002
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-FI-A2D6",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AX-A05S",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9757547825812692,
+      "score_wsi": 0.6754622832603508,
+      "similarity": 1.65121706584162
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AX-A05Y",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AX-A05W",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9680867698279589,
+      "score_wsi": 0.8737117984015742,
+      "similarity": 1.841798568229533
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AX-A062",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AX-A05Z",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9877744198345619,
+      "score_wsi": 0.6803552665822494,
+      "similarity": 1.6681296864168114
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-A5-A0GB",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AX-A060",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9933587253634341,
+      "score_wsi": 0.5253718117200524,
+      "similarity": 1.5187305370834865
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AX-A063",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AX-A064",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9943163206859333,
+      "score_wsi": 0.5561228766586709,
+      "similarity": 1.5504391973446041
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AX-A05Y",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AX-A06B",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9932694171178661,
+      "score_wsi": 0.805596358663228,
+      "similarity": 1.7988657757810942
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AX-A1CA",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AX-A06L",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.986204819899672,
+      "score_wsi": 0.5932991363009195,
+      "similarity": 1.5795039562005915
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AX-A05U",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AX-A0IU",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9948124385258843,
+      "score_wsi": 0.5636896584970437,
+      "similarity": 1.558502097022928
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AX-A062",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AX-A0IW",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9919257120975873,
+      "score_wsi": 0.4975718275012563,
+      "similarity": 1.4894975395988435
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AX-A063",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AX-A0J1",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9933916285198705,
+      "score_wsi": 0.6324364012166621,
+      "similarity": 1.6258280297365326
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-E6-A1LZ",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AX-A1CC",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9723346648541353,
+      "score_wsi": 0.475369442672583,
+      "similarity": 1.4477041075267183
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-A5-A0R9",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AX-A1CF",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9822585620583565,
+      "score_wsi": 0.43388031423987916,
+      "similarity": 1.4161388762982356
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AX-A062",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-AX-A2IN",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9862955314273041,
+      "score_wsi": 0.4117962530613661,
+      "similarity": 1.3980917844886702
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A0K7",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A0JR",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.99419200873963,
+      "score_wsi": 0.6594045234605039,
+      "similarity": 1.653596532200134
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A11L",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A0JU",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.986736709427805,
+      "score_wsi": 0.8474650121622105,
+      "similarity": 1.8342017215900155
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A11H",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A0JV",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9953777474084148,
+      "score_wsi": 0.7760280319774261,
+      "similarity": 1.7714057793858409
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A0K7",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A0JZ",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.994459809801513,
+      "score_wsi": 0.5744507120180491,
+      "similarity": 1.568910521819562
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A0JT",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A0K1",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9943881665578801,
+      "score_wsi": 0.8507906500493891,
+      "similarity": 1.8451788166072691
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A0JT",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A0K4",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9724301827996418,
+      "score_wsi": 0.6977180037128679,
+      "similarity": 1.6701481865125096
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A0JN",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A0K6",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9844993841525211,
+      "score_wsi": 0.7876102298361025,
+      "similarity": 1.7721096139886237
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A11V",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A11E",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9948397605337863,
+      "score_wsi": 0.6348458493997555,
+      "similarity": 1.6296856099335417
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A0JT",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A11F",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9940489872906263,
+      "score_wsi": 0.7800800082890347,
+      "similarity": 1.774128995579661
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A0K8",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A11J",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9946980258179892,
+      "score_wsi": 0.3737587190529201,
+      "similarity": 1.3684567448709093
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A0JT",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A11S",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9975591509275314,
+      "score_wsi": 0.7787950411679543,
+      "similarity": 1.7763541920954857
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A11V",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A11U",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9967346339992148,
+      "score_wsi": 0.7655265753184012,
+      "similarity": 1.762261209317616
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A0JT",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A11Z",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9943520382903542,
+      "score_wsi": 0.8440540861474292,
+      "similarity": 1.8384061244377834
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A0JT",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A121",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9964837160519006,
+      "score_wsi": 0.7667076407969927,
+      "similarity": 1.7631913568488933
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A3S1",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A1MU",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9971564094895168,
+      "score_wsi": 0.7639396636968968,
+      "similarity": 1.7610960731864136
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A0JX",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A1MV",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9979984112847948,
+      "score_wsi": 0.49047737619548076,
+      "similarity": 1.4884757874802756
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A3F9",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A1MZ",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9926850695124337,
+      "score_wsi": 0.7291294705873916,
+      "similarity": 1.7218145400998255
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A1MR",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A1N2",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9898660933358848,
+      "score_wsi": 0.7545003898787129,
+      "similarity": 1.7443664832145978
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A3FB",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A3FC",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9902768300844067,
+      "score_wsi": 0.8936272111896675,
+      "similarity": 1.8839040412740742
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A1MR",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A3FD",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9896958394679746,
+      "score_wsi": 0.7361476558298412,
+      "similarity": 1.7258434952978159
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A11L",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A3FH",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9850828896097114,
+      "score_wsi": 0.7000845351742324,
+      "similarity": 1.6851674247839439
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A5OC",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-B5-A5OE",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9820621658960018,
+      "score_wsi": 0.7037531436104492,
+      "similarity": 1.685815309506451
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-DI-A1NN",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A0LW",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9927491513764216,
+      "score_wsi": 0.7243014344115027,
+      "similarity": 1.7170505857879244
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BG-A0M0",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A0LX",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.995660865238489,
+      "score_wsi": 0.6660003939625843,
+      "similarity": 1.661661259201073
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BG-A0M9",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A0M3",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9958334077680595,
+      "score_wsi": 0.6560684811351706,
+      "similarity": 1.6519018889032302
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BG-A0M6",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A0M8",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9499703678906568,
+      "score_wsi": 0.6034834992463938,
+      "similarity": 1.5534538671370506
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BG-A0M4",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A0MA",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9948285480240519,
+      "score_wsi": 0.7358873612835516,
+      "similarity": 1.7307159093076034
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BG-A0M9",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A0MC",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9953925423099214,
+      "score_wsi": 0.5982394356143976,
+      "similarity": 1.593631977924319
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BK-A0C9",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A0MH",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9892632084700829,
+      "score_wsi": 0.41246047486911336,
+      "similarity": 1.4017236833391962
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BG-A0MG",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A0MI",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9977872934535561,
+      "score_wsi": 0.7538767970232272,
+      "similarity": 1.7516640904767833
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BG-A0M4",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A0MS",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9925537499024167,
+      "score_wsi": 0.7238069952646531,
+      "similarity": 1.7163607451670697
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BG-A0M7",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A0MT",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9870314601545354,
+      "score_wsi": 0.7287399918001093,
+      "similarity": 1.7157714519546445
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-DI-A1NN",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A0MU",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.98957726287591,
+      "score_wsi": 0.662183829909628,
+      "similarity": 1.651761092785538
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BG-A0M6",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A0RY",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9940348740837918,
+      "score_wsi": 0.7266814857586458,
+      "similarity": 1.7207163598424375
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BG-A0YU",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A0VT",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9948069544069923,
+      "score_wsi": 0.6848809921816007,
+      "similarity": 1.679687946588593
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BG-A0VX",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A0VW",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9576238230794857,
+      "score_wsi": 0.7878977482329338,
+      "similarity": 1.7455215713124195
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BG-A18A",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A0VZ",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9921195532157958,
+      "score_wsi": 0.7062292641484271,
+      "similarity": 1.698348817364223
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-PG-A5BC",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A0W2",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9925278350314556,
+      "score_wsi": 0.7135146897441718,
+      "similarity": 1.7060425247756275
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BG-A187",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A18B",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9944353434844534,
+      "score_wsi": 0.4414502484557033,
+      "similarity": 1.4358855919401567
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BG-A0VX",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A18C",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9926039838841034,
+      "score_wsi": 0.6194189569196981,
+      "similarity": 1.6120229408038016
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BG-A220",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A221",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9928164072832992,
+      "score_wsi": 0.4676281801347935,
+      "similarity": 1.4604445874180927
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BG-A220",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A222",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9980641577286774,
+      "score_wsi": 0.6299622622139233,
+      "similarity": 1.6280264199426007
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BG-A2L7",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BG-A3EW",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9934084675046677,
+      "score_wsi": 0.7081261305289998,
+      "similarity": 1.7015345980336676
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A3DA",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BK-A0CC",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9946519101260418,
+      "score_wsi": 0.4128614232076522,
+      "similarity": 1.407513333333694
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A1GR",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BK-A13B",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9941195963011054,
+      "score_wsi": 0.5316239535195085,
+      "similarity": 1.5257435498206138
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A212",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BK-A26L",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9912145677345231,
+      "score_wsi": 0.6383739084935046,
+      "similarity": 1.6295884762280277
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BK-A0C9",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BK-A6W3",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9844130891668431,
+      "score_wsi": 0.6832088771993396,
+      "similarity": 1.6676219663661827
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BK-A56F",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BK-A6W4",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9975741367967005,
+      "score_wsi": 0.6374755838850606,
+      "similarity": 1.6350497206817611
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A5OC",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BS-A0T9",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9843560103042338,
+      "score_wsi": 0.3785411260350371,
+      "similarity": 1.3628971363392708
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A0K9",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BS-A0TA",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9823328306722304,
+      "score_wsi": 0.5167079599941492,
+      "similarity": 1.4990407906663796
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A0K9",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BS-A0TE",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9878944372357358,
+      "score_wsi": 0.46937207923997515,
+      "similarity": 1.4572665164757108
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BS-A0U7",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BS-A0TI",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9828587418068029,
+      "score_wsi": 0.42317656910476986,
+      "similarity": 1.4060353109115726
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BS-A0V4",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BS-A0U9",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9659949959273741,
+      "score_wsi": 0.7602413313943421,
+      "similarity": 1.7262363273217163
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BS-A0UF",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BS-A0UL",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9899936150567845,
+      "score_wsi": 0.7199420083446707,
+      "similarity": 1.709935623401455
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A1G8",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BS-A0UV",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9975944262514559,
+      "score_wsi": 0.47744970598546566,
+      "similarity": 1.4750441322369214
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BS-A0U7",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BS-A0VI",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9772094603223959,
+      "score_wsi": 0.529585939589596,
+      "similarity": 1.5067953999119919
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BS-A0UT",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-BS-A0WQ",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9921560315855545,
+      "score_wsi": 0.6546035296616688,
+      "similarity": 1.6467595612472232
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A103",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A0ZN",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9955754958379563,
+      "score_wsi": 0.6393407378940598,
+      "similarity": 1.634916233732016
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A16I",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A0ZP",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.98154501377971,
+      "score_wsi": 0.8409830429130484,
+      "similarity": 1.8225280566927584
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A103",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A0ZQ",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9971409368518692,
+      "score_wsi": 0.7063983318065186,
+      "similarity": 1.7035392686583877
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A0ZO",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A0ZU",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9970063088788028,
+      "score_wsi": 0.689698277147369,
+      "similarity": 1.6867045860261718
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A16I",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A0ZV",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.968644211578973,
+      "score_wsi": 0.8480646224830608,
+      "similarity": 1.8167088340620339
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A103",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A0ZZ",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9930982278549462,
+      "score_wsi": 0.7331327684432507,
+      "similarity": 1.726230996298197
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A16X",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A101",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9858116921671921,
+      "score_wsi": 0.758874965002702,
+      "similarity": 1.7446866571698942
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A16E",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A15W",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9974770056463078,
+      "score_wsi": 0.7203407126615442,
+      "similarity": 1.717817718307852
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A15Z",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A162",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9970845230694565,
+      "score_wsi": 0.7230677517132234,
+      "similarity": 1.7201522747826798
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A16S",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": false
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A16F",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9798413854708637,
+      "score_wsi": 0.8344171784177111,
+      "similarity": 1.8142585638885749
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A1NY",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A16G",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9965381073502876,
+      "score_wsi": 0.6541681987575702,
+      "similarity": 1.6507063061078577
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A16O",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A16N",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9844074414388968,
+      "score_wsi": 0.8188829723588652,
+      "similarity": 1.803290413797762
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A16J",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A16V",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9943931225420508,
+      "score_wsi": 0.6498422063284398,
+      "similarity": 1.6442353288704905
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A16B",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A16Y",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9759917256947048,
+      "score_wsi": 0.5306212209887025,
+      "similarity": 1.5066129466834073
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A16B",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A176",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.992981198770265,
+      "score_wsi": 0.6253085770966242,
+      "similarity": 1.6182897758668893
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A1NY",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A17A",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9943850851546453,
+      "score_wsi": 0.6452809183160361,
+      "similarity": 1.6396660034706814
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A103",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A17F",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9774624796384052,
+      "score_wsi": 0.755365060861355,
+      "similarity": 1.7328275404997602
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A1O7",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A17K",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9884748024446737,
+      "score_wsi": 0.715191913675393,
+      "similarity": 1.7036667161200667
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A17C",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A17L",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9945797786802975,
+      "score_wsi": 0.6867669894816854,
+      "similarity": 1.681346768161983
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A1O7",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A17N",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9806171506730474,
+      "score_wsi": 0.6635630638541616,
+      "similarity": 1.644180214527209
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A16O",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A17Q",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9895766484547076,
+      "score_wsi": 0.645737693637294,
+      "similarity": 1.6353143420920015
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A102",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A17S",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9653186282293127,
+      "score_wsi": 0.6045398565465022,
+      "similarity": 1.569858484775815
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A102",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A17U",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9923915230522974,
+      "score_wsi": 0.7297019254910314,
+      "similarity": 1.7220934485433288
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A16B",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A1NS",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9917763996077191,
+      "score_wsi": 0.6194077929056307,
+      "similarity": 1.6111841925133499
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A16I",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A1NU",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9838081612352298,
+      "score_wsi": 0.6811410949969735,
+      "similarity": 1.6649492562322035
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A1O7",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A1NZ",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9953478522192598,
+      "score_wsi": 0.8444413261866831,
+      "similarity": 1.839789178405943
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A16D",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A2G5",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9770677613436948,
+      "score_wsi": 0.6908125371593852,
+      "similarity": 1.6678802985030798
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A16J",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A2G6",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9885332722098242,
+      "score_wsi": 0.6444749703435221,
+      "similarity": 1.6330082425533463
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A16O",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A2G7",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9921167339020501,
+      "score_wsi": 0.5780974426847768,
+      "similarity": 1.570214176586827
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-D1-A3DA",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-D1-A3JP",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9951965664209269,
+      "score_wsi": 0.6332088336648786,
+      "similarity": 1.6284054000858055
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A0LT",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-DF-A2KN",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9929521376395619,
+      "score_wsi": 0.4881295807405017,
+      "similarity": 1.4810817183800635
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AP-A05A",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-DF-A2KZ",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9850104939156406,
+      "score_wsi": 0.4917890940533461,
+      "similarity": 1.4767995879689866
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-AJ-A3BG",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-DF-A2L0",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9813114575826223,
+      "score_wsi": 0.4961867082655994,
+      "similarity": 1.4774981658482216
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EO-A2CH",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-DI-A1BY",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9792633227051522,
+      "score_wsi": 0.22229661959644234,
+      "similarity": 1.2015599423015946
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-E6-A8L9",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-DI-A2QT",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9957545488963726,
+      "score_wsi": 0.5041866019825109,
+      "similarity": 1.4999411508788834
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-E6-A8L9",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-E6-A1LX",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9895685065917725,
+      "score_wsi": 0.5134550923969055,
+      "similarity": 1.503023598988678
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-FI-A3PV",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EC-A1NJ",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.990851754026035,
+      "score_wsi": 0.2321231038530629,
+      "similarity": 1.2229748578790978
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A2OM",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EC-A1QX",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9901089529714152,
+      "score_wsi": 0.578406632035222,
+      "similarity": 1.5685155850066372
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EO-A1Y8",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EO-A1Y5",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9984221682873354,
+      "score_wsi": 0.8480622938034509,
+      "similarity": 1.8464844620907863
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EO-A1Y8",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EO-A22R",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9899260604956991,
+      "score_wsi": 0.5306374634388258,
+      "similarity": 1.5205635239345248
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EO-A1Y8",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EO-A22S",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9947727702956208,
+      "score_wsi": 0.47294318680890296,
+      "similarity": 1.4677159571045237
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EO-A1Y8",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EO-A22T",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9901728669118736,
+      "score_wsi": 0.5011819222410518,
+      "similarity": 1.4913547891529255
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EO-A3KU",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EO-A22U",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9920716466713432,
+      "score_wsi": 0.8414397042401139,
+      "similarity": 1.8335113509114571
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EO-A3KX",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EO-A22X",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9975928400149559,
+      "score_wsi": 0.5657137566531407,
+      "similarity": 1.5633065966680966
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EO-A2CH",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EO-A2CG",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9939362161638177,
+      "score_wsi": 0.6876039176436349,
+      "similarity": 1.6815401338074527
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EO-A3AZ",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EO-A3AY",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9928446771381504,
+      "score_wsi": 0.5628321202675405,
+      "similarity": 1.5556767974056909
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EO-A3AV",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EO-A3B0",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9948523820079483,
+      "score_wsi": 0.604781269722907,
+      "similarity": 1.5996336517308554
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A212",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EO-A3B1",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9961400006646555,
+      "score_wsi": 0.629235165431686,
+      "similarity": 1.6253751660963416
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EO-A3KX",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EO-A3L0",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9970774316712272,
+      "score_wsi": 0.49684673747665825,
+      "similarity": 1.4939241691478855
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A212",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EY-A1G7",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9940730227520901,
+      "score_wsi": 0.4959042184881414,
+      "similarity": 1.4899772412402315
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A1GR",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EY-A1GC",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9970829148153381,
+      "score_wsi": 0.6077343294326693,
+      "similarity": 1.6048172442480073
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A1GF",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EY-A1GE",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9939918572547248,
+      "score_wsi": 0.6132229030690495,
+      "similarity": 1.6072147603237743
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A1GF",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EY-A1GH",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9973445950850217,
+      "score_wsi": 0.6098961864555239,
+      "similarity": 1.6072407815405456
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A1GF",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EY-A1GM",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9917205901912114,
+      "score_wsi": 0.5128775145459733,
+      "similarity": 1.5045981047371848
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-QS-A744",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EY-A1GO",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9937054530825148,
+      "score_wsi": 0.639761452236991,
+      "similarity": 1.633466905319506
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A1GX",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EY-A1GQ",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9876788619214425,
+      "score_wsi": 0.6806251070906408,
+      "similarity": 1.6683039690120833
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A1GR",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EY-A1GS",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.997449411950672,
+      "score_wsi": 0.6655207585888301,
+      "similarity": 1.6629701705395021
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A1GP",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EY-A1GU",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9918289263533107,
+      "score_wsi": 0.7332097991167277,
+      "similarity": 1.7250387254700383
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A1GX",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EY-A1GV",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9900275554517864,
+      "score_wsi": 0.5851633148921095,
+      "similarity": 1.575190870343896
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A2OM",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EY-A214",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9929885869633825,
+      "score_wsi": 0.6087511223534576,
+      "similarity": 1.6017397093168402
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A547",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EY-A3QX",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9873253879239975,
+      "score_wsi": 0.629061287327044,
+      "similarity": 1.6163866752510416
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A1GF",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EY-A548",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9876469115877038,
+      "score_wsi": 0.39692366975115956,
+      "similarity": 1.3845705813388633
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A547",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EY-A549",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9847724663835973,
+      "score_wsi": 0.5702942877180461,
+      "similarity": 1.5550667541016434
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A212",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EY-A54A",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9958012556065555,
+      "score_wsi": 0.6194653974767219,
+      "similarity": 1.6152666530832773
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A547",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EY-A5W2",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9916446662149854,
+      "score_wsi": 0.6412605107917957,
+      "similarity": 1.632905177006781
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-EY-A1GF",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-EY-A72D",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9906470082761187,
+      "score_wsi": 0.6652411290138518,
+      "similarity": 1.6558881372899705
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-FI-A2EU",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-FI-A2CX",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9853884506962057,
+      "score_wsi": 0.6292035678913854,
+      "similarity": 1.614592018587591
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-FI-A2D6",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-FI-A2D4",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9871146414365418,
+      "score_wsi": 0.42523165728588735,
+      "similarity": 1.4123462987224291
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-FI-A2EU",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-FI-A2EW",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9901951769653617,
+      "score_wsi": 0.8028896707866573,
+      "similarity": 1.7930848477520192
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-FI-A2EU",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-FI-A2EX",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9968299719557839,
+      "score_wsi": 0.7923004022109066,
+      "similarity": 1.7891303741666906
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BG-A2L7",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-K6-A3WQ",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9922747441071942,
+      "score_wsi": 0.6675446499103249,
+      "similarity": 1.6598193940175192
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-FI-A2F8",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-PG-A6IB",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9921840772378373,
+      "score_wsi": 0.5525818618893198,
+      "similarity": 1.544765939127157
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-A5-A1OF",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-PG-A7D5",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9879965607115552,
+      "score_wsi": 0.5747349844720882,
+      "similarity": 1.5627315451836434
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-FI-A2F8",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-PG-A916",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9941332803462148,
+      "score_wsi": 0.565905603763795,
+      "similarity": 1.5600388841100097
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-B5-A3FB",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-PG-A917",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9966081028308204,
+      "score_wsi": 0.5862065202324861,
+      "similarity": 1.5828146230633064
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-A5-AB3J",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-QF-A5YT",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9815648218865064,
+      "score_wsi": 0.5662233542540911,
+      "similarity": 1.5477881761405974
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-BG-A0W1",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-QS-A5YQ",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.996598265330767,
+      "score_wsi": 0.784756249547985,
+      "similarity": 1.781354514878752
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-E6-A8L9",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-QS-A8F1",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9729007727075438,
+      "score_wsi": 0.38690353004313477,
+      "similarity": 1.3598043027506785
+    },
+    {
+      "candidate_count": 187,
+      "common_valid_rows": 128,
+      "donor_id": "TCGA-SJ-A6ZI",
+      "donor_valid_rows": 128,
+      "fusion_valid": {
+        "rna": true,
+        "text": true
+      },
+      "imputed": {
+        "rna": false,
+        "text": true
+      },
+      "natural_valid": {
+        "rna": true,
+        "text": true
+      },
+      "original_valid": {
+        "rna": true,
+        "text": false
+      },
+      "padding_strategy": "raw_nonzero_prefix; train_patient_equal_valid_mean; pair_intersection_cosine",
+      "patient_id": "TCGA-SJ-A6ZJ",
+      "pool_weights": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "query_valid_rows": 128,
+      "route": "retrieval_joint",
+      "score_rna": 0.9901314953112822,
+      "score_wsi": 0.7336041263172363,
+      "similarity": 1.7237356216285185
+    }
+  ],
+  "run_fingerprint": "32cb3f31579bec549214d8577ac3fe057edb84b8a3fac49989c7e86090c94f14",
+  "spec": {
+    "alpha": 1.0,
+    "candidate_id": "combo-l1-a1-w0p5",
+    "enabled_rules": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "inactive_parameters": [],
+    "lambda": 1.0,
+    "protocol": "combo",
+    "ucec_exception": true,
+    "w": 0.5
+  },
+  "split": "test"
+}

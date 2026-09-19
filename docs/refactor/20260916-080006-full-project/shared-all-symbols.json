@@ -1,0 +1,562 @@
+[
+  {
+    "symbol": "GatedFusion",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/fusion_model.py",
+    "source_line": 917,
+    "target": "src/trimodalsurv/models/fusion.py",
+    "target_line": 6,
+    "ast_equal": true
+  },
+  {
+    "symbol": "MeanFusion",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/fusion_model.py",
+    "source_line": 952,
+    "target": "src/trimodalsurv/models/fusion.py",
+    "target_line": 42,
+    "ast_equal": true
+  },
+  {
+    "symbol": "SurvivalHead",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/fusion_model.py",
+    "source_line": 968,
+    "target": "src/trimodalsurv/models/fusion.py",
+    "target_line": 59,
+    "ast_equal": true
+  },
+  {
+    "symbol": "MainModalityMoE",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/fusion_model.py",
+    "source_line": 978,
+    "target": "src/trimodalsurv/models/fusion.py",
+    "target_line": 70,
+    "ast_equal": true
+  },
+  {
+    "symbol": "NPJC",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/model/fusion_model.py",
+    "source_line": 1101,
+    "target": "src/trimodalsurv/models/npjc.py",
+    "target_line": 7,
+    "ast_equal": true
+  },
+  {
+    "symbol": "consistency_loss",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/compensator.py",
+    "source_line": 223,
+    "target": "src/trimodalsurv/models/consistency.py",
+    "target_line": 5,
+    "ast_equal": true
+  },
+  {
+    "symbol": "_sample_mask",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/compensator.py",
+    "source_line": 8,
+    "target": "src/trimodalsurv/models/compensator.py",
+    "target_line": 7,
+    "ast_equal": true
+  },
+  {
+    "symbol": "_append_consistency_pair",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/compensator.py",
+    "source_line": 18,
+    "target": "src/trimodalsurv/models/compensator.py",
+    "target_line": 17,
+    "ast_equal": true
+  },
+  {
+    "symbol": "CAPRecall",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/compensator.py",
+    "source_line": 34,
+    "target": "src/trimodalsurv/models/compensator.py",
+    "target_line": 33,
+    "ast_equal": true
+  },
+  {
+    "symbol": "MissingBank",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/compensator.py",
+    "source_line": 175,
+    "target": "src/trimodalsurv/models/compensator.py",
+    "target_line": 174,
+    "ast_equal": true
+  },
+  {
+    "symbol": "compute_quantile_edges",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils_3yr/tcga_dataset.py",
+    "source_line": 318,
+    "target": "src/trimodalsurv/data/tcga_dataset.py",
+    "target_line": 25,
+    "ast_equal": true
+  },
+  {
+    "symbol": "assign_bins",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils_3yr/tcga_dataset.py",
+    "source_line": 336,
+    "target": "src/trimodalsurv/data/tcga_dataset.py",
+    "target_line": 43,
+    "ast_equal": true
+  },
+  {
+    "symbol": "TCGASurDataset",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils_3yr/tcga_dataset.py",
+    "source_line": 345,
+    "target": "src/trimodalsurv/data/tcga_dataset.py",
+    "target_line": 52,
+    "ast_equal": true
+  },
+  {
+    "symbol": "get_dataset_tcga_sur",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils_3yr/tcga_dataset.py",
+    "source_line": 657,
+    "target": "src/trimodalsurv/data/tcga_dataset.py",
+    "target_line": 365,
+    "ast_equal": true
+  },
+  {
+    "symbol": "parsing_args",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "source_line": 53,
+    "target": "src/trimodalsurv/training/runtime.py",
+    "target_line": 50,
+    "ast_equal": false
+  },
+  {
+    "symbol": "_resolve_config_path",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "source_line": 88,
+    "target": "src/trimodalsurv/training/runtime.py",
+    "target_line": 108,
+    "ast_equal": false
+  },
+  {
+    "symbol": "resolve_gpu_config",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "source_line": 96,
+    "target": "src/trimodalsurv/training/runtime.py",
+    "target_line": 116,
+    "ast_equal": true
+  },
+  {
+    "symbol": "validate_formal_contract",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "source_line": 144,
+    "target": "src/trimodalsurv/training/runtime.py",
+    "target_line": 164,
+    "ast_equal": true
+  },
+  {
+    "symbol": "build_dataloader_kwargs",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "source_line": 159,
+    "target": "src/trimodalsurv/training/runtime.py",
+    "target_line": 179,
+    "ast_equal": true
+  },
+  {
+    "symbol": "_print_resolved_gpu_config",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "source_line": 170,
+    "target": "src/trimodalsurv/training/runtime.py",
+    "target_line": 190,
+    "ast_equal": true
+  },
+  {
+    "symbol": "load_model",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "source_line": 173,
+    "target": "src/trimodalsurv/training/runtime.py",
+    "target_line": 193,
+    "ast_equal": false
+  },
+  {
+    "symbol": "_unwrap_model",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "source_line": 250,
+    "target": "src/trimodalsurv/training/runtime.py",
+    "target_line": 262,
+    "ast_equal": true
+  },
+  {
+    "symbol": "_model_compensator",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "source_line": 258,
+    "target": "src/trimodalsurv/training/runtime.py",
+    "target_line": 270,
+    "ast_equal": true
+  },
+  {
+    "symbol": "_append_compensator_suffix",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "source_line": 380,
+    "target": "src/trimodalsurv/training/runtime.py",
+    "target_line": 277,
+    "ast_equal": true
+  },
+  {
+    "symbol": "_unpack_survival_batch",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "source_line": 391,
+    "target": "src/trimodalsurv/training/runtime.py",
+    "target_line": 288,
+    "ast_equal": true
+  },
+  {
+    "symbol": "_forward_survival_model",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "source_line": 425,
+    "target": "src/trimodalsurv/training/runtime.py",
+    "target_line": 322,
+    "ast_equal": true
+  },
+  {
+    "symbol": "_batch_shape_summary",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "source_line": 439,
+    "target": "src/trimodalsurv/training/runtime.py",
+    "target_line": 336,
+    "ast_equal": true
+  },
+  {
+    "symbol": "_is_cuda_oom",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "source_line": 448,
+    "target": "src/trimodalsurv/training/runtime.py",
+    "target_line": 345,
+    "ast_equal": true
+  },
+  {
+    "symbol": "probe_batch_size",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "source_line": 452,
+    "target": "src/trimodalsurv/training/runtime.py",
+    "target_line": 349,
+    "ast_equal": true
+  },
+  {
+    "symbol": "plot_metrics",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "source_line": 559,
+    "target": "src/trimodalsurv/training/runtime.py",
+    "target_line": 456,
+    "ast_equal": true
+  },
+  {
+    "symbol": "finetune_epoch",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "source_line": 588,
+    "target": "src/trimodalsurv/training/runtime.py",
+    "target_line": 485,
+    "ast_equal": true
+  },
+  {
+    "symbol": "prediction",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "source_line": 684,
+    "target": "src/trimodalsurv/training/runtime.py",
+    "target_line": 581,
+    "ast_equal": true
+  },
+  {
+    "symbol": "main",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "source_line": 785,
+    "target": "src/trimodalsurv/training/runtime.py",
+    "target_line": 682,
+    "ast_equal": false
+  },
+  {
+    "symbol": "set_seed",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils/common_tools.py",
+    "source_line": 21,
+    "target": "src/trimodalsurv/training/common_tools.py",
+    "target_line": 21,
+    "ast_equal": true
+  },
+  {
+    "symbol": "str2bool",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils/common_tools.py",
+    "source_line": 30,
+    "target": "src/trimodalsurv/training/common_tools.py",
+    "target_line": 30,
+    "ast_equal": true
+  },
+  {
+    "symbol": "input_dim",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils/common_tools.py",
+    "source_line": 46,
+    "target": "src/trimodalsurv/training/common_tools.py",
+    "target_line": 46,
+    "ast_equal": true
+  },
+  {
+    "symbol": "YmlConfig",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils/common_tools.py",
+    "source_line": 50,
+    "target": "src/trimodalsurv/training/common_tools.py",
+    "target_line": 50,
+    "ast_equal": true
+  },
+  {
+    "symbol": "ModelDumper",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils_3yr/model_util.py",
+    "source_line": 7,
+    "target": "src/trimodalsurv/training/model_util.py",
+    "target_line": 7,
+    "ast_equal": true
+  },
+  {
+    "symbol": "Modality",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils_3yr/model_util.py",
+    "source_line": 73,
+    "target": "src/trimodalsurv/training/model_util.py",
+    "target_line": 73,
+    "ast_equal": true
+  },
+  {
+    "symbol": "NLLSurvLoss",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils_3yr/loss_func.py",
+    "source_line": 8,
+    "target": "src/trimodalsurv/training/loss_func.py",
+    "target_line": 8,
+    "ast_equal": true
+  },
+  {
+    "symbol": "nll_loss",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils_3yr/loss_func.py",
+    "source_line": 43,
+    "target": "src/trimodalsurv/training/loss_func.py",
+    "target_line": 43,
+    "ast_equal": true
+  },
+  {
+    "symbol": "PairwiseRankingLoss",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils_3yr/loss_func.py",
+    "source_line": 117,
+    "target": "src/trimodalsurv/training/loss_func.py",
+    "target_line": 117,
+    "ast_equal": true
+  },
+  {
+    "symbol": "parse_grids",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 56,
+    "target": "src/trimodalsurv/evaluation/missing.py",
+    "target_line": 46,
+    "ast_equal": true
+  },
+  {
+    "symbol": "_parse_bool",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 78,
+    "target": "src/trimodalsurv/evaluation/missing.py",
+    "target_line": 61,
+    "ast_equal": true
+  },
+  {
+    "symbol": "manifest_members",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 87,
+    "target": "src/trimodalsurv/evaluation/missing.py",
+    "target_line": 70,
+    "ast_equal": true
+  },
+  {
+    "symbol": "grid_mask_counts",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 130,
+    "target": "src/trimodalsurv/evaluation/missing.py",
+    "target_line": 106,
+    "ast_equal": true
+  },
+  {
+    "symbol": "dual_cindex",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 150,
+    "target": "src/trimodalsurv/evaluation/missing.py",
+    "target_line": 116,
+    "ast_equal": true
+  },
+  {
+    "symbol": "load_checkpoint",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 181,
+    "target": "src/trimodalsurv/evaluation/missing.py",
+    "target_line": 131,
+    "ast_equal": false
+  },
+  {
+    "symbol": "compute_training_feature_means",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 192,
+    "target": "src/trimodalsurv/evaluation/missing.py",
+    "target_line": 139,
+    "ast_equal": true
+  },
+  {
+    "symbol": "apply_m1_feature_means",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 224,
+    "target": "src/trimodalsurv/evaluation/missing.py",
+    "target_line": 171,
+    "ast_equal": true
+  },
+  {
+    "symbol": "format_grid_result",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 245,
+    "target": "src/trimodalsurv/evaluation/missing.py",
+    "target_line": 192,
+    "ast_equal": true
+  },
+  {
+    "symbol": "prepare_dataset_labels",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 270,
+    "target": "src/trimodalsurv/evaluation/missing.py",
+    "target_line": 211,
+    "ast_equal": true
+  },
+  {
+    "symbol": "_load_runtime",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 298,
+    "target": "src/trimodalsurv/evaluation/missing.py",
+    "target_line": 239,
+    "ast_equal": false
+  },
+  {
+    "symbol": "_resolve_modalities",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 308,
+    "target": "src/trimodalsurv/evaluation/missing.py",
+    "target_line": 245,
+    "ast_equal": true
+  },
+  {
+    "symbol": "_make_dataset",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 321,
+    "target": "src/trimodalsurv/evaluation/missing.py",
+    "target_line": 258,
+    "ast_equal": true
+  },
+  {
+    "symbol": "configure_missing_grid_inplace",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 349,
+    "target": "src/trimodalsurv/evaluation/missing.py",
+    "target_line": 286,
+    "ast_equal": true
+  },
+  {
+    "symbol": "_make_test_dataset_legacy",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 368,
+    "target": "src/trimodalsurv/evaluation/missing.py",
+    "target_line": 305,
+    "ast_equal": true
+  },
+  {
+    "symbol": "iter_reused_grid_datasets",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 391,
+    "target": "src/trimodalsurv/evaluation/missing.py",
+    "target_line": 328,
+    "ast_equal": true
+  },
+  {
+    "symbol": "_collect_logits",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 405,
+    "target": "src/trimodalsurv/evaluation/missing.py",
+    "target_line": 342,
+    "ast_equal": true
+  },
+  {
+    "symbol": "run_evaluation",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 472,
+    "target": "src/trimodalsurv/evaluation/missing.py",
+    "target_line": 386,
+    "ast_equal": false
+  },
+  {
+    "symbol": "parse_args",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 633,
+    "target": "src/trimodalsurv/evaluation/missing.py",
+    "target_line": 549,
+    "ast_equal": false
+  },
+  {
+    "symbol": "main",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 658,
+    "target": "src/trimodalsurv/evaluation/missing.py",
+    "target_line": 574,
+    "ast_equal": true
+  },
+  {
+    "symbol": "grid_parts",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 43,
+    "target": "src/trimodalsurv/evaluation/common.py",
+    "target_line": 11,
+    "ast_equal": true
+  },
+  {
+    "symbol": "masked_modalities",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 69,
+    "target": "src/trimodalsurv/evaluation/common.py",
+    "target_line": 25,
+    "ast_equal": true
+  },
+  {
+    "symbol": "grid_sha256",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 121,
+    "target": "src/trimodalsurv/evaluation/common.py",
+    "target_line": 35,
+    "ast_equal": true
+  },
+  {
+    "symbol": "dual_risk_from_logits",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 138,
+    "target": "src/trimodalsurv/evaluation/common.py",
+    "target_line": 45,
+    "ast_equal": true
+  },
+  {
+    "symbol": "strip_data_parallel_prefix",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 161,
+    "target": "src/trimodalsurv/evaluation/common.py",
+    "target_line": 58,
+    "ast_equal": true
+  },
+  {
+    "symbol": "extract_state_dict",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 171,
+    "target": "src/trimodalsurv/evaluation/common.py",
+    "target_line": 69,
+    "ast_equal": true
+  },
+  {
+    "symbol": "file_sha256",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 262,
+    "target": "src/trimodalsurv/evaluation/common.py",
+    "target_line": 80,
+    "ast_equal": true
+  },
+  {
+    "symbol": "_atomic_json_dump",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/scripts/eval_missing.py",
+    "source_line": 447,
+    "target": "src/trimodalsurv/evaluation/common.py",
+    "target_line": 89,
+    "ast_equal": true
+  }
+]

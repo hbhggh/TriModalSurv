@@ -1,0 +1,195 @@
+{
+  "status": "PASS",
+  "scope": "documentation_only; no model inference or patient-level C-index recomputation",
+  "units": 75,
+  "cindex_readings": 300,
+  "artifact_hashes_verified": 600,
+  "paired_checkpoint_groups": 25,
+  "distinct_checkpoint_file_hashes": 25,
+  "result_table_rows_verified": 64,
+  "paired_win_tie_loss": {
+    "four": {
+      "m1": [
+        32,
+        5,
+        63
+      ],
+      "m0real": [
+        37,
+        5,
+        58
+      ]
+    },
+    "three": {
+      "m1": [
+        28,
+        0,
+        47
+      ],
+      "m0real": [
+        30,
+        0,
+        45
+      ]
+    }
+  },
+  "verbatim_code_excerpts_verified": 16,
+  "historical_training_log_reconstruction": {
+    "BLCA": {
+      "log_sha256": "479c8f8a5d21151586d66bf0288da7a99489fa233df3b777a993ad1c3de4cad9",
+      "epochs_completed": 50,
+      "runs": [
+        {
+          "seed": 123,
+          "last_saved_epoch_1based": 49
+        },
+        {
+          "seed": 132,
+          "last_saved_epoch_1based": 41
+        },
+        {
+          "seed": 213,
+          "last_saved_epoch_1based": 2
+        },
+        {
+          "seed": 231,
+          "last_saved_epoch_1based": 49
+        },
+        {
+          "seed": 321,
+          "last_saved_epoch_1based": 49
+        }
+      ]
+    },
+    "BRCA": {
+      "log_sha256": "34829ca57e02ddbd272eea20f2b4be3b6b803d9ac5e8da8db6521b2f733948aa",
+      "epochs_completed": 50,
+      "runs": [
+        {
+          "seed": 123,
+          "last_saved_epoch_1based": 18
+        },
+        {
+          "seed": 132,
+          "last_saved_epoch_1based": 37
+        },
+        {
+          "seed": 213,
+          "last_saved_epoch_1based": 16
+        },
+        {
+          "seed": 231,
+          "last_saved_epoch_1based": 28
+        },
+        {
+          "seed": 321,
+          "last_saved_epoch_1based": 16
+        }
+      ]
+    },
+    "LGG": {
+      "log_sha256": "7c8ba1f7305da34d429031bf4f898899dd4a82ede65d6fa00d02c0bae74613f8",
+      "epochs_completed": 50,
+      "runs": [
+        {
+          "seed": 123,
+          "last_saved_epoch_1based": 50
+        },
+        {
+          "seed": 132,
+          "last_saved_epoch_1based": 50
+        },
+        {
+          "seed": 213,
+          "last_saved_epoch_1based": 50
+        },
+        {
+          "seed": 231,
+          "last_saved_epoch_1based": 45
+        },
+        {
+          "seed": 321,
+          "last_saved_epoch_1based": 45
+        }
+      ]
+    },
+    "LUAD": {
+      "log_sha256": "a473bb1a254cdc593e74f5bc1537dbbccb8fb07de5f96e3c253dc7630c008d03",
+      "epochs_completed": 50,
+      "runs": [
+        {
+          "seed": 123,
+          "last_saved_epoch_1based": 41
+        },
+        {
+          "seed": 132,
+          "last_saved_epoch_1based": 50
+        },
+        {
+          "seed": 213,
+          "last_saved_epoch_1based": 31
+        },
+        {
+          "seed": 231,
+          "last_saved_epoch_1based": 37
+        },
+        {
+          "seed": 321,
+          "last_saved_epoch_1based": 41
+        }
+      ]
+    },
+    "UCEC": {
+      "log_sha256": "005309c4f9f01122678187519257cac986379d807a71902cfd922b2c2305e83b",
+      "epochs_completed": 50,
+      "runs": [
+        {
+          "seed": 123,
+          "last_saved_epoch_1based": 50
+        },
+        {
+          "seed": 132,
+          "last_saved_epoch_1based": 37
+        },
+        {
+          "seed": 213,
+          "last_saved_epoch_1based": 49
+        },
+        {
+          "seed": 231,
+          "last_saved_epoch_1based": 49
+        },
+        {
+          "seed": 321,
+          "last_saved_epoch_1based": 49
+        }
+      ]
+    }
+  },
+  "source_sha256": {
+    "model/patient_retrieval_bank.py": "1a87fd04dc4ec87591421b76424aba60b0bb523a6849eae2dcc5a6b921663bb0",
+    "model/fusion_model.py": "03c4060232d2d18ca277205e5a3dc47a8e3617e930128c839b11402953a7a096",
+    "scripts/eval_missing.py": "e42d52c3a87e34ba77d293c61131046cff6bdeadf703c74dde3d2cf59f98ef93",
+    "scripts/eval_patient_retrieval.py": "76cf8f3e58703c4615910e8cc3457a6539e9feefc27dc937239ae89a57a334de"
+  },
+  "original_reports_unchanged": {
+    "seed单位-实验结果.md": "511f7bcf7a3a5cb0d7ddd0a5bfb645ce5183b0a74e2f242b61583f0a8337eebb",
+    "癌症为单位.md": "1c5d80eb2edcd46256a59193c9b50032f4195098d39ff770775ec22ff029c9fd"
+  },
+  "document_sha256": {
+    "patient-fixed-padmask-v2-总实验map.md": "d01dbb0a20bc2dbcc61d03835845180f72f4769fe0b9785a0d1bd944ed4242c8",
+    "Grok-patient-fixed-padmask-v2-诊断prompt.md": "df0eb797f2745df01f797222b7d5751877246807d7f240420c83cc00a2c09cc9"
+  },
+  "overall_recomputed_from_result_json": {
+    "four_including_none": {
+      "retrieval": 0.6289637990840953,
+      "m1": 0.6318247078964476,
+      "m0real": 0.630751400355783
+    },
+    "three_artificial": {
+      "retrieval": 0.6180826677650274,
+      "m1": 0.6213486487102147,
+      "m0real": 0.6202203335750032
+    }
+  }
+}

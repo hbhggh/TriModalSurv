@@ -1,0 +1,85 @@
+test_explicit_false_and_zero_survive_merge (test_config.ConfigTests) ... ok
+test_resolved_output_preserves_paths_and_refuses_overwrite (test_config.ConfigTests) ... ok
+test_unpassed_cli_does_not_replace_experiment (test_config.ConfigTests) ... ok
+test_actual_model_configuration_and_unknown_training_parameters (test_migration_contracts.MigrationContracts) ... ok
+test_existing_run_and_formal_without_record_are_blocked (test_migration_contracts.MigrationContracts) ... ok
+test_experiment_overrides_defaults_but_cannot_change_locked_model (test_migration_contracts.MigrationContracts) ... ok
+test_strict_load_rejects_missing_nonfinite_and_prefix_collision (test_migration_contracts.MigrationContracts) ... ok
+test_batch_fill_preserves_original_valid_and_is_partition_invariant (test_patient_retrieval_bank.BankTests) ... ok
+test_both_missing_requires_one_complete_donor (test_patient_retrieval_bank.BankTests) ... ok
+test_exact_tie_uses_sorted_id (test_patient_retrieval_bank.BankTests) ... ok
+test_mean_and_no_fill_have_distinct_valid_contracts (test_patient_retrieval_bank.BankTests) ... ok
+test_no_mutation_or_value_alias (test_patient_retrieval_bank.BankTests) ... ok
+test_nontrain_features_do_not_enter_mean_keys_or_values (test_patient_retrieval_bank.BankTests) ... ok
+test_original_centroid_order_is_preserved (test_patient_retrieval_bank.BankTests) ... ok
+test_reject_duplicate_or_overlapping_ids (test_patient_retrieval_bank.BankTests) ... ok
+test_reject_padding_nonfinite_shapes_zero_norm_and_empty_candidates (test_patient_retrieval_bank.BankTests) ... ok
+test_self_excluded_and_unregistered_query_rejected (test_patient_retrieval_bank.BankTests) ... ok
+test_top1_returns_full_paired_value_and_shared_mean (test_patient_retrieval_bank.BankTests) ... ok
+test_actual_npjc_forward_identity_mask_and_strict_checkpoint (test_patient_retrieval_eval.EvaluationContract) ... /home/wuhao/.local/lib/python3.10/site-packages/torch/nn/modules/transformer.py:384: UserWarning: The PyTorch API of nested tensors is in prototype stage and will change in the near future. (Triggered internally at ../aten/src/ATen/NestedTensorImpl.cpp:177.)
+  output = torch._nested_tensor_from_mask(output, src_key_padding_mask.logical_not(), mask_check=False)
+ok
+test_bad_test_value_and_missing_wsi_rejected (test_patient_retrieval_eval.EvaluationContract) ... ok
+test_check_count_null_and_batch_partition (test_patient_retrieval_eval.EvaluationContract) ... ok
+test_complete_tolerance_accepts_inside_and_rejects_outside (test_patient_retrieval_eval.EvaluationContract) ... ok
+test_duplicate_seed_state_rejected_before_data_access (test_patient_retrieval_eval.EvaluationContract) ... ok
+test_fill_and_masks_are_applied_before_model (test_patient_retrieval_eval.EvaluationContract) ... ok
+test_fixed_cli_rejects_unapproved_dimensions (test_patient_retrieval_eval.EvaluationContract) ... ok
+test_invalid_or_duplicate_label_rejected (test_patient_retrieval_eval.EvaluationContract) ... ok
+test_json_output_refuses_overwrite (test_patient_retrieval_eval.EvaluationContract) ... ok
+test_none_preserves_natural_missing_and_grid_masks (test_patient_retrieval_eval.EvaluationContract) ... ok
+test_output_cannot_pollute_source_cache (test_patient_retrieval_eval.EvaluationContract) ... ok
+test_smoke_includes_all_padded_test_patients_without_train_leak (test_patient_retrieval_eval.EvaluationContract) ... ok
+test_synthetic_unit_artifacts_match_summary_contract (test_patient_retrieval_eval.EvaluationContract) ... ERROR
+test_bad_zero_layout_and_allzero_still_rejected (test_patient_retrieval_padding.PaddingBankTests) ... ok
+test_invalid_masks_empty_overlap_and_norm_are_rejected (test_patient_retrieval_padding.PaddingBankTests) ... ok
+test_invalid_pair_norm_not_silently_skipped (test_patient_retrieval_padding.PaddingBankTests) ... ok
+test_mask_excludes_padding_and_nonoverlap_from_both_norms (test_patient_retrieval_padding.PaddingBankTests) ... ok
+test_nonpadding_matches_original_score_and_order (test_patient_retrieval_padding.PaddingBankTests) ... ok
+test_padding_query_cache_and_partition_are_stable (test_patient_retrieval_padding.PaddingBankTests) ... ok
+test_patient_equal_mean_and_targeted_padding_retrieval (test_patient_retrieval_padding.PaddingBankTests) ... ok
+test_zero_centered_real_row_still_counts_as_real (test_patient_retrieval_padding.PaddingBankTests) ... ok
+test_00_production_module_exists (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_artifact_path_escape_is_rejected_even_when_hash_matches (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_artificial_missing_cannot_claim_complete_checks (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_cli_accepts_required_directories (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_complete_75_unit_fixture_writes_expected_outputs_and_arithmetic (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_duplicate_identity_in_differently_named_json_is_rejected (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_exact_zero_delta_is_counted_as_tie (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_existing_output_target_is_never_overwritten (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_failed_campaign_is_rejected (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_inconsistent_check_diagnostics_rejected (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_known_manifest_malformed_schema_is_rejected (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_macro_overview_excludes_none_and_reports_worst_missing_grid (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_missing_artifact_is_rejected (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_missing_campaign_status_is_rejected (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_missing_check_count_rejected_for_formal_summary (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_missing_unit_is_rejected_without_outputs (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_nan_cindex_is_rejected (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_new_run_layout_manifests_preserve_full_summary (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_paired_check_metadata_must_match (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_paired_checkpoint_or_fingerprint_mismatch_is_rejected (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_paired_grid_sample_count_mismatch_is_rejected (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_paired_grid_sha_mismatch_is_rejected (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_report_none_does_not_claim_complete_data (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_running_campaign_is_rejected (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_same_cancer_duplicate_checkpoint_across_seeds_is_rejected (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_same_cancer_fingerprint_mismatch_across_seeds_is_rejected (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_tampered_artifact_is_rejected (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_unknown_seed_is_rejected (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+test_v1_v2_mixed_protocol_is_rejected (test_patient_retrieval_summary.PatientRetrievalSummaryTest) ... ok
+
+======================================================================
+ERROR: test_synthetic_unit_artifacts_match_summary_contract (test_patient_retrieval_eval.EvaluationContract)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/wuhao/npj_rules15_b1b2_20260916_fiYJ87/repo/experiments/I01_patient_retrieval/tests/test_patient_retrieval_eval.py", line 182, in test_synthetic_unit_artifacts_match_summary_contract
+    self.module.evaluate_unit(args, self.bank, source, model, report, 123)
+  File "/home/wuhao/npj_rules15_b1b2_20260916_fiYJ87/repo/experiments/I01_patient_retrieval/evaluate.py", line 272, in evaluate_unit
+    from sksurv.metrics import concordance_index_censored
+ModuleNotFoundError: No module named 'sksurv'
+
+----------------------------------------------------------------------
+Ran 68 tests in 6.285s
+
+FAILED (errors=1)

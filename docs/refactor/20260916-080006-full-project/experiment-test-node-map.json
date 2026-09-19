@@ -1,0 +1,347 @@
+[
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_early_stopping.py::test_fifteen_non_improvements_stop_and_ties_count",
+    "new": "experiments/I02_population_prototypes/tests/test_population_early_stopping.py::test_fifteen_non_improvements_stop_and_ties_count",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_early_stopping.py::test_improvement_resets_counter_and_disabled_keeps_running",
+    "new": "experiments/I02_population_prototypes/tests/test_population_early_stopping.py::test_improvement_resets_counter_and_disabled_keeps_running",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_early_stopping.py::test_invalid_patience_and_nonfinite_metric_fail",
+    "new": "experiments/I02_population_prototypes/tests/test_population_early_stopping.py::test_invalid_patience_and_nonfinite_metric_fail",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_early_stopping.py::test_cli_early_stopping_is_population_only_and_opt_in",
+    "new": "experiments/I02_population_prototypes/tests/test_population_early_stopping.py::test_cli_early_stopping_is_population_only_and_opt_in",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_early_stopping.py::test_real_main_stops_and_reloads_best_checkpoint",
+    "new": "experiments/I02_population_prototypes/tests/test_population_early_stopping.py::test_real_main_stops_and_reloads_best_checkpoint",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_entrypoints.py::test_training_cli_requires_explicit_population_k",
+    "new": "experiments/I02_population_prototypes/tests/test_population_entrypoints.py::test_training_cli_requires_explicit_population_k",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_entrypoints.py::test_model_factory_population_scope_and_seed",
+    "new": "experiments/I02_population_prototypes/tests/test_population_entrypoints.py::test_model_factory_population_scope_and_seed",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_entrypoints.py::test_output_identity_includes_k_and_legacy_suffix_stays_same",
+    "new": "experiments/I02_population_prototypes/tests/test_population_entrypoints.py::test_output_identity_includes_k_and_legacy_suffix_stays_same",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_entrypoints.py::test_population_artifact_paths_isolate_distinct_cpt_names",
+    "new": "experiments/I02_population_prototypes/tests/test_population_entrypoints.py::test_population_artifact_paths_isolate_distinct_cpt_names",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_entrypoints.py::test_eval_cli_population_does_not_allow_mean_prefill",
+    "new": "experiments/I02_population_prototypes/tests/test_population_entrypoints.py::test_eval_cli_population_does_not_allow_mean_prefill",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_entrypoints.py::test_population_eval_refuses_to_overwrite_existing_json",
+    "new": "experiments/I02_population_prototypes/tests/test_population_entrypoints.py::test_population_eval_refuses_to_overwrite_existing_json",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_entrypoints.py::test_legacy_eval_keeps_existing_json_overwrite_behavior",
+    "new": "experiments/I02_population_prototypes/tests/test_population_entrypoints.py::test_legacy_eval_keeps_existing_json_overwrite_behavior",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_launcher.py::test_population_next_seed_waits_for_previous_evaluation",
+    "new": "experiments/I02_population_prototypes/tests/test_population_launcher.py::test_population_next_seed_waits_for_previous_evaluation",
+    "assertions": "原判别保留；新增显式bin_mode=author输入及评测透传断言（计划B4）。"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_launcher.py::test_population_spec_accepts_explicit_k",
+    "new": "experiments/I02_population_prototypes/tests/test_population_launcher.py::test_population_spec_accepts_explicit_k",
+    "assertions": "原判别保留；新增显式bin_mode=author输入及评测透传断言（计划B4）。"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_launcher.py::test_population_early_stopping_reaches_training_but_not_old_arms",
+    "new": "experiments/I02_population_prototypes/tests/test_population_launcher.py::test_population_early_stopping_reaches_training_but_not_old_arms",
+    "assertions": "原判别保留；新增显式bin_mode=author输入及评测透传断言（计划B4）。"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_launcher.py::test_plan_loads_explicit_population_k",
+    "new": "experiments/I02_population_prototypes/tests/test_population_launcher.py::test_plan_loads_explicit_population_k",
+    "assertions": "原判别保留；新增显式bin_mode=author输入及评测透传断言（计划B4）。"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_launcher.py::test_different_k_get_distinct_run_and_checkpoint_identity",
+    "new": "experiments/I02_population_prototypes/tests/test_population_launcher.py::test_different_k_get_distinct_run_and_checkpoint_identity",
+    "assertions": "原判别保留；新增显式bin_mode=author输入及评测透传断言（计划B4）。"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_launcher.py::test_population_rejects_missing_invalid_duplicate_k_and_other_network",
+    "new": "experiments/I02_population_prototypes/tests/test_population_launcher.py::test_population_rejects_missing_invalid_duplicate_k_and_other_network",
+    "assertions": "原判别保留；新增显式bin_mode=author输入及评测透传断言（计划B4）。"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_launcher.py::test_cli_dry_run_supports_population_without_side_effects",
+    "new": "experiments/I02_population_prototypes/tests/test_population_launcher.py::test_cli_dry_run_supports_population_without_side_effects",
+    "assertions": "原判别保留；新增显式bin_mode=author输入及评测透传断言（计划B4）。"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_launcher.py::test_checkpoint_path_matches_training_and_idempotent_skip",
+    "new": "experiments/I02_population_prototypes/tests/test_population_launcher.py::test_checkpoint_path_matches_training_and_idempotent_skip",
+    "assertions": "原判别保留；新增显式bin_mode=author输入及评测透传断言（计划B4）。"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_launcher.py::test_eval_forwards_k_and_preserves_old_modes",
+    "new": "experiments/I02_population_prototypes/tests/test_population_launcher.py::test_eval_forwards_k_and_preserves_old_modes",
+    "assertions": "原判别保留；新增显式bin_mode=author输入及评测透传断言（计划B4）。"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_launcher.py::test_eval_relay_reads_and_keeps_k_specific_identity",
+    "new": "experiments/I02_population_prototypes/tests/test_population_launcher.py::test_eval_relay_reads_and_keeps_k_specific_identity",
+    "assertions": "原判别保留；新增显式bin_mode=author输入及评测透传断言（计划B4）。"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_prototypes.py::test_population_prototype_module_exists",
+    "new": "experiments/I02_population_prototypes/tests/test_population_prototypes.py::test_population_prototype_module_exists",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_prototypes.py::test_bank_registers_only_buffers_and_dictionary_view",
+    "new": "experiments/I02_population_prototypes/tests/test_population_prototypes.py::test_bank_registers_only_buffers_and_dictionary_view",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_prototypes.py::test_update_uses_raw_wsi_labels_for_all_paired_means",
+    "new": "experiments/I02_population_prototypes/tests/test_population_prototypes.py::test_update_uses_raw_wsi_labels_for_all_paired_means",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_prototypes.py::test_eval_fills_each_missing_target_by_wsi_cosine_top1_only",
+    "new": "experiments/I02_population_prototypes/tests/test_population_prototypes.py::test_eval_fills_each_missing_target_by_wsi_cosine_top1_only",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_prototypes.py::test_training_is_a_strict_no_read_no_fill_path",
+    "new": "experiments/I02_population_prototypes/tests/test_population_prototypes.py::test_training_is_a_strict_no_read_no_fill_path",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_prototypes.py::test_unready_bank_errors_only_when_eval_fill_is_needed",
+    "new": "experiments/I02_population_prototypes/tests/test_population_prototypes.py::test_unready_bank_errors_only_when_eval_fill_is_needed",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_prototypes.py::test_update_is_hard_overwrite_and_failed_update_is_atomic",
+    "new": "experiments/I02_population_prototypes/tests/test_population_prototypes.py::test_update_is_hard_overwrite_and_failed_update_is_atomic",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_prototypes.py::test_state_dict_roundtrip_preserves_ready_bank",
+    "new": "experiments/I02_population_prototypes/tests/test_population_prototypes.py::test_state_dict_roundtrip_preserves_ready_bank",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_prototypes.py::test_constructor_and_update_reject_invalid_inputs",
+    "new": "experiments/I02_population_prototypes/tests/test_population_prototypes.py::test_constructor_and_update_reject_invalid_inputs",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_prototypes.py::test_npjc_encode_exposes_exact_mean_projector_tokens_and_real_valids",
+    "new": "experiments/I02_population_prototypes/tests/test_population_prototypes.py::test_npjc_encode_exposes_exact_mean_projector_tokens_and_real_valids",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_prototypes.py::test_npjc_population_encode_exposes_img_valid_for_complete_patient_filter",
+    "new": "experiments/I02_population_prototypes/tests/test_population_prototypes.py::test_npjc_population_encode_exposes_img_valid_for_complete_patient_filter",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_prototypes.py::test_npjc_population_eval_fills_and_promotes_only_missing_targets",
+    "new": "experiments/I02_population_prototypes/tests/test_population_prototypes.py::test_npjc_population_eval_fills_and_promotes_only_missing_targets",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_prototypes.py::test_npjc_population_training_skips_bank_and_valid_promotion",
+    "new": "experiments/I02_population_prototypes/tests/test_population_prototypes.py::test_npjc_population_training_skips_bank_and_valid_promotion",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_prototypes.py::test_npjc_population_eval_rejects_invalid_wsi_even_when_targets_are_valid",
+    "new": "experiments/I02_population_prototypes/tests/test_population_prototypes.py::test_npjc_population_eval_rejects_invalid_wsi_even_when_targets_are_valid",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_prototypes.py::test_npjc_population_eval_uses_default_target_valids_to_reject_invalid_wsi",
+    "new": "experiments/I02_population_prototypes/tests/test_population_prototypes.py::test_npjc_population_eval_uses_default_target_valids_to_reject_invalid_wsi",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_prototypes.py::test_npjc_old_compensator_training_behavior_is_unchanged",
+    "new": "experiments/I02_population_prototypes/tests/test_population_prototypes.py::test_npjc_old_compensator_training_behavior_is_unchanged",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_runtime.py::test_train_view_keeps_fixed_mask_and_does_not_call_training_getitem",
+    "new": "experiments/I02_population_prototypes/tests/test_population_runtime.py::test_train_view_keeps_fixed_mask_and_does_not_call_training_getitem",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_runtime.py::test_split_integrity_rejects_duplicates_and_overlap",
+    "new": "experiments/I02_population_prototypes/tests/test_population_runtime.py::test_split_integrity_rejects_duplicates_and_overlap",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_runtime.py::test_global_outputs_deduplicate_padding_sort_and_require_coverage",
+    "new": "experiments/I02_population_prototypes/tests/test_population_runtime.py::test_global_outputs_deduplicate_padding_sort_and_require_coverage",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_runtime.py::test_bank_loader_does_not_consume_global_torch_rng",
+    "new": "experiments/I02_population_prototypes/tests/test_population_runtime.py::test_bank_loader_does_not_consume_global_torch_rng",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_runtime.py::test_update_uses_complete_patients_restores_mode_and_rebuilds",
+    "new": "experiments/I02_population_prototypes/tests/test_population_runtime.py::test_update_uses_complete_patients_restores_mode_and_rebuilds",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_runtime.py::test_checkpoint_zero_metric_saves_unwrapped_strictly_and_nan_fails",
+    "new": "experiments/I02_population_prototypes/tests/test_population_runtime.py::test_checkpoint_zero_metric_saves_unwrapped_strictly_and_nan_fails",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_runtime.py::test_checkpoint_reload_accepts_accelerate_indexed_cpu",
+    "new": "experiments/I02_population_prototypes/tests/test_population_runtime.py::test_checkpoint_reload_accepts_accelerate_indexed_cpu",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/tests/test_population_runtime.py::test_new_run_refuses_to_overwrite_existing_checkpoint",
+    "new": "experiments/I02_population_prototypes/tests/test_population_runtime.py::test_new_run_refuses_to_overwrite_existing_checkpoint",
+    "assertions": "unchanged; import/path only"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_capr_bitwise_identical",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_capr_bitwise_identical",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_load_model_capr_unchanged",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_load_model_capr_unchanged",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_buffer_shapes_and_state_dict_keys",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_buffer_shapes_and_state_dict_keys",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_init_prototypes_slot_counts_and_determinism",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_init_prototypes_slot_counts_and_determinism",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_init_prototypes_empty_bin_all_invalid",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_init_prototypes_empty_bin_all_invalid",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_update_moves_only_own_slot",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_update_moves_only_own_slot",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_update_skipped_when_eval",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_update_skipped_when_eval",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_l1_update_equals_bin_mean_ema",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_l1_update_equals_bin_mean_ema",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_recall_attention_and_manual_output",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_recall_attention_and_manual_output",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_recall_path_ignores_bin_labels",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_recall_path_ignores_bin_labels",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_degenerate_slots_match_l1",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_degenerate_slots_match_l1",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_recall_without_valid_slot_raises",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_recall_without_valid_slot_raises",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_load_model_validations",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_load_model_validations",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_strict_load_shape_mismatch",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_strict_load_shape_mismatch",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_init_pass_uses_orig_and_skips_natural_missing",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_init_pass_uses_orig_and_skips_natural_missing",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_epoch_stats_print_format",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_epoch_stats_print_format",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_eval_missing_new_options",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_eval_missing_new_options",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_main_survival_cli_defaults",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_main_survival_cli_defaults",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_logit_scale_parameter_and_capr_unchanged",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_logit_scale_parameter_and_capr_unchanged",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_direction_match_and_scale_monotonic",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_direction_match_and_scale_monotonic",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_anchor_sensitivity_and_permutation_equivariance",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_anchor_sensitivity_and_permutation_equivariance",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_strict_load_missing_logit_scale_raises",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_strict_load_missing_logit_scale_raises",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  },
+  {
+    "old": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/tests/test_capl.py::test_extreme_logit_scale_finite_gradients",
+    "new": "experiments/I04_cap4_multi_prototypes/tests/test_capl.py::test_extreme_logit_scale_finite_gradients",
+    "assertions": "unchanged; bin_mode input explicit for changed CLI contract"
+  }
+]

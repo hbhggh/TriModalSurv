@@ -1,0 +1,123 @@
+{
+  "bank_exact": true,
+  "cell_count": 12,
+  "cells": [
+    {
+      "arm": "m0real",
+      "donor_mask_input_exact": true,
+      "grid": "none",
+      "max_logit_abs_diff": 0.0,
+      "max_projector_abs_diff": 0.0,
+      "max_risk_abs_diff": 0.0,
+      "patients": 32
+    },
+    {
+      "arm": "m1",
+      "donor_mask_input_exact": true,
+      "grid": "none",
+      "max_logit_abs_diff": 0.0,
+      "max_projector_abs_diff": 0.0,
+      "max_risk_abs_diff": 0.0,
+      "patients": 32
+    },
+    {
+      "arm": "retrieval",
+      "donor_mask_input_exact": true,
+      "grid": "none",
+      "max_logit_abs_diff": 0.0,
+      "max_projector_abs_diff": 0.0,
+      "max_risk_abs_diff": 0.0,
+      "patients": 32
+    },
+    {
+      "arm": "m0real",
+      "donor_mask_input_exact": true,
+      "grid": "rna_100",
+      "max_logit_abs_diff": 0.0,
+      "max_projector_abs_diff": 0.0,
+      "max_risk_abs_diff": 0.0,
+      "patients": 32
+    },
+    {
+      "arm": "m1",
+      "donor_mask_input_exact": true,
+      "grid": "rna_100",
+      "max_logit_abs_diff": 0.0,
+      "max_projector_abs_diff": 0.0,
+      "max_risk_abs_diff": 0.0,
+      "patients": 32
+    },
+    {
+      "arm": "retrieval",
+      "donor_mask_input_exact": true,
+      "grid": "rna_100",
+      "max_logit_abs_diff": 0.0,
+      "max_projector_abs_diff": 0.0,
+      "max_risk_abs_diff": 0.0,
+      "patients": 32
+    },
+    {
+      "arm": "m0real",
+      "donor_mask_input_exact": true,
+      "grid": "text_100",
+      "max_logit_abs_diff": 0.0,
+      "max_projector_abs_diff": 0.0,
+      "max_risk_abs_diff": 0.0,
+      "patients": 32
+    },
+    {
+      "arm": "m1",
+      "donor_mask_input_exact": true,
+      "grid": "text_100",
+      "max_logit_abs_diff": 0.0,
+      "max_projector_abs_diff": 0.0,
+      "max_risk_abs_diff": 0.0,
+      "patients": 32
+    },
+    {
+      "arm": "retrieval",
+      "donor_mask_input_exact": true,
+      "grid": "text_100",
+      "max_logit_abs_diff": 0.0,
+      "max_projector_abs_diff": 0.0,
+      "max_risk_abs_diff": 0.0,
+      "patients": 32
+    },
+    {
+      "arm": "m0real",
+      "donor_mask_input_exact": true,
+      "grid": "both_100",
+      "max_logit_abs_diff": 0.0,
+      "max_projector_abs_diff": 0.0,
+      "max_risk_abs_diff": 0.0,
+      "patients": 32
+    },
+    {
+      "arm": "m1",
+      "donor_mask_input_exact": true,
+      "grid": "both_100",
+      "max_logit_abs_diff": 0.0,
+      "max_projector_abs_diff": 0.0,
+      "max_risk_abs_diff": 0.0,
+      "patients": 32
+    },
+    {
+      "arm": "retrieval",
+      "donor_mask_input_exact": true,
+      "grid": "both_100",
+      "max_logit_abs_diff": 0.0,
+      "max_projector_abs_diff": 0.0,
+      "max_risk_abs_diff": 0.0,
+      "patients": 32
+    }
+  ],
+  "device": "cpu",
+  "patient_count": 32,
+  "status": "PASS",
+  "tolerance": {
+    "atol": 1e-06,
+    "rtol": 0
+  },
+  "weights_unchanged": true,
+  "zero_training": true
+}

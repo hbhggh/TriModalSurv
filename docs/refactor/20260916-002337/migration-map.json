@@ -1,0 +1,660 @@
+{
+  "source_commit": "6a04a0bf5c283a57e90207899ddffe3867fd5e0a",
+  "source_root": "/Users/wuhao/.codex/worktrees/774f/TriModalSurv/code/NPJ",
+  "archive": "archive/legacy_npj_snapshot/774f-6a04a0bf5c28/code/NPJ",
+  "entries": [
+    {
+      "source_file": "model/fusion_model.py",
+      "symbol": "SurvivalHead",
+      "source_lines": [
+        968,
+        976
+      ],
+      "source_sha256": "03c4060232d2d18ca277205e5a3dc47a8e3617e930128c839b11402953a7a096",
+      "target": "src/trimodalsurv/models/npjc.py",
+      "mode": "verbatim_symbol",
+      "target_sha256": "cd50db1687d95aa6b29b5d297a071926f53d8b490e6b1e964a764339ab0eebb6"
+    },
+    {
+      "source_file": "model/fusion_model.py",
+      "symbol": "NPJC",
+      "source_lines": [
+        1101,
+        1224
+      ],
+      "source_sha256": "03c4060232d2d18ca277205e5a3dc47a8e3617e930128c839b11402953a7a096",
+      "target": "src/trimodalsurv/models/npjc.py",
+      "mode": "verbatim_symbol",
+      "target_sha256": "cd50db1687d95aa6b29b5d297a071926f53d8b490e6b1e964a764339ab0eebb6"
+    },
+    {
+      "source_file": "model/compensator.py",
+      "symbol": "consistency_loss",
+      "source_lines": [
+        223,
+        236
+      ],
+      "source_sha256": "3fc09ccfc12442971897ac0e47b524cac8963400bfd505064a4ac12bef13ba2c",
+      "target": "src/trimodalsurv/models/consistency.py",
+      "mode": "verbatim_symbol",
+      "target_sha256": "41b6c85fc099058dfe29d7856fc5b776af87edb894d92fae1240495da1e0b0c7"
+    },
+    {
+      "source_file": "scripts/eval_missing.py",
+      "symbol": "grid_parts",
+      "source_lines": [
+        43,
+        53
+      ],
+      "source_sha256": "e42d52c3a87e34ba77d293c61131046cff6bdeadf703c74dde3d2cf59f98ef93",
+      "target": "src/trimodalsurv/evaluation/common.py",
+      "mode": "verbatim_symbol",
+      "target_sha256": "179d878ef3be4639579a89b7d6b21d9908ebc7fb5d019500d45a85e94d982029"
+    },
+    {
+      "source_file": "scripts/eval_missing.py",
+      "symbol": "masked_modalities",
+      "source_lines": [
+        69,
+        75
+      ],
+      "source_sha256": "e42d52c3a87e34ba77d293c61131046cff6bdeadf703c74dde3d2cf59f98ef93",
+      "target": "src/trimodalsurv/evaluation/common.py",
+      "mode": "verbatim_symbol",
+      "target_sha256": "179d878ef3be4639579a89b7d6b21d9908ebc7fb5d019500d45a85e94d982029"
+    },
+    {
+      "source_file": "scripts/eval_missing.py",
+      "symbol": "grid_sha256",
+      "source_lines": [
+        121,
+        127
+      ],
+      "source_sha256": "e42d52c3a87e34ba77d293c61131046cff6bdeadf703c74dde3d2cf59f98ef93",
+      "target": "src/trimodalsurv/evaluation/common.py",
+      "mode": "verbatim_symbol",
+      "target_sha256": "179d878ef3be4639579a89b7d6b21d9908ebc7fb5d019500d45a85e94d982029"
+    },
+    {
+      "source_file": "scripts/eval_missing.py",
+      "symbol": "dual_risk_from_logits",
+      "source_lines": [
+        138,
+        147
+      ],
+      "source_sha256": "e42d52c3a87e34ba77d293c61131046cff6bdeadf703c74dde3d2cf59f98ef93",
+      "target": "src/trimodalsurv/evaluation/common.py",
+      "mode": "verbatim_symbol",
+      "target_sha256": "179d878ef3be4639579a89b7d6b21d9908ebc7fb5d019500d45a85e94d982029"
+    },
+    {
+      "source_file": "scripts/eval_missing.py",
+      "symbol": "strip_data_parallel_prefix",
+      "source_lines": [
+        161,
+        168
+      ],
+      "source_sha256": "e42d52c3a87e34ba77d293c61131046cff6bdeadf703c74dde3d2cf59f98ef93",
+      "target": "src/trimodalsurv/evaluation/common.py",
+      "mode": "verbatim_symbol",
+      "target_sha256": "179d878ef3be4639579a89b7d6b21d9908ebc7fb5d019500d45a85e94d982029"
+    },
+    {
+      "source_file": "scripts/eval_missing.py",
+      "symbol": "extract_state_dict",
+      "source_lines": [
+        171,
+        178
+      ],
+      "source_sha256": "e42d52c3a87e34ba77d293c61131046cff6bdeadf703c74dde3d2cf59f98ef93",
+      "target": "src/trimodalsurv/evaluation/common.py",
+      "mode": "verbatim_symbol",
+      "target_sha256": "179d878ef3be4639579a89b7d6b21d9908ebc7fb5d019500d45a85e94d982029"
+    },
+    {
+      "source_file": "scripts/eval_missing.py",
+      "symbol": "file_sha256",
+      "source_lines": [
+        262,
+        267
+      ],
+      "source_sha256": "e42d52c3a87e34ba77d293c61131046cff6bdeadf703c74dde3d2cf59f98ef93",
+      "target": "src/trimodalsurv/evaluation/common.py",
+      "mode": "verbatim_symbol",
+      "target_sha256": "179d878ef3be4639579a89b7d6b21d9908ebc7fb5d019500d45a85e94d982029"
+    },
+    {
+      "source_file": "scripts/eval_missing.py",
+      "symbol": "_atomic_json_dump",
+      "source_lines": [
+        443,
+        465
+      ],
+      "source_sha256": "e42d52c3a87e34ba77d293c61131046cff6bdeadf703c74dde3d2cf59f98ef93",
+      "target": "src/trimodalsurv/evaluation/common.py",
+      "mode": "verbatim_symbol",
+      "target_sha256": "179d878ef3be4639579a89b7d6b21d9908ebc7fb5d019500d45a85e94d982029"
+    },
+    {
+      "source_file": "model/patient_retrieval_bank.py",
+      "symbol": "validate_splits",
+      "source_sha256": "1a87fd04dc4ec87591421b76424aba60b0bb523a6849eae2dcc5a6b921663bb0",
+      "target": "experiments/I01_patient_retrieval/model.py",
+      "mode": "migrated_module",
+      "target_sha256": "e4e08b0c9ee78da8b2a7c4d01250516693fc087bf567d18ef6a944b27cc10c13",
+      "source_lines": [
+        15,
+        33
+      ]
+    },
+    {
+      "source_file": "model/patient_retrieval_bank.py",
+      "symbol": "_numeric",
+      "source_sha256": "1a87fd04dc4ec87591421b76424aba60b0bb523a6849eae2dcc5a6b921663bb0",
+      "target": "experiments/I01_patient_retrieval/model.py",
+      "mode": "migrated_module",
+      "target_sha256": "e4e08b0c9ee78da8b2a7c4d01250516693fc087bf567d18ef6a944b27cc10c13",
+      "source_lines": [
+        36,
+        44
+      ]
+    },
+    {
+      "source_file": "model/patient_retrieval_bank.py",
+      "symbol": "valid_row_mask",
+      "source_sha256": "1a87fd04dc4ec87591421b76424aba60b0bb523a6849eae2dcc5a6b921663bb0",
+      "target": "experiments/I01_patient_retrieval/model.py",
+      "mode": "migrated_module",
+      "target_sha256": "e4e08b0c9ee78da8b2a7c4d01250516693fc087bf567d18ef6a944b27cc10c13",
+      "source_lines": [
+        47,
+        57
+      ]
+    },
+    {
+      "source_file": "model/patient_retrieval_bank.py",
+      "symbol": "masked_cosine",
+      "source_sha256": "1a87fd04dc4ec87591421b76424aba60b0bb523a6849eae2dcc5a6b921663bb0",
+      "target": "experiments/I01_patient_retrieval/model.py",
+      "mode": "migrated_module",
+      "target_sha256": "e4e08b0c9ee78da8b2a7c4d01250516693fc087bf567d18ef6a944b27cc10c13",
+      "source_lines": [
+        60,
+        80
+      ]
+    },
+    {
+      "source_file": "model/patient_retrieval_bank.py",
+      "symbol": "FixedPatientBank",
+      "source_sha256": "1a87fd04dc4ec87591421b76424aba60b0bb523a6849eae2dcc5a6b921663bb0",
+      "target": "experiments/I01_patient_retrieval/model.py",
+      "mode": "migrated_module",
+      "target_sha256": "e4e08b0c9ee78da8b2a7c4d01250516693fc087bf567d18ef6a944b27cc10c13",
+      "source_lines": [
+        83,
+        225
+      ]
+    },
+    {
+      "source_file": "scripts/eval_patient_retrieval.py",
+      "symbol": "json_digest",
+      "source_sha256": "76cf8f3e58703c4615910e8cc3457a6539e9feefc27dc937239ae89a57a334de",
+      "target": "experiments/I01_patient_retrieval/evaluate.py",
+      "mode": "migrated_module",
+      "target_sha256": "f8b045557b27de3e7dc68ea2592e24384691275ba24c18223471276c413ba78f",
+      "source_lines": [
+        37,
+        38
+      ]
+    },
+    {
+      "source_file": "scripts/eval_patient_retrieval.py",
+      "symbol": "write_json_new",
+      "source_sha256": "76cf8f3e58703c4615910e8cc3457a6539e9feefc27dc937239ae89a57a334de",
+      "target": "experiments/I01_patient_retrieval/evaluate.py",
+      "mode": "migrated_module",
+      "target_sha256": "f8b045557b27de3e7dc68ea2592e24384691275ba24c18223471276c413ba78f",
+      "source_lines": [
+        41,
+        45
+      ]
+    },
+    {
+      "source_file": "scripts/eval_patient_retrieval.py",
+      "symbol": "read_labels",
+      "source_sha256": "76cf8f3e58703c4615910e8cc3457a6539e9feefc27dc937239ae89a57a334de",
+      "target": "experiments/I01_patient_retrieval/evaluate.py",
+      "mode": "migrated_module",
+      "target_sha256": "f8b045557b27de3e7dc68ea2592e24384691275ba24c18223471276c413ba78f",
+      "source_lines": [
+        48,
+        65
+      ]
+    },
+    {
+      "source_file": "scripts/eval_patient_retrieval.py",
+      "symbol": "validate_manifest",
+      "source_sha256": "76cf8f3e58703c4615910e8cc3457a6539e9feefc27dc937239ae89a57a334de",
+      "target": "experiments/I01_patient_retrieval/evaluate.py",
+      "mode": "migrated_module",
+      "target_sha256": "f8b045557b27de3e7dc68ea2592e24384691275ba24c18223471276c413ba78f",
+      "source_lines": [
+        68,
+        79
+      ]
+    },
+    {
+      "source_file": "scripts/eval_patient_retrieval.py",
+      "symbol": "load_cache",
+      "source_sha256": "76cf8f3e58703c4615910e8cc3457a6539e9feefc27dc937239ae89a57a334de",
+      "target": "experiments/I01_patient_retrieval/evaluate.py",
+      "mode": "migrated_module",
+      "target_sha256": "f8b045557b27de3e7dc68ea2592e24384691275ba24c18223471276c413ba78f",
+      "source_lines": [
+        82,
+        95
+      ]
+    },
+    {
+      "source_file": "scripts/eval_patient_retrieval.py",
+      "symbol": "CachedPatients",
+      "source_sha256": "76cf8f3e58703c4615910e8cc3457a6539e9feefc27dc937239ae89a57a334de",
+      "target": "experiments/I01_patient_retrieval/evaluate.py",
+      "mode": "migrated_module",
+      "target_sha256": "f8b045557b27de3e7dc68ea2592e24384691275ba24c18223471276c413ba78f",
+      "source_lines": [
+        98,
+        133
+      ]
+    },
+    {
+      "source_file": "scripts/eval_patient_retrieval.py",
+      "symbol": "prepare_batch",
+      "source_sha256": "76cf8f3e58703c4615910e8cc3457a6539e9feefc27dc937239ae89a57a334de",
+      "target": "experiments/I01_patient_retrieval/evaluate.py",
+      "mode": "migrated_module",
+      "target_sha256": "f8b045557b27de3e7dc68ea2592e24384691275ba24c18223471276c413ba78f",
+      "source_lines": [
+        136,
+        145
+      ]
+    },
+    {
+      "source_file": "scripts/eval_patient_retrieval.py",
+      "symbol": "build_model",
+      "source_sha256": "76cf8f3e58703c4615910e8cc3457a6539e9feefc27dc937239ae89a57a334de",
+      "target": "experiments/I01_patient_retrieval/evaluate.py",
+      "mode": "migrated_module",
+      "target_sha256": "f8b045557b27de3e7dc68ea2592e24384691275ba24c18223471276c413ba78f",
+      "source_lines": [
+        148,
+        155
+      ]
+    },
+    {
+      "source_file": "scripts/eval_patient_retrieval.py",
+      "symbol": "strict_e0_load",
+      "source_sha256": "76cf8f3e58703c4615910e8cc3457a6539e9feefc27dc937239ae89a57a334de",
+      "target": "experiments/I01_patient_retrieval/evaluate.py",
+      "mode": "migrated_module",
+      "target_sha256": "f8b045557b27de3e7dc68ea2592e24384691275ba24c18223471276c413ba78f",
+      "source_lines": [
+        158,
+        180
+      ]
+    },
+    {
+      "source_file": "scripts/eval_patient_retrieval.py",
+      "symbol": "forward_numpy",
+      "source_sha256": "76cf8f3e58703c4615910e8cc3457a6539e9feefc27dc937239ae89a57a334de",
+      "target": "experiments/I01_patient_retrieval/evaluate.py",
+      "mode": "migrated_module",
+      "target_sha256": "f8b045557b27de3e7dc68ea2592e24384691275ba24c18223471276c413ba78f",
+      "source_lines": [
+        183,
+        191
+      ]
+    },
+    {
+      "source_file": "scripts/eval_patient_retrieval.py",
+      "symbol": "checkpoint_path",
+      "source_sha256": "76cf8f3e58703c4615910e8cc3457a6539e9feefc27dc937239ae89a57a334de",
+      "target": "experiments/I01_patient_retrieval/evaluate.py",
+      "mode": "migrated_module",
+      "target_sha256": "f8b045557b27de3e7dc68ea2592e24384691275ba24c18223471276c413ba78f",
+      "source_lines": [
+        194,
+        195
+      ]
+    },
+    {
+      "source_file": "scripts/eval_patient_retrieval.py",
+      "symbol": "preflight_cancer",
+      "source_sha256": "76cf8f3e58703c4615910e8cc3457a6539e9feefc27dc937239ae89a57a334de",
+      "target": "experiments/I01_patient_retrieval/evaluate.py",
+      "mode": "migrated_module",
+      "target_sha256": "f8b045557b27de3e7dc68ea2592e24384691275ba24c18223471276c413ba78f",
+      "source_lines": [
+        198,
+        237
+      ]
+    },
+    {
+      "source_file": "scripts/eval_patient_retrieval.py",
+      "symbol": "smoke_ids",
+      "source_sha256": "76cf8f3e58703c4615910e8cc3457a6539e9feefc27dc937239ae89a57a334de",
+      "target": "experiments/I01_patient_retrieval/evaluate.py",
+      "mode": "migrated_module",
+      "target_sha256": "f8b045557b27de3e7dc68ea2592e24384691275ba24c18223471276c413ba78f",
+      "source_lines": [
+        240,
+        250
+      ]
+    },
+    {
+      "source_file": "scripts/eval_patient_retrieval.py",
+      "symbol": "evaluate_unit",
+      "source_sha256": "76cf8f3e58703c4615910e8cc3457a6539e9feefc27dc937239ae89a57a334de",
+      "target": "experiments/I01_patient_retrieval/evaluate.py",
+      "mode": "migrated_module",
+      "target_sha256": "f8b045557b27de3e7dc68ea2592e24384691275ba24c18223471276c413ba78f",
+      "source_lines": [
+        253,
+        330
+      ]
+    },
+    {
+      "source_file": "scripts/eval_patient_retrieval.py",
+      "symbol": "parser",
+      "source_sha256": "76cf8f3e58703c4615910e8cc3457a6539e9feefc27dc937239ae89a57a334de",
+      "target": "experiments/I01_patient_retrieval/evaluate.py",
+      "mode": "migrated_module",
+      "target_sha256": "f8b045557b27de3e7dc68ea2592e24384691275ba24c18223471276c413ba78f",
+      "source_lines": [
+        333,
+        347
+      ]
+    },
+    {
+      "source_file": "scripts/eval_patient_retrieval.py",
+      "symbol": "main",
+      "source_sha256": "76cf8f3e58703c4615910e8cc3457a6539e9feefc27dc937239ae89a57a334de",
+      "target": "experiments/I01_patient_retrieval/evaluate.py",
+      "mode": "migrated_module",
+      "target_sha256": "f8b045557b27de3e7dc68ea2592e24384691275ba24c18223471276c413ba78f",
+      "source_lines": [
+        350,
+        416
+      ]
+    },
+    {
+      "source_file": "scripts/summarize_patient_retrieval.py",
+      "symbol": "_sha256",
+      "source_sha256": "598ed20473f236e3538503a41ceb8d68c1afa10bfa4723ec66471bef10f1a601",
+      "target": "experiments/I01_patient_retrieval/summarize.py",
+      "mode": "migrated_module",
+      "target_sha256": "a01ae92cf4d1a9cbd152ff4adf8aa81e4b8f646b6f8677c16699e9fba8b43e0a",
+      "source_lines": [
+        45,
+        50
+      ]
+    },
+    {
+      "source_file": "scripts/summarize_patient_retrieval.py",
+      "symbol": "_require_string",
+      "source_sha256": "598ed20473f236e3538503a41ceb8d68c1afa10bfa4723ec66471bef10f1a601",
+      "target": "experiments/I01_patient_retrieval/summarize.py",
+      "mode": "migrated_module",
+      "target_sha256": "a01ae92cf4d1a9cbd152ff4adf8aa81e4b8f646b6f8677c16699e9fba8b43e0a",
+      "source_lines": [
+        53,
+        55
+      ]
+    },
+    {
+      "source_file": "scripts/summarize_patient_retrieval.py",
+      "symbol": "_artifact_path",
+      "source_sha256": "598ed20473f236e3538503a41ceb8d68c1afa10bfa4723ec66471bef10f1a601",
+      "target": "experiments/I01_patient_retrieval/summarize.py",
+      "mode": "migrated_module",
+      "target_sha256": "a01ae92cf4d1a9cbd152ff4adf8aa81e4b8f646b6f8677c16699e9fba8b43e0a",
+      "source_lines": [
+        58,
+        71
+      ]
+    },
+    {
+      "source_file": "scripts/summarize_patient_retrieval.py",
+      "symbol": "validate_complete_diagnostics",
+      "source_sha256": "598ed20473f236e3538503a41ceb8d68c1afa10bfa4723ec66471bef10f1a601",
+      "target": "experiments/I01_patient_retrieval/summarize.py",
+      "mode": "migrated_module",
+      "target_sha256": "a01ae92cf4d1a9cbd152ff4adf8aa81e4b8f646b6f8677c16699e9fba8b43e0a",
+      "source_lines": [
+        74,
+        98
+      ]
+    },
+    {
+      "source_file": "scripts/summarize_patient_retrieval.py",
+      "symbol": "_validate_grid",
+      "source_sha256": "598ed20473f236e3538503a41ceb8d68c1afa10bfa4723ec66471bef10f1a601",
+      "target": "experiments/I01_patient_retrieval/summarize.py",
+      "mode": "migrated_module",
+      "target_sha256": "a01ae92cf4d1a9cbd152ff4adf8aa81e4b8f646b6f8677c16699e9fba8b43e0a",
+      "source_lines": [
+        101,
+        130
+      ]
+    },
+    {
+      "source_file": "scripts/summarize_patient_retrieval.py",
+      "symbol": "_load_units",
+      "source_sha256": "598ed20473f236e3538503a41ceb8d68c1afa10bfa4723ec66471bef10f1a601",
+      "target": "experiments/I01_patient_retrieval/summarize.py",
+      "mode": "migrated_module",
+      "target_sha256": "a01ae92cf4d1a9cbd152ff4adf8aa81e4b8f646b6f8677c16699e9fba8b43e0a",
+      "source_lines": [
+        133,
+        176
+      ]
+    },
+    {
+      "source_file": "scripts/summarize_patient_retrieval.py",
+      "symbol": "_validate_campaign_status",
+      "source_sha256": "598ed20473f236e3538503a41ceb8d68c1afa10bfa4723ec66471bef10f1a601",
+      "target": "experiments/I01_patient_retrieval/summarize.py",
+      "mode": "migrated_module",
+      "target_sha256": "a01ae92cf4d1a9cbd152ff4adf8aa81e4b8f646b6f8677c16699e9fba8b43e0a",
+      "source_lines": [
+        179,
+        193
+      ]
+    },
+    {
+      "source_file": "scripts/summarize_patient_retrieval.py",
+      "symbol": "_validate_pairing",
+      "source_sha256": "598ed20473f236e3538503a41ceb8d68c1afa10bfa4723ec66471bef10f1a601",
+      "target": "experiments/I01_patient_retrieval/summarize.py",
+      "mode": "migrated_module",
+      "target_sha256": "a01ae92cf4d1a9cbd152ff4adf8aa81e4b8f646b6f8677c16699e9fba8b43e0a",
+      "source_lines": [
+        196,
+        219
+      ]
+    },
+    {
+      "source_file": "scripts/summarize_patient_retrieval.py",
+      "symbol": "_mean",
+      "source_sha256": "598ed20473f236e3538503a41ceb8d68c1afa10bfa4723ec66471bef10f1a601",
+      "target": "experiments/I01_patient_retrieval/summarize.py",
+      "mode": "migrated_module",
+      "target_sha256": "a01ae92cf4d1a9cbd152ff4adf8aa81e4b8f646b6f8677c16699e9fba8b43e0a",
+      "source_lines": [
+        222,
+        223
+      ]
+    },
+    {
+      "source_file": "scripts/summarize_patient_retrieval.py",
+      "symbol": "_sample_std",
+      "source_sha256": "598ed20473f236e3538503a41ceb8d68c1afa10bfa4723ec66471bef10f1a601",
+      "target": "experiments/I01_patient_retrieval/summarize.py",
+      "mode": "migrated_module",
+      "target_sha256": "a01ae92cf4d1a9cbd152ff4adf8aa81e4b8f646b6f8677c16699e9fba8b43e0a",
+      "source_lines": [
+        226,
+        227
+      ]
+    },
+    {
+      "source_file": "scripts/summarize_patient_retrieval.py",
+      "symbol": "_build_summary",
+      "source_sha256": "598ed20473f236e3538503a41ceb8d68c1afa10bfa4723ec66471bef10f1a601",
+      "target": "experiments/I01_patient_retrieval/summarize.py",
+      "mode": "migrated_module",
+      "target_sha256": "a01ae92cf4d1a9cbd152ff4adf8aa81e4b8f646b6f8677c16699e9fba8b43e0a",
+      "source_lines": [
+        230,
+        331
+      ]
+    },
+    {
+      "source_file": "scripts/summarize_patient_retrieval.py",
+      "symbol": "_write_csv",
+      "source_sha256": "598ed20473f236e3538503a41ceb8d68c1afa10bfa4723ec66471bef10f1a601",
+      "target": "experiments/I01_patient_retrieval/summarize.py",
+      "mode": "migrated_module",
+      "target_sha256": "a01ae92cf4d1a9cbd152ff4adf8aa81e4b8f646b6f8677c16699e9fba8b43e0a",
+      "source_lines": [
+        334,
+        338
+      ]
+    },
+    {
+      "source_file": "scripts/summarize_patient_retrieval.py",
+      "symbol": "_render_report",
+      "source_sha256": "598ed20473f236e3538503a41ceb8d68c1afa10bfa4723ec66471bef10f1a601",
+      "target": "experiments/I01_patient_retrieval/summarize.py",
+      "mode": "migrated_module",
+      "target_sha256": "a01ae92cf4d1a9cbd152ff4adf8aa81e4b8f646b6f8677c16699e9fba8b43e0a",
+      "source_lines": [
+        341,
+        369
+      ]
+    },
+    {
+      "source_file": "scripts/summarize_patient_retrieval.py",
+      "symbol": "summarize",
+      "source_sha256": "598ed20473f236e3538503a41ceb8d68c1afa10bfa4723ec66471bef10f1a601",
+      "target": "experiments/I01_patient_retrieval/summarize.py",
+      "mode": "migrated_module",
+      "target_sha256": "a01ae92cf4d1a9cbd152ff4adf8aa81e4b8f646b6f8677c16699e9fba8b43e0a",
+      "source_lines": [
+        372,
+        399
+      ]
+    },
+    {
+      "source_file": "scripts/summarize_patient_retrieval.py",
+      "symbol": "main",
+      "source_sha256": "598ed20473f236e3538503a41ceb8d68c1afa10bfa4723ec66471bef10f1a601",
+      "target": "experiments/I01_patient_retrieval/summarize.py",
+      "mode": "migrated_module",
+      "target_sha256": "a01ae92cf4d1a9cbd152ff4adf8aa81e4b8f646b6f8677c16699e9fba8b43e0a",
+      "source_lines": [
+        402,
+        408
+      ]
+    },
+    {
+      "source_file": "tests/test_patient_retrieval_padding.py",
+      "symbol": "PaddingBankTests",
+      "source_sha256": "5d10593f74be915e9a715de7eb716da5b1e8284371c59aa4e198f64d4d09e121",
+      "target": "experiments/I01_patient_retrieval/tests/test_patient_retrieval_padding.py",
+      "mode": "import_and_cli_contract_updates",
+      "target_sha256": "5fe40cac727cfc39cf779f7aff66c89cc7f7ac6879f5b1c7104643c7a973d431",
+      "source_lines": [
+        14,
+        131
+      ]
+    },
+    {
+      "source_file": "tests/test_patient_retrieval_summary.py",
+      "symbol": "sha256",
+      "source_sha256": "de2f23e9208632c57ae856de4517538b792ba71b82bdd109c574f863f582f619",
+      "target": "experiments/I01_patient_retrieval/tests/test_patient_retrieval_summary.py",
+      "mode": "import_and_cli_contract_updates",
+      "target_sha256": "cbd9708554d5bc66edbafe7a8f3bc894baa5594097c5a4c343ef5718d22bd076",
+      "source_lines": [
+        23,
+        28
+      ]
+    },
+    {
+      "source_file": "tests/test_patient_retrieval_summary.py",
+      "symbol": "load_module",
+      "source_sha256": "de2f23e9208632c57ae856de4517538b792ba71b82bdd109c574f863f582f619",
+      "target": "experiments/I01_patient_retrieval/tests/test_patient_retrieval_summary.py",
+      "mode": "import_and_cli_contract_updates",
+      "target_sha256": "cbd9708554d5bc66edbafe7a8f3bc894baa5594097c5a4c343ef5718d22bd076",
+      "source_lines": [
+        31,
+        35
+      ]
+    },
+    {
+      "source_file": "tests/test_patient_retrieval_summary.py",
+      "symbol": "PatientRetrievalSummaryTest",
+      "source_sha256": "de2f23e9208632c57ae856de4517538b792ba71b82bdd109c574f863f582f619",
+      "target": "experiments/I01_patient_retrieval/tests/test_patient_retrieval_summary.py",
+      "mode": "import_and_cli_contract_updates",
+      "target_sha256": "cbd9708554d5bc66edbafe7a8f3bc894baa5594097c5a4c343ef5718d22bd076",
+      "source_lines": [
+        38,
+        373
+      ]
+    },
+    {
+      "source_file": "tests/test_patient_retrieval_eval.py",
+      "symbol": "EvaluationContract",
+      "source_sha256": "e43bd3c95a289eb2783546226d4306d1a3a674d43f2955243f6fa250f09d6436",
+      "target": "experiments/I01_patient_retrieval/tests/test_patient_retrieval_eval.py",
+      "mode": "import_and_cli_contract_updates",
+      "target_sha256": "8363df464c728276c9e2225bf57933dccbd9ab1d58a8e523ad0249c17ffd1750",
+      "source_lines": [
+        17,
+        263
+      ]
+    },
+    {
+      "source_file": "tests/test_patient_retrieval_bank.py",
+      "symbol": "fixture",
+      "source_sha256": "196bd95856f97587bade4288b8df2cae1406041f97adc2fe56eebb48723579cb",
+      "target": "experiments/I01_patient_retrieval/tests/test_patient_retrieval_bank.py",
+      "mode": "import_and_cli_contract_updates",
+      "target_sha256": "1e89e482886ca82f8d378093b1b588b989c8afd8cedc78904d94092d0e41c6a1",
+      "source_lines": [
+        13,
+        21
+      ]
+    },
+    {
+      "source_file": "tests/test_patient_retrieval_bank.py",
+      "symbol": "BankTests",
+      "source_sha256": "196bd95856f97587bade4288b8df2cae1406041f97adc2fe56eebb48723579cb",
+      "target": "experiments/I01_patient_retrieval/tests/test_patient_retrieval_bank.py",
+      "mode": "import_and_cli_contract_updates",
+      "target_sha256": "1e89e482886ca82f8d378093b1b588b989c8afd8cedc78904d94092d0e41c6a1",
+      "source_lines": [
+        24,
+        153
+      ]
+    }
+  ],
+  "validation": {
+    "compiled_python_files": 23,
+    "standard_library_tests_passed": 30,
+    "numeric_tests": "由主 Agent 在 tako 运行"
+  }
+}
