@@ -1,0 +1,62 @@
+\begin{sidewaystable}
+\centering
+\caption{Comparison of three compensation strategies across five cancers
+under four modality-availability settings. Entries are test C-indices
+averaged over five seeds; \emph{Overall} is the equally weighted mean of the
+four settings of a cohort. Proto.$^{\dagger}$ is the complete S0-force
+protocol, that is, prototype-guided retrieval combined with fixed routing,
+and not retrieval alone. Its LUAD routing was informed by previously
+inspected test results, so the comparison is exploratory.}
+\label{tab:prototype-compensation}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}l*{15}{c}@{}}
+\toprule
+ & \multicolumn{3}{c}{BRCA} & \multicolumn{3}{c}{UCEC}
+ & \multicolumn{3}{c}{LUAD} & \multicolumn{3}{c}{BLCA}
+ & \multicolumn{3}{c}{LGG} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+\cmidrule(lr){11-13}\cmidrule(lr){14-16}
+Scenario
+ & No comp. & Mean & Proto.$^{\dagger}$
+ & No comp. & Mean & Proto.$^{\dagger}$
+ & No comp. & Mean & Proto.$^{\dagger}$
+ & No comp. & Mean & Proto.$^{\dagger}$
+ & No comp. & Mean & Proto.$^{\dagger}$ \\
+\midrule
+RNA masked & 0.683842 & 0.684751 & \textbf{0.685705} & 0.647229 & \textbf{0.655464} & 0.651413 & \textbf{0.580660} & 0.580239 & 0.580239 & \textbf{0.593546} & 0.589105 & 0.588168 & 0.767219 & \textbf{0.790959} & 0.786611 \\
+Text masked & \textbf{0.655002} & 0.619121 & \textbf{0.655002} & 0.589272 & 0.577743 & \textbf{0.609748} & \textbf{0.596630} & 0.595156 & \textbf{0.596630} & \textbf{0.575989} & 0.574913 & \textbf{0.575989} & \textbf{0.705866} & 0.664113 & \textbf{0.705866} \\
+Both masked & 0.596026 & 0.614738 & \textbf{0.640263} & 0.576319 & 0.575072 & \textbf{0.609348} & 0.585469 & \textbf{0.588803} & \textbf{0.588803} & 0.574046 & \textbf{0.574774} & 0.561797 & 0.576190 & 0.635266 & \textbf{0.665286} \\
+None & \textbf{0.691359} & 0.686068 & 0.688112 & 0.651502 & \textbf{0.656888} & 0.650968 & 0.582064 & \textbf{0.583819} & 0.582485 & \textbf{0.589972} & \textbf{0.589972} & \textbf{0.589972} & 0.796825 & \textbf{0.799517} & 0.797723 \\
+\midrule
+Overall & 0.656557 & 0.651170 & \textbf{0.667270} & 0.616081 & 0.616292 & \textbf{0.630369} & 0.586206 & 0.587004 & \textbf{0.587039} & \textbf{0.583388} & 0.582191 & 0.578982 & 0.711525 & 0.722464 & \textbf{0.738872} \\
+\bottomrule
+\end{tabular*}
+\par\smallskip
+\begin{minipage}{\linewidth}
+\scriptsize
+Scenarios: RNA masked, Text masked and Both masked remove the RNA profile,
+the pathology report or both for all test patients (\texttt{rna\_100},
+\texttt{text\_100}, \texttt{both\_100}); None (\texttt{none}) adds no
+artificial mask but retains naturally occurring missingness and is therefore
+not a complete-data condition. Overall is an average and not a fifth
+experimental scenario. Strategies: No comp., no compensation (m0real), missing
+modalities are masked; Mean, mean imputation (m1), a missing modality is
+replaced by the element-wise training mean of the same cohort;
+Proto.$^{\dagger}$, prototype-guided compensation with fixed routing (S0-force,
+strategy0; protocol
+\texttt{patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1}).
+$^{\dagger}$Where the protocol routes a setting to a reference strategy, the
+entry coincides with that strategy by construction: LUAD uses mean imputation
+when RNA or both modalities are masked and no compensation when text is
+masked, and BRCA, BLCA and LGG use no compensation when text is masked. The
+LUAD routing was enabled although the LUAD validation C-index was lower with
+it than without it (0.645226 versus 0.654042). The overall advantage in four
+of five cohorts should therefore not be attributed to retrieval alone, and the
+LUAD margin over mean imputation is only about 0.000035. Bold marks the
+highest unrounded value among the three strategies within a cohort and row;
+ties are all bold. The three strategies use the same 25 frozen networks; no
+model was retrained and no statistical test was performed.
+\end{minipage}
+\end{sidewaystable}

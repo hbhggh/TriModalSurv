@@ -1,0 +1,9 @@
+{
+  "protocol_id": "patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1",
+  "enabled": true,
+  "a_mean": 0.65404181184669,
+  "b_mean": 0.6452264808362369,
+  "b_minus_a": -0.008815331010453065,
+  "decision_rule": "S0-force强制启用；valid仅审计，不以 B>A 否决",
+  "scientific_boundary": "valid B<A 仍强制开启；本轮是受已见test启发的探索性反事实，存在test泄漏。"
+}

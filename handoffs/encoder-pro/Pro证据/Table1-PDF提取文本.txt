@@ -1,0 +1,21 @@
+Table 1: Comparison of three compensation strategies across five cancers under four modality-availability settings. Entries are test C-indices averaged
+over five seeds;Overallis the equally weighted mean of the four settings of a cohort. Proto.† is the complete S0-force protocol, that is, prototype-
+guided retrieval combined with fixed routing, and not retrieval alone. Its LUAD routing was informed by previously inspected test results, so the
+comparison is exploratory.
+BRCA UCEC LUAD BLCA LGG
+Scenario No comp. Mean Proto. † No comp. Mean Proto. † No comp. Mean Proto. † No comp. Mean Proto. † No comp. Mean Proto. †
+RNA masked 0.683842 0.6847510.6857050.6472290.6554640.6514130.5806600.580239 0.5802390.5935460.589105 0.588168 0.7672190.7909590.786611
+Text masked0.6550020.6191210.6550020.589272 0.5777430.609748 0.5966300.5951560.596630 0.5759890.5749130.575989 0.7058660.6641130.705866
+Both masked 0.596026 0.6147380.6402630.576319 0.5750720.6093480.5854690.588803 0.5888030.5740460.5747740.561797 0.576190 0.6352660.665286
+None0.6913590.686068 0.688112 0.6515020.6568880.650968 0.5820640.5838190.5824850.589972 0.589972 0.5899720.7968250.7995170.797723
+Overall 0.656557 0.6511700.6672700.616081 0.6162920.6303690.586206 0.5870040.587039 0.5833880.582191 0.578982 0.711525 0.7224640.738872
+Scenarios: RNA masked, Text masked and Both masked remove the RNA profile, the pathology report or both for all test patients (rna_100,text_100,both_100); None (none) adds no
+artificial mask but retains naturally occurring missingness and is therefore not a complete-data condition. Overall is an average and not a fifth experimental scenario. Strategies: No comp.,
+no compensation (m0real), missing modalities are masked; Mean, mean imputation (m1), a missing modality is replaced by the element-wise training mean of the same cohort; Proto.†,
+prototype-guided compensation with fixed routing (S0-force, strategy0; protocolpatient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1).†Where the protocol routes a setting
+to a reference strategy, the entry coincides with that strategy by construction: LUAD uses mean imputation when RNA or both modalities are masked and no compensation when text is
+masked, and BRCA, BLCA and LGG use no compensation when text is masked. The LUAD routing was enabled although the LUAD validation C-index was lower with it than without it
+(0.645226 versus 0.654042). The overall advantage in four of five cohorts should therefore not be attributed to retrieval alone, and the LUAD margin over mean imputation is only about
+0.000035. Bold marks the highest unrounded value among the three strategies within a cohort and row; ties are all bold. The three strategies use the same 25 frozen networks; no model was
+retrained and no statistical test was performed.
+7

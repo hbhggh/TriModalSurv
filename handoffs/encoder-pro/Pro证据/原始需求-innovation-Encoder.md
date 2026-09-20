@@ -1,0 +1,74 @@
+【Trigger：触发场景/背景】
+
+	实验的核心创新点，消融实验已经获得在五个癌症的种类中的五分之四的胜率，接下来实验也是消融实验，证明（NPJ骨架➕原型学习➕新的辅助创新点：我们选择的新的encoder）实验结果大于（NPJ骨架➕原型学习➕NPJ架构中，文本图像和rna三个模态的所使用的encoder），既可以证明新的辅助创新点：我们选择的新的encoder大于NPJ架构中文本图像和rna所使用的encoder，证明新的辅助创新点：我们选择的新的encoders以有效的
+
+
+**Q_draft**：What should be true afterward?
+
+	1.证明新的encoder的实验表格的设计图,必须严格参考/Users/wuhao/Desktop/TriModalSurv/experiments/innovation-secode-part- Encoder/Framework-encoder-tabel.excalidraw.svg
+
+	2. 我们提出来的encoder的实验效果在五个癌症中的实现结果，想对比其他方法的胜率达到五分之四。
+
+	3.因为是辅助的创新点，所以不希望花费太多时间去修改算法，最好的情况就是基于现在已经验证后的包含模型（包含原型学习的架/Users/wuhao/Desktop/TriModalSurv/manuscript/消融实验/4progress-claude交接/实验先验知识与公式说明.md
+
+	4.因为新的encoder是辅助创新点，所以无需像是主创新点原型学习那样，在四个不同场景做实验，只需要在none，也就是三模态都完整，不存在缺失的的情况下，证明在五个癌症种类中（NPJ骨架➕原型学习➕新的辅助创新点：我们选择的新的encoder）实验结果大于（NPJ骨架➕原型学习➕NPJ架构中文本图像和rna所使用的encoder）的实验即可
+
+	5.后选的encoder的strategy首先必须是比较新，比较炫酷的特征融合方式，因为只有这样才有创新性，编写论文故事的时候才可以。
+
+6.**文件位置**：上述的prompt.md和先验知识的markdown文件都放在/Users/wuhao/Desktop/TriModalSurv/experiments/innovation-secode-part- Encoder
+
+
+#### 候选与决策 
+
+	1.首先，模态的选择：评价下先选择替换rna，text还是图片wsi的哪个模态的encoder？？
+
+		接下来我们打算加入第二个辅助创新点，指的是将原先的NPJ的骨架enocder模块替换成一个先进前沿的特征提取模块，例如，
+
+	npj论文中的rna使用的是bulkrnabert，
+
+	npj论文中的的text使用的bert，（很古老了，可以将text使用的bert修改成新进的encoder，几乎实验肯定涨点！！）
+
+	npj论文中的wsi图片模块使用的是vision transformer
+
+				判断标准：遵循最下改动原则和改动后实验结果大概率在五个cancer中，c-index上升
+
+	2. 策略方法的选择和择优；关键 P 与 Boundary：选择完修改某个模态的encoder之后，基于此项目的多模态癌症分析中模态缺失问题和数据集的数据量和数据特点，去刷选候选的前沿模型，检查标准是每个候选特征融合策略和S_state交集，将满足后的交集【ki】，再去考虑满足后的交集【ki】和本任务的适用域和Q_draft，刷选出最合适的两个策略k1，k2.
+
+	  
+
+#### S_state
+
+当前代码/配置版本；原始结果与日志的位置；
+已证实的事实、未核验的假设、已经失败的尝试。
+
+# how to do it
+
+	workflow:Gemini (构建框架) **$\rightarrow$** ChatGPT Pro (发散创新) **$\rightarrow$** Claude (代码落地)。
+
+		1. ChatGPT Pro (发散创新)：
+
+				1. 1使用chatgpt网页端的pro的网页搜索能力，结合consensus插件搜索顶级论文（生物信息）和顶级最新的会议（CVPR / ICCV / ECCV等）尤其关注multimodal、missing modality、token fusion方面的论文和生成实验的markdown作为先验知识（此md文件包含【trigger：触发场景/背景】，**Q_draft**：What should be true afterward?，S_state）的说明文件
+
+				1.2 只给 {k} + 每条的 P/B，不许改 T/Q
+
+              2. 必要文件同步上传GitHub并读取GitHub项目：因为gemini和chatgpt pro没办法读去mac的本地文件，所以将润色上述的prompt.md和生成实验的markdown作为先验知识（此md文件包含【trigger：触发场景/背景】，**Q_draft**：What should be true afterward?，S_state）的说明文件所引用的文件都上传到GitHub中去，然后后续的ai去执行操作之前，必须读取[github.com/hbhggh/TriModalSurv](https://github.com/hbhggh/TriModalSurv)
+
+【how to 避免信息损失】为了避免ai在数据传输中的信息损失，所以选择所有模型读同一份证据，不做逐级转述，下一位可以读上一位的建议，但上一位的建议不能代替原始需求和原始证据。
+
+
+**本次交接**：/你的任务：
+
+作为codex的你，
+
+	1.首先润色上述的prompt，这次跳过workflow:Gemini (构建框架)环节，直接进入ChatGPT Pro (发散创新)环节，所以这次生成的事发送给ChatGPT Pro (发散创新)环节的prompt。
+
+2. 然后并同步生成实验的markdown作为先验知识（此md文件包含【trigger：触发场景/背景】，**Q_draft**：What should be true afterward?，S_state）的说明文件，作为原始需求和原始证据，避免ai在数据传输中的信息损失。
+
+
+
+# **不可变约束**
+
+1. none的定义指的就是在both_100，text_100，rna_100，none的中的历史 none 保留天然缺失，因为消融实验二-encoder的实验结果中，（NPJ骨架➕原型学习➕新的辅助创新点：我们选择的新的encoder）实验结果可以直接使用/Users/wuhao/Desktop/TriModalSurv/manuscript/bmc_initial_draft/main.pdf中的Table 1的Scenario为None的实验数据
+2. 新 encoder 优于文本图像和rna三个模态的所使用的encoder，也就是/Users/wuhao/Desktop/TriModalSurv/manuscript/bmc_initial_draft/main.pdf中的Table 1的Scenario为None所使用的文本图像和rna三个模态的所使用的encoder）
+3. 对照：Table 1 中 **None / Proto.†** 对应的现有系统；新 encoder 成绩尚未产生。
+4. 不需要去执行ChatGPT Pro (发散创新)和workflow:Gemini (构建框架) 的工作，
