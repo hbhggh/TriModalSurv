@@ -1,0 +1,138 @@
+[
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/fusion_model.py",
+    "symbol": "GatedFusion",
+    "source_line": 917,
+    "source_sha256": "03c4060232d2d18ca277205e5a3dc47a8e3617e930128c839b11402953a7a096",
+    "target": "src/trimodalsurv/models/fusion.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/fusion_model.py",
+    "symbol": "MeanFusion",
+    "source_line": 952,
+    "source_sha256": "03c4060232d2d18ca277205e5a3dc47a8e3617e930128c839b11402953a7a096",
+    "target": "src/trimodalsurv/models/fusion.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/fusion_model.py",
+    "symbol": "SurvivalHead",
+    "source_line": 968,
+    "source_sha256": "03c4060232d2d18ca277205e5a3dc47a8e3617e930128c839b11402953a7a096",
+    "target": "src/trimodalsurv/models/fusion.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/fusion_model.py",
+    "symbol": "MainModalityMoE",
+    "source_line": 978,
+    "source_sha256": "03c4060232d2d18ca277205e5a3dc47a8e3617e930128c839b11402953a7a096",
+    "target": "src/trimodalsurv/models/fusion.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/model/fusion_model.py",
+    "symbol": "NPJC",
+    "source_line": 1101,
+    "source_sha256": "e5876999fd9a2a3ea24c78b1e1e13db52fe159152bd57c34f081d6e21575de7f",
+    "target": "src/trimodalsurv/models/npjc.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/compensator.py",
+    "symbol": "_sample_mask",
+    "source_line": 8,
+    "source_sha256": "a79db0a2bbac8e98eb698590b4e7c6e497744a88df4670c18a78e005ec60e2f1",
+    "target": "src/trimodalsurv/models/compensator.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/compensator.py",
+    "symbol": "_append_consistency_pair",
+    "source_line": 18,
+    "source_sha256": "a79db0a2bbac8e98eb698590b4e7c6e497744a88df4670c18a78e005ec60e2f1",
+    "target": "src/trimodalsurv/models/compensator.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/compensator.py",
+    "symbol": "CAPRecall",
+    "source_line": 34,
+    "source_sha256": "a79db0a2bbac8e98eb698590b4e7c6e497744a88df4670c18a78e005ec60e2f1",
+    "target": "src/trimodalsurv/models/compensator.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/compensator.py",
+    "symbol": "MissingBank",
+    "source_line": 175,
+    "source_sha256": "a79db0a2bbac8e98eb698590b4e7c6e497744a88df4670c18a78e005ec60e2f1",
+    "target": "src/trimodalsurv/models/compensator.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils_3yr/tcga_dataset.py",
+    "symbol": "compute_quantile_edges",
+    "source_line": 318,
+    "source_sha256": "6876be9f6ddbda0b751aa91ada268ebce9242456840bfa1109344e5b1fe6527b",
+    "target": "src/trimodalsurv/data/tcga_dataset.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils_3yr/tcga_dataset.py",
+    "symbol": "assign_bins",
+    "source_line": 336,
+    "source_sha256": "6876be9f6ddbda0b751aa91ada268ebce9242456840bfa1109344e5b1fe6527b",
+    "target": "src/trimodalsurv/data/tcga_dataset.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils_3yr/tcga_dataset.py",
+    "symbol": "TCGASurDataset",
+    "source_line": 345,
+    "source_sha256": "6876be9f6ddbda0b751aa91ada268ebce9242456840bfa1109344e5b1fe6527b",
+    "target": "src/trimodalsurv/data/tcga_dataset.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils_3yr/tcga_dataset.py",
+    "symbol": "get_dataset_tcga_sur",
+    "source_line": 657,
+    "source_sha256": "6876be9f6ddbda0b751aa91ada268ebce9242456840bfa1109344e5b1fe6527b",
+    "target": "src/trimodalsurv/data/tcga_dataset.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils/common_tools.py",
+    "symbol": "set_seed",
+    "target": "src/trimodalsurv/training/common_tools.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils/common_tools.py",
+    "symbol": "str2bool",
+    "target": "src/trimodalsurv/training/common_tools.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils/common_tools.py",
+    "symbol": "input_dim",
+    "target": "src/trimodalsurv/training/common_tools.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils/common_tools.py",
+    "symbol": "YmlConfig",
+    "target": "src/trimodalsurv/training/common_tools.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils_3yr/model_util.py",
+    "symbol": "ModelDumper",
+    "target": "src/trimodalsurv/training/model_util.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils_3yr/model_util.py",
+    "symbol": "Modality",
+    "target": "src/trimodalsurv/training/model_util.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils_3yr/loss_func.py",
+    "symbol": "NLLSurvLoss",
+    "target": "src/trimodalsurv/training/loss_func.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils_3yr/loss_func.py",
+    "symbol": "nll_loss",
+    "target": "src/trimodalsurv/training/loss_func.py"
+  },
+  {
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/loc_utils_3yr/loss_func.py",
+    "symbol": "PairwiseRankingLoss",
+    "target": "src/trimodalsurv/training/loss_func.py"
+  }
+]

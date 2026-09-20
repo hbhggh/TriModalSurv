@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/wuhao/npj_rules15_b1b2_20260916_fiYJ87/result/run.py", line 314, in <module>
+    main()
+  File "/home/wuhao/npj_rules15_b1b2_20260916_fiYJ87/result/run.py", line 309, in main
+    result = execute(rt.load_config(args.config))
+  File "/home/wuhao/npj_rules15_b1b2_20260916_fiYJ87/result/run.py", line 188, in execute
+    env, assets = rt.environment(), rt.hash_assets(config)
+  File "/home/wuhao/npj_rules15_b1b2_20260916_fiYJ87/result/runtime.py", line 289, in environment
+    import sksurv
+ModuleNotFoundError: No module named 'sksurv'

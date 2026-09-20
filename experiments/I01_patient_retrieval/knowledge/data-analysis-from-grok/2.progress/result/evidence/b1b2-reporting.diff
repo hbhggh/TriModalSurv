@@ -1,0 +1,55 @@
+--- evidence/b1b2-before-source/reporting.py	2026-09-16 19:10:38
++++ reporting.py	2026-09-16 21:29:06
+@@ -7,7 +7,9 @@
+ from statistics import fmean
+ from typing import Any, Iterable
+ 
++from selection import inactive_parameters
+ 
++
+ _FILENAMES = (
+     "零训练改推理1-5实验结果.md",
+     "seed单位-实验结果.md",
+@@ -60,6 +62,16 @@
+     if star:
+         text += " ★"
+     return _red(text) if red else text
++
++
++def _parameter_label(spec: dict[str, Any], name: str, *, candidate: bool = False) -> str:
++    """保留原参数数值以便复现，但对结构上未生效者明确标注。"""
++    exception = bool(spec.get("ucec_exception_enabled" if candidate else "ucec_exception"))
++    inactive = inactive_parameters(spec, exception)
++    if "inactive_parameters" in spec and spec["inactive_parameters"] != inactive:
++        raise ValueError("未生效参数标注与规则/路由不一致")
++    value = format(float(spec[name]), ".12g")
++    return f"{value}（未生效）" if name in inactive else value
+ 
+ 
+ def _delta(value: float) -> str:
+@@ -351,9 +363,9 @@
+                 protocol,
+                 spec["candidate_id"],
+                 ",".join(str(x) for x in spec.get("enabled_rules", [])),
+-                format(float(spec.get("lambda", 1.0)), ".12g"),
+-                format(float(spec.get("alpha", 0.0)), ".12g"),
+-                format(float(spec.get("w", 1.0)), ".12g"),
++                _parameter_label(spec, "lambda"),
++                _parameter_label(spec, "alpha"),
++                _parameter_label(spec, "w"),
+                 ucec_label,
+             )
+         )
+@@ -422,9 +434,9 @@
+             "| {} | {} | {} | {} | {} | {} | {} | {} | {} | {} | {} |".format(
+                 item.get("protocol", "—"),
+                 item["candidate_id"],
+-                format(float(item.get("lambda", 1.0)), ".12g"),
+-                format(float(item.get("alpha", 0.0)), ".12g"),
+-                format(float(item.get("w", 1.0)), ".12g"),
++                _parameter_label(item, "lambda", candidate=True),
++                _parameter_label(item, "alpha", candidate=True),
++                _parameter_label(item, "w", candidate=True),
+                 number("raw_mean"),
+                 number("routed_mean"),
+                 number("mean_delta_m1"),

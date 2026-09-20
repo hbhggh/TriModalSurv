@@ -1,0 +1,16 @@
+{
+  "experiment": "I02_population_prototypes",
+  "provenance": "684e formal-config.json + main_survival.py actual constructor defaults; historical original preserved",
+  "runtime": {
+    "network_type": "NPJC",
+    "compensator": "population",
+    "prototype_k": 8,
+    "hidden_size": 256,
+    "bin_mode": "author",
+    "epochs": 100,
+    "early_stopping_patience": 15,
+    "lr": 0.0001,
+    "batch_size": 32,
+    "modality_dropout": 0.0
+  }
+}

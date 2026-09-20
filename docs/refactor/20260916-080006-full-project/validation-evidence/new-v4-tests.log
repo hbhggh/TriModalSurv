@@ -1,0 +1,309 @@
+ss......................s............................................... [ 39%]
+.........................................FFFF........................... [ 78%]
+.................s.................s..s.                                 [100%]
+=================================== FAILURES ===================================
+_______ test_real_main_stops_and_reloads_best_checkpoint[15-100-16-None] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-wuhao/pytest-267/test_real_main_stops_and_reloa0')
+patience = 15, max_epochs = 100, expected_epochs = 16, scores = None
+
+    @pytest.mark.parametrize('patience,max_epochs,expected_epochs,scores', [
+        (15, 100, 16, None), (0, 2, 2, None), (15, 2, 2, None),
+        (2, 10, 5, [.6, .5, .7, .6, .6]),
+    ])
+    def test_real_main_stops_and_reloads_best_checkpoint(tmp_path, patience, max_epochs, expected_epochs, scores):
+        torch.set_num_threads(1)
+        main.set_seed(19)
+        args = _parse_author_args([
+            '--network_type', 'NPJC', '--compensator', 'population', '--prototype-k', '2',
+            '--hidden_size', '16', '--epochs', str(max_epochs), '--early-stopping-patience', str(patience),
+            '--batch_size', '4', '--num_workers', '0', '--cancer_types', 'A_B_UNUSED',
+            '--result_path', str(tmp_path / 'out'), '--cpt_name', 'earlystop',
+            '--gpu_config', str(ROOT.parents[1] / 'configs/gpu_train.yaml'), '--seed', '19',
+        ])
+        datasets = tuple(synthetic_dataset(s, n) for s, n in [('train', 13), ('valid', 9), ('test', 7)])
+        original_pass, original_save, original_load = main.finetune_epoch, torch.save, main.load_population_checkpoint
+        epochs, saved, loaded = [], [], []
+    
+        def controlled_validation(*a, **kw):
+            result = original_pass(*a, **kw)
+            if not kw['training']:
+                epochs.append(a[4])
+                # 仅控制验证分数，模型训练、全量建库、保存及重载仍走生产代码。
+                result['c-index'] = result['metric'] = .6 if scores is None else scores[a[4]]
+            return result
+    
+        def record_save(state, *a, **kw):
+            saved.append({k: v.detach().cpu().clone() for k, v in state.items()})
+            return original_save(state, *a, **kw)
+    
+        def verify_load(model, path, accelerator):
+            original_load(model, path, accelerator)
+            state = accelerator.unwrap_model(model).state_dict()
+            assert all(torch.equal(value.cpu(), saved[-1][key]) for key, value in state.items())
+            loaded.append(True)
+    
+        with patch.object(main, 'YmlConfig', SyntheticConfig), \
+             patch.object(main, 'get_dataset_tcga_sur', lambda *a, **k: datasets), \
+             patch.object(main, 'finetune_epoch', controlled_validation), \
+             patch.object(torch, 'save', record_save), \
+             patch.object(main, 'load_population_checkpoint', verify_load):
+>           main.main(args)
+
+experiments/I02_population_prototypes/tests/test_population_early_stopping.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+experiments/I02_population_prototypes/train.py:354: in main
+    main_process_call(accelerator, persist_configuration)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+accelerator = <accelerate.accelerator.Accelerator object at 0x14e8ac25f140>
+function = <function main.<locals>.persist_configuration at 0x14e8abbfbd80>
+
+    def main_process_call(accelerator, function):
+        """主进程异常也广播，其他 rank 不得一直等待下一次 collective。"""
+        result = [None, None]
+        if accelerator.is_main_process:
+            try:
+                result[0] = function()
+            except Exception as exc:
+                result[1] = f'{type(exc).__name__}: {exc}'
+        broadcast_object_list(result, from_process=0)
+        if result[1] is not None:
+>           raise RuntimeError(result[1])
+E           RuntimeError: FileNotFoundError: [Errno 2] No such file or directory: '/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v4/project/data/TCGA_9523sample_label_Censorship.csv'
+
+experiments/I02_population_prototypes/runtime.py:102: RuntimeError
+----------------------------- Captured stdout call -----------------------------
+RESOLVED_GPU_CONFIG={"allow_low_gpu_util": true, "batch_size": 4, "batch_size_source": "cli", "concurrent_runs": 1, "gpu_util_min_percent": 50, "gpu_util_target_percent": 80, "gpu_util_warmup_sec": 120, "gradient_accumulation_steps": 1, "low_gpu_util_reason": "NPJ small compute graph: measured active-util median 11-15%, peak 31% across bs 32-256 on V100; wall time increases with larger bs (probe 2026-09-02, collab/20260902-NPJ-GPU\u5408\u540c/notes.md)", "non_blocking": true, "num_workers": 0, "persistent_workers": true, "pin_memory": true, "prefetch_factor": 4}
+_________ test_real_main_stops_and_reloads_best_checkpoint[0-2-2-None] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-wuhao/pytest-267/test_real_main_stops_and_reloa1')
+patience = 0, max_epochs = 2, expected_epochs = 2, scores = None
+
+    @pytest.mark.parametrize('patience,max_epochs,expected_epochs,scores', [
+        (15, 100, 16, None), (0, 2, 2, None), (15, 2, 2, None),
+        (2, 10, 5, [.6, .5, .7, .6, .6]),
+    ])
+    def test_real_main_stops_and_reloads_best_checkpoint(tmp_path, patience, max_epochs, expected_epochs, scores):
+        torch.set_num_threads(1)
+        main.set_seed(19)
+        args = _parse_author_args([
+            '--network_type', 'NPJC', '--compensator', 'population', '--prototype-k', '2',
+            '--hidden_size', '16', '--epochs', str(max_epochs), '--early-stopping-patience', str(patience),
+            '--batch_size', '4', '--num_workers', '0', '--cancer_types', 'A_B_UNUSED',
+            '--result_path', str(tmp_path / 'out'), '--cpt_name', 'earlystop',
+            '--gpu_config', str(ROOT.parents[1] / 'configs/gpu_train.yaml'), '--seed', '19',
+        ])
+        datasets = tuple(synthetic_dataset(s, n) for s, n in [('train', 13), ('valid', 9), ('test', 7)])
+        original_pass, original_save, original_load = main.finetune_epoch, torch.save, main.load_population_checkpoint
+        epochs, saved, loaded = [], [], []
+    
+        def controlled_validation(*a, **kw):
+            result = original_pass(*a, **kw)
+            if not kw['training']:
+                epochs.append(a[4])
+                # 仅控制验证分数，模型训练、全量建库、保存及重载仍走生产代码。
+                result['c-index'] = result['metric'] = .6 if scores is None else scores[a[4]]
+            return result
+    
+        def record_save(state, *a, **kw):
+            saved.append({k: v.detach().cpu().clone() for k, v in state.items()})
+            return original_save(state, *a, **kw)
+    
+        def verify_load(model, path, accelerator):
+            original_load(model, path, accelerator)
+            state = accelerator.unwrap_model(model).state_dict()
+            assert all(torch.equal(value.cpu(), saved[-1][key]) for key, value in state.items())
+            loaded.append(True)
+    
+        with patch.object(main, 'YmlConfig', SyntheticConfig), \
+             patch.object(main, 'get_dataset_tcga_sur', lambda *a, **k: datasets), \
+             patch.object(main, 'finetune_epoch', controlled_validation), \
+             patch.object(torch, 'save', record_save), \
+             patch.object(main, 'load_population_checkpoint', verify_load):
+>           main.main(args)
+
+experiments/I02_population_prototypes/tests/test_population_early_stopping.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+experiments/I02_population_prototypes/train.py:354: in main
+    main_process_call(accelerator, persist_configuration)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+accelerator = <accelerate.accelerator.Accelerator object at 0x14e8ac25e840>
+function = <function main.<locals>.persist_configuration at 0x14e8abfdff60>
+
+    def main_process_call(accelerator, function):
+        """主进程异常也广播，其他 rank 不得一直等待下一次 collective。"""
+        result = [None, None]
+        if accelerator.is_main_process:
+            try:
+                result[0] = function()
+            except Exception as exc:
+                result[1] = f'{type(exc).__name__}: {exc}'
+        broadcast_object_list(result, from_process=0)
+        if result[1] is not None:
+>           raise RuntimeError(result[1])
+E           RuntimeError: FileNotFoundError: [Errno 2] No such file or directory: '/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v4/project/data/TCGA_9523sample_label_Censorship.csv'
+
+experiments/I02_population_prototypes/runtime.py:102: RuntimeError
+----------------------------- Captured stdout call -----------------------------
+RESOLVED_GPU_CONFIG={"allow_low_gpu_util": true, "batch_size": 4, "batch_size_source": "cli", "concurrent_runs": 1, "gpu_util_min_percent": 50, "gpu_util_target_percent": 80, "gpu_util_warmup_sec": 120, "gradient_accumulation_steps": 1, "low_gpu_util_reason": "NPJ small compute graph: measured active-util median 11-15%, peak 31% across bs 32-256 on V100; wall time increases with larger bs (probe 2026-09-02, collab/20260902-NPJ-GPU\u5408\u540c/notes.md)", "non_blocking": true, "num_workers": 0, "persistent_workers": true, "pin_memory": true, "prefetch_factor": 4}
+________ test_real_main_stops_and_reloads_best_checkpoint[15-2-2-None] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-wuhao/pytest-267/test_real_main_stops_and_reloa2')
+patience = 15, max_epochs = 2, expected_epochs = 2, scores = None
+
+    @pytest.mark.parametrize('patience,max_epochs,expected_epochs,scores', [
+        (15, 100, 16, None), (0, 2, 2, None), (15, 2, 2, None),
+        (2, 10, 5, [.6, .5, .7, .6, .6]),
+    ])
+    def test_real_main_stops_and_reloads_best_checkpoint(tmp_path, patience, max_epochs, expected_epochs, scores):
+        torch.set_num_threads(1)
+        main.set_seed(19)
+        args = _parse_author_args([
+            '--network_type', 'NPJC', '--compensator', 'population', '--prototype-k', '2',
+            '--hidden_size', '16', '--epochs', str(max_epochs), '--early-stopping-patience', str(patience),
+            '--batch_size', '4', '--num_workers', '0', '--cancer_types', 'A_B_UNUSED',
+            '--result_path', str(tmp_path / 'out'), '--cpt_name', 'earlystop',
+            '--gpu_config', str(ROOT.parents[1] / 'configs/gpu_train.yaml'), '--seed', '19',
+        ])
+        datasets = tuple(synthetic_dataset(s, n) for s, n in [('train', 13), ('valid', 9), ('test', 7)])
+        original_pass, original_save, original_load = main.finetune_epoch, torch.save, main.load_population_checkpoint
+        epochs, saved, loaded = [], [], []
+    
+        def controlled_validation(*a, **kw):
+            result = original_pass(*a, **kw)
+            if not kw['training']:
+                epochs.append(a[4])
+                # 仅控制验证分数，模型训练、全量建库、保存及重载仍走生产代码。
+                result['c-index'] = result['metric'] = .6 if scores is None else scores[a[4]]
+            return result
+    
+        def record_save(state, *a, **kw):
+            saved.append({k: v.detach().cpu().clone() for k, v in state.items()})
+            return original_save(state, *a, **kw)
+    
+        def verify_load(model, path, accelerator):
+            original_load(model, path, accelerator)
+            state = accelerator.unwrap_model(model).state_dict()
+            assert all(torch.equal(value.cpu(), saved[-1][key]) for key, value in state.items())
+            loaded.append(True)
+    
+        with patch.object(main, 'YmlConfig', SyntheticConfig), \
+             patch.object(main, 'get_dataset_tcga_sur', lambda *a, **k: datasets), \
+             patch.object(main, 'finetune_epoch', controlled_validation), \
+             patch.object(torch, 'save', record_save), \
+             patch.object(main, 'load_population_checkpoint', verify_load):
+>           main.main(args)
+
+experiments/I02_population_prototypes/tests/test_population_early_stopping.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+experiments/I02_population_prototypes/train.py:354: in main
+    main_process_call(accelerator, persist_configuration)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+accelerator = <accelerate.accelerator.Accelerator object at 0x14e8ac38a2a0>
+function = <function main.<locals>.persist_configuration at 0x14e8abfdd6c0>
+
+    def main_process_call(accelerator, function):
+        """主进程异常也广播，其他 rank 不得一直等待下一次 collective。"""
+        result = [None, None]
+        if accelerator.is_main_process:
+            try:
+                result[0] = function()
+            except Exception as exc:
+                result[1] = f'{type(exc).__name__}: {exc}'
+        broadcast_object_list(result, from_process=0)
+        if result[1] is not None:
+>           raise RuntimeError(result[1])
+E           RuntimeError: FileNotFoundError: [Errno 2] No such file or directory: '/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v4/project/data/TCGA_9523sample_label_Censorship.csv'
+
+experiments/I02_population_prototypes/runtime.py:102: RuntimeError
+----------------------------- Captured stdout call -----------------------------
+RESOLVED_GPU_CONFIG={"allow_low_gpu_util": true, "batch_size": 4, "batch_size_source": "cli", "concurrent_runs": 1, "gpu_util_min_percent": 50, "gpu_util_target_percent": 80, "gpu_util_warmup_sec": 120, "gradient_accumulation_steps": 1, "low_gpu_util_reason": "NPJ small compute graph: measured active-util median 11-15%, peak 31% across bs 32-256 on V100; wall time increases with larger bs (probe 2026-09-02, collab/20260902-NPJ-GPU\u5408\u540c/notes.md)", "non_blocking": true, "num_workers": 0, "persistent_workers": true, "pin_memory": true, "prefetch_factor": 4}
+_______ test_real_main_stops_and_reloads_best_checkpoint[2-10-5-scores3] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-wuhao/pytest-267/test_real_main_stops_and_reloa3')
+patience = 2, max_epochs = 10, expected_epochs = 5
+scores = [0.6, 0.5, 0.7, 0.6, 0.6]
+
+    @pytest.mark.parametrize('patience,max_epochs,expected_epochs,scores', [
+        (15, 100, 16, None), (0, 2, 2, None), (15, 2, 2, None),
+        (2, 10, 5, [.6, .5, .7, .6, .6]),
+    ])
+    def test_real_main_stops_and_reloads_best_checkpoint(tmp_path, patience, max_epochs, expected_epochs, scores):
+        torch.set_num_threads(1)
+        main.set_seed(19)
+        args = _parse_author_args([
+            '--network_type', 'NPJC', '--compensator', 'population', '--prototype-k', '2',
+            '--hidden_size', '16', '--epochs', str(max_epochs), '--early-stopping-patience', str(patience),
+            '--batch_size', '4', '--num_workers', '0', '--cancer_types', 'A_B_UNUSED',
+            '--result_path', str(tmp_path / 'out'), '--cpt_name', 'earlystop',
+            '--gpu_config', str(ROOT.parents[1] / 'configs/gpu_train.yaml'), '--seed', '19',
+        ])
+        datasets = tuple(synthetic_dataset(s, n) for s, n in [('train', 13), ('valid', 9), ('test', 7)])
+        original_pass, original_save, original_load = main.finetune_epoch, torch.save, main.load_population_checkpoint
+        epochs, saved, loaded = [], [], []
+    
+        def controlled_validation(*a, **kw):
+            result = original_pass(*a, **kw)
+            if not kw['training']:
+                epochs.append(a[4])
+                # 仅控制验证分数，模型训练、全量建库、保存及重载仍走生产代码。
+                result['c-index'] = result['metric'] = .6 if scores is None else scores[a[4]]
+            return result
+    
+        def record_save(state, *a, **kw):
+            saved.append({k: v.detach().cpu().clone() for k, v in state.items()})
+            return original_save(state, *a, **kw)
+    
+        def verify_load(model, path, accelerator):
+            original_load(model, path, accelerator)
+            state = accelerator.unwrap_model(model).state_dict()
+            assert all(torch.equal(value.cpu(), saved[-1][key]) for key, value in state.items())
+            loaded.append(True)
+    
+        with patch.object(main, 'YmlConfig', SyntheticConfig), \
+             patch.object(main, 'get_dataset_tcga_sur', lambda *a, **k: datasets), \
+             patch.object(main, 'finetune_epoch', controlled_validation), \
+             patch.object(torch, 'save', record_save), \
+             patch.object(main, 'load_population_checkpoint', verify_load):
+>           main.main(args)
+
+experiments/I02_population_prototypes/tests/test_population_early_stopping.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+experiments/I02_population_prototypes/train.py:354: in main
+    main_process_call(accelerator, persist_configuration)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+accelerator = <accelerate.accelerator.Accelerator object at 0x14e8ac2409b0>
+function = <function main.<locals>.persist_configuration at 0x14e8abbf9440>
+
+    def main_process_call(accelerator, function):
+        """主进程异常也广播，其他 rank 不得一直等待下一次 collective。"""
+        result = [None, None]
+        if accelerator.is_main_process:
+            try:
+                result[0] = function()
+            except Exception as exc:
+                result[1] = f'{type(exc).__name__}: {exc}'
+        broadcast_object_list(result, from_process=0)
+        if result[1] is not None:
+>           raise RuntimeError(result[1])
+E           RuntimeError: FileNotFoundError: [Errno 2] No such file or directory: '/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v4/project/data/TCGA_9523sample_label_Censorship.csv'
+
+experiments/I02_population_prototypes/runtime.py:102: RuntimeError
+----------------------------- Captured stdout call -----------------------------
+RESOLVED_GPU_CONFIG={"allow_low_gpu_util": true, "batch_size": 4, "batch_size_source": "cli", "concurrent_runs": 1, "gpu_util_min_percent": 50, "gpu_util_target_percent": 80, "gpu_util_warmup_sec": 120, "gradient_accumulation_steps": 1, "low_gpu_util_reason": "NPJ small compute graph: measured active-util median 11-15%, peak 31% across bs 32-256 on V100; wall time increases with larger bs (probe 2026-09-02, collab/20260902-NPJ-GPU\u5408\u540c/notes.md)", "non_blocking": true, "num_workers": 0, "persistent_workers": true, "pin_memory": true, "prefetch_factor": 4}
+=============================== warnings summary ===============================
+experiments/I01_patient_retrieval/tests/test_patient_retrieval_eval.py::EvaluationContract::test_actual_npjc_forward_identity_mask_and_strict_checkpoint
+  /home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/nn/modules/transformer.py:502: UserWarning: The PyTorch API of nested tensors is in prototype stage and will change in the near future. (Triggered internally at /opt/conda/conda-bld/pytorch_1728945388038/work/aten/src/ATen/NestedTensorImpl.cpp:178.)
+    output = torch._nested_tensor_from_mask(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED experiments/I02_population_prototypes/tests/test_population_early_stopping.py::test_real_main_stops_and_reloads_best_checkpoint[15-100-16-None]
+FAILED experiments/I02_population_prototypes/tests/test_population_early_stopping.py::test_real_main_stops_and_reloads_best_checkpoint[0-2-2-None]
+FAILED experiments/I02_population_prototypes/tests/test_population_early_stopping.py::test_real_main_stops_and_reloads_best_checkpoint[15-2-2-None]
+FAILED experiments/I02_population_prototypes/tests/test_population_early_stopping.py::test_real_main_stops_and_reloads_best_checkpoint[2-10-5-scores3]
+4 failed, 174 passed, 6 skipped, 1 warning in 11.32s

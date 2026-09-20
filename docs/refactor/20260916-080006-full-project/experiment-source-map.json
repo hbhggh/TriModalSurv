@@ -1,0 +1,47 @@
+[
+  {
+    "target": "experiments/I02_population_prototypes/model.py",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/model/population_prototypes.py",
+    "operation": "create",
+    "sha256_after": "f0dc091eba63d5427c6c971f687200af8df1cf1069744d6ce7b347fd06319943"
+  },
+  {
+    "target": "experiments/I02_population_prototypes/runtime.py",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/population_runtime.py",
+    "operation": "create",
+    "sha256_after": "08940dcdc6f964b36139a18d355e4779cbb7e5062704d1024b9b82cb5c2f1f96"
+  },
+  {
+    "target": "experiments/I04_cap4_multi_prototypes/model.py",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/compensator.py",
+    "operation": "create",
+    "sha256_after": "eb1526572a918a5b7468ce9b414c962f76bb1a28e48605aa54497aca3023bedd"
+  },
+  {
+    "target": "experiments/I02_population_prototypes/train.py",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/main_survival.py",
+    "operation": "create",
+    "sha256_after": "936a0764c9672f0b740ed3894396d1cf39b842a8d5a4c1d9cc748321488775d0"
+  },
+  {
+    "target": "experiments/I04_cap4_multi_prototypes/runtime.py",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "operation": "create",
+    "sha256_after": "03f8854c15b775345f9dd1e52e33aafb8e205f1f2bbc13201e73411c72e8a43e"
+  },
+  {
+    "source": "git:f2e2358:code/NPJ/model/compensator.py",
+    "sha256": "3fc09ccfc12442971897ac0e47b524cac8963400bfd505064a4ac12bef13ba2c",
+    "role": "历史来源复核，不覆盖T0当前实现"
+  },
+  {
+    "source": "git:f2e2358:code/NPJ/model/fusion_model.py",
+    "sha256": "03c4060232d2d18ca277205e5a3dc47a8e3617e930128c839b11402953a7a096",
+    "role": "历史来源复核，不覆盖T0当前实现"
+  },
+  {
+    "source": "git:f2e2358:code/NPJ/main_survival.py",
+    "sha256": "52af76879125042d56f2184da77f8c673d2d4f12d305f60c6565ab63120a7c42",
+    "role": "历史来源复核，不覆盖T0当前实现"
+  }
+]

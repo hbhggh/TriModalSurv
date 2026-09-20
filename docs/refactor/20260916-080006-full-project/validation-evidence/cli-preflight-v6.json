@@ -1,0 +1,382 @@
+[
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/train_launcher.py",
+      "--arms",
+      "e0,d0,dq0,dq_capl1,population",
+      "--cancers",
+      "BLCA",
+      "--seeds",
+      "123",
+      "--prototype-k",
+      "8",
+      "--dry_run"
+    ],
+    "exit": 0,
+    "stdout": "RESOLVED_GPU_POLICY={\"allow_low_gpu_util\": true, \"batch_size\": 32, \"concurrent_runs\": 1, \"gpu_util_min_percent\": 50, \"gpu_util_target_percent\": 80, \"gpu_util_warmup_sec\": 120, \"gradient_accumulation_steps\": 1, \"low_gpu_util_reason\": \"NPJ small compute graph: measured active-util median 11-15%, peak 31% across bs 32-256 on V100; wall time increases with larger bs (probe 2026-09-02, collab/20260902-NPJ-GPU\u5408\u540c/notes.md)\", \"non_blocking\": true, \"num_workers\": 4, \"persistent_workers\": true, \"pin_memory\": true, \"prefetch_factor\": 4}\nDRY_RUN index=1 name=e0_BLCA_s123 arm=e0 cancer=BLCA seed=123 gpu=0 slot=0 checkpoint=/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out/123/tcga_uni2_img_1536text_768rna_256_NPJC_BLCA_surv.pth command=/home/wuhao/miniconda3/envs/tcga_env/bin/python /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/main_survival.py --seed 123 --cpt_name tcga_uni2 --result_path /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out --report_label_path /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523_ex12.csv --model_config /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml --gpu_config /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml --cancer_types BLCA --network_type NPJC --hidden_size 256 --compensator none --lr 0.0001 --epochs 50 --batch_size 32 --bin_mode author\nDRY_RUN index=2 name=d0_BLCA_s123 arm=d0 cancer=BLCA seed=123 gpu=1 slot=0 checkpoint=/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out/123/tcga_uni2_img_1536text_768rna_256_MainModalityMoE_BLCA_surv.pth command=/home/wuhao/miniconda3/envs/tcga_env/bin/python /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/main_survival.py --seed 123 --cpt_name tcga_uni2 --result_path /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out --report_label_path /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523_ex12.csv --model_config /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml --gpu_config /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml --cancer_types BLCA --network_type MainModalityMoE --hidden_size 256 --compensator none --lr 0.0001 --epochs 50 --batch_size 32 --fusion_type mean --bin_mode author\nDRY_RUN index=3 name=dq0_BLCA_s123 arm=dq0 cancer=BLCA seed=123 gpu=0 slot=1 checkpoint=/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out/123/tcga_uni2_img_1536text_768rna_256_MainModalityMoE_BLCA_surv.pth command=/home/wuhao/miniconda3/envs/tcga_env/bin/python /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/main_survival.py --seed 123 --cpt_name tcga_uni2 --result_path /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out --report_label_path /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523_ex12.csv --model_config /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml --gpu_config /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml --cancer_types BLCA --network_type MainModalityMoE --hidden_size 256 --compensator none --lr 0.0001 --epochs 50 --batch_size 32 --fusion_type mean --bin_mode train_quantile\nDRY_RUN index=4 name=dq_capl1_BLCA_s123 arm=dq_capl1 cancer=BLCA seed=123 gpu=1 slot=1 checkpoint=/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out_capl/123/tcga_uni2_capl_img_1536text_768rna_256_MainModalityMoE_BLCA_surv.pth command=/home/wuhao/miniconda3/envs/tcga_env/bin/python /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/main_survival.py --seed 123 --cpt_name tcga_uni2 --result_path /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out --report_label_path /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523_ex12.csv --model_config /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml --gpu_config /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml --cancer_types BLCA --network_type MainModalityMoE --hidden_size 256 --compensator capl --lr 0.0001 --epochs 50 --batch_size 32 --fusion_type mean --bin_mode train_quantile --proto_per_bin 1 --modality_dropout 0.15 --consistency_lambda 0.1\nDRY_RUN index=5 name=population_BLCA_s123_k8 arm=population cancer=BLCA seed=123 gpu=0 slot=2 checkpoint=/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out_population_k8/123/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BLCA_surv.pth command=/home/wuhao/miniconda3/envs/tcga_env/bin/python /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/main_survival.py --seed 123 --cpt_name tcga_uni2 --result_path /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out --report_label_path /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523_ex12.csv --model_config /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml --gpu_config /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml --cancer_types BLCA --network_type NPJC --hidden_size 256 --compensator population --lr 0.0001 --epochs 50 --batch_size 32 --bin_mode author --prototype-k 8\nDRY_RUN_TOTAL=5\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/main_survival.py",
+      "--network_type",
+      "NPJC",
+      "--compensator",
+      "none",
+      "--bin_mode",
+      "author",
+      "--cancer_types",
+      "BLCA",
+      "--dry_run"
+    ],
+    "exit": 0,
+    "stdout": "['BLCA'] cancer_types\n{\"model\": {\"compensator\": \"none\", \"dropout_rate\": 0.1, \"hidden_size\": 256, \"mlp_ratio\": 4, \"modality_order\": [\"img\", \"text\", \"rna\"], \"n_backbone\": 1, \"n_head\": 4, \"network_type\": \"NPJC\", \"pred_dim\": 4}, \"runtime\": {\"batch_size\": null, \"bin_mode\": \"author\", \"cancer_type\": \"None\", \"cancer_types\": \"BLCA\", \"compensator\": \"none\", \"config\": null, \"consistency_lambda\": 0.1, \"cpt_name\": \"tcga\", \"dry_run\": true, \"epochs\": 50, \"finetune_head_only\": false, \"fusion_type\": \"gate\", \"gpu_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml\", \"hidden_size\": 256, \"lr\": 0.0005, \"modality_dropout\": 0.0, \"model_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml\", \"n_image_tokens\": 128, \"network_type\": \"NPJC\", \"num_workers\": null, \"preset\": null, \"pretrain_path\": \"\", \"proto_per_bin\": null, \"report_label_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523sample_label_Censorship.csv\", \"result_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out\", \"run_record_root\": null, \"seed\": 123, \"simulate_missing_modality\": \"\", \"task_type\": \"surv\", \"train\": true}}\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "-m",
+      "experiments.I02_population_prototypes.train",
+      "--config",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/experiments/I02_population_prototypes/config.yaml",
+      "--cancer_types",
+      "BLCA",
+      "--dry_run"
+    ],
+    "exit": 0,
+    "stdout": "{\"model\": {\"compensator\": \"PopulationPrototypeBank\", \"dropout_rate\": 0.1, \"hidden_size\": 256, \"mlp_ratio\": 4, \"modality_order\": [\"img\", \"text\", \"rna\"], \"n_backbone\": 1, \"n_head\": 4, \"network_type\": \"NPJC\", \"pred_dim\": 4}, \"runtime\": {\"batch_size\": 32, \"bin_mode\": \"author\", \"cancer_type\": \"None\", \"cancer_types\": \"BLCA\", \"compensator\": \"population\", \"config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/experiments/I02_population_prototypes/config.yaml\", \"consistency_lambda\": 0.1, \"cpt_name\": \"tcga\", \"dry_run\": true, \"early_stopping_patience\": 15, \"epochs\": 100, \"finetune_head_only\": false, \"fusion_type\": \"gate\", \"gpu_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml\", \"hidden_size\": 256, \"lr\": 0.0001, \"modality_dropout\": 0.0, \"model_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml\", \"n_image_tokens\": 128, \"network_type\": \"NPJC\", \"num_workers\": null, \"pretrain_path\": \"\", \"prototype_k\": 8, \"report_label_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523sample_label_Censorship.csv\", \"result_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out\", \"run_record_root\": null, \"seed\": 123, \"simulate_missing_modality\": \"\", \"task_type\": \"surv\", \"train\": true}}\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "-m",
+      "experiments.I04_cap4_multi_prototypes.train",
+      "--network_type",
+      "MainModalityMoE",
+      "--compensator",
+      "capl",
+      "--proto_per_bin",
+      "2",
+      "--fusion_type",
+      "mean",
+      "--bin_mode",
+      "train_quantile",
+      "--cancer_types",
+      "BLCA",
+      "--dry_run"
+    ],
+    "exit": 0,
+    "stdout": "['BLCA'] cancer_types\n{\"model\": {\"compensator\": \"CAPRecallMulti\", \"dropout_rate\": 0.1, \"fusion\": \"MeanFusion\", \"hidden_size\": 256, \"mlp_ratio\": 4, \"modality_order\": [\"img\", \"text\", \"rna\"], \"n_backbone\": 1, \"n_head\": 4, \"network_type\": \"MainModalityMoE\", \"pred_dim\": 4}, \"runtime\": {\"batch_size\": null, \"bin_mode\": \"train_quantile\", \"cancer_type\": \"None\", \"cancer_types\": \"BLCA\", \"compensator\": \"capl\", \"config\": null, \"consistency_lambda\": 0.1, \"cpt_name\": \"tcga\", \"dry_run\": true, \"epochs\": 50, \"finetune_head_only\": false, \"fusion_type\": \"mean\", \"gpu_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml\", \"hidden_size\": 256, \"lr\": 0.0005, \"modality_dropout\": 0.0, \"model_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml\", \"n_image_tokens\": 128, \"network_type\": \"MainModalityMoE\", \"num_workers\": null, \"preset\": null, \"pretrain_path\": \"\", \"proto_per_bin\": 2, \"report_label_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523sample_label_Censorship.csv\", \"result_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out\", \"run_record_root\": null, \"seed\": 123, \"simulate_missing_modality\": \"\", \"task_type\": \"surv\", \"train\": true}}\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "-m",
+      "experiments.I01_patient_retrieval.evaluate",
+      "--help"
+    ],
+    "exit": 0,
+    "stdout": "usage: evaluate.py [-h] --data-root DATA_ROOT\n                   [--checkpoint-root CHECKPOINT_ROOT] [--label LABEL]\n                   [--manifest MANIFEST] --out-dir OUT_DIR\n                   [--cancers {BLCA,BRCA,LGG,LUAD,UCEC} [{BLCA,BRCA,LGG,LUAD,UCEC} ...]]\n                   [--seeds {123,132,213,231,321} [{123,132,213,231,321} ...]]\n                   [--stage {preflight,smoke,formal}]\n                   [--review-record REVIEW_RECORD] [--device {cpu,cuda}]\n                   [--batch-size BATCH_SIZE] [--cpu-threads CPU_THREADS]\n                   [--config CONFIG] [--formal-approved]\n\nNPJ-C \u56fa\u5b9a\u60a3\u8005\u5e93\u4e09\u81c2\u8bc4\u6d4b\uff1b\u7531 eval_missing.py --patient-fixed \u8c03\u7528\u3002 \u53ea\u8bfb\u65e2\u6709 pickle\n\u7f13\u5b58\uff08\u4ec5\u9650\u53ef\u4fe1\u7684\u672c\u9879\u76ee\u7f13\u5b58\uff09\uff0c\u7edd\u4e0d\u89e6\u53d1 dataset \u51b7\u6784\u5efa\u3002 \u9ed8\u8ba4\u4ec5 preflight\uff1bsmoke \u4e0d\u4ea7 C-index\uff1bformal\n\u5fc5\u987b\u63d0\u4f9b\u4eba\u5de5\u4e92\u5ba1\u8bb0\u5f55\u3002\n\noptions:\n  -h, --help            show this help message and exit\n  --data-root DATA_ROOT\n  --checkpoint-root CHECKPOINT_ROOT\n  --label LABEL\n  --manifest MANIFEST\n  --out-dir OUT_DIR\n  --cancers {BLCA,BRCA,LGG,LUAD,UCEC} [{BLCA,BRCA,LGG,LUAD,UCEC} ...]\n  --seeds {123,132,213,231,321} [{123,132,213,231,321} ...]\n  --stage {preflight,smoke,formal}\n  --review-record REVIEW_RECORD\n                        formal \u5fc5\u987b\u63d0\u4f9b\u771f\u5b9e\u4e92\u5ba1\u8bb0\u5f55\uff1b\u6587\u4ef6\u5b58\u5728\u4e0d\u4ee3\u8868\u81ea\u52a8\u83b7\u6279\n  --device {cpu,cuda}\n  --batch-size BATCH_SIZE\n  --cpu-threads CPU_THREADS\n  --config CONFIG       \u5b9e\u9a8c\u914d\u7f6e\uff1b\u663e\u5f0f CLI \u6700\u540e\u8986\u76d6\n  --formal-approved     \u786e\u8ba4\u5df2\u6709 Claude \u5ba1\u67e5\u901a\u8fc7\u4e14\u7528\u6237\u6279\u51c6\u672c\u6b21\u6b63\u5f0f\u8bc4\u6d4b\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "-m",
+      "experiments.I02_population_prototypes.evaluate",
+      "--help"
+    ],
+    "exit": 0,
+    "stdout": "usage: evaluate.py [-h] --bin_mode {author} --arm {m0real,m1} --cancer\n                   {BLCA,BRCA,LUAD,LGG,UCEC} --seed SEED --ckpt CKPT\n                   --manifest MANIFEST [--grids GRIDS] --label LABEL --out-dir\n                   OUT_DIR [--compensator {none,capr,bank,population}]\n                   [--prototype-k PROTOTYPE_K]\n                   [--network_type {MainModalityMoE,NPJC}]\n                   [--fusion_type {gate,mean}] [--m1-mark-valid]\n\nI02 \u63a8\u7406\u5165\u53e3\uff1aauthor\u5206\u7bb1\u3001\u4e25\u683c\u65e2\u6709\u5e93\u3001\u7981\u6b62\u5747\u503c\u9884\u586b\u8865\u3002\n\noptions:\n  -h, --help            show this help message and exit\n  --bin_mode {author}\n  --arm {m0real,m1}\n  --cancer {BLCA,BRCA,LUAD,LGG,UCEC}\n  --seed SEED\n  --ckpt CKPT\n  --manifest MANIFEST\n  --grids GRIDS         all \u6216\u9017\u53f7\u5206\u9694\u683c\u70b9\n  --label LABEL\n  --out-dir OUT_DIR\n  --compensator {none,capr,bank,population}\n  --prototype-k PROTOTYPE_K\n  --network_type {MainModalityMoE,NPJC}\n  --fusion_type {gate,mean}\n  --m1-mark-valid\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/eval_missing.py",
+      "--help"
+    ],
+    "exit": 0,
+    "stdout": "usage: eval_missing.py [-h] --arm {m0real,m1} --cancer\n                       {BLCA,BRCA,LUAD,LGG,UCEC} --seed SEED --ckpt CKPT\n                       --manifest MANIFEST [--grids GRIDS] --label LABEL\n                       --out-dir OUT_DIR [--compensator {none,capr,capl,bank}]\n                       [--proto_per_bin PROTO_PER_BIN] --bin_mode\n                       {author,train_quantile}\n                       [--network_type {MainModalityMoE,NPJC}]\n                       [--fusion_type {gate,mean}] [--m1-mark-valid]\n\n\u4f7f\u7528\u51bb\u7ed3 NPJ checkpoint \u8bc4\u6d4b\u56fa\u5b9a\u7f3a\u5931\u683c\u70b9\u7684 M0-real \u4e0e M1\u3002\n\noptions:\n  -h, --help            show this help message and exit\n  --arm {m0real,m1}\n  --cancer {BLCA,BRCA,LUAD,LGG,UCEC}\n  --seed SEED\n  --ckpt CKPT\n  --manifest MANIFEST\n  --grids GRIDS         all \u6216\u9017\u53f7\u5206\u9694\u683c\u70b9\n  --label LABEL\n  --out-dir OUT_DIR\n  --compensator {none,capr,capl,bank}\n  --proto_per_bin PROTO_PER_BIN\n  --bin_mode {author,train_quantile}\n  --network_type {MainModalityMoE,NPJC}\n  --fusion_type {gate,mean}\n  --m1-mark-valid\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/main_survival.py",
+      "--config",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/experiments/I02_population_prototypes/config.yaml",
+      "--cancer_types",
+      "BLCA",
+      "--dry_run"
+    ],
+    "exit": 0,
+    "stdout": "{\"model\": {\"compensator\": \"PopulationPrototypeBank\", \"dropout_rate\": 0.1, \"hidden_size\": 256, \"mlp_ratio\": 4, \"modality_order\": [\"img\", \"text\", \"rna\"], \"n_backbone\": 1, \"n_head\": 4, \"network_type\": \"NPJC\", \"pred_dim\": 4}, \"runtime\": {\"batch_size\": 32, \"bin_mode\": \"author\", \"cancer_type\": \"None\", \"cancer_types\": \"BLCA\", \"compensator\": \"population\", \"config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/experiments/I02_population_prototypes/config.yaml\", \"consistency_lambda\": 0.1, \"cpt_name\": \"tcga\", \"dry_run\": true, \"early_stopping_patience\": 15, \"epochs\": 100, \"finetune_head_only\": false, \"fusion_type\": \"gate\", \"gpu_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml\", \"hidden_size\": 256, \"lr\": 0.0001, \"modality_dropout\": 0.0, \"model_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml\", \"n_image_tokens\": 128, \"network_type\": \"NPJC\", \"num_workers\": null, \"pretrain_path\": \"\", \"prototype_k\": 8, \"report_label_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523sample_label_Censorship.csv\", \"result_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out\", \"run_record_root\": null, \"seed\": 123, \"simulate_missing_modality\": \"\", \"task_type\": \"surv\", \"train\": true}}\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/main_survival.py",
+      "--config",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/experiments/I03_npj_d_dm_e1/config.yaml",
+      "--preset",
+      "D",
+      "--cancer_types",
+      "BLCA",
+      "--dry_run"
+    ],
+    "exit": 0,
+    "stdout": "['BLCA'] cancer_types\n{\"model\": {\"compensator\": \"none\", \"dropout_rate\": 0.1, \"fusion\": \"MeanFusion\", \"hidden_size\": 256, \"mlp_ratio\": 4, \"modality_order\": [\"img\", \"text\", \"rna\"], \"n_backbone\": 1, \"n_head\": 4, \"network_type\": \"MainModalityMoE\", \"pred_dim\": 4}, \"runtime\": {\"batch_size\": null, \"bin_mode\": \"author\", \"cancer_type\": \"None\", \"cancer_types\": \"BLCA\", \"compensator\": \"none\", \"config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/experiments/I03_npj_d_dm_e1/config.yaml\", \"consistency_lambda\": 0.1, \"cpt_name\": \"tcga\", \"dry_run\": true, \"epochs\": 50, \"finetune_head_only\": false, \"fusion_type\": \"mean\", \"gpu_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml\", \"hidden_size\": 256, \"lr\": 0.0005, \"modality_dropout\": 0.0, \"model_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml\", \"n_image_tokens\": 128, \"network_type\": \"MainModalityMoE\", \"num_workers\": null, \"preset\": \"D\", \"pretrain_path\": \"\", \"proto_per_bin\": null, \"report_label_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523sample_label_Censorship.csv\", \"result_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out\", \"run_record_root\": null, \"seed\": 123, \"simulate_missing_modality\": \"\", \"task_type\": \"surv\", \"train\": true}}\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/main_survival.py",
+      "--config",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/experiments/I03_npj_d_dm_e1/config.yaml",
+      "--preset",
+      "E1",
+      "--cancer_types",
+      "BLCA",
+      "--dry_run"
+    ],
+    "exit": 0,
+    "stdout": "['BLCA'] cancer_types\n{\"model\": {\"compensator\": \"CAPRecall\", \"dropout_rate\": 0.1, \"hidden_size\": 256, \"mlp_ratio\": 4, \"modality_order\": [\"img\", \"text\", \"rna\"], \"n_backbone\": 1, \"n_head\": 4, \"network_type\": \"NPJC\", \"pred_dim\": 4}, \"runtime\": {\"batch_size\": null, \"bin_mode\": \"author\", \"cancer_type\": \"None\", \"cancer_types\": \"BLCA\", \"compensator\": \"capr\", \"config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/experiments/I03_npj_d_dm_e1/config.yaml\", \"consistency_lambda\": 0.1, \"cpt_name\": \"tcga\", \"dry_run\": true, \"epochs\": 50, \"finetune_head_only\": false, \"fusion_type\": \"gate\", \"gpu_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml\", \"hidden_size\": 256, \"lr\": 0.0005, \"modality_dropout\": 0.15, \"model_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml\", \"n_image_tokens\": 128, \"network_type\": \"NPJC\", \"num_workers\": null, \"preset\": \"E1\", \"pretrain_path\": \"\", \"proto_per_bin\": null, \"report_label_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523sample_label_Censorship.csv\", \"result_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out\", \"run_record_root\": null, \"seed\": 123, \"simulate_missing_modality\": \"\", \"task_type\": \"surv\", \"train\": true}}\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/main_survival.py",
+      "--config",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/experiments/I04_cap4_multi_prototypes/config.yaml",
+      "--preset",
+      "dq_capl8",
+      "--cancer_types",
+      "BLCA",
+      "--dry_run"
+    ],
+    "exit": 0,
+    "stdout": "['BLCA'] cancer_types\n{\"model\": {\"compensator\": \"CAPRecallMulti\", \"dropout_rate\": 0.1, \"fusion\": \"MeanFusion\", \"hidden_size\": 256, \"mlp_ratio\": 4, \"modality_order\": [\"img\", \"text\", \"rna\"], \"n_backbone\": 1, \"n_head\": 4, \"network_type\": \"MainModalityMoE\", \"pred_dim\": 4}, \"runtime\": {\"batch_size\": null, \"bin_mode\": \"train_quantile\", \"cancer_type\": \"None\", \"cancer_types\": \"BLCA\", \"compensator\": \"capl\", \"config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/experiments/I04_cap4_multi_prototypes/config.yaml\", \"consistency_lambda\": 0.1, \"cpt_name\": \"tcga\", \"dry_run\": true, \"epochs\": 50, \"finetune_head_only\": false, \"fusion_type\": \"mean\", \"gpu_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml\", \"hidden_size\": 256, \"lr\": 0.0005, \"modality_dropout\": 0.15, \"model_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml\", \"n_image_tokens\": 128, \"network_type\": \"MainModalityMoE\", \"num_workers\": null, \"preset\": \"dq_capl8\", \"pretrain_path\": \"\", \"proto_per_bin\": 8, \"report_label_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523sample_label_Censorship.csv\", \"result_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out\", \"run_record_root\": null, \"seed\": 123, \"simulate_missing_modality\": \"\", \"task_type\": \"surv\", \"train\": true}}\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/train_launcher.py",
+      "--arms",
+      "e0,d0,dq0,dq_capl1,population",
+      "--cancers",
+      "BLCA",
+      "--seeds",
+      "123",
+      "--prototype-k",
+      "8",
+      "--dry_run"
+    ],
+    "exit": 0,
+    "stdout": "RESOLVED_GPU_POLICY={\"allow_low_gpu_util\": true, \"batch_size\": 32, \"concurrent_runs\": 1, \"gpu_util_min_percent\": 50, \"gpu_util_target_percent\": 80, \"gpu_util_warmup_sec\": 120, \"gradient_accumulation_steps\": 1, \"low_gpu_util_reason\": \"NPJ small compute graph: measured active-util median 11-15%, peak 31% across bs 32-256 on V100; wall time increases with larger bs (probe 2026-09-02, collab/20260902-NPJ-GPU\u5408\u540c/notes.md)\", \"non_blocking\": true, \"num_workers\": 4, \"persistent_workers\": true, \"pin_memory\": true, \"prefetch_factor\": 4}\nDRY_RUN index=1 name=e0_BLCA_s123 arm=e0 cancer=BLCA seed=123 gpu=0 slot=0 checkpoint=/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out/123/tcga_uni2_img_1536text_768rna_256_NPJC_BLCA_surv.pth command=/home/wuhao/miniconda3/envs/tcga_env/bin/python /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/main_survival.py --seed 123 --cpt_name tcga_uni2 --result_path /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out --report_label_path /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523_ex12.csv --model_config /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml --gpu_config /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml --cancer_types BLCA --network_type NPJC --hidden_size 256 --compensator none --lr 0.0001 --epochs 50 --batch_size 32 --bin_mode author\nDRY_RUN index=2 name=d0_BLCA_s123 arm=d0 cancer=BLCA seed=123 gpu=1 slot=0 checkpoint=/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out/123/tcga_uni2_img_1536text_768rna_256_MainModalityMoE_BLCA_surv.pth command=/home/wuhao/miniconda3/envs/tcga_env/bin/python /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/main_survival.py --seed 123 --cpt_name tcga_uni2 --result_path /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out --report_label_path /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523_ex12.csv --model_config /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml --gpu_config /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml --cancer_types BLCA --network_type MainModalityMoE --hidden_size 256 --compensator none --lr 0.0001 --epochs 50 --batch_size 32 --fusion_type mean --bin_mode author\nDRY_RUN index=3 name=dq0_BLCA_s123 arm=dq0 cancer=BLCA seed=123 gpu=0 slot=1 checkpoint=/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out/123/tcga_uni2_img_1536text_768rna_256_MainModalityMoE_BLCA_surv.pth command=/home/wuhao/miniconda3/envs/tcga_env/bin/python /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/main_survival.py --seed 123 --cpt_name tcga_uni2 --result_path /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out --report_label_path /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523_ex12.csv --model_config /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml --gpu_config /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml --cancer_types BLCA --network_type MainModalityMoE --hidden_size 256 --compensator none --lr 0.0001 --epochs 50 --batch_size 32 --fusion_type mean --bin_mode train_quantile\nDRY_RUN index=4 name=dq_capl1_BLCA_s123 arm=dq_capl1 cancer=BLCA seed=123 gpu=1 slot=1 checkpoint=/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out_capl/123/tcga_uni2_capl_img_1536text_768rna_256_MainModalityMoE_BLCA_surv.pth command=/home/wuhao/miniconda3/envs/tcga_env/bin/python /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/main_survival.py --seed 123 --cpt_name tcga_uni2 --result_path /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out --report_label_path /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523_ex12.csv --model_config /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml --gpu_config /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml --cancer_types BLCA --network_type MainModalityMoE --hidden_size 256 --compensator capl --lr 0.0001 --epochs 50 --batch_size 32 --fusion_type mean --bin_mode train_quantile --proto_per_bin 1 --modality_dropout 0.15 --consistency_lambda 0.1\nDRY_RUN index=5 name=population_BLCA_s123_k8 arm=population cancer=BLCA seed=123 gpu=0 slot=2 checkpoint=/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out_population_k8/123/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BLCA_surv.pth command=/home/wuhao/miniconda3/envs/tcga_env/bin/python /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/main_survival.py --seed 123 --cpt_name tcga_uni2 --result_path /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out --report_label_path /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523_ex12.csv --model_config /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml --gpu_config /home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml --cancer_types BLCA --network_type NPJC --hidden_size 256 --compensator population --lr 0.0001 --epochs 50 --batch_size 32 --bin_mode author --prototype-k 8\nDRY_RUN_TOTAL=5\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/main_survival.py",
+      "--network_type",
+      "NPJC",
+      "--compensator",
+      "none",
+      "--bin_mode",
+      "author",
+      "--cancer_types",
+      "BLCA",
+      "--dry_run"
+    ],
+    "exit": 0,
+    "stdout": "['BLCA'] cancer_types\n{\"model\": {\"compensator\": \"none\", \"dropout_rate\": 0.1, \"hidden_size\": 256, \"mlp_ratio\": 4, \"modality_order\": [\"img\", \"text\", \"rna\"], \"n_backbone\": 1, \"n_head\": 4, \"network_type\": \"NPJC\", \"pred_dim\": 4}, \"runtime\": {\"batch_size\": null, \"bin_mode\": \"author\", \"cancer_type\": \"None\", \"cancer_types\": \"BLCA\", \"compensator\": \"none\", \"config\": null, \"consistency_lambda\": 0.1, \"cpt_name\": \"tcga\", \"dry_run\": true, \"epochs\": 50, \"finetune_head_only\": false, \"fusion_type\": \"gate\", \"gpu_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml\", \"hidden_size\": 256, \"lr\": 0.0005, \"modality_dropout\": 0.0, \"model_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml\", \"n_image_tokens\": 128, \"network_type\": \"NPJC\", \"num_workers\": null, \"preset\": null, \"pretrain_path\": \"\", \"proto_per_bin\": null, \"report_label_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523sample_label_Censorship.csv\", \"result_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out\", \"run_record_root\": null, \"seed\": 123, \"simulate_missing_modality\": \"\", \"task_type\": \"surv\", \"train\": true}}\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "-m",
+      "experiments.I02_population_prototypes.train",
+      "--config",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/experiments/I02_population_prototypes/config.yaml",
+      "--cancer_types",
+      "BLCA",
+      "--dry_run"
+    ],
+    "exit": 0,
+    "stdout": "{\"model\": {\"compensator\": \"PopulationPrototypeBank\", \"dropout_rate\": 0.1, \"hidden_size\": 256, \"mlp_ratio\": 4, \"modality_order\": [\"img\", \"text\", \"rna\"], \"n_backbone\": 1, \"n_head\": 4, \"network_type\": \"NPJC\", \"pred_dim\": 4}, \"runtime\": {\"batch_size\": 32, \"bin_mode\": \"author\", \"cancer_type\": \"None\", \"cancer_types\": \"BLCA\", \"compensator\": \"population\", \"config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/experiments/I02_population_prototypes/config.yaml\", \"consistency_lambda\": 0.1, \"cpt_name\": \"tcga\", \"dry_run\": true, \"early_stopping_patience\": 15, \"epochs\": 100, \"finetune_head_only\": false, \"fusion_type\": \"gate\", \"gpu_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml\", \"hidden_size\": 256, \"lr\": 0.0001, \"modality_dropout\": 0.0, \"model_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml\", \"n_image_tokens\": 128, \"network_type\": \"NPJC\", \"num_workers\": null, \"pretrain_path\": \"\", \"prototype_k\": 8, \"report_label_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523sample_label_Censorship.csv\", \"result_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out\", \"run_record_root\": null, \"seed\": 123, \"simulate_missing_modality\": \"\", \"task_type\": \"surv\", \"train\": true}}\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "-m",
+      "experiments.I04_cap4_multi_prototypes.train",
+      "--network_type",
+      "MainModalityMoE",
+      "--compensator",
+      "capl",
+      "--proto_per_bin",
+      "2",
+      "--fusion_type",
+      "mean",
+      "--bin_mode",
+      "train_quantile",
+      "--cancer_types",
+      "BLCA",
+      "--dry_run"
+    ],
+    "exit": 0,
+    "stdout": "['BLCA'] cancer_types\n{\"model\": {\"compensator\": \"CAPRecallMulti\", \"dropout_rate\": 0.1, \"fusion\": \"MeanFusion\", \"hidden_size\": 256, \"mlp_ratio\": 4, \"modality_order\": [\"img\", \"text\", \"rna\"], \"n_backbone\": 1, \"n_head\": 4, \"network_type\": \"MainModalityMoE\", \"pred_dim\": 4}, \"runtime\": {\"batch_size\": null, \"bin_mode\": \"train_quantile\", \"cancer_type\": \"None\", \"cancer_types\": \"BLCA\", \"compensator\": \"capl\", \"config\": null, \"consistency_lambda\": 0.1, \"cpt_name\": \"tcga\", \"dry_run\": true, \"epochs\": 50, \"finetune_head_only\": false, \"fusion_type\": \"mean\", \"gpu_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml\", \"hidden_size\": 256, \"lr\": 0.0005, \"modality_dropout\": 0.0, \"model_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml\", \"n_image_tokens\": 128, \"network_type\": \"MainModalityMoE\", \"num_workers\": null, \"preset\": null, \"pretrain_path\": \"\", \"proto_per_bin\": 2, \"report_label_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523sample_label_Censorship.csv\", \"result_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out\", \"run_record_root\": null, \"seed\": 123, \"simulate_missing_modality\": \"\", \"task_type\": \"surv\", \"train\": true}}\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "-m",
+      "experiments.I01_patient_retrieval.evaluate",
+      "--help"
+    ],
+    "exit": 0,
+    "stdout": "usage: evaluate.py [-h] --data-root DATA_ROOT\n                   [--checkpoint-root CHECKPOINT_ROOT] [--label LABEL]\n                   [--manifest MANIFEST] --out-dir OUT_DIR\n                   [--cancers {BLCA,BRCA,LGG,LUAD,UCEC} [{BLCA,BRCA,LGG,LUAD,UCEC} ...]]\n                   [--seeds {123,132,213,231,321} [{123,132,213,231,321} ...]]\n                   [--stage {preflight,smoke,formal}]\n                   [--review-record REVIEW_RECORD] [--device {cpu,cuda}]\n                   [--batch-size BATCH_SIZE] [--cpu-threads CPU_THREADS]\n                   [--config CONFIG] [--formal-approved]\n\nNPJ-C \u56fa\u5b9a\u60a3\u8005\u5e93\u4e09\u81c2\u8bc4\u6d4b\uff1b\u7531 eval_missing.py --patient-fixed \u8c03\u7528\u3002 \u53ea\u8bfb\u65e2\u6709 pickle\n\u7f13\u5b58\uff08\u4ec5\u9650\u53ef\u4fe1\u7684\u672c\u9879\u76ee\u7f13\u5b58\uff09\uff0c\u7edd\u4e0d\u89e6\u53d1 dataset \u51b7\u6784\u5efa\u3002 \u9ed8\u8ba4\u4ec5 preflight\uff1bsmoke \u4e0d\u4ea7 C-index\uff1bformal\n\u5fc5\u987b\u63d0\u4f9b\u4eba\u5de5\u4e92\u5ba1\u8bb0\u5f55\u3002\n\noptions:\n  -h, --help            show this help message and exit\n  --data-root DATA_ROOT\n  --checkpoint-root CHECKPOINT_ROOT\n  --label LABEL\n  --manifest MANIFEST\n  --out-dir OUT_DIR\n  --cancers {BLCA,BRCA,LGG,LUAD,UCEC} [{BLCA,BRCA,LGG,LUAD,UCEC} ...]\n  --seeds {123,132,213,231,321} [{123,132,213,231,321} ...]\n  --stage {preflight,smoke,formal}\n  --review-record REVIEW_RECORD\n                        formal \u5fc5\u987b\u63d0\u4f9b\u771f\u5b9e\u4e92\u5ba1\u8bb0\u5f55\uff1b\u6587\u4ef6\u5b58\u5728\u4e0d\u4ee3\u8868\u81ea\u52a8\u83b7\u6279\n  --device {cpu,cuda}\n  --batch-size BATCH_SIZE\n  --cpu-threads CPU_THREADS\n  --config CONFIG       \u5b9e\u9a8c\u914d\u7f6e\uff1b\u663e\u5f0f CLI \u6700\u540e\u8986\u76d6\n  --formal-approved     \u786e\u8ba4\u5df2\u6709 Claude \u5ba1\u67e5\u901a\u8fc7\u4e14\u7528\u6237\u6279\u51c6\u672c\u6b21\u6b63\u5f0f\u8bc4\u6d4b\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "-m",
+      "experiments.I02_population_prototypes.evaluate",
+      "--help"
+    ],
+    "exit": 0,
+    "stdout": "usage: evaluate.py [-h] --bin_mode {author} --arm {m0real,m1} --cancer\n                   {BLCA,BRCA,LUAD,LGG,UCEC} --seed SEED --ckpt CKPT\n                   --manifest MANIFEST [--grids GRIDS] --label LABEL --out-dir\n                   OUT_DIR [--compensator {none,capr,bank,population}]\n                   [--prototype-k PROTOTYPE_K]\n                   [--network_type {MainModalityMoE,NPJC}]\n                   [--fusion_type {gate,mean}] [--m1-mark-valid]\n\nI02 \u63a8\u7406\u5165\u53e3\uff1aauthor\u5206\u7bb1\u3001\u4e25\u683c\u65e2\u6709\u5e93\u3001\u7981\u6b62\u5747\u503c\u9884\u586b\u8865\u3002\n\noptions:\n  -h, --help            show this help message and exit\n  --bin_mode {author}\n  --arm {m0real,m1}\n  --cancer {BLCA,BRCA,LUAD,LGG,UCEC}\n  --seed SEED\n  --ckpt CKPT\n  --manifest MANIFEST\n  --grids GRIDS         all \u6216\u9017\u53f7\u5206\u9694\u683c\u70b9\n  --label LABEL\n  --out-dir OUT_DIR\n  --compensator {none,capr,bank,population}\n  --prototype-k PROTOTYPE_K\n  --network_type {MainModalityMoE,NPJC}\n  --fusion_type {gate,mean}\n  --m1-mark-valid\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/eval_missing.py",
+      "--help"
+    ],
+    "exit": 0,
+    "stdout": "usage: eval_missing.py [-h] --arm {m0real,m1} --cancer\n                       {BLCA,BRCA,LUAD,LGG,UCEC} --seed SEED --ckpt CKPT\n                       --manifest MANIFEST [--grids GRIDS] --label LABEL\n                       --out-dir OUT_DIR [--compensator {none,capr,capl,bank}]\n                       [--proto_per_bin PROTO_PER_BIN] --bin_mode\n                       {author,train_quantile}\n                       [--network_type {MainModalityMoE,NPJC}]\n                       [--fusion_type {gate,mean}] [--m1-mark-valid]\n\n\u4f7f\u7528\u51bb\u7ed3 NPJ checkpoint \u8bc4\u6d4b\u56fa\u5b9a\u7f3a\u5931\u683c\u70b9\u7684 M0-real \u4e0e M1\u3002\n\noptions:\n  -h, --help            show this help message and exit\n  --arm {m0real,m1}\n  --cancer {BLCA,BRCA,LUAD,LGG,UCEC}\n  --seed SEED\n  --ckpt CKPT\n  --manifest MANIFEST\n  --grids GRIDS         all \u6216\u9017\u53f7\u5206\u9694\u683c\u70b9\n  --label LABEL\n  --out-dir OUT_DIR\n  --compensator {none,capr,capl,bank}\n  --proto_per_bin PROTO_PER_BIN\n  --bin_mode {author,train_quantile}\n  --network_type {MainModalityMoE,NPJC}\n  --fusion_type {gate,mean}\n  --m1-mark-valid\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/main_survival.py",
+      "--config",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/experiments/I02_population_prototypes/config.yaml",
+      "--cancer_types",
+      "BLCA",
+      "--dry_run"
+    ],
+    "exit": 0,
+    "stdout": "{\"model\": {\"compensator\": \"PopulationPrototypeBank\", \"dropout_rate\": 0.1, \"hidden_size\": 256, \"mlp_ratio\": 4, \"modality_order\": [\"img\", \"text\", \"rna\"], \"n_backbone\": 1, \"n_head\": 4, \"network_type\": \"NPJC\", \"pred_dim\": 4}, \"runtime\": {\"batch_size\": 32, \"bin_mode\": \"author\", \"cancer_type\": \"None\", \"cancer_types\": \"BLCA\", \"compensator\": \"population\", \"config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/experiments/I02_population_prototypes/config.yaml\", \"consistency_lambda\": 0.1, \"cpt_name\": \"tcga\", \"dry_run\": true, \"early_stopping_patience\": 15, \"epochs\": 100, \"finetune_head_only\": false, \"fusion_type\": \"gate\", \"gpu_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml\", \"hidden_size\": 256, \"lr\": 0.0001, \"modality_dropout\": 0.0, \"model_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml\", \"n_image_tokens\": 128, \"network_type\": \"NPJC\", \"num_workers\": null, \"pretrain_path\": \"\", \"prototype_k\": 8, \"report_label_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523sample_label_Censorship.csv\", \"result_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out\", \"run_record_root\": null, \"seed\": 123, \"simulate_missing_modality\": \"\", \"task_type\": \"surv\", \"train\": true}}\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/main_survival.py",
+      "--config",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/experiments/I03_npj_d_dm_e1/config.yaml",
+      "--preset",
+      "D",
+      "--cancer_types",
+      "BLCA",
+      "--dry_run"
+    ],
+    "exit": 0,
+    "stdout": "['BLCA'] cancer_types\n{\"model\": {\"compensator\": \"none\", \"dropout_rate\": 0.1, \"fusion\": \"MeanFusion\", \"hidden_size\": 256, \"mlp_ratio\": 4, \"modality_order\": [\"img\", \"text\", \"rna\"], \"n_backbone\": 1, \"n_head\": 4, \"network_type\": \"MainModalityMoE\", \"pred_dim\": 4}, \"runtime\": {\"batch_size\": null, \"bin_mode\": \"author\", \"cancer_type\": \"None\", \"cancer_types\": \"BLCA\", \"compensator\": \"none\", \"config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/experiments/I03_npj_d_dm_e1/config.yaml\", \"consistency_lambda\": 0.1, \"cpt_name\": \"tcga\", \"dry_run\": true, \"epochs\": 50, \"finetune_head_only\": false, \"fusion_type\": \"mean\", \"gpu_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml\", \"hidden_size\": 256, \"lr\": 0.0005, \"modality_dropout\": 0.0, \"model_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml\", \"n_image_tokens\": 128, \"network_type\": \"MainModalityMoE\", \"num_workers\": null, \"preset\": \"D\", \"pretrain_path\": \"\", \"proto_per_bin\": null, \"report_label_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523sample_label_Censorship.csv\", \"result_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out\", \"run_record_root\": null, \"seed\": 123, \"simulate_missing_modality\": \"\", \"task_type\": \"surv\", \"train\": true}}\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/main_survival.py",
+      "--config",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/experiments/I03_npj_d_dm_e1/config.yaml",
+      "--preset",
+      "E1",
+      "--cancer_types",
+      "BLCA",
+      "--dry_run"
+    ],
+    "exit": 0,
+    "stdout": "['BLCA'] cancer_types\n{\"model\": {\"compensator\": \"CAPRecall\", \"dropout_rate\": 0.1, \"hidden_size\": 256, \"mlp_ratio\": 4, \"modality_order\": [\"img\", \"text\", \"rna\"], \"n_backbone\": 1, \"n_head\": 4, \"network_type\": \"NPJC\", \"pred_dim\": 4}, \"runtime\": {\"batch_size\": null, \"bin_mode\": \"author\", \"cancer_type\": \"None\", \"cancer_types\": \"BLCA\", \"compensator\": \"capr\", \"config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/experiments/I03_npj_d_dm_e1/config.yaml\", \"consistency_lambda\": 0.1, \"cpt_name\": \"tcga\", \"dry_run\": true, \"epochs\": 50, \"finetune_head_only\": false, \"fusion_type\": \"gate\", \"gpu_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml\", \"hidden_size\": 256, \"lr\": 0.0005, \"modality_dropout\": 0.15, \"model_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml\", \"n_image_tokens\": 128, \"network_type\": \"NPJC\", \"num_workers\": null, \"preset\": \"E1\", \"pretrain_path\": \"\", \"proto_per_bin\": null, \"report_label_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523sample_label_Censorship.csv\", \"result_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out\", \"run_record_root\": null, \"seed\": 123, \"simulate_missing_modality\": \"\", \"task_type\": \"surv\", \"train\": true}}\n",
+    "stderr": ""
+  },
+  {
+    "cwd": "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6",
+    "command": [
+      "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+      "-B",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/scripts/main_survival.py",
+      "--config",
+      "/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/experiments/I04_cap4_multi_prototypes/config.yaml",
+      "--preset",
+      "dq_capl8",
+      "--cancer_types",
+      "BLCA",
+      "--dry_run"
+    ],
+    "exit": 0,
+    "stdout": "['BLCA'] cancer_types\n{\"model\": {\"compensator\": \"CAPRecallMulti\", \"dropout_rate\": 0.1, \"fusion\": \"MeanFusion\", \"hidden_size\": 256, \"mlp_ratio\": 4, \"modality_order\": [\"img\", \"text\", \"rna\"], \"n_backbone\": 1, \"n_head\": 4, \"network_type\": \"MainModalityMoE\", \"pred_dim\": 4}, \"runtime\": {\"batch_size\": null, \"bin_mode\": \"train_quantile\", \"cancer_type\": \"None\", \"cancer_types\": \"BLCA\", \"compensator\": \"capl\", \"config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/experiments/I04_cap4_multi_prototypes/config.yaml\", \"consistency_lambda\": 0.1, \"cpt_name\": \"tcga\", \"dry_run\": true, \"epochs\": 50, \"finetune_head_only\": false, \"fusion_type\": \"mean\", \"gpu_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/gpu_train.yaml\", \"hidden_size\": 256, \"lr\": 0.0005, \"modality_dropout\": 0.15, \"model_config\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/configs/models/surv_multimodal_mainmoe_uni2.yml\", \"n_image_tokens\": 128, \"network_type\": \"MainModalityMoE\", \"num_workers\": null, \"preset\": \"dq_capl8\", \"pretrain_path\": \"\", \"proto_per_bin\": 8, \"report_label_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/data/TCGA_9523sample_label_Censorship.csv\", \"result_path\": \"/home/wuhao/NPJ/refactor-validation-20260916-080006/candidate-v6/project/out\", \"run_record_root\": null, \"seed\": 123, \"simulate_missing_modality\": \"\", \"task_type\": \"surv\", \"train\": true}}\n",
+    "stderr": ""
+  }
+]

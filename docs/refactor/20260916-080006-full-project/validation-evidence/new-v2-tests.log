@@ -1,0 +1,10 @@
+ss........s............................................................. [ 45%]
+................................................................s....... [ 90%]
+..........s..s.                                                          [100%]
+=============================== warnings summary ===============================
+experiments/I01_patient_retrieval/tests/test_patient_retrieval_eval.py::EvaluationContract::test_actual_npjc_forward_identity_mask_and_strict_checkpoint
+  /home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/nn/modules/transformer.py:502: UserWarning: The PyTorch API of nested tensors is in prototype stage and will change in the near future. (Triggered internally at /opt/conda/conda-bld/pytorch_1728945388038/work/aten/src/ATen/NestedTensorImpl.cpp:178.)
+    output = torch._nested_tensor_from_mask(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+153 passed, 6 skipped, 1 warning in 13.47s

@@ -1,0 +1,11 @@
+{
+  "target": "/Users/wuhao/Desktop/TriModalSurv/docs/templates/experiment-oriented-ml-template.md",
+  "before_sha256": "8add5248867c47c83803c550ff04e6b430aa7b828446cdadf0423a94b8bb2ca6",
+  "objective": "定稿通用初始化MD，Claude审核，有问题修复复审，通过后交付并停止",
+  "allowed_changes": [
+    "docs/templates/experiment-oriented-ml-template.md",
+    "this review directory",
+    "STATUS.md append only if recording delivery"
+  ],
+  "no_training": true
+}

@@ -1,0 +1,20 @@
+{
+  "exit": 0,
+  "command": [
+    "/opt/homebrew/bin/claude",
+    "--safe-mode",
+    "-p",
+    "--model",
+    "opus",
+    "--effort",
+    "high",
+    "--tools",
+    "",
+    "--no-chrome",
+    "--no-session-persistence",
+    "--output-format",
+    "json"
+  ],
+  "prompt_sha256": "62a3d0e4178ee5fd240addceb6d439201b955c10d191af936b604b737466cf1a",
+  "completed": "2026-09-16T08:42:08.772047"
+}

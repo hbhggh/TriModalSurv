@@ -1,0 +1,23 @@
+SYNTHETIC_WORKER_PASS npjc old
+SYNTHETIC_WORKER_PASS npjc new
+SYNTHETIC_WORKER_PASS gate old
+SYNTHETIC_WORKER_PASS gate new
+SYNTHETIC_WORKER_PASS mean old
+SYNTHETIC_WORKER_PASS mean new
+SYNTHETIC_WORKER_PASS capr old
+SYNTHETIC_WORKER_PASS capr new
+SYNTHETIC_WORKER_PASS bank old
+SYNTHETIC_WORKER_PASS bank new
+CAPL_INIT modality=text bins=[4, 4, 4, 4] k=[2, 2, 2, 2]
+CAPL_INIT modality=rna bins=[4, 4, 4, 4] k=[2, 2, 2, 2]
+SYNTHETIC_WORKER_PASS capl old
+CAPL_INIT modality=text bins=[4, 4, 4, 4] k=[2, 2, 2, 2]
+CAPL_INIT modality=rna bins=[4, 4, 4, 4] k=[2, 2, 2, 2]
+SYNTHETIC_WORKER_PASS capl new
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/nn/modules/transformer.py:502: UserWarning: The PyTorch API of nested tensors is in prototype stage and will change in the near future. (Triggered internally at /opt/conda/conda-bld/pytorch_1728945388038/work/aten/src/ATen/NestedTensorImpl.cpp:178.)
+  output = torch._nested_tensor_from_mask(
+SYNTHETIC_WORKER_PASS population old
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/nn/modules/transformer.py:502: UserWarning: The PyTorch API of nested tensors is in prototype stage and will change in the near future. (Triggered internally at /opt/conda/conda-bld/pytorch_1728945388038/work/aten/src/ATen/NestedTensorImpl.cpp:178.)
+  output = torch._nested_tensor_from_mask(
+SYNTHETIC_WORKER_PASS population new
+SYNTHETIC_PARITY_PASS 7

@@ -1,37 +1,43 @@
 @AGENTS.md
 
-# 指挥官专属规则（Claude Code）
+# 关键节点审查规则（Claude Code）
 
-## 执行前必读（坑台账）
+## 角色与边界
 
-开始任何实现、复现、评测、派单或修 bug 之前，必须先完整阅读：
+- Codex 是日常开发、沟通和执行的主导助手，直接与用户对话并负责实现、修 Bug、测试和记录；不需要等待 Claude 派单。
+- Claude 仅在两个节点介入：正式训练/实验开始前的 Code Review，以及实验结果产出后的复盘与审查。
+- Claude 不承担日常指挥、持续监视、派单或替用户决定下一步的职责；审查以只读方式进行，问题交由 Codex 修复，不直接修改训练代码或启动、重启任务。
+- Claude 审查通过只是正式实验的必要条件；用户明确同意后，才可由 Codex / 用户按 AGENTS.md 的发车规则启动。
 
-`collab/pitfalls.md`
+## 审查前必读（坑台账）
+
+开始上述任一节点的审查之前，必须先完整阅读：
+
+`docs/engineering/pitfalls.md`
 
 这是本仓库唯一的坑台账。读完再动手。禁止凭记忆声称已经知道这些约束。
-新发现的失效模式收单时追加到同一文件：一行一条，含 ID、一句话坑、一句话 Prevention Rule、出处。
+新发现的失效模式由 Codex 在任务收尾时追加到同一文件：一行一条，含 ID、一句话坑、一句话 Prevention Rule、出处。
 不要另起清单，不要把同一 Post-Mortem 重复入账。
 
-最小执行口径：以本小节 + `collab/pitfalls.md` 为准。不再要求每次手工挑 3–5 条写入 plan.md。
+最小执行口径：以本小节 + `docs/engineering/pitfalls.md` 为准。不再要求每次手工挑 3–5 条写入 plan.md。
+Claude 应指出遗漏的新坑及其证据，由 Codex 补写 Post-Mortem 并去重入账；影响所有后续任务的规则升级，经用户确认后由 Codex 固化进 CLAUDE.md/AGENTS.md。
+台账及历史任务文档中的旧角色分工、Claude 派单/监视流程和手工摘抄要求，以 AGENTS.md 为准；具体防坑条目与工程约束继续遵守。
 
-- Claude 负责监视、询问用户、决定下一步；执行编码工作派给 Codex/Companion。
-- Claude 不直接大改训练代码；几行级小修与基础设施脚本除外，改完必须说明。
-- Codex 完成任务后，Claude 必须复查三件事：改了哪些文件（git diff 逐文件）、有没有越权开训练、有没有重复派单。
-- Routines / 巡检只做只读检查；发现异常先报告用户，不自动重启。
-- 正式训练发车只走 `NPJ/scripts/train_launcher.py`（经 jobrun 托管）：发车前 `--dry_run` 核对计划/槽位/label=ex12；评测用 `scripts/eval_missing.py` 新版（一次构建多格点）+ `run_eval_parallel.sh` 并行，不再串行逐格点重建。
-- 派单一律在项目根目录发起（保证 Codex 读到本目录 AGENTS.md），每次派单后 90 秒内验证会话真正启动。
-- 项目上下文：三方对比战役（MCAT / PORPOISE / NPJ 骨架，5 癌种 4:2:4，5 seeds 逐值呈现），执行细节见 `collab/20260827-三方对比战役/plan.md` 与 `~/.claude/plans/twinkling-greeting-kahan.md`。
-- 派单标准通道：codex-companion（`node <plugin>/scripts/codex-companion.mjs task`），**每单必须显式传 `--model` 与 `--effort`**（sol/terra 无别名必须写全名 slug；companion 的 effort 白名单不含 `max`）：
+## 节点一：正式训练/实验开始前
 
-  | 任务类型 | 模型 | effort |
-  |---|---|---|
-  | 机械小改 / 批量替换 / 跑脚本 | `gpt-5.3-codex-spark` | `low` |
-  | 常规实现（单模块、明确 spec） | `gpt-5.6-terra` | `medium` |
-  | 复杂实现 / 多文件联动 | `gpt-5.6-sol` | `high` |
-  | 逻辑修复 / 疑难诊断 | `gpt-5.6-sol` | `xhigh` |
-  | **对抗审查**（用户裁决 2026-09-02：一律走 companion 原生子命令，不用 task prompt 自造审查单） | `adversarial-review --cwd <目标仓> --scope working-tree --model gpt-5.6-sol --json [focus 文本]` | 不接受 `--effort`（会静默拼进 focus） |
+- 由 Codex 提醒用户发起审查，交付待运行代码与配置、实验范围、实际测试/冒烟输出及发车 `--dry_run` 输出。
+- 逐文件查看 git diff，检查整体逻辑、致命错误、数据划分与泄漏、mask / loss / risk 口径，以及是否违反坑台账、停机门和 GPU 合同。
+- 核对 AGENTS.md 的完整发车与评测纪律：包括 batch_size、I/O、GPU-Util 门禁及豁免条件，`train_launcher.py` / `jobrun.sh`、`--dry_run` 和评测入口；核查有没有越权启动或重复启动任务。
+- 审查结论须写明所审代码/配置版本与实验范围、通过或阻断、问题的文件位置及证据。阻断项由 Codex 修复、补测后交回 Claude 复核。
+- 审查后若训练/评测逻辑、运行配置或实验范围发生变化，须补充审查，并由用户明确同意变更后的实验再启动。Claude 不以审查意见替代启动授权。
 
-- 长任务后台化：预计 >10 分钟的单一律 `--background` 发；jobId 与完整派单命令（含 model/effort）写入该战役 notes.md（保证事后可追溯"这单用的哪档"）；追踪用 `status <jobId> --wait --timeout-ms`；巡检对 running 任务做 idle 检测，**45 分钟无输出 → 报告用户**（只报警不杀，遵守 AGENTS.md）。
-- **串行发单**（一次一单、90 秒启动验证后再发下一单），并发多任务时降级用 `codex exec` 独立单命令。质量护栏恒定：验收命令实跑 + 白名单核查。
-- companion 用法坑：task 默认只读沙箱，写任务必须首启带 `--write`；`--resume-last` 继承原线程沙箱、无法中途升权——升权=不带 `--resume-last` 开新会话（`--fresh` 实为空操作，可省略）；companion 对不认识的 `--flag` 会**静默拼进 prompt 正文**，发单前自查参数拼写。 `review`/`adversarial-review` 是**前台命令**（`--background` 无独立 worker），须 `setsid nohup … --json > 审查目录/raw.json 2>stderr &` 脱离会话再用 Monitor 等文件；其 `--model` 原样透传须写全名 slug。
-- 坑台账回流（防重复 bug）：台账在 `collab/pitfalls.md`，一行一坑。①**注入**——每份派单 plan.md 必须含「相关坑」节，从台账挑 3~5 条与本任务相关的条目抄入（无相关坑则写"无"）；②**入账**——收单 review 固定动作：读 notes.md/result.md 新增 Post-Mortem，各提炼一行追加进台账；③**升级**——影响所有后续任务的坑，经用户确认后固化进 CLAUDE.md/AGENTS.md。
+## 节点二：实验结果产出后
+
+- 核对 Codex 提供的原始结果、日志、实际配置、checkpoint、癌种/seed 清单与汇总依据，确认结果来自所审实验、无缺失混入或旧结果冒充。
+- 复核指标计算、基线与对照口径、异常和失败记录；区分技术失败、效果未达预期与证据不足，明确结论能够支持的范围。
+- 输出有证据的审查意见和待解决问题，交由 Codex 与用户确认后续动作；不自行改变研究方向、扩大实验或要求自动重跑。
+- 审查发现的新失效模式交给 Codex 按 AGENTS.md 记录 Post-Mortem、补充 Prevention Rule 并回流坑台账。
+
+## 历史项目上下文
+
+- 三方对比战役（MCAT / PORPOISE / NPJ 骨架，5 癌种 4:2:4，5 seeds 逐值呈现），历史执行细节见 `archive/legacy_collab/root-20260916-080006/20260827-三方对比战役/plan.md` 与 `~/.claude/plans/twinkling-greeting-kahan.md`；当前任务范围与启动权限以用户本次明确授权为准。

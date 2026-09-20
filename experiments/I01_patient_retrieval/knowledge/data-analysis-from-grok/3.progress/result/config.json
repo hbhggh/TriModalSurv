@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "protocol_id": "patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-v1",
+  "base_protocol_id": "patient-fixed-padmask-v2-infer-rules1to5-v1",
+  "cancers": ["BLCA", "BRCA", "LGG", "LUAD", "UCEC"],
+  "seeds": [123, 132, 213, 231, 321],
+  "grids": ["none", "rna_100", "text_100", "both_100"],
+  "prototype_k": 128,
+  "model": {"network_type": "NPJC", "compensator": "none"},
+  "numerics": {"norm_epsilon": 1e-12, "logit_atol": 1e-6, "logit_rtol": 0, "risk_clamp": 1e-6},
+  "upstream": {
+    "protocol_id": "patient-fixed-padmask-v2-infer-rules1to5-v1",
+    "combo_candidate_id": "combo-l1-a1-w0p5",
+    "test_fingerprint": "32cb3f31579bec549214d8577ac3fe057edb84b8a3fac49989c7e86090c94f14",
+    "source_sha256": {
+      "config.yaml": "6d2c224fe3997cd58fc4a67bb0517183ec220480d2a30216dbb13f6b1d0c4b80",
+      "inference.py": "b6581528aa0ba7aed718dbdd1f44b871a30c7de8839e949637c8cc4b849fcf99",
+      "run.py": "3c6808fa453a40608b750665f9daa5bab2ad0edff1ef5fb9ee93d454d6290cb9",
+      "runtime.py": "89ff2696657189792248a6bf9a2964ba091c1fa6e028d4e33843695db8d4dbf8",
+      "reporting.py": "e3778e226aae83bc1f94c7fa968bbc2816f09a2e45a03a8ff3d61d60c1b38ca6",
+      "selection.py": "9c6e241080a9a0c3f7ca46dd18269681c4ce27c04df593c9568ae8e53718fc40",
+      "runs/valid/complete.json": "ef525bb07ca82dc3a9bd1315db53de2ad6813c5347fa74c24fecfe40fc28c70b",
+      "runs/test/complete.json": "99a8d0fec8c6adf65136c863a845c6ed105daf0593cfe90df8f08f521b1d2bca"
+    }
+  },
+  "strategy0": {
+    "enabled_only_if_valid_b_strictly_gt_a": true,
+    "luad": {
+      "text_100": "m0real",
+      "rna_100": "m1",
+      "both_100": "m1",
+      "none_rna_missing": "m1",
+      "none_both_missing": "m1",
+      "none_text_only_or_complete": "upstream_combo"
+    }
+  },
+  "execution": {
+    "active_profile": "local",
+    "profiles": {
+      "local": {
+        "upstream_root": "/Users/wuhao/Desktop/TriModalSurv/experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result",
+        "upstream_runtime_config": "/Users/wuhao/Desktop/TriModalSurv/experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/evidence/accel-test.yaml",
+        "execution_root": "/Users/wuhao/Desktop/TriModalSurv/experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/3.progress/result",
+        "device": "cpu",
+        "gpu_ids": []
+      }
+    }
+  }
+}

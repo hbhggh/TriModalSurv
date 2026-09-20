@@ -1,0 +1,16 @@
+# ripgrep / Better Todo Tree：搜索当前公共代码与实验实现。
+# 历史归档和原始结果不进入默认源码搜索；Git 规则另由 .gitignore 管理。
+
+
+# 搜索例外不包含 Python 缓存或编译产物。
+__pycache__/
+*.pyc
+*.so
+
+# 历史归档与实验原始产物不参与默认源码搜索。
+/archive/
+/experiments/**/results/**/checkpoints/
+/experiments/**/results/**/raw/
+/experiments/**/results/**/logs/
+
+/docs/refactor/**/history-derived-*/

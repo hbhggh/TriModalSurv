@@ -1,0 +1,21 @@
+{
+  "better-todo-tree.regex.regex": "(^|//|#|<!--|;|/\\*|^[ \\t]*(?:#{1,6}[ \\t]+)?(?:[-*+]|\\d+.))\\s*(?=\\[[xX]\\]|\\[ \\]|[A-Za-z0-9_])($TAGS)(?![A-Za-z0-9_])",
+  "better-todo-tree.general.tags": [
+    "BUG",
+    "HACK",
+    "FIXME",
+    "TODO",
+    "XXX",
+    "[ ]",
+    "[x]",
+    "[X]"
+  ],
+  "better-todo-tree.tree.disableCompactFolders": true,
+  "better-todo-tree.tree.showCountsInTree": true,
+  "search.exclude": {
+    "archive/**": true,
+    "experiments/**/results/**/raw/**": true,
+    "experiments/**/results/**/checkpoints/**": true,
+    "**/__pycache__/**": true
+  }
+}

@@ -1,0 +1,114 @@
+tests/test_mean_fusion.py::test_gate_path_bitwise_identical
+tests/test_mean_fusion.py::test_mean_state_dict_drops_gate_params
+tests/test_mean_fusion.py::test_mean_forward_matches_manual_average
+tests/test_mean_fusion.py::test_zero_rna_constant_token_still_averaged
+tests/test_mean_fusion.py::test_load_model_rejects_mean_for_npjc
+tests/test_mlp.py::TestClass::test_mlp_correctness[1-128-256-8-2-dtype0]
+tests/test_mlp.py::TestClass::test_mlp_correctness[1-128-170-8-3-dtype1]
+tests/test_mlp.py::TestClass::test_mlp_correctness[1-128-128-8-4-dtype2]
+tests/test_mlp.py::TestClass::test_mlp_correctness[1-256-512-8-2-dtype3]
+tests/test_mlp.py::TestClass::test_mlp_correctness[1-256-341-8-3-dtype4]
+tests/test_mlp.py::TestClass::test_mlp_correctness[1-256-256-8-4-dtype5]
+tests/test_mlp.py::TestClass::test_mlp_correctness[1-512-1024-8-2-dtype6]
+tests/test_mlp.py::TestClass::test_mlp_correctness[1-512-682-8-3-dtype7]
+tests/test_mlp.py::TestClass::test_mlp_correctness[1-512-512-8-4-dtype8]
+tests/test_mlp.py::TestClass::test_mlp_correctness[1-600-1200-8-2-dtype9]
+tests/test_mlp.py::TestClass::test_mlp_correctness[1-600-800-8-3-dtype10]
+tests/test_mlp.py::TestClass::test_mlp_correctness[1-600-600-8-4-dtype11]
+tests/test_mlp.py::TestClass::test_mlp_correctness[1-100-200-8-2-dtype12]
+tests/test_mlp.py::TestClass::test_mlp_correctness[1-100-133-8-3-dtype13]
+tests/test_mlp.py::TestClass::test_mlp_correctness[1-100-100-8-4-dtype14]
+tests/test_mlp.py::TestClass::test_mlp_correctness[256-128-256-8-2-dtype15]
+tests/test_mlp.py::TestClass::test_mlp_correctness[256-128-170-8-3-dtype16]
+tests/test_mlp.py::TestClass::test_mlp_correctness[256-128-128-8-4-dtype17]
+tests/test_mlp.py::TestClass::test_mlp_correctness[256-256-512-8-2-dtype18]
+tests/test_mlp.py::TestClass::test_mlp_correctness[256-256-341-8-3-dtype19]
+tests/test_mlp.py::TestClass::test_mlp_correctness[256-256-256-8-4-dtype20]
+tests/test_mlp.py::TestClass::test_mlp_correctness[256-512-1024-8-2-dtype21]
+tests/test_mlp.py::TestClass::test_mlp_correctness[256-512-682-8-3-dtype22]
+tests/test_mlp.py::TestClass::test_mlp_correctness[256-512-512-8-4-dtype23]
+tests/test_mlp.py::TestClass::test_mlp_correctness[256-600-1200-8-2-dtype24]
+tests/test_mlp.py::TestClass::test_mlp_correctness[256-600-800-8-3-dtype25]
+tests/test_mlp.py::TestClass::test_mlp_correctness[256-600-600-8-4-dtype26]
+tests/test_mlp.py::TestClass::test_mlp_correctness[256-100-200-8-2-dtype27]
+tests/test_mlp.py::TestClass::test_mlp_correctness[256-100-133-8-3-dtype28]
+tests/test_mlp.py::TestClass::test_mlp_correctness[256-100-100-8-4-dtype29]
+tests/test_mlp.py::TestClass::test_mlp_correctness[512-128-256-8-2-dtype30]
+tests/test_mlp.py::TestClass::test_mlp_correctness[512-128-170-8-3-dtype31]
+tests/test_mlp.py::TestClass::test_mlp_correctness[512-128-128-8-4-dtype32]
+tests/test_mlp.py::TestClass::test_mlp_correctness[512-256-512-8-2-dtype33]
+tests/test_mlp.py::TestClass::test_mlp_correctness[512-256-341-8-3-dtype34]
+tests/test_mlp.py::TestClass::test_mlp_correctness[512-256-256-8-4-dtype35]
+tests/test_mlp.py::TestClass::test_mlp_correctness[512-512-1024-8-2-dtype36]
+tests/test_mlp.py::TestClass::test_mlp_correctness[512-512-682-8-3-dtype37]
+tests/test_mlp.py::TestClass::test_mlp_correctness[512-512-512-8-4-dtype38]
+tests/test_mlp.py::TestClass::test_mlp_correctness[512-600-1200-8-2-dtype39]
+tests/test_mlp.py::TestClass::test_mlp_correctness[512-600-800-8-3-dtype40]
+tests/test_mlp.py::TestClass::test_mlp_correctness[512-600-600-8-4-dtype41]
+tests/test_mlp.py::TestClass::test_mlp_correctness[512-100-200-8-2-dtype42]
+tests/test_mlp.py::TestClass::test_mlp_correctness[512-100-133-8-3-dtype43]
+tests/test_mlp.py::TestClass::test_mlp_correctness[512-100-100-8-4-dtype44]
+tests/test_patient_retrieval_bank.py::BankTests::test_batch_fill_preserves_original_valid_and_is_partition_invariant
+tests/test_patient_retrieval_bank.py::BankTests::test_both_missing_requires_one_complete_donor
+tests/test_patient_retrieval_bank.py::BankTests::test_exact_tie_uses_sorted_id
+tests/test_patient_retrieval_bank.py::BankTests::test_mean_and_no_fill_have_distinct_valid_contracts
+tests/test_patient_retrieval_bank.py::BankTests::test_no_mutation_or_value_alias
+tests/test_patient_retrieval_bank.py::BankTests::test_nontrain_features_do_not_enter_mean_keys_or_values
+tests/test_patient_retrieval_bank.py::BankTests::test_original_centroid_order_is_preserved
+tests/test_patient_retrieval_bank.py::BankTests::test_reject_duplicate_or_overlapping_ids
+tests/test_patient_retrieval_bank.py::BankTests::test_reject_padding_nonfinite_shapes_zero_norm_and_empty_candidates
+tests/test_patient_retrieval_bank.py::BankTests::test_self_excluded_and_unregistered_query_rejected
+tests/test_patient_retrieval_bank.py::BankTests::test_top1_returns_full_paired_value_and_shared_mean
+tests/test_patient_retrieval_eval.py::EvaluationContract::test_actual_npjc_forward_identity_mask_and_strict_checkpoint
+tests/test_patient_retrieval_eval.py::EvaluationContract::test_bad_test_value_and_missing_wsi_rejected
+tests/test_patient_retrieval_eval.py::EvaluationContract::test_check_count_null_and_batch_partition
+tests/test_patient_retrieval_eval.py::EvaluationContract::test_complete_tolerance_accepts_inside_and_rejects_outside
+tests/test_patient_retrieval_eval.py::EvaluationContract::test_duplicate_seed_state_rejected_before_data_access
+tests/test_patient_retrieval_eval.py::EvaluationContract::test_fill_and_masks_are_applied_before_model
+tests/test_patient_retrieval_eval.py::EvaluationContract::test_fixed_cli_rejects_unapproved_dimensions
+tests/test_patient_retrieval_eval.py::EvaluationContract::test_invalid_or_duplicate_label_rejected
+tests/test_patient_retrieval_eval.py::EvaluationContract::test_json_output_refuses_overwrite
+tests/test_patient_retrieval_eval.py::EvaluationContract::test_none_preserves_natural_missing_and_grid_masks
+tests/test_patient_retrieval_eval.py::EvaluationContract::test_output_cannot_pollute_source_cache
+tests/test_patient_retrieval_eval.py::EvaluationContract::test_smoke_includes_all_padded_test_patients_without_train_leak
+tests/test_patient_retrieval_eval.py::EvaluationContract::test_synthetic_unit_artifacts_match_summary_contract
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_00_production_module_exists
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_artifact_path_escape_is_rejected_even_when_hash_matches
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_artificial_missing_cannot_claim_complete_checks
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_cli_accepts_required_directories
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_complete_75_unit_fixture_writes_expected_outputs_and_arithmetic
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_duplicate_identity_in_differently_named_json_is_rejected
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_exact_zero_delta_is_counted_as_tie
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_existing_output_target_is_never_overwritten
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_failed_campaign_is_rejected
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_inconsistent_check_diagnostics_rejected
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_macro_overview_excludes_none_and_reports_worst_missing_grid
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_missing_artifact_is_rejected
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_missing_campaign_status_is_rejected
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_missing_check_count_rejected_for_formal_summary
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_missing_unit_is_rejected_without_outputs
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_nan_cindex_is_rejected
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_paired_check_metadata_must_match
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_paired_checkpoint_or_fingerprint_mismatch_is_rejected
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_paired_grid_sample_count_mismatch_is_rejected
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_paired_grid_sha_mismatch_is_rejected
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_report_none_does_not_claim_complete_data
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_running_campaign_is_rejected
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_same_cancer_duplicate_checkpoint_across_seeds_is_rejected
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_same_cancer_fingerprint_mismatch_across_seeds_is_rejected
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_tampered_artifact_is_rejected
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_unknown_seed_is_rejected
+tests/test_patient_retrieval_summary.py::PatientRetrievalSummaryTest::test_v1_v2_mixed_protocol_is_rejected
+
+==================================== ERRORS ====================================
+___________ ERROR collecting tests/test_patient_retrieval_padding.py ___________
+ImportError while importing test module '/home/wuhao/NPJ/refactor-validation-20260916-080006/oracles/774f/tests/test_patient_retrieval_padding.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+tests/test_patient_retrieval_padding.py:11: in <module>
+    from test_patient_retrieval_bank import fixture
+E   ModuleNotFoundError: No module named 'test_patient_retrieval_bank'
+=========================== short test summary info ============================
+ERROR tests/test_patient_retrieval_padding.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+101 tests collected, 1 error in 3.10s

@@ -1,0 +1,21 @@
+{
+  "cancers": {
+    "BLCA": {
+      "configs/refactor_defaults.yaml": "d5bf165a8ddc20b70dd7bdaa162aa5b4480461094487f3685c1ab526d45148fd",
+      "experiments/I01_patient_retrieval/config.yaml": "bbfbab371d6b24c8c68d370a8f1f6c6934cfac26aae1fa06531a3788985dbedf",
+      "experiments/I01_patient_retrieval/evaluate.py": "f8b045557b27de3e7dc68ea2592e24384691275ba24c18223471276c413ba78f",
+      "experiments/I01_patient_retrieval/model.py": "e4e08b0c9ee78da8b2a7c4d01250516693fc087bf567d18ef6a944b27cc10c13",
+      "src/trimodalsurv/__init__.py": "8c95913a473560325f19d0104ca42f7741da1f8c451ab306ee6481268990c06b",
+      "src/trimodalsurv/config.py": "15c10a571628437ffd1e44297149c2b69b6a20759b20f1a92154fcedb8a589c2",
+      "src/trimodalsurv/data/__init__.py": "f70a6308d65648e324242d2a06bf13e7d881dede01b527ac2b801968aa65d175",
+      "src/trimodalsurv/evaluation/__init__.py": "8c95913a473560325f19d0104ca42f7741da1f8c451ab306ee6481268990c06b",
+      "src/trimodalsurv/evaluation/common.py": "179d878ef3be4639579a89b7d6b21d9908ebc7fb5d019500d45a85e94d982029",
+      "src/trimodalsurv/models/__init__.py": "8c95913a473560325f19d0104ca42f7741da1f8c451ab306ee6481268990c06b",
+      "src/trimodalsurv/models/consistency.py": "41b6c85fc099058dfe29d7856fc5b776af87edb894d92fae1240495da1e0b0c7",
+      "src/trimodalsurv/models/npjc.py": "cd50db1687d95aa6b29b5d297a071926f53d8b490e6b1e964a764339ab0eebb6",
+      "src/trimodalsurv/training/__init__.py": "bdbf43903f1dbf786bb13b5569424efb0ef60bc41269561d3116822c11517ad7"
+    }
+  },
+  "failures": {},
+  "source_commit": "6a04a0bf5c283a57e90207899ddffe3867fd5e0a"
+}

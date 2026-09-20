@@ -1,0 +1,110 @@
+[
+  {
+    "symbol": "PopulationPrototypeBank",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/model/population_prototypes.py",
+    "target": "experiments/I02_population_prototypes/model.py",
+    "ast_equal": true
+  },
+  {
+    "symbol": "PopulationEarlyStopping",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/population_runtime.py",
+    "target": "experiments/I02_population_prototypes/runtime.py",
+    "ast_equal": true
+  },
+  {
+    "symbol": "PopulationTrainView",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/population_runtime.py",
+    "target": "experiments/I02_population_prototypes/runtime.py",
+    "ast_equal": true
+  },
+  {
+    "symbol": "validate_population_splits",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/population_runtime.py",
+    "target": "experiments/I02_population_prototypes/runtime.py",
+    "ast_equal": true
+  },
+  {
+    "symbol": "make_population_loader",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/population_runtime.py",
+    "target": "experiments/I02_population_prototypes/runtime.py",
+    "ast_equal": true
+  },
+  {
+    "symbol": "ordered_patient_outputs",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/population_runtime.py",
+    "target": "experiments/I02_population_prototypes/runtime.py",
+    "ast_equal": true
+  },
+  {
+    "symbol": "main_process_call",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/population_runtime.py",
+    "target": "experiments/I02_population_prototypes/runtime.py",
+    "ast_equal": true
+  },
+  {
+    "symbol": "update_population_memory",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/population_runtime.py",
+    "target": "experiments/I02_population_prototypes/runtime.py",
+    "ast_equal": true
+  },
+  {
+    "symbol": "save_population_checkpoint",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/population_runtime.py",
+    "target": "experiments/I02_population_prototypes/runtime.py",
+    "ast_equal": true
+  },
+  {
+    "symbol": "load_population_checkpoint",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/684e/code/NPJ/population_runtime.py",
+    "target": "experiments/I02_population_prototypes/runtime.py",
+    "ast_equal": true
+  },
+  {
+    "symbol": "_kmeans_plus_plus",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/compensator.py",
+    "target": "experiments/I04_cap4_multi_prototypes/model.py",
+    "ast_equal": true
+  },
+  {
+    "symbol": "_kmeans_fit",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/compensator.py",
+    "target": "experiments/I04_cap4_multi_prototypes/model.py",
+    "ast_equal": true
+  },
+  {
+    "symbol": "_distinct_rows",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/compensator.py",
+    "target": "experiments/I04_cap4_multi_prototypes/model.py",
+    "ast_equal": true
+  },
+  {
+    "symbol": "CAPRecallMulti",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/model/compensator.py",
+    "target": "experiments/I04_cap4_multi_prototypes/model.py",
+    "ast_equal": true
+  },
+  {
+    "symbol": "_capl_compensator",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "target": "experiments/I04_cap4_multi_prototypes/runtime.py",
+    "ast_equal": true
+  },
+  {
+    "symbol": "_capl_pooled_tokens",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "target": "experiments/I04_cap4_multi_prototypes/runtime.py",
+    "ast_equal": true
+  },
+  {
+    "symbol": "init_capl_prototypes",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "target": "experiments/I04_cap4_multi_prototypes/runtime.py",
+    "ast_equal": true
+  },
+  {
+    "symbol": "print_capl_stats",
+    "source": "/Users/wuhao/.codex/backups/trimodalsurv/20260916-080006/root/NPJ/main_survival.py",
+    "target": "experiments/I04_cap4_multi_prototypes/runtime.py",
+    "ast_equal": true
+  }
+]

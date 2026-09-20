@@ -1,0 +1,349 @@
+{
+  "asset_hashes": {
+    "cache/test/img_sur_test_all_BLCA.pkl": "99dc24ef3c1fc9218e53ffcc2716a50d04e5f14de722f7e8a40888c431fc0306",
+    "cache/test/img_sur_test_all_BRCA.pkl": "7029296f35b4b317d74bdea8e10c351a3c9c1efbfa0ef05d7b40d057d245064a",
+    "cache/test/img_sur_test_all_LGG.pkl": "88f2e45f0c37ec8e8a7d8b7d0e1d16da899ba514472b96c16638a46abfbbba53",
+    "cache/test/img_sur_test_all_LUAD.pkl": "b3ec945beef6d354a5d806ce10e73a14736f89eb4cc185dde336b022b13d2284",
+    "cache/test/img_sur_test_all_UCEC.pkl": "0a8f33b8adc9326fd2910697241d4e886eeb5b5168418d623240dcd9fddc676d",
+    "cache/test/rna_sur_test_all_BLCA.pkl": "0c2101468e915153e2c94d51e8e0be743f81fb1e080a4b7a621de530728b42fe",
+    "cache/test/rna_sur_test_all_BRCA.pkl": "c7a3c85f02bf1e6334742548298d63c305920108d0a82265b7d93ed253dd10dd",
+    "cache/test/rna_sur_test_all_LGG.pkl": "36a90c1ba5c5edb43e589640ca3b9a6a39f30160915dbd2bcc0042a200b3af9a",
+    "cache/test/rna_sur_test_all_LUAD.pkl": "3386bc438e057f4e99609039249e0e8aaa971177876b95d38ad29764e365aaaa",
+    "cache/test/rna_sur_test_all_UCEC.pkl": "9f7d310bb45d22f1c4e0b2c38988d8a9947fbc53aacc6e586d376d4e96c7fd06",
+    "cache/test/text_sur_test_all_BLCA.pkl": "82242dfd738ba607daeefe25e186c2629ebb6fcd6cbc0e680ae69d6d11897d6b",
+    "cache/test/text_sur_test_all_BRCA.pkl": "3c45612af6fbe273a27e96ec1356bb842f4cc1e59d54cd36d4925dde0614fd50",
+    "cache/test/text_sur_test_all_LGG.pkl": "aaf6e6c67ceeb711e0509670245dc5363252915b240b92521693f145b71ccbde",
+    "cache/test/text_sur_test_all_LUAD.pkl": "78e401f6b46ecf5dc13767c4212f7f39a9821e208c7b988efc75d995b7e41c2d",
+    "cache/test/text_sur_test_all_UCEC.pkl": "6da8bf2d2d8141d83e3a37257454312289c0b9d197b2c99dea9a4480bca9562e",
+    "cache/train/img_sur_train_all_BLCA.pkl": "bbea24c789320132c96cbda6dae582e2c5db2a08a06189322e24f315af9573dc",
+    "cache/train/img_sur_train_all_BRCA.pkl": "9fed35276097e7c78afa3ed3144cd59875ea8c6ade337a91ca739ee7b7e7ed84",
+    "cache/train/img_sur_train_all_LGG.pkl": "bfc67db1dec9b2fda96900fc9390eee1d6aaed1b83e077c90bd394d47f405d9d",
+    "cache/train/img_sur_train_all_LUAD.pkl": "5bfced0b5dc2aa7dbc94c4bff41476ee4e13156e8689a2ec1e726e488044a5a4",
+    "cache/train/img_sur_train_all_UCEC.pkl": "e4ad6ea5e25639e73b8ffe41f5af5e260fb86278f4ca5100ce6823b76d0180ea",
+    "cache/train/rna_sur_train_all_BLCA.pkl": "5e54691b33d1c9cee2260ec51dee8e3858cfd1cf26f61baae8e7e5b3aa6e3690",
+    "cache/train/rna_sur_train_all_BRCA.pkl": "f2069f1d2fe27d2ef7ee321c40e7fdfa76e781041d0dd8513b190636091f0fdb",
+    "cache/train/rna_sur_train_all_LGG.pkl": "b1bed37b702faa239645100e7afd604a31e5da9eca7c2630e2a0869f23013b90",
+    "cache/train/rna_sur_train_all_LUAD.pkl": "3e89d496df6426667593b7c5448fef44754d08ca7437431acdeabf35cb88e7a7",
+    "cache/train/rna_sur_train_all_UCEC.pkl": "8491ec5f483c3c44154eeb7050552698fdc216f446de3b8e61619f6bc38b84f1",
+    "cache/train/text_sur_train_all_BLCA.pkl": "bedda1c3c915ad58ce15acec3c5862a7ea8ec7fd80d72da213ab627585990530",
+    "cache/train/text_sur_train_all_BRCA.pkl": "59f7fe8bb7b0589fae7de39fcd28f5b9a816b46f8d5879285b1a7702b21ff7e6",
+    "cache/train/text_sur_train_all_LGG.pkl": "d96861a1193ec17aae867704c78ed3983a7428054061a26d7bbaf02ddef4ab47",
+    "cache/train/text_sur_train_all_LUAD.pkl": "2e21b2a0bd3bdd3705d93f245bf4bc989db3170495d2aa6e832994916bca527f",
+    "cache/train/text_sur_train_all_UCEC.pkl": "80b3d5c0b992a753c6388439ef300de88397bb8c5cd55416e513c4f3dea400fd",
+    "cache/valid/img_sur_valid_all_BLCA.pkl": "8bf588e26f484d3529d59ef77859ee1fda582d7c1e2909433874e9c8ce1de338",
+    "cache/valid/img_sur_valid_all_BRCA.pkl": "fdedbc48ef45d896583d6cdc2868cae31509e7bbad746036a6cd4b3519d7171c",
+    "cache/valid/img_sur_valid_all_LGG.pkl": "9d0023ee78eedcedc0b63ad381e79cb820215294eaf7f5b9004b85f345aedd5a",
+    "cache/valid/img_sur_valid_all_LUAD.pkl": "0be21d143ff2aed9e697bb73403f6551fc3a3064465d9b9aef52d561827eaf5b",
+    "cache/valid/img_sur_valid_all_UCEC.pkl": "1af0f2505997cc8175543f2fe88f6333d89ac8143fe6990dcb0f14ef74883409",
+    "cache/valid/rna_sur_valid_all_BLCA.pkl": "5f1014cebc68b3e8017a81d8d5e328f3c72db3c155d17f591534af508591055a",
+    "cache/valid/rna_sur_valid_all_BRCA.pkl": "e1a44e16650b89ea3cb9de5889ab210837c63870f55548b1caee908133472003",
+    "cache/valid/rna_sur_valid_all_LGG.pkl": "e25a3f445d29b3395ba8a1ff15d7908447aa85e305491eda55ec377ada0c74e2",
+    "cache/valid/rna_sur_valid_all_LUAD.pkl": "f7ee81f244e80e588118d4e1c9418b8da99425f28659bdbbdb310ba7f2456deb",
+    "cache/valid/rna_sur_valid_all_UCEC.pkl": "a95591aba71e3a48caf7d35dd91640be9b55dca2c8cbd6e257ded3a6555e0bf0",
+    "cache/valid/text_sur_valid_all_BLCA.pkl": "8522911b1018eafeaeda9b8fafae5c6bb573eb3e8162a7aea0f419410e0cf415",
+    "cache/valid/text_sur_valid_all_BRCA.pkl": "88ca1eb6ff6392541ba082bab388d10887f29d831f43495c7ce27a4f4f4911bb",
+    "cache/valid/text_sur_valid_all_LGG.pkl": "930b082e5e722043aaa20ad48564c720611d6d5a21facf94b0d8aecaa492b012",
+    "cache/valid/text_sur_valid_all_LUAD.pkl": "5e207c5cebd554fcf871d8cde6657ffc1a43a4c2b7100aad699ff9b2df12c0bb",
+    "cache/valid/text_sur_valid_all_UCEC.pkl": "8b2905ccc410f23c0e52043074db8eae3e8e0a9970a2771bfcaf3d8e52a4cb79",
+    "checkpoint/BLCA/123": "610c12f79b220f6e56c27eb3cd4df289b7e81c256b0b764d92dd38b8a226ef0b",
+    "checkpoint/BLCA/132": "680b0c731f54ad673899d90c006fe286f7fa10dac57da9ed028d688b3baff642",
+    "checkpoint/BLCA/213": "98a6ba74d6ed54eb059b446ba861b7b00018ee926dd9097f6831a1e8afc82e4a",
+    "checkpoint/BLCA/231": "9e88eea2281392f461e5573646555741d6cdb8303186769155fad2bb804099ba",
+    "checkpoint/BLCA/321": "38045bdaa43389c291a1a9b887fc16fb0b830c25052a32d097028569b2e3b059",
+    "checkpoint/BRCA/123": "66cd8b5e25da852a83e2e0d9a92e5252785e58a447038b79c4fe0b5759bf11d9",
+    "checkpoint/BRCA/132": "cc3199cc83b044a9bd95487e4d74f7d7f476fc0989dd5fe0d2ade50dc05b2970",
+    "checkpoint/BRCA/213": "0d3a20ffa84ef5eece646d871a01dedd0f1f3a6372733d3577a1613a6cdf9252",
+    "checkpoint/BRCA/231": "8ab22005c3161931b5490d7b722ed7f55e485b72c75d3369a16fa0f4aab4deea",
+    "checkpoint/BRCA/321": "d208182a6b3185f852429432f4f66da2724c77b4f5d9d19e9982be089ce2f171",
+    "checkpoint/LGG/123": "6eae7b2d2b22210ed2729de0082992fa3edaae02cc66186d2289c2f2c5c5a98f",
+    "checkpoint/LGG/132": "df8fcf2473fb9bfed0803a35fcd32cd11a477233f1329c6c12e710d0c06313e3",
+    "checkpoint/LGG/213": "03b1d41f132a16ece66f8afdf32aba101edf06eb5d67a9739fccfee4b5a34eeb",
+    "checkpoint/LGG/231": "ac0a329c32c7b533adfcc2cf4640b63cd043bd3299abb3365dfe9c49f5ce24b0",
+    "checkpoint/LGG/321": "62262432466459a08c15df9e7598321441ba18d7b09d0175a5ac0d5758e8ad71",
+    "checkpoint/LUAD/123": "6e1c270676a78100b43ae85e66d621ea8799dc57d4e19121861deb5713a59287",
+    "checkpoint/LUAD/132": "d5f5a4188df75aac7f6aed55c5e76cf293f2d20b8e5f7964fedce70e0f021805",
+    "checkpoint/LUAD/213": "5f8b4cef7a89d1907d9cdc85bb33a2bd54b988dc83557bd3754b6c798c8a3627",
+    "checkpoint/LUAD/231": "d6c5bd2069a16a55b8261962833d057f1dbede30ef99cc17fb1f9216be9e7f7a",
+    "checkpoint/LUAD/321": "2f3ea84621c44d2955b8b0bc17f0308f82e94da27b07dfc7fb85989ffaf86e20",
+    "checkpoint/UCEC/123": "3f8f2b48ea66271425620282dcdced5f42dc64d19e0c4ea149f7aa7ddd804930",
+    "checkpoint/UCEC/132": "e798ab18e5372b14335fd06c28734b05111d34a50fd8dfc3f4df9cdd49288053",
+    "checkpoint/UCEC/213": "13285b1560ce4a2b6164c444797f44cd57c01c6ae74d6d7698b54a5baff888ef",
+    "checkpoint/UCEC/231": "28abc113f523895a6566356ae2d710d2a92f480dab535f8f72553f4bf7005b04",
+    "checkpoint/UCEC/321": "c30de07d1c7daab2d7d054286c998b39335622a7cb0f0dda4d467ede81e3160c",
+    "labels": "35c2865914d1e32f077ab470d299fc712d4f5fb2e63059f6bf8a68694a347e2f",
+    "legacy_preflight": "c5c674f69ae04e49748d7a73187a22d651a511493bdceb20e251d67f0624f11a",
+    "manifest": "c789eae9a5b1517d82cfa137a92dfa8cc7ffae58e5f300163b25729ffc5d8156",
+    "valid_source_manifest": "76b5f16afad735896ab37335419803ecdeececb90f61a744d6a29bda1c0b2507"
+  },
+  "environment": {
+    "cuda_runtime": "12.4",
+    "numpy": "2.0.1",
+    "platform": "Linux-5.15.0-160-generic-x86_64-with-glibc2.35",
+    "python": "3.12.9 | packaged by Anaconda, Inc. | (main, Feb  6 2025, 18:56:27) [GCC 11.2.0]",
+    "sksurv": "0.23.1",
+    "torch": "2.5.0"
+  },
+  "science_config": {
+    "base_protocol_id": "patient-fixed-padmask-v2",
+    "cancers": [
+      "BLCA",
+      "BRCA",
+      "LGG",
+      "LUAD",
+      "UCEC"
+    ],
+    "grids": [
+      "none",
+      "rna_100",
+      "text_100",
+      "both_100"
+    ],
+    "model": {
+      "compensator": "none",
+      "dropout_rate": 0.1,
+      "hidden_size": 256,
+      "mlp_ratio": 4,
+      "modality_order": [
+        "img",
+        "text",
+        "rna"
+      ],
+      "n_backbone": 1,
+      "n_head": 4,
+      "network_type": "NPJC",
+      "pred_dim": 4
+    },
+    "numerics": {
+      "logit_atol": 1e-06,
+      "logit_rtol": 0,
+      "norm_epsilon": 1e-12,
+      "risk_clamp": 1e-06
+    },
+    "protocol_id": "patient-fixed-padmask-v2-infer-rules1to5-v1",
+    "prototype_k": 128,
+    "rules": [
+      "01_text100_skip_compensate",
+      "02_wsi_meanpool_key",
+      "03_shrinkage_lambda",
+      "04_wsi_rna_joint_sim",
+      "05_imputed_token_downweight"
+    ],
+    "runtime": {
+      "batch_size": 383,
+      "cpu_threads": 4,
+      "device": "cuda",
+      "forward_dtype": "float32",
+      "gpu_id": 4,
+      "non_blocking": true,
+      "num_workers": 0,
+      "persistent_workers": false,
+      "pin_memory": false,
+      "prefetch_factor": null,
+      "require_idle_gpu": true,
+      "retrieval_backend": "gpu_cached",
+      "run_id": "infer-rules1to5-accel-20260916"
+    },
+    "search": {
+      "alpha_grid": [
+        0.5,
+        1,
+        2
+      ],
+      "lambda_grid": [
+        0,
+        0.25,
+        0.5,
+        0.75,
+        1
+      ],
+      "weight_grid": [
+        0.2,
+        0.3,
+        0.5
+      ]
+    },
+    "seeds": [
+      123,
+      132,
+      213,
+      231,
+      321
+    ],
+    "shapes": {
+      "img": [
+        128,
+        1536
+      ],
+      "rna": [
+        2048,
+        256
+      ],
+      "text": [
+        200,
+        768
+      ]
+    }
+  },
+  "selection_lock_sha256": "cd74151fb6c355c1234c1971d0bad36282d7da37718716867de42e289e03c0b3",
+  "source_hashes": {
+    "repo/experiments/I01_patient_retrieval/config.yaml": "285ca9f918d4565cf2b1e58f321cc5430153371adf9e19f19bfa48ad8a2d4aa7",
+    "repo/experiments/I01_patient_retrieval/evaluate.py": "e92812ef5316b3d0d212deda0e37793e3de84dd9b44410b25ebe7caecb658b5a",
+    "repo/experiments/I01_patient_retrieval/model.py": "e4e08b0c9ee78da8b2a7c4d01250516693fc087bf567d18ef6a944b27cc10c13",
+    "repo/src/trimodalsurv/__init__.py": "8c95913a473560325f19d0104ca42f7741da1f8c451ab306ee6481268990c06b",
+    "repo/src/trimodalsurv/config.py": "fa430eeb7694376ccc8e68759dfca36c913ed5524ddcfa8911e47e6246f2ef74",
+    "repo/src/trimodalsurv/data/__init__.py": "f70a6308d65648e324242d2a06bf13e7d881dede01b527ac2b801968aa65d175",
+    "repo/src/trimodalsurv/data/tcga_dataset.py": "00c15fc2fad773902ff5d5675e28ea04ac632ebd6d6c432efb8a66fcac0968e1",
+    "repo/src/trimodalsurv/evaluation/__init__.py": "8c95913a473560325f19d0104ca42f7741da1f8c451ab306ee6481268990c06b",
+    "repo/src/trimodalsurv/evaluation/common.py": "179d878ef3be4639579a89b7d6b21d9908ebc7fb5d019500d45a85e94d982029",
+    "repo/src/trimodalsurv/evaluation/missing.py": "d91a20da4d19e94649f8a2b24b75e26a41cf99186602c2bc05e3bd770632b81e",
+    "repo/src/trimodalsurv/models/__init__.py": "8c95913a473560325f19d0104ca42f7741da1f8c451ab306ee6481268990c06b",
+    "repo/src/trimodalsurv/models/compensator.py": "e72c853f5681b505465aaada0a482bb949deb970c74469020df5bc066bd04eee",
+    "repo/src/trimodalsurv/models/consistency.py": "41b6c85fc099058dfe29d7856fc5b776af87edb894d92fae1240495da1e0b0c7",
+    "repo/src/trimodalsurv/models/fusion.py": "26afa736990c06df1ea67353b1969903b87655f0037969292ff5b5910e5c30c1",
+    "repo/src/trimodalsurv/models/npjc.py": "f0c03c1516a3976ca71ac5f0b8a4b752f3f98a91f44e6abb7f0edcda399eac2f",
+    "repo/src/trimodalsurv/training/__init__.py": "bdbf43903f1dbf786bb13b5569424efb0ef60bc41269561d3116822c11517ad7",
+    "repo/src/trimodalsurv/training/common_tools.py": "09710d56cb1d3f7641d75bad677f4a659cd1c57ac6f01ceeb5d8311f233a64fc",
+    "repo/src/trimodalsurv/training/loss_func.py": "44e227eea9ad9f39f29437c24666e876565941556b1559a21bf732d64c1e0194",
+    "repo/src/trimodalsurv/training/model_util.py": "6846877585dfd7177131f6f3ef1b426872a46e680f562be6cffb7b9b90eeff17",
+    "repo/src/trimodalsurv/training/runtime.py": "9e03a242d22f9cdf9dd6adb6f1437b9bea45e8bcc2c382c6a9264fa702a5f3bd",
+    "rules/01_text100_skip_compensate/config.yaml": "f74b2d5dfd4d8ba1ecb75b054c6d2e0a8a848dc95348c91037db0897b0ac525f",
+    "rules/01_text100_skip_compensate/model.py": "7cc7f22fa7a609b7777aa94cba25e482fd71d79aae2abc8c3853854da5e17217",
+    "rules/02_wsi_meanpool_key/config.yaml": "08b82243b931d967a54f206cf70ac29465b1f433b10508f5ce4bad574830034a",
+    "rules/02_wsi_meanpool_key/model.py": "2ba602b5204fc923769a83ce4748190552ad6f95541e79111f41a11d1c58e435",
+    "rules/03_shrinkage_lambda/config.yaml": "bb8ef837dced04a1d205dc74f23db93349b050eb90414e5e18e638ecbb2c8dcd",
+    "rules/03_shrinkage_lambda/model.py": "a0cc7c337f41c062168b407d74c7d692b49f90bc12ef8938fd609dd1e36e49f0",
+    "rules/04_wsi_rna_joint_sim/config.yaml": "6c527da8b03671775c310c76f52ec667db3253987b06a740e582a9cd6c90c5de",
+    "rules/04_wsi_rna_joint_sim/model.py": "70ee79ca14acfdaa9a5d316c79cdd02f4905d2072926dc7d242ff9934c89b113",
+    "rules/05_imputed_token_downweight/config.yaml": "9bc7e60594dbc32c2ad639ee1bf69e854f7108d47f42161e5c2122138c163650",
+    "rules/05_imputed_token_downweight/model.py": "48ba0f81673a631015d8ee722c47aaef46b9c4f7b3432801199817794e9cb446",
+    "rules/acceleration.py": "c9cd3013b69c9d060fb75095a164142317dd8c93aa1b8b8efe69b9fcd33b58e7",
+    "rules/inference.py": "b6581528aa0ba7aed718dbdd1f44b871a30c7de8839e949637c8cc4b849fcf99",
+    "rules/reporting.py": "e3778e226aae83bc1f94c7fa968bbc2816f09a2e45a03a8ff3d61d60c1b38ca6",
+    "rules/run.py": "3c6808fa453a40608b750665f9daa5bab2ad0edff1ef5fb9ee93d454d6290cb9",
+    "rules/runtime.py": "89ff2696657189792248a6bf9a2964ba091c1fa6e028d4e33843695db8d4dbf8",
+    "rules/selection.py": "9c6e241080a9a0c3f7ca46dd18269681c4ce27c04df593c9568ae8e53718fc40"
+  },
+  "specs": [
+    {
+      "alpha": 0.0,
+      "candidate_id": "m0real",
+      "enabled_rules": [],
+      "lambda": 1.0,
+      "protocol": "m0real",
+      "ucec_exception": false,
+      "w": 1.0
+    },
+    {
+      "alpha": 0.0,
+      "candidate_id": "m1",
+      "enabled_rules": [],
+      "lambda": 1.0,
+      "protocol": "m1",
+      "ucec_exception": false,
+      "w": 1.0
+    },
+    {
+      "alpha": 0.0,
+      "candidate_id": "retrieval",
+      "enabled_rules": [],
+      "lambda": 1.0,
+      "protocol": "retrieval",
+      "ucec_exception": false,
+      "w": 1.0
+    },
+    {
+      "alpha": 0.0,
+      "candidate_id": "single-r1",
+      "enabled_rules": [
+        1
+      ],
+      "inactive_parameters": [
+        "lambda",
+        "alpha",
+        "w"
+      ],
+      "lambda": 1.0,
+      "protocol": "01_text100_skip_compensate",
+      "ucec_exception": true,
+      "w": 1.0
+    },
+    {
+      "alpha": 0.0,
+      "candidate_id": "single-r2",
+      "enabled_rules": [
+        2
+      ],
+      "inactive_parameters": [
+        "lambda",
+        "alpha",
+        "w"
+      ],
+      "lambda": 1.0,
+      "protocol": "02_wsi_meanpool_key",
+      "ucec_exception": false,
+      "w": 1.0
+    },
+    {
+      "alpha": 0.0,
+      "candidate_id": "single-r3-l1",
+      "enabled_rules": [
+        3
+      ],
+      "inactive_parameters": [
+        "alpha",
+        "w"
+      ],
+      "lambda": 1.0,
+      "protocol": "03_shrinkage_lambda",
+      "ucec_exception": false,
+      "w": 1.0
+    },
+    {
+      "alpha": 2.0,
+      "candidate_id": "single-r4-a2",
+      "enabled_rules": [
+        4
+      ],
+      "inactive_parameters": [
+        "lambda",
+        "w"
+      ],
+      "lambda": 1.0,
+      "protocol": "04_wsi_rna_joint_sim",
+      "ucec_exception": false,
+      "w": 1.0
+    },
+    {
+      "alpha": 0.0,
+      "candidate_id": "single-r5-w0p5",
+      "enabled_rules": [
+        5
+      ],
+      "inactive_parameters": [
+        "lambda",
+        "alpha"
+      ],
+      "lambda": 1.0,
+      "protocol": "05_imputed_token_downweight",
+      "ucec_exception": false,
+      "w": 0.5
+    },
+    {
+      "alpha": 1.0,
+      "candidate_id": "combo-l1-a1-w0p5",
+      "enabled_rules": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "inactive_parameters": [],
+      "lambda": 1.0,
+      "protocol": "combo",
+      "ucec_exception": true,
+      "w": 0.5
+    }
+  ],
+  "stage": "test"
+}

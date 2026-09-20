@@ -1,0 +1,23 @@
+/home/wuhao/miniconda3/envs/tcga_env/lib/python3.12/site-packages/torch/nn/modules/transformer.py:502: UserWarning: The PyTorch API of nested tensors is in prototype stage and will change in the near future. (Triggered internally at /opt/conda/conda-bld/pytorch_1728945388038/work/aten/src/ATen/NestedTensorImpl.cpp:178.)
+  output = torch._nested_tensor_from_mask(
+smoke BLCA/123/none: 4患者 × 9协议，不计算C-index
+smoke BLCA/123/rna_100: 4患者 × 9协议，不计算C-index
+smoke BLCA/123/text_100: 4患者 × 9协议，不计算C-index
+smoke BLCA/123/both_100: 4患者 × 9协议，不计算C-index
+smoke BRCA/123/none: 6患者 × 9协议，不计算C-index
+smoke BRCA/123/rna_100: 6患者 × 9协议，不计算C-index
+smoke BRCA/123/text_100: 6患者 × 9协议，不计算C-index
+smoke BRCA/123/both_100: 6患者 × 9协议，不计算C-index
+smoke LGG/123/none: 6患者 × 9协议，不计算C-index
+smoke LGG/123/rna_100: 6患者 × 9协议，不计算C-index
+smoke LGG/123/text_100: 6患者 × 9协议，不计算C-index
+smoke LGG/123/both_100: 6患者 × 9协议，不计算C-index
+smoke LUAD/123/none: 4患者 × 9协议，不计算C-index
+smoke LUAD/123/rna_100: 4患者 × 9协议，不计算C-index
+smoke LUAD/123/text_100: 4患者 × 9协议，不计算C-index
+smoke LUAD/123/both_100: 4患者 × 9协议，不计算C-index
+smoke UCEC/123/none: 5患者 × 9协议，不计算C-index
+smoke UCEC/123/rna_100: 5患者 × 9协议，不计算C-index
+smoke UCEC/123/text_100: 5患者 × 9协议，不计算C-index
+smoke UCEC/123/both_100: 5患者 × 9协议，不计算C-index
+{"stage": "smoke", "status": "SMOKE_PASS", "metrics_computed": false}

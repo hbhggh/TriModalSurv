@@ -1,0 +1,25 @@
+{
+  "target": "/Users/wuhao/Desktop/TriModalSurv/docs/templates/experiment-oriented-ml-template.md",
+  "sha256": "31552e2a57174d5311df3ac557385da1331fb67e0b151a97c7178e129edfadb6",
+  "command": [
+    "/opt/homebrew/bin/claude",
+    "--safe-mode",
+    "-p",
+    "--model",
+    "opus",
+    "--effort",
+    "high",
+    "--tools",
+    "",
+    "--no-chrome",
+    "--no-session-persistence",
+    "--output-format",
+    "json"
+  ],
+  "cwd": "/Users/wuhao/Desktop/TriModalSurv/docs/refactor/template-claude-20260916-004153",
+  "started_at": "2026-09-15T15:43:34.675174+00:00",
+  "runner_pid": 9829,
+  "claude_pid": 9830,
+  "exit_code": 0,
+  "finished_at": "2026-09-15T15:45:11.658108+00:00"
+}

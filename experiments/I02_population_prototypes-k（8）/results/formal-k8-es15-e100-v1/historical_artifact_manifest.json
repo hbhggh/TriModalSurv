@@ -1,0 +1,725 @@
+{
+  "kind": "byte_preserved_historical_copy",
+  "files": [
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/audit.json",
+      "copy": "results-summary/audit.json",
+      "sha256": "22ec71fb2e9967f669d2ae853ba7498879285da09f7d0c350bc470b3b742474f",
+      "bytes": 1042
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/baseline_protocol/c_e0_blca.log",
+      "copy": "results-summary/evidence/baseline_protocol/c_e0_blca.log",
+      "sha256": "479c8f8a5d21151586d66bf0288da7a99489fa233df3b777a993ad1c3de4cad9",
+      "bytes": 93351
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/baseline_protocol/c_e0_brca.log",
+      "copy": "results-summary/evidence/baseline_protocol/c_e0_brca.log",
+      "sha256": "34829ca57e02ddbd272eea20f2b4be3b6b803d9ac5e8da8db6521b2f733948aa",
+      "bytes": 228629
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/baseline_protocol/c_e0_lgg.log",
+      "copy": "results-summary/evidence/baseline_protocol/c_e0_lgg.log",
+      "sha256": "7c8ba1f7305da34d429031bf4f898899dd4a82ede65d6fa00d02c0bae74613f8",
+      "bytes": 143008
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/baseline_protocol/c_e0_luad.log",
+      "copy": "results-summary/evidence/baseline_protocol/c_e0_luad.log",
+      "sha256": "a473bb1a254cdc593e74f5bc1537dbbccb8fb07de5f96e3c253dc7630c008d03",
+      "bytes": 141468
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/baseline_protocol/c_e0_ucec.log",
+      "copy": "results-summary/evidence/baseline_protocol/c_e0_ucec.log",
+      "sha256": "005309c4f9f01122678187519257cac986379d807a71902cfd922b2c2305e83b",
+      "bytes": 148425
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/baseline_protocol/c_unit.sh",
+      "copy": "results-summary/evidence/baseline_protocol/c_unit.sh",
+      "sha256": "6f1cac029d2542ffa960d6e5c6870d64f17acec90fd94559a2522934de0d58a9",
+      "bytes": 800
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/baseline_protocol/eval_missing_observed.py",
+      "copy": "results-summary/evidence/baseline_protocol/eval_missing_observed.py",
+      "sha256": "44f451e53a1188702b508e05f9e7e085279779ac23c0adcdf02769cdaf8e9d60",
+      "bytes": 24432
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/baseline_protocol/main_survival_20260902_backup.py",
+      "copy": "results-summary/evidence/baseline_protocol/main_survival_20260902_backup.py",
+      "sha256": "2e49d80dc3f8a67a9e8b53a89a1f4c286f17c973abc56818a4804acc83da4dd9",
+      "bytes": 17937
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/done.flag",
+      "copy": "results-summary/evidence/done.flag",
+      "sha256": "f40dc39292a94500165fa666768fa0361e90d00f4b4309d4e1ea3e2f3b1040aa",
+      "bytes": 20
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/job.json",
+      "copy": "results-summary/evidence/job.json",
+      "sha256": "39e6633bda745d24902c02d9056ae4ca5bdd16d2682783b9b1e1a5b9c2daa2d6",
+      "bytes": 308
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_BLCA_s123_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_BLCA_s123_population_k8.json",
+      "sha256": "4926bde9c871c8f6e8eb24e42daa53a594cdadd7f0a8087f7967a9c1994b639e",
+      "bytes": 4063
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_BLCA_s132_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_BLCA_s132_population_k8.json",
+      "sha256": "5e824fe6553cfe410bed22f9b33003cfa330f6ac3783a90f65228c8e2da091f9",
+      "bytes": 4071
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_BLCA_s213_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_BLCA_s213_population_k8.json",
+      "sha256": "a272276fdf3cf5925d3243e29667f54c222858dc4b3c48bfa097a01cb14bc36d",
+      "bytes": 4069
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_BLCA_s231_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_BLCA_s231_population_k8.json",
+      "sha256": "31fef1be47b5886526da479437e16502b700801b7d650b17032feceab5b4395f",
+      "bytes": 4071
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_BLCA_s321_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_BLCA_s321_population_k8.json",
+      "sha256": "891b737f19f8cb22891fba40c118b2d839d2b06b5b9793b435b61100a0ca3ee6",
+      "bytes": 4065
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_BRCA_s123_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_BRCA_s123_population_k8.json",
+      "sha256": "4d802ece20b9e4fb1f3ee081907a54bd31a3e3ce44d74799850a5c10cf4aa2c4",
+      "bytes": 4070
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_BRCA_s132_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_BRCA_s132_population_k8.json",
+      "sha256": "d86ee53a3eb64c2ff83a81d4aea2f5f3bc0be2815d262841740bf243c890917c",
+      "bytes": 4070
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_BRCA_s213_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_BRCA_s213_population_k8.json",
+      "sha256": "f94893cfe9d77c3a497f3e1cd29557d4778df2204159ae981c04aba5e6a3d68a",
+      "bytes": 4063
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_BRCA_s231_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_BRCA_s231_population_k8.json",
+      "sha256": "05fc5f0f17b7e7f4e9c29ba85fe284f35e1baa411306cb20a924bcd67883bd61",
+      "bytes": 4076
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_BRCA_s321_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_BRCA_s321_population_k8.json",
+      "sha256": "728ee2bc5f0c10c0f721397a890d33a16e204039c13f2a64f8573ade84bfe989",
+      "bytes": 4069
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_LGG_s123_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_LGG_s123_population_k8.json",
+      "sha256": "fa1194d72e14fbb6fe7cfc9928ab98d81b181931bc6f0f38080dab85ae3e0748",
+      "bytes": 4062
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_LGG_s132_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_LGG_s132_population_k8.json",
+      "sha256": "c5ea8572c828744d27b083eda59999c0fda18de1a408272179b3dc26b05f1551",
+      "bytes": 4064
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_LGG_s213_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_LGG_s213_population_k8.json",
+      "sha256": "ebd512e81b2c87e06d7b6fada3b96f9b77c38816e6b8e36724bf10eff658f125",
+      "bytes": 4061
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_LGG_s231_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_LGG_s231_population_k8.json",
+      "sha256": "b06d395924b1b9ef49b6ccdeac13a39694521972a3bf760df0e6e3555f6108e2",
+      "bytes": 4063
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_LGG_s321_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_LGG_s321_population_k8.json",
+      "sha256": "dc2db1611410b05136f3b0a9ebc116445f96b2ef850867e23da8ef3ecd03ceb6",
+      "bytes": 4064
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_LUAD_s123_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_LUAD_s123_population_k8.json",
+      "sha256": "3c33e465b7a558a029d069b6bf24534059df6619e6705affd80e3e229be44ef9",
+      "bytes": 4065
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_LUAD_s132_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_LUAD_s132_population_k8.json",
+      "sha256": "79e4eb8a53b3884702b516b6e4537e52471d6495b15abc306f1b76efe9e3d16e",
+      "bytes": 4067
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_LUAD_s213_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_LUAD_s213_population_k8.json",
+      "sha256": "9fedc1e6a2f2d954d3b5715e2146ac652460a628be0edea07963317f7fecaa6c",
+      "bytes": 4063
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_LUAD_s231_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_LUAD_s231_population_k8.json",
+      "sha256": "8a8e23ec389b9b334126bd2520ecbd6ac6a10c6748a3267e62177b1196d7af5d",
+      "bytes": 4063
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_LUAD_s321_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_LUAD_s321_population_k8.json",
+      "sha256": "976de3444edaeb0c50bc6c69787c312c5138e6f55b19904424617cca567ff36e",
+      "bytes": 4061
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_UCEC_s123_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_UCEC_s123_population_k8.json",
+      "sha256": "668a15384b58aa387a7327482fda9e6916ad19852318a12cebcd5f9e97f6fec4",
+      "bytes": 4066
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_UCEC_s132_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_UCEC_s132_population_k8.json",
+      "sha256": "2297236fe0d34c5b8e53750aa56f81703c8576e97d8b32cf3183e3eb688de9ec",
+      "bytes": 4064
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_UCEC_s213_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_UCEC_s213_population_k8.json",
+      "sha256": "a8f496d4f382768aff13c215ef7363c35d1fb22f1e6d7ea4ada75a5985945133",
+      "bytes": 4064
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_UCEC_s231_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_UCEC_s231_population_k8.json",
+      "sha256": "ae634d3c4b802430a9344f92079f2142b885b757d74e79dd139643a15843545c",
+      "bytes": 4065
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/eval/population_UCEC_s321_population_k8.json",
+      "copy": "results-summary/evidence/population/eval/population_UCEC_s321_population_k8.json",
+      "sha256": "58fda61609a024b85e143db07d122de5348d12db23fbdf057dafbf5f58acd7be",
+      "bytes": 4060
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_BLCA_s123_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_BLCA_s123_k8.eval.log",
+      "sha256": "244779103ce63834ffe26bb2eca36102314c9cee8e8a7d211bf3b3d56b411053",
+      "bytes": 989
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_BLCA_s123_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_BLCA_s123_k8.log",
+      "sha256": "045b00d09c8bf426e769ce04d94b95e4bf12206019e07e9becd327b241744ea0",
+      "bytes": 21831
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_BLCA_s132_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_BLCA_s132_k8.eval.log",
+      "sha256": "b1170525ae84042c92aed922171886e61a1800ddad65758db283c12c30662d78",
+      "bytes": 989
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_BLCA_s132_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_BLCA_s132_k8.log",
+      "sha256": "0fafae246bc4ab0cd11c1bfff53bb606c8a2bba5b0ff0ce6867a629e4045662f",
+      "bytes": 6698
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_BLCA_s213_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_BLCA_s213_k8.eval.log",
+      "sha256": "b3e76cccbef966b589d5cd73b63755bf1a1567e95bb4f7402664240036b2a8c0",
+      "bytes": 989
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_BLCA_s213_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_BLCA_s213_k8.log",
+      "sha256": "21f7fbe11a62bb6932dd65dd579865b6b49337f3ca680fd19e6a43f48533a404",
+      "bytes": 6971
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_BLCA_s231_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_BLCA_s231_k8.eval.log",
+      "sha256": "c1df1067e663366ce94bb2d48ec8959ec34d96ff51d6d2eb24ce4c80b55396e7",
+      "bytes": 989
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_BLCA_s231_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_BLCA_s231_k8.log",
+      "sha256": "dd641f39d4316fc95ef77240a20a07d150918e3883de8414cf54a0c88576341a",
+      "bytes": 6481
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_BLCA_s321_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_BLCA_s321_k8.eval.log",
+      "sha256": "ede998425debbd560a78edf90e616c032aca34245a214f036b631c423492ff04",
+      "bytes": 989
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_BLCA_s321_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_BLCA_s321_k8.log",
+      "sha256": "6c9d9dfc8b7c1909b9d83e030896ac9e1402ed3b5b6dc50a3ac3dde06d752926",
+      "bytes": 7469
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_BRCA_s123_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_BRCA_s123_k8.eval.log",
+      "sha256": "c74ea1941cf2759c7fd5a72785ce0c14ccd32b56f579235bca4757b263c7b0b1",
+      "bytes": 993
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_BRCA_s123_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_BRCA_s123_k8.log",
+      "sha256": "ed1b8010928849984502ab6000b0b1476e74ec2dce5b0599f0ee6ef9cd403f53",
+      "bytes": 8774
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_BRCA_s132_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_BRCA_s132_k8.eval.log",
+      "sha256": "2881cae47b0ff5d60b436942836bfca067c65ee5994f40a4563d302fd3240be9",
+      "bytes": 993
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_BRCA_s132_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_BRCA_s132_k8.log",
+      "sha256": "d443f3f1c3631a84635256b73bdb4561ae9842fdb92cbfd7f22a71074482adf0",
+      "bytes": 8015
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_BRCA_s213_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_BRCA_s213_k8.eval.log",
+      "sha256": "e9a0f72d3a3f1326428f3fbc6bc04e7a0041612c75cad1e7ac9d13de4215a12a",
+      "bytes": 993
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_BRCA_s213_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_BRCA_s213_k8.log",
+      "sha256": "b905a706fa009cd1c89d9986e758986b652c9924a1e72077cc23254ff0e9b2ab",
+      "bytes": 16236
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_BRCA_s231_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_BRCA_s231_k8.eval.log",
+      "sha256": "076fc498948a31fbf34c7dd24df7d606c397a36e1e896edb7218e285a3ac416f",
+      "bytes": 993
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_BRCA_s231_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_BRCA_s231_k8.log",
+      "sha256": "182f0a54ac6a88a05355696dbc47f29bba7a0725b6ac21ed9adf0965d4303213",
+      "bytes": 6484
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_BRCA_s321_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_BRCA_s321_k8.eval.log",
+      "sha256": "71c36021a0c7e0bf78d923b2f75c44338495ae21c818463d16d8db27c6f54a99",
+      "bytes": 993
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_BRCA_s321_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_BRCA_s321_k8.log",
+      "sha256": "2905fa790837b11d7d5778ad908ab2c00b6873167b6ee863bbca8168221387fb",
+      "bytes": 6996
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_LGG_s123_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_LGG_s123_k8.eval.log",
+      "sha256": "be9219eb162abc2c8ec7e9f583e9962c55e9e35952543f3f02495fd09beb6681",
+      "bytes": 986
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_LGG_s123_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_LGG_s123_k8.log",
+      "sha256": "f060eb0d1df0dba98c819c354b9e78b4df49651bc3170073b3d882db71bb96c0",
+      "bytes": 25891
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_LGG_s132_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_LGG_s132_k8.eval.log",
+      "sha256": "e3d24bb80cc5dac66660553d42425697908608fcf9fcb38b3045ac3f656ef00c",
+      "bytes": 986
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_LGG_s132_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_LGG_s132_k8.log",
+      "sha256": "3c9a96968aa64f158485184c8ee9a7be50521ea586225564e7eb7a348893f6c0",
+      "bytes": 28192
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_LGG_s213_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_LGG_s213_k8.eval.log",
+      "sha256": "0a9bccd2804463f12e76973871c59dab43fa6a6a802a8b493ed81ac28a23c9d5",
+      "bytes": 986
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_LGG_s213_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_LGG_s213_k8.log",
+      "sha256": "48c2fd1f19381b3a990efbb4150ce85c593cf920e74780e82303d448e9e1cd82",
+      "bytes": 16227
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_LGG_s231_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_LGG_s231_k8.eval.log",
+      "sha256": "48f4e270881264a6b49c3afd530fd1a1e95c2734ebc01e07b9ac39d3db20732e",
+      "bytes": 986
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_LGG_s231_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_LGG_s231_k8.log",
+      "sha256": "cc273b673440d2268f48161d4530d8939f5246447b160dffe884fa38622d7532",
+      "bytes": 21604
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_LGG_s321_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_LGG_s321_k8.eval.log",
+      "sha256": "81389c7ebae432f1c91a35ede88f14af52f507d5375bf816e18be86d6a50eea9",
+      "bytes": 986
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_LGG_s321_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_LGG_s321_k8.log",
+      "sha256": "87334da9e2844e2fe6b6b46f16a3ccf8db0e0f061d35ce7776479d8b0e2aa397",
+      "bytes": 23379
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_LUAD_s123_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_LUAD_s123_k8.eval.log",
+      "sha256": "0c3ed384e7eb8143275556c6b75583441e4648f71c04bb534133e7437682a9f6",
+      "bytes": 989
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_LUAD_s123_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_LUAD_s123_k8.log",
+      "sha256": "c9dcbe147f14750ec2f116bfbc2fcb7ba6f2c742860657f4206bfc372f96aede",
+      "bytes": 16741
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_LUAD_s132_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_LUAD_s132_k8.eval.log",
+      "sha256": "9dc80cb0e6e0faab910b3bd707c48ae4f48f3450f1703db76af52356555e8f19",
+      "bytes": 989
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_LUAD_s132_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_LUAD_s132_k8.log",
+      "sha256": "b828e01ba6c9fe183e675736923e4b08bec05ae0f48d8b1c90560fb92c764fd1",
+      "bytes": 18042
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_LUAD_s213_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_LUAD_s213_k8.eval.log",
+      "sha256": "4c8a6994511adb392b1e30053cf887a9126402c514d918aa2333adb6879f0477",
+      "bytes": 989
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_LUAD_s213_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_LUAD_s213_k8.log",
+      "sha256": "a2be44f8b2997a3ae1844a27d99a8bd7a9eff446a5529de0fced9aa3f5a72315",
+      "bytes": 16734
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_LUAD_s231_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_LUAD_s231_k8.eval.log",
+      "sha256": "5ab12d8b36750b24dff32eda0512d62f73b668e6a1d1064f559ae5018b648a24",
+      "bytes": 989
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_LUAD_s231_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_LUAD_s231_k8.log",
+      "sha256": "04bfe27354b65e6f8f0afbbee1b43fe90e3929baccf54f1722c921acbb5e708b",
+      "bytes": 16483
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_LUAD_s321_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_LUAD_s321_k8.eval.log",
+      "sha256": "64565ef4fe07724d8f486cd33690bb0598221471d43a5f64366a22a3d3908220",
+      "bytes": 989
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_LUAD_s321_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_LUAD_s321_k8.log",
+      "sha256": "57e5d132b1f82e111f24aaf89ab528c59bd692977aac1571d77caaa0447817a8",
+      "bytes": 16989
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_UCEC_s123_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_UCEC_s123_k8.eval.log",
+      "sha256": "9d9a3046fcf92e30b441f1198e803478e7dd9502c7cbb29c5603ac6fe61a2493",
+      "bytes": 989
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_UCEC_s123_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_UCEC_s123_k8.log",
+      "sha256": "4e2d0b0db586b7ae5346cc0b109cc8549b3e9368ca18cc742fe312f3c44071c7",
+      "bytes": 13444
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_UCEC_s132_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_UCEC_s132_k8.eval.log",
+      "sha256": "cc4e97a526b96bc8c481199e5074e11f811f8565ab497e221a8c08fa35a88ca7",
+      "bytes": 989
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_UCEC_s132_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_UCEC_s132_k8.log",
+      "sha256": "908baf61bbfe4232da57fe7f7fc7cefe3c3fa201e8494479cdbe1f7e974fb674",
+      "bytes": 12654
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_UCEC_s213_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_UCEC_s213_k8.eval.log",
+      "sha256": "d1304e8df373403d3004fcea095a17fa7d5db0648207152f093f3bc79292d779",
+      "bytes": 989
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_UCEC_s213_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_UCEC_s213_k8.log",
+      "sha256": "e0f86cef3c24f8b225c529ef265f2975856eda336dd5e90cf6b717aadd2fc47d",
+      "bytes": 7000
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_UCEC_s231_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_UCEC_s231_k8.eval.log",
+      "sha256": "1b8f54d411d511e6c0bb43428a4dc530ad033ea5eaaa362caf67bd71fe5d0d01",
+      "bytes": 989
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_UCEC_s231_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_UCEC_s231_k8.log",
+      "sha256": "9ee3e94b70f7e01b9aaccfe3e56ec423aaf7caf78a191a6ce6a26e2b46e69bd0",
+      "bytes": 13448
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_UCEC_s321_k8.eval.log",
+      "copy": "results-summary/evidence/population/logs/population_UCEC_s321_k8.eval.log",
+      "sha256": "8a65fa0689a9720e822d70014d81c0eb844396947fffba6d2e06a931808a2813",
+      "bytes": 989
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/logs/population_UCEC_s321_k8.log",
+      "copy": "results-summary/evidence/population/logs/population_UCEC_s321_k8.log",
+      "sha256": "5cea3dddac055589984b7482fd5644010830311f29bc6ec6520a8d0cf6fa1949",
+      "bytes": 16242
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/123/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BLCA_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/123/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BLCA_surv_results.json",
+      "sha256": "ba0bc80ca974477c7e7d7803401eac6a0b7a4b63403dfabd484734663b5d60e2",
+      "bytes": 103
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/123/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BRCA_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/123/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BRCA_surv_results.json",
+      "sha256": "9ae9092aeeceed99ce9c46fed9d41b08d21f5d91f8cdcb6b42be5df7e42b23c2",
+      "bytes": 103
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/123/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_LGG_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/123/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_LGG_surv_results.json",
+      "sha256": "bf5c38e3cf15af73993d69c02b09cd463a7d14ddfbde1e1b00a15f831614a6bd",
+      "bytes": 102
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/123/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_LUAD_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/123/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_LUAD_surv_results.json",
+      "sha256": "1780aaf2e84cdca852810cdd7c66eb766dd475793ebabf067efeecf4cb4064dc",
+      "bytes": 102
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/123/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_UCEC_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/123/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_UCEC_surv_results.json",
+      "sha256": "d3ea5993b7813509ccfe66c654e31d3bb3452710faca7f35482b7a127216f6f3",
+      "bytes": 103
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/132/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BLCA_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/132/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BLCA_surv_results.json",
+      "sha256": "9120fe8a5f7ef0b68141773763bde2bded0486eb21e0167d64292bc929968976",
+      "bytes": 105
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/132/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BRCA_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/132/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BRCA_surv_results.json",
+      "sha256": "3a3bcfe560581afbb14f0af0cbb10a2d06303da031131081f5a90230e3d7eb53",
+      "bytes": 103
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/132/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_LGG_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/132/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_LGG_surv_results.json",
+      "sha256": "2d12db4eaaf320e0d1aa6028edff8659afe8454f265fcdc6ea4b63eff5a64570",
+      "bytes": 102
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/132/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_LUAD_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/132/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_LUAD_surv_results.json",
+      "sha256": "153b0688b4f5b33cf1d4e69df29c58e3f90f3822b3c1d1e21845f8cd81dff9e2",
+      "bytes": 103
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/132/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_UCEC_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/132/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_UCEC_surv_results.json",
+      "sha256": "ed46d2595d9ea7be7c2f9fe8c1025ec91e6f67916376cf3c628a4bdba70a10a2",
+      "bytes": 103
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/213/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BLCA_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/213/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BLCA_surv_results.json",
+      "sha256": "271ba67bc79e010f52af8882a38414a72779706d0153f3588bb96cc0b4ff63f5",
+      "bytes": 103
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/213/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BRCA_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/213/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BRCA_surv_results.json",
+      "sha256": "d85df304ecff5d2b81906819de682a4479eb2f9b7dde842d07f09d2cab8c2dcd",
+      "bytes": 103
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/213/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_LGG_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/213/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_LGG_surv_results.json",
+      "sha256": "16638903e82eba4542804b2e30528213e39bceb7dbb8260314ffbf11cbdbbbb5",
+      "bytes": 103
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/213/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_LUAD_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/213/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_LUAD_surv_results.json",
+      "sha256": "79cc6498dc810a4ceed5323956d79e399202e5f16eed3ec96f17ce5c2a8511d2",
+      "bytes": 103
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/213/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_UCEC_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/213/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_UCEC_surv_results.json",
+      "sha256": "a5160cf931b898b457acde511282897314a1907bae8ed9ebd7342c727ebdf26b",
+      "bytes": 103
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/231/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BLCA_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/231/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BLCA_surv_results.json",
+      "sha256": "1f4ddb14bc41104f71d8dc09489a6328147153fcb58945b04e85981cf71e032f",
+      "bytes": 103
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/231/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BRCA_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/231/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BRCA_surv_results.json",
+      "sha256": "4bfd28785778fbb914f96dd9c67ff1685a258d087b0aba84ddeb8088a5e9c2ba",
+      "bytes": 103
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/231/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_LGG_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/231/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_LGG_surv_results.json",
+      "sha256": "681eeecbf1ffd5cc7315c25459b3ab65e4f54ec71219020bc769ac05bbb16f56",
+      "bytes": 101
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/231/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_LUAD_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/231/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_LUAD_surv_results.json",
+      "sha256": "13c587e8bfe8bdd4f301aaef94e0d87e2126622bdbd3dbbd093ebab37ef14644",
+      "bytes": 103
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/231/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_UCEC_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/231/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_UCEC_surv_results.json",
+      "sha256": "347b41b0aa2b6e6d2efd9ae5c522818ec81c6a00057b2fdc7e627a1c2ff9dbdd",
+      "bytes": 103
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/321/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BLCA_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/321/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BLCA_surv_results.json",
+      "sha256": "75e198e454cff8656c7c4d786abcab3142a6298e3f495c06ed820b889540cf9b",
+      "bytes": 103
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/321/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BRCA_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/321/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_BRCA_surv_results.json",
+      "sha256": "8a06ca11f529de51fc0b56ca799ed1ec5743af98c050df279fd79145fbaf0400",
+      "bytes": 103
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/321/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_LGG_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/321/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_LGG_surv_results.json",
+      "sha256": "bf494b51129f8afad0e992aab28f4032d348f984c0b643195dd7f6d8b644e38a",
+      "bytes": 103
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/321/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_LUAD_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/321/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_LUAD_surv_results.json",
+      "sha256": "39954fe73c5bc2ec08983186416ab995045604119dba89aeb21729d82393b55d",
+      "bytes": 103
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/out_population_k8/321/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_UCEC_surv_results.json",
+      "copy": "results-summary/evidence/population/out_population_k8/321/tcga_uni2_population_k8_img_1536text_768rna_256_NPJC_UCEC_surv_results.json",
+      "sha256": "545487738ac1899648901b082c7728af9bd033fefa105750bc12221b941d4508",
+      "bytes": 101
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/evidence/population/runs_state.json",
+      "copy": "results-summary/evidence/population/runs_state.json",
+      "sha256": "368a48cb692cd1dc5199511362ca2662c3f829c5146a90bb28dc834563f4ce8a",
+      "bytes": 48028
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/historical_deltas.csv",
+      "copy": "results-summary/historical_deltas.csv",
+      "sha256": "b44d35e4c12c52a9c21dd7ade71fbac0a6b6732ee2601243eec5a134204e0d8c",
+      "bytes": 2647
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/metrics_long.csv",
+      "copy": "results-summary/metrics_long.csv",
+      "sha256": "4ae0d4bdd7feab34e805a92442e413b9195d6c7b48d24667cba475bf9e37bb53",
+      "bytes": 113956
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/notes.md",
+      "copy": "results-summary/notes.md",
+      "sha256": "4052ff787a3f2d949034cbd71269f6720d99bb002f1d3f8ffb83f69f251bd743",
+      "bytes": 2424
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/report.md",
+      "copy": "results-summary/report.md",
+      "sha256": "981bdb030c4fc147ab8bc0979a1d65f36ba7e6981d46999e9e264203b492a241",
+      "bytes": 14440
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/source_hashes.json",
+      "copy": "results-summary/source_hashes.json",
+      "sha256": "6ebaacd767ac479a340605609bbea5bcfbcee90316467bd658066dce82960c51",
+      "bytes": 36008
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/summarize.py",
+      "copy": "results-summary/summarize.py",
+      "sha256": "822b82597b050f464315fee3a5836ab8b17a3de9c734fa0abe1fb4673350ee41",
+      "bytes": 19724
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/summary_mean_sd.csv",
+      "copy": "results-summary/summary_mean_sd.csv",
+      "sha256": "e7041ed694a996044b30df1dedbde2fbd50ab3371077d92ab1bc9a17856e911c",
+      "bytes": 6852
+    },
+    {
+      "original": "/Users/wuhao/.codex/worktrees/684e/TriModalSurv/collab/20260915-population-prototypes/results-summary/training_summary.csv",
+      "copy": "results-summary/training_summary.csv",
+      "sha256": "bfa11b2ba5915ebc16fe9f36baa3a32724c935b705cf27a5868b2e58e8b286cc",
+      "bytes": 4342
+    }
+  ]
+}

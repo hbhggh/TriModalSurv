@@ -1,0 +1,24 @@
+{
+  "as_of_utc": "2026-09-16 10:27:08 UTC",
+  "implementation": "COMPLETE",
+  "regression": {
+    "new": 39,
+    "legacy": 68,
+    "skipped": 0,
+    "status": "PASS"
+  },
+  "asset_preflight": "PASS",
+  "smoke": {
+    "status": "PASS",
+    "device": "cpu",
+    "split": "valid",
+    "cells": 20,
+    "protocol_records": 180,
+    "c_index_computed": false
+  },
+  "claude_review": "BLOCKED_AUTH",
+  "formal_valid": "NOT_RUN",
+  "formal_test": "NOT_RUN",
+  "overall_research": "NOT_COMPLETE",
+  "next_required": "User restores Claude Code authentication; read-only review only, no automatic formal run"
+}

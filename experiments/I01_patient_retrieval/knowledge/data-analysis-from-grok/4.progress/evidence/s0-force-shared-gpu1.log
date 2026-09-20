@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/home/wuhao/npj_strategy0_force_luad_20260917/source/run.py", line 405, in <module>
+    main()
+  File "/home/wuhao/npj_strategy0_force_luad_20260917/source/run.py", line 401, in main
+    print(json.dumps(execute(Path(args.config)), ensure_ascii=False, sort_keys=True))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wuhao/npj_strategy0_force_luad_20260917/source/run.py", line 338, in execute
+    up_config, gpu_record = configure_shared_gpu_runtime(
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/wuhao/npj_strategy0_force_luad_20260917/source/run.py", line 109, in configure_shared_gpu_runtime
+    gpu_id, samples = choose_shared_gpu(
+                      ^^^^^^^^^^^^^^^^^^
+  File "/home/wuhao/npj_strategy0_force_luad_20260917/source/run.py", line 96, in choose_shared_gpu
+    raise RuntimeError("候选 GPU 未同时满足两次利用率与显存共享门禁")
+RuntimeError: 候选 GPU 未同时满足两次利用率与显存共享门禁

@@ -1,0 +1,737 @@
+[
+  {
+    "arm": "E0",
+    "cancer": "BLCA",
+    "grid": "none",
+    "mean": 0.5899722414989591,
+    "sd": 0.05604856446265236
+  },
+  {
+    "arm": "E0",
+    "cancer": "BLCA",
+    "grid": "rna_100",
+    "mean": 0.5935461485079806,
+    "sd": 0.05654988277142471
+  },
+  {
+    "arm": "E0",
+    "cancer": "BLCA",
+    "grid": "text_100",
+    "mean": 0.5759888965995836,
+    "sd": 0.029206775530738787
+  },
+  {
+    "arm": "E0",
+    "cancer": "BLCA",
+    "grid": "both_100",
+    "mean": 0.5740458015267176,
+    "sd": 0.04072365072461457
+  },
+  {
+    "arm": "E0",
+    "cancer": "BRCA",
+    "grid": "none",
+    "mean": 0.6913591461337573,
+    "sd": 0.005151913182742497
+  },
+  {
+    "arm": "E0",
+    "cancer": "BRCA",
+    "grid": "rna_100",
+    "mean": 0.6838423980924265,
+    "sd": 0.008947327315785127
+  },
+  {
+    "arm": "E0",
+    "cancer": "BRCA",
+    "grid": "text_100",
+    "mean": 0.6550017031906438,
+    "sd": 0.014161563345841895
+  },
+  {
+    "arm": "E0",
+    "cancer": "BRCA",
+    "grid": "both_100",
+    "mean": 0.5960258884977858,
+    "sd": 0.03493985358099402
+  },
+  {
+    "arm": "E0",
+    "cancer": "LGG",
+    "grid": "none",
+    "mean": 0.7968253968253969,
+    "sd": 0.010784057944294509
+  },
+  {
+    "arm": "E0",
+    "cancer": "LGG",
+    "grid": "rna_100",
+    "mean": 0.7672187715665977,
+    "sd": 0.01991180788181864
+  },
+  {
+    "arm": "E0",
+    "cancer": "LGG",
+    "grid": "text_100",
+    "mean": 0.7058661145617667,
+    "sd": 0.02123429287488433
+  },
+  {
+    "arm": "E0",
+    "cancer": "LGG",
+    "grid": "both_100",
+    "mean": 0.5761904761904761,
+    "sd": 0.02713694397186526
+  },
+  {
+    "arm": "E0",
+    "cancer": "LUAD",
+    "grid": "none",
+    "mean": 0.582063882063882,
+    "sd": 0.011342254691786562
+  },
+  {
+    "arm": "E0",
+    "cancer": "LUAD",
+    "grid": "rna_100",
+    "mean": 0.5806598806598806,
+    "sd": 0.013676970879689632
+  },
+  {
+    "arm": "E0",
+    "cancer": "LUAD",
+    "grid": "text_100",
+    "mean": 0.5966303966303966,
+    "sd": 0.0036721078985698756
+  },
+  {
+    "arm": "E0",
+    "cancer": "LUAD",
+    "grid": "both_100",
+    "mean": 0.5854685854685855,
+    "sd": 0.006208590014499376
+  },
+  {
+    "arm": "E0",
+    "cancer": "UCEC",
+    "grid": "none",
+    "mean": 0.6515023369686178,
+    "sd": 0.014258631308596286
+  },
+  {
+    "arm": "E0",
+    "cancer": "UCEC",
+    "grid": "rna_100",
+    "mean": 0.6472290229245493,
+    "sd": 0.017551183252936597
+  },
+  {
+    "arm": "E0",
+    "cancer": "UCEC",
+    "grid": "text_100",
+    "mean": 0.5892722012018696,
+    "sd": 0.026138576295425948
+  },
+  {
+    "arm": "E0",
+    "cancer": "UCEC",
+    "grid": "both_100",
+    "mean": 0.5763187180057868,
+    "sd": 0.025571941783024844
+  },
+  {
+    "arm": "E0m",
+    "cancer": "BLCA",
+    "grid": "none",
+    "mean": 0.5899722414989591,
+    "sd": 0.05604856446265236
+  },
+  {
+    "arm": "E0m",
+    "cancer": "BLCA",
+    "grid": "rna_100",
+    "mean": 0.5891047883414295,
+    "sd": 0.057918932058545175
+  },
+  {
+    "arm": "E0m",
+    "cancer": "BLCA",
+    "grid": "text_100",
+    "mean": 0.574913254684247,
+    "sd": 0.032064664112804786
+  },
+  {
+    "arm": "E0m",
+    "cancer": "BLCA",
+    "grid": "both_100",
+    "mean": 0.5747744621790423,
+    "sd": 0.034965787547681634
+  },
+  {
+    "arm": "E0m",
+    "cancer": "BRCA",
+    "grid": "none",
+    "mean": 0.6860679005336664,
+    "sd": 0.00455629583763096
+  },
+  {
+    "arm": "E0m",
+    "cancer": "BRCA",
+    "grid": "rna_100",
+    "mean": 0.6847507664357897,
+    "sd": 0.004433823953442765
+  },
+  {
+    "arm": "E0m",
+    "cancer": "BRCA",
+    "grid": "text_100",
+    "mean": 0.6191211536277961,
+    "sd": 0.023458128819979843
+  },
+  {
+    "arm": "E0m",
+    "cancer": "BRCA",
+    "grid": "both_100",
+    "mean": 0.6147496309753605,
+    "sd": 0.026773713904415325
+  },
+  {
+    "arm": "E0m",
+    "cancer": "LGG",
+    "grid": "none",
+    "mean": 0.7995169082125604,
+    "sd": 0.01022466003452659
+  },
+  {
+    "arm": "E0m",
+    "cancer": "LGG",
+    "grid": "rna_100",
+    "mean": 0.7909592822636301,
+    "sd": 0.011728168826085853
+  },
+  {
+    "arm": "E0m",
+    "cancer": "LGG",
+    "grid": "text_100",
+    "mean": 0.6641131815044858,
+    "sd": 0.035246213413158534
+  },
+  {
+    "arm": "E0m",
+    "cancer": "LGG",
+    "grid": "both_100",
+    "mean": 0.6352657004830918,
+    "sd": 0.035914181053303594
+  },
+  {
+    "arm": "E0m",
+    "cancer": "LUAD",
+    "grid": "none",
+    "mean": 0.5838188838188838,
+    "sd": 0.009099476780335892
+  },
+  {
+    "arm": "E0m",
+    "cancer": "LUAD",
+    "grid": "rna_100",
+    "mean": 0.5802386802386802,
+    "sd": 0.006798678372964057
+  },
+  {
+    "arm": "E0m",
+    "cancer": "LUAD",
+    "grid": "text_100",
+    "mean": 0.5951561951561951,
+    "sd": 0.004493969772540575
+  },
+  {
+    "arm": "E0m",
+    "cancer": "LUAD",
+    "grid": "both_100",
+    "mean": 0.5888030888030887,
+    "sd": 0.0015299750591578401
+  },
+  {
+    "arm": "E0m",
+    "cancer": "UCEC",
+    "grid": "none",
+    "mean": 0.6568884932116625,
+    "sd": 0.014728751332803651
+  },
+  {
+    "arm": "E0m",
+    "cancer": "UCEC",
+    "grid": "rna_100",
+    "mean": 0.655464055196973,
+    "sd": 0.013108884329069407
+  },
+  {
+    "arm": "E0m",
+    "cancer": "UCEC",
+    "grid": "text_100",
+    "mean": 0.5777431560204763,
+    "sd": 0.029366975787898708
+  },
+  {
+    "arm": "E0m",
+    "cancer": "UCEC",
+    "grid": "both_100",
+    "mean": 0.5750723347429335,
+    "sd": 0.028737800449183264
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BLCA",
+    "grid": "none",
+    "mean": 0.5331714087439279,
+    "sd": 0.053147546049935025
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BLCA",
+    "grid": "rna_25",
+    "mean": 0.5319222761970853,
+    "sd": 0.05575787548827522
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BLCA",
+    "grid": "rna_50",
+    "mean": 0.5325815405968077,
+    "sd": 0.05465676345536186
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BLCA",
+    "grid": "rna_75",
+    "mean": 0.5327203331020125,
+    "sd": 0.05452943300342959
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BLCA",
+    "grid": "rna_100",
+    "mean": 0.5303955586398335,
+    "sd": 0.05516721107200562
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BLCA",
+    "grid": "text_25",
+    "mean": 0.5224496877168633,
+    "sd": 0.044658355523215065
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BLCA",
+    "grid": "text_50",
+    "mean": 0.5253990284524636,
+    "sd": 0.04663423656891173
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BLCA",
+    "grid": "text_75",
+    "mean": 0.5161693268563498,
+    "sd": 0.04866518904670506
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BLCA",
+    "grid": "text_100",
+    "mean": 0.5129077029840389,
+    "sd": 0.05421805685887923
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BLCA",
+    "grid": "both_25",
+    "mean": 0.5174878556557946,
+    "sd": 0.0659103901351553
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BLCA",
+    "grid": "both_50",
+    "mean": 0.5208882720333102,
+    "sd": 0.05523485076624882
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BLCA",
+    "grid": "both_75",
+    "mean": 0.5160652324774462,
+    "sd": 0.04763788643941169
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BLCA",
+    "grid": "both_100",
+    "mean": 0.5094031922276198,
+    "sd": 0.053420664385385626
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BRCA",
+    "grid": "none",
+    "mean": 0.630339502668332,
+    "sd": 0.07096180751226917
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BRCA",
+    "grid": "rna_25",
+    "mean": 0.630907232882934,
+    "sd": 0.06974105733493785
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BRCA",
+    "grid": "rna_50",
+    "mean": 0.6312024525945271,
+    "sd": 0.07018371752830672
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BRCA",
+    "grid": "rna_75",
+    "mean": 0.630634722379925,
+    "sd": 0.06908691229694462
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BRCA",
+    "grid": "rna_100",
+    "mean": 0.6296128079936414,
+    "sd": 0.0685444367009881
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BRCA",
+    "grid": "text_25",
+    "mean": 0.5909617349835359,
+    "sd": 0.07712211567561131
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BRCA",
+    "grid": "text_50",
+    "mean": 0.5655047121607812,
+    "sd": 0.08266832704919723
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BRCA",
+    "grid": "text_75",
+    "mean": 0.5773135006245033,
+    "sd": 0.07980031729543859
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BRCA",
+    "grid": "text_100",
+    "mean": 0.5616214374929034,
+    "sd": 0.08918123353927765
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BRCA",
+    "grid": "both_25",
+    "mean": 0.5756557283978654,
+    "sd": 0.07685370436601942
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BRCA",
+    "grid": "both_50",
+    "mean": 0.5532190303167934,
+    "sd": 0.0839378476080079
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BRCA",
+    "grid": "both_75",
+    "mean": 0.53427955035767,
+    "sd": 0.08009708007799043
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "BRCA",
+    "grid": "both_100",
+    "mean": 0.5521516975133417,
+    "sd": 0.09558470855753076
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LGG",
+    "grid": "none",
+    "mean": 0.8015182884748102,
+    "sd": 0.0158230527611197
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LGG",
+    "grid": "rna_25",
+    "mean": 0.7951000690131125,
+    "sd": 0.016506257257331392
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LGG",
+    "grid": "rna_50",
+    "mean": 0.7930296756383713,
+    "sd": 0.016956382701154283
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LGG",
+    "grid": "rna_75",
+    "mean": 0.7928916494133885,
+    "sd": 0.0174307641116486
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LGG",
+    "grid": "rna_100",
+    "mean": 0.7922015182884748,
+    "sd": 0.017997079578622503
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LGG",
+    "grid": "text_25",
+    "mean": 0.7908902691511387,
+    "sd": 0.019991479900056574
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LGG",
+    "grid": "text_50",
+    "mean": 0.7750862663906142,
+    "sd": 0.014573455024722052
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LGG",
+    "grid": "text_75",
+    "mean": 0.6723947550034507,
+    "sd": 0.019010889162201693
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LGG",
+    "grid": "text_100",
+    "mean": 0.5884057971014492,
+    "sd": 0.025969937754377594
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LGG",
+    "grid": "both_25",
+    "mean": 0.7200828157349897,
+    "sd": 0.008513404521402071
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LGG",
+    "grid": "both_50",
+    "mean": 0.6937888198757763,
+    "sd": 0.017005816790902902
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LGG",
+    "grid": "both_75",
+    "mean": 0.682815734989648,
+    "sd": 0.014830595124592748
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LGG",
+    "grid": "both_100",
+    "mean": 0.5647342995169082,
+    "sd": 0.025493550244275336
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LUAD",
+    "grid": "none",
+    "mean": 0.5806949806949807,
+    "sd": 0.016547070134491706
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LUAD",
+    "grid": "rna_25",
+    "mean": 0.5795015795015794,
+    "sd": 0.01603115092547453
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LUAD",
+    "grid": "rna_50",
+    "mean": 0.5782730782730783,
+    "sd": 0.01462507312495611
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LUAD",
+    "grid": "rna_75",
+    "mean": 0.5776412776412776,
+    "sd": 0.014638545279460045
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LUAD",
+    "grid": "rna_100",
+    "mean": 0.5763776763776763,
+    "sd": 0.014600517684315866
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LUAD",
+    "grid": "text_25",
+    "mean": 0.5746226746226746,
+    "sd": 0.009242879653363626
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LUAD",
+    "grid": "text_50",
+    "mean": 0.5804141804141804,
+    "sd": 0.003829766100455998
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LUAD",
+    "grid": "text_75",
+    "mean": 0.6014742014742015,
+    "sd": 0.006979745902155509
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LUAD",
+    "grid": "text_100",
+    "mean": 0.5972270972270972,
+    "sd": 0.005909953752363202
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LUAD",
+    "grid": "both_25",
+    "mean": 0.5784485784485784,
+    "sd": 0.012762133353947222
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LUAD",
+    "grid": "both_50",
+    "mean": 0.5828360828360829,
+    "sd": 0.013241834236319874
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LUAD",
+    "grid": "both_75",
+    "mean": 0.5951210951210951,
+    "sd": 0.012001568947440618
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "LUAD",
+    "grid": "both_100",
+    "mean": 0.5931203931203931,
+    "sd": 0.005533963301691562
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "UCEC",
+    "grid": "none",
+    "mean": 0.6725127976852883,
+    "sd": 0.02044155114410624
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "UCEC",
+    "grid": "rna_25",
+    "mean": 0.671399955486312,
+    "sd": 0.019684162195813062
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "UCEC",
+    "grid": "rna_50",
+    "mean": 0.6709993322946806,
+    "sd": 0.018849063485485363
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "UCEC",
+    "grid": "rna_75",
+    "mean": 0.6728243935010015,
+    "sd": 0.02008240841292902
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "UCEC",
+    "grid": "rna_100",
+    "mean": 0.6724682839973292,
+    "sd": 0.019540824566058726
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "UCEC",
+    "grid": "text_25",
+    "mean": 0.644113064767416,
+    "sd": 0.035037744295426575
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "UCEC",
+    "grid": "text_50",
+    "mean": 0.6030269307812152,
+    "sd": 0.038991614991959286
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "UCEC",
+    "grid": "text_75",
+    "mean": 0.6125083463164923,
+    "sd": 0.04164082422620122
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "UCEC",
+    "grid": "text_100",
+    "mean": 0.6071221900734476,
+    "sd": 0.02937372228046986
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "UCEC",
+    "grid": "both_25",
+    "mean": 0.6468729134208769,
+    "sd": 0.02201493282165353
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "UCEC",
+    "grid": "both_50",
+    "mean": 0.6380146895170264,
+    "sd": 0.03554084184879867
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "UCEC",
+    "grid": "both_75",
+    "mean": 0.6059203204985533,
+    "sd": 0.04269417319711145
+  },
+  {
+    "arm": "Population-K8",
+    "cancer": "UCEC",
+    "grid": "both_100",
+    "mean": 0.6082350322724237,
+    "sd": 0.0252747019015762
+  }
+]

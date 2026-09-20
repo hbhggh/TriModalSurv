@@ -1,0 +1,50 @@
+test_completed_rejects_missing_mixed_batch_and_provenance_mismatch (test_reporting.ReportingTests) ... ok
+test_completed_rejects_selected_not_bound_to_valid_candidate_ledger (test_reporting.ReportingTests) ... ok
+test_completed_reports_cover_locked_sections_raw_ties_and_all_valid_candidates (test_reporting.ReportingTests) ... ok
+test_unfinished_status_requires_no_rows_and_renders_three_full_empty_tables (test_reporting.ReportingTests) ... ok
+test_both_parameter_tables_mark_inactive_not_optimal (test_review_fixes.ReviewFixTests) ... ok
+test_enabled_ucec_keeps_alpha_active (test_review_fixes.ReviewFixTests) ... ok
+test_inactive_alpha_tie_is_marked_in_candidate_and_lock (test_review_fixes.ReviewFixTests) ... ok
+test_source_hash_ignores_metadata_but_detects_real_code_change (test_review_fixes.ReviewFixTests) ... ok
+test_disabled_candidate_is_exact_original_retrieval_and_split_is_explicit (test_rules.RulesNumpyTests) ... ok
+test_dynamic_rule_loader_registers_real_modules (test_rules.RulesNumpyTests) ... ok
+test_mixed_natural_missing_batch_matches_patientwise_partitions (test_rules.RulesNumpyTests) ... ok
+test_non_blocking_is_an_optional_keyword_only_forward_contract (test_rules.RulesNumpyTests) ... ok
+test_repo_resolution_uses_pythonpath_without_assuming_result_depth (test_rules.RulesNumpyTests) ... ok
+test_rule1_skips_entire_text100_scenario_except_locked_ucec_exception (test_rules.RulesNumpyTests) ... ok
+test_rule2_mean_key_is_permutation_invariant_and_rejects_own_degeneracy (test_rules.RulesNumpyTests) ... ok
+test_rule2_real_padding_preserves_cache_and_valid_row_permutation (test_rules.RulesNumpyTests) ... ok
+test_rule3_extreme_scale_endpoints_are_exact_copies_with_requested_dtype (test_rules.RulesNumpyTests) ... ok
+test_rule3_lambda_endpoints_and_both_missing_share_one_donor (test_rules.RulesNumpyTests) ... ok
+test_rule4_joint_score_uses_natural_query_rna_and_complete_donors (test_rules.RulesNumpyTests) ... ok
+test_rule5_changes_only_final_pool_weights_not_boolean_masks (test_rules.RulesNumpyTests) ... ok
+test_w1_forward_matches_original_npjc (test_rules.RulesTorchTests) ... ok
+test_all_reports_disclose_historical_comparability_block (test_runner.RunnerTests) ... ok
+test_formal_gate_precedes_assets (test_runner.RunnerTests) ... ok
+test_legacy_comparison_reads_original_nested_grids (test_runner.RunnerTests) ... ok
+test_real_torch_synthetic_cell_no_smoke_c_index (test_runner.RunnerTests) ... /home/wuhao/.local/lib/python3.10/site-packages/torch/nn/modules/transformer.py:384: UserWarning: The PyTorch API of nested tensors is in prototype stage and will change in the near future. (Triggered internally at ../aten/src/ATen/NestedTensorImpl.cpp:177.)
+  output = torch._nested_tensor_from_mask(output, src_key_padding_mask.logical_not(), mask_check=False)
+ok
+test_report_stage_never_reads_assets_or_invents_scores (test_runner.RunnerTests) ... ok
+test_smoke_candidates_are_not_a_valid_selection (test_runner.RunnerTests) ... ok
+test_cell_resume_checks_artifacts_and_refuses_tampering (test_runtime.RuntimeTests) ... ok
+test_config_rejects_unknown_or_changed_scientific_scope (test_runtime.RuntimeTests) ... ok
+test_diagnostic_zero_checked_is_null_and_counts_once (test_runtime.RuntimeTests) ... ok
+test_exclusive_json_and_lock_tampering (test_runtime.RuntimeTests) ... ok
+test_formal_authorization_rejected_before_assets (test_runtime.RuntimeTests) ... ok
+test_formal_requires_review_bound_to_same_code (test_runtime.RuntimeTests) ... ok
+test_json_completion_is_published_only_after_full_write (test_runtime.RuntimeTests) ... ok
+test_lock_rejects_test_evidence_and_scientific_drift (test_runtime.RuntimeTests) ... ok
+test_protected_output_rejected_before_creation (test_runtime.RuntimeTests) ... ok
+test_query_source_uses_explicit_valid_not_test (test_runtime.RuntimeTests) ... ok
+test_builds_13_single_points_and_45_joint_points (test_selection.BuildCandidatesTests) ... ok
+test_exact_ties_use_small_lambda_then_small_w_then_small_alpha (test_selection.ChooseValidationTests) ... ok
+test_rejects_a_candidate_set_other_than_the_locked_58_specs (test_selection.ChooseValidationTests) ... ok
+test_rejects_wrong_split_missing_duplicate_nonfinite_and_out_of_range (test_selection.ChooseValidationTests) ... ok
+test_requires_three_complete_baselines_and_shared_cell_provenance (test_selection.ChooseValidationTests) ... ok
+test_routes_rule1_text_cells_and_locks_ucec_exception_from_valid_only (test_selection.ChooseValidationTests) ... ok
+
+----------------------------------------------------------------------
+Ran 43 tests in 4.398s
+
+OK

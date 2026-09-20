@@ -1,0 +1,9 @@
+请对上一轮文档复审的修订做只读定向复核，不重复全项目调查，不修改文件，不派agent。中文输出PASS或CONCERNS，不打分。上轮没有数据错误，九条意见已逐项修订。请读：
+/Users/wuhao/Desktop/TriModalSurv/experiments/I01_patient_retrieval/results/_experiment_map_audit/claude-review-r1.md
+/Users/wuhao/Desktop/TriModalSurv/experiments/I01_patient_retrieval/results/_experiment_map_audit/review-closure.md
+/Users/wuhao/Desktop/TriModalSurv/experiments/I01_patient_retrieval/results/_experiment_map_audit/verify_documents.py
+/Users/wuhao/Desktop/TriModalSurv/experiments/I01_patient_retrieval/results/_experiment_map_audit/verification.json
+再定向查两文档修订处（无需重审全套历史事实）：
+/Users/wuhao/Desktop/TriModalSurv/experiments/I01_patient_retrieval/results/patient-fixed-padmask-v2-总实验map.md
+/Users/wuhao/Desktop/TriModalSurv/experiments/I01_patient_retrieval/results/Grok-patient-fixed-padmask-v2-诊断prompt.md
+重点：胜平负与所有汇总表现在从原JSON断言；整句K/未来200/patience边界；补齐batch/compensate/valids代码，说明CAP分支不执行；天然缺失含双缺；证据链接迁到核对字节的archive。执行者已经实际运行验证PASS，64表行/16代码节选/600SHA/25配对及25唯一文件hash/25日志重建。你只审修订是否闭合，不声称亲自运行或算hash。若仍有实际阻断明确指出，否则PASS并列非阻断建议即可。
