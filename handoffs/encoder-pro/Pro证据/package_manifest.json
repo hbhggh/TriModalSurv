@@ -1,21 +1,22 @@
 {
   "schema_version": 1,
-  "exclusion": "此清单自身不纳入哈希；ZIP/commit收据保存在包外",
+  "handoff_version": "v2",
+  "exclusion": "清单本身、ZIP与发布收据不纳入清单，避免自引用",
   "files": [
     {
       "path": "给ChatGPT-Pro的结构化Prompt.md",
-      "bytes": 7373,
-      "sha256": "9791a8a0084e50d75a04d6c0678bc8e729c8e6edfa9804a8d476c43f72880d93"
+      "bytes": 8714,
+      "sha256": "b86b8a60132c2581064e6debb5d5f0688df28e552b709360d6ad33950ba19232"
     },
     {
       "path": "Encoder实验先验知识-Pro版.md",
-      "bytes": 12685,
-      "sha256": "200ccd1c2cf5251a64d2f1611d3f8dad6609e978d89916e3392eabadc778d0e8"
+      "bytes": 14245,
+      "sha256": "7f49374676a8e3c2ed20d89305378688bcd70f62d0c6fb68585ce4ebf2d07bb9"
     },
     {
       "path": "Pro交接使用说明.md",
-      "bytes": 2902,
-      "sha256": "9f0ad62e52e4c8c62955f661f88b1662eda8ca09b4181071cfd1654788aeb25a"
+      "bytes": 3338,
+      "sha256": "fb624db24578a01d341f73dfb585dfddc1da38ceaa36e8f32bc706b95d4df29f"
     },
     {
       "path": "Pro证据/Framework-encoder-tabel.excalidraw.svg",
@@ -123,6 +124,11 @@
       "sha256": "afcd6298a940c72bab3bb9c60d87a5e51b8323b4d3d9aaa7961816930f0f8064"
     },
     {
+      "path": "Pro证据/seal_v2.py",
+      "bytes": 3704,
+      "sha256": "029ee86353b9d0af41d83f772c72565d5fe19575d7a82407625cc5dc8e28a6a6"
+    },
+    {
       "path": "Pro证据/source_manifest.json",
       "bytes": 9656,
       "sha256": "a1866db64e5a65c48a7be5be4a5da6e52bbf80a672792d0b74a07a29960013aa"
@@ -131,6 +137,16 @@
       "path": "Pro证据/table1.tex",
       "bytes": 4040,
       "sha256": "7bdfc45595f19595394315a35ead05248fe808edea818c0b04ebdf3c9573c9fd"
+    },
+    {
+      "path": "Pro证据/v2_source_status.json",
+      "bytes": 703,
+      "sha256": "12360e297610146c3eb05e467415a46e1f4544684f0ee67dfbb7a48b80efdc78"
+    },
+    {
+      "path": "Pro证据/v2版本说明.md",
+      "bytes": 3401,
+      "sha256": "1ecf375da0e7ecaa0b3143214fa6b2551197b1bd25d4abd179300d7cd2f40624"
     },
     {
       "path": "Pro证据/verify_package.py",
