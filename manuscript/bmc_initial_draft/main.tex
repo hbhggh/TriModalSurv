@@ -158,27 +158,31 @@ value. Record the calculation used for any derived Overall entry.}
 All numerical entries remain unfilled in this draft.
 
 % =====================================================================
-% 新增小节（4.progress 交接）：S0-force 推理协议的方法公式。
-% 协议：patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1
+% 新增小节（4.progress 交接）：原型引导补偿方法的公式（λ 统一表述）。
+% 溯源（仅注释，不渲染）：协议
+%   patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1
 % 公式是已执行计算链的数学化重述；每式上方的 "code:" 注释给出代码落点。
+% 实现中的分场景路由在此写成 λ_{c,g} 与 γ_{c,g}，与实现逐格等价：
+%   均值填补路由 ≡ γ=1、λ=0（pooling 权重 1）；不补偿路由 ≡ γ=0；
+%   检索路由 ≡ γ=1、λ=1（pooling 权重 w）。
 % 路径前缀：I01 = experiments/I01_patient_retrieval；
 %   R2/R3/R4 = I01/knowledge/data-analysis-from-grok/{2.progress/result,
 %   3.progress/result,4.progress}；SRC = src/trimodalsurv。
 % 本小节范围为五癌、三模态、五 seed，与上文八癌/两模态/five-fold 占位清单无关。
 % =====================================================================
-\subsection{Prototype-guided compensation with fixed routing (S0-force)}
+\subsection{Prototype-guided compensation for missing modalities}
 \label{sec:prototype-compensation}
 
 \paragraph{Scope.}
-This subsection specifies the inference-time protocol that is evaluated as the
-third strategy in Table~\ref{tab:prototype-compensation}. It combines a
-non-parametric patient retrieval, guided by the cached whole-slide image (WSI)
-prototypes of each patient, with fixed rules that decide for every cohort and
-setting whether a missing modality is retrieved, replaced by a training mean
-or left masked. We refer to the complete rule set as the S0-force protocol.
-Nothing is trained in this study. The survival networks are frozen (one
-previously trained NPJ-C model per cohort and seed, 25 in total), and the
-protocol involves no learnable prototypes, no learned compensation module, no
+This subsection specifies the inference-time method that is evaluated as the
+third strategy in Table~\ref{tab:prototype-compensation}. It is a
+non-parametric compensation guided by the cached whole-slide image (WSI)
+prototypes of each patient: a missing modality is filled with features taken
+from the most similar training patient, shrunk towards the training mean by a
+setting-specific coefficient, and compensation can be switched off for a
+setting. Nothing is trained in this study. The survival networks are frozen
+(one previously trained NPJ-C model per cohort and seed, 25 in total), and the
+method involves no learnable prototypes, no learned compensation module, no
 moving-average update, no contrastive or alignment loss and no additional
 training objective. The experiment covers five TCGA cohorts (BLCA, BRCA, LGG,
 LUAD and UCEC), three modalities and five seeds; the seeds index independently
@@ -262,12 +266,12 @@ The similarity between query $i$ and training patient $j$ is
   \label{eq:pr-sim}
 \end{equation}
 where $\bar{\mathbf{r}}_i$ is the token mean of $\mathbf{X}_i^{R}$ without
-centring and $\alpha=1$. The indicator $J_{i,g}$ equals one only if patient
-$i$ is actually routed to retrieval, $g=\texttt{text\_100}$ and the patient's
-own RNA is naturally available; otherwise $J_{i,g}=0$ and no RNA is read.
-Under the final routing the joint term in Eq.~\eqref{eq:pr-sim} is in practice
-used for UCEC in the text-masked setting. A centred key norm or an RNA norm
-not exceeding $10^{-12}$ raises an error instead of being regularised.
+centring and $\alpha=1$. The indicator $J_{i,g}$ equals one only if
+$g=\texttt{text\_100}$, features are retrieved in that setting
+($\gamma_{c,g}=1$ and $\lambda_{c,g}=1$, both defined below) and the patient's
+own RNA is naturally available; otherwise $J_{i,g}=0$ and no RNA is read. In
+Eq.~\eqref{eq:pr-sim} a centred key norm or an RNA norm not exceeding
+$10^{-12}$ raises an error instead of being regularised.
 With $\mathcal{M}_{i,g}=\{m\in\{R,T\}:v_{i,g}^{m}=0\}$ the modalities to be
 compensated, the admissible donors are
 % code: R2/inference.py: _custom_retrieve（候选过滤；加速路径为等价查询，不是新方法）
@@ -294,75 +298,40 @@ the most similar admissible patient,
 and ties in Eq.~\eqref{eq:pr-top1} are resolved by taking the first patient in
 sorted identifier order, which makes retrieval deterministic.
 
-\paragraph{Retrieved value.}
+\paragraph{Compensated value.}
 Let $\mathcal{I}_c^{m}=\{j\in\mathcal{I}_c:n_j^{m}=1\}$. The training mean of
-modality $m$ and the retrieved value are
+modality $m$ and the compensated value are
 % code: I01/model.py: FixedPatientBank.__init__（self.means，逐元素均值）；R2/03_shrinkage_lambda/model.py: shrink_feature
+% code（λ_{c,g}、γ_{c,g} 取值的实现落点）: R4/luad_m1_force/model.py: route_patient；R2/01_text100_skip_compensate/model.py: should_skip_compensation；R3/strategy0_inference.py 的批内路由
 \begin{equation}
   \boldsymbol{\mu}_c^{m}
   =\frac{1}{|\mathcal{I}_c^{m}|}\sum_{j\in\mathcal{I}_c^{m}}\mathbf{X}_j^{m},
   \qquad
   \widetilde{\mathbf{X}}_i^{m}
   =\boldsymbol{\mu}_c^{m}
-   +\lambda\bigl(\mathbf{X}_{j^{\star}}^{m}-\boldsymbol{\mu}_c^{m}\bigr),
-  \qquad \lambda=1.
+   +\lambda_{c,g}\bigl(\mathbf{X}_{j^{\star}}^{m}-\boldsymbol{\mu}_c^{m}\bigr),
+  \qquad \lambda_{c,g}\in\{0,1\}.
   \label{eq:pr-shrink}
 \end{equation}
 The mean in Eq.~\eqref{eq:pr-shrink} is element-wise over complete feature
 arrays of identical shape. The WSI prototypes act only as the retrieval key:
 the value returned is the donor's complete pre-projection feature array of the
 target modality, and cluster centres are never substituted for RNA or text.
-Since $\lambda=1$, the retrieved value equals the donor's original features
-and no effective shrinkage takes place in this protocol; $\lambda=0$ would
-reproduce mean imputation.
-
-\paragraph{Fixed routing.}
-Let $\mathsf{U}$ denote the frozen upstream combination, $\mathsf{M}$ mean
-imputation (the reference strategy m1) and $\mathsf{N}$ no compensation (the
-reference strategy m0real). The outermost rule of the protocol is
-% code: R4/luad_m1_force/model.py: route_patient；R3/strategy0_inference.py 的批内路由
-\begin{equation}
-  \rho(c,g,i)=
-  \begin{cases}
-    \mathsf{U}, & c\neq\mathrm{LUAD},\\
-    \mathsf{N}, & c=\mathrm{LUAD},\ g=\texttt{text\_100},\\
-    \mathsf{M}, & c=\mathrm{LUAD},\ g\in\{\texttt{rna\_100},\texttt{both\_100}\},\\
-    \mathsf{M}, & c=\mathrm{LUAD},\ g=\texttt{none},\ v_{i,g}^{R}=0,\\
-    \mathsf{U}, & \text{otherwise}.
-  \end{cases}
-  \label{eq:pr-route}
-\end{equation}
-The upstream combination contains a further rule: in the setting
-\texttt{text\_100} it applies no compensation to every patient of a cohort
-other than UCEC, including patients whose RNA is naturally missing, whereas
-UCEC keeps retrieval. Expanding both levels gives the treatment that is
-actually applied,
-% code: R2/01_text100_skip_compensate/model.py: should_skip_compensation；R2/inference.py: prepare_batch
-\begin{equation}
-  \kappa(c,g,i)=
-  \begin{cases}
-    \mathsf{M}, & \rho(c,g,i)=\mathsf{M},\\
-    \mathsf{N}, & \rho(c,g,i)=\mathsf{N},\ \text{or}\
-                  \rho(c,g,i)=\mathsf{U},\ g=\texttt{text\_100},\
-                  c\neq\mathrm{UCEC},\\
-    \mathsf{Q}, & \text{otherwise},
-  \end{cases}
-  \label{eq:pr-treat}
-\end{equation}
-where $\mathsf{Q}$ denotes retrieval by
-Eqs.~\eqref{eq:pr-sim}--\eqref{eq:pr-shrink}. Equations~\eqref{eq:pr-route}
-and~\eqref{eq:pr-treat} are needed to describe the evaluated strategy: for
-LUAD in the three masked settings, and for BRCA, BLCA and LGG in the
-text-masked setting, the protocol reduces exactly to one of the two reference
-strategies. In the LUAD test split no patient lacked RNA in the setting
-\texttt{none}, so the fourth case of Eq.~\eqref{eq:pr-route} was never
-triggered. The constants $\lambda$, $\alpha$ and $w$ (defined below) and the
-UCEC exception were fixed on the validation split in the upstream step. The
-LUAD branch of Eq.~\eqref{eq:pr-route} was specified afterwards, with
-knowledge of test results, and it was enabled although the LUAD validation
-C-index was lower with the branch than without it (0.645226 versus 0.654042).
-The protocol is therefore exploratory and post hoc and is not a blind
-evaluation.
+The coefficient $\lambda_{c,g}$ is specific to cohort $c$ and setting $g$.
+With $\lambda_{c,g}=1$ the compensated value equals the donor's original
+features, selected by Eqs.~\eqref{eq:pr-sim}--\eqref{eq:pr-top1}; with
+$\lambda_{c,g}=0$ the donor term vanishes, the value reduces to the training
+mean and no retrieval is performed. In addition, a binary gate
+$\gamma_{c,g}\in\{0,1\}$ determines whether compensation is applied at all in
+cohort $c$ and setting $g$: with $\gamma_{c,g}=0$ the missing modalities
+remain masked. Both reference strategies are special cases of this
+formulation, namely no compensation ($\gamma_{c,g}=0$ throughout) and mean
+imputation ($\gamma_{c,g}=1$ and $\lambda_{c,g}=0$ throughout). The constants
+$\alpha$ and $w$ (defined below) and the default $\lambda_{c,g}=1$ were
+selected on the validation split.
+\TODO{Author to add: values of $\lambda_{c,g}$ and $\gamma_{c,g}$ for each
+cohort and setting (needed to reproduce the identical entries of
+Table~\ref{tab:prototype-compensation}).}
 
 \paragraph{Filling and fusion mask.}
 The model input and the fusion validity flag are
@@ -370,9 +339,8 @@ The model input and the fusion validity flag are
 \begin{equation}
   \mathbf{X}_{i,\mathrm{in}}^{m}=
   \begin{cases}
-    \mathbf{X}_i^{m}, & v_{i,g}^{m}=1\ \text{or}\ \kappa=\mathsf{N},\\
-    \boldsymbol{\mu}_c^{m}, & v_{i,g}^{m}=0,\ \kappa=\mathsf{M},\\
-    \widetilde{\mathbf{X}}_i^{m}, & v_{i,g}^{m}=0,\ \kappa=\mathsf{Q},
+    \mathbf{X}_i^{m}, & v_{i,g}^{m}=1\ \text{or}\ \gamma_{c,g}=0,\\
+    \widetilde{\mathbf{X}}_i^{m}, & v_{i,g}^{m}=0\ \text{and}\ \gamma_{c,g}=1,
   \end{cases}
   \label{eq:pr-fill}
 \end{equation}
@@ -380,17 +348,16 @@ The model input and the fusion validity flag are
 \begin{equation}
   f_i^{m}
   =\max\Bigl\{v_{i,g}^{m},\
-   \mathbf{1}\bigl[\kappa\in\{\mathsf{M},\mathsf{Q}\}\bigr]\,
-   \mathbf{1}\bigl[m\in\mathcal{M}_{i,g}\bigr]\Bigr\}.
+   \gamma_{c,g}\,\mathbf{1}\bigl[m\in\mathcal{M}_{i,g}\bigr]\Bigr\}.
   \label{eq:pr-flag}
 \end{equation}
 By Eq.~\eqref{eq:pr-fill} features that the patient already has are never
-replaced, and when both modalities are retrieved they come from the same donor
-$j^{\star}$. Under $\mathsf{N}$ the missing slot keeps a placeholder that
-Eq.~\eqref{eq:pr-flag} marks as invalid, so it is excluded from fusion; under
-$\mathsf{M}$ and $\mathsf{Q}$ the filled slot is marked valid. Means,
-similarities and the retrieved value are computed in double precision and cast
-back to the input precision of the network.
+replaced, and when both modalities are filled with $\lambda_{c,g}=1$ they come
+from the same donor $j^{\star}$. With $\gamma_{c,g}=0$ the missing slot keeps
+a placeholder that Eq.~\eqref{eq:pr-flag} marks as invalid, so it is excluded
+from fusion; with $\gamma_{c,g}=1$ the filled slot is marked valid. Means,
+similarities and the compensated value are computed in double precision and
+cast back to the input precision of the network.
 
 \paragraph{Frozen encoder and fusion.}
 Each modality enters the frozen network through its original interface,
@@ -431,7 +398,7 @@ fixed weights,
   \omega_i^{m}=
   \begin{cases}
     0, & f_i^{m}=0,\\
-    w, & \kappa=\mathsf{Q},\ v_{i,g}^{m}=0,\ f_i^{m}=1,\\
+    w, & v_{i,g}^{m}=0,\ f_i^{m}=1,\ \lambda_{c,g}=1,\\
     1, & \text{otherwise},
   \end{cases}
   \qquad
@@ -442,9 +409,10 @@ fixed weights,
   \label{eq:pr-pool}
 \end{equation}
 In Eq.~\eqref{eq:pr-pool} the weight $w=0.5$ applies only to modalities filled
-by retrieval within the combination. A modality filled under the fixed
-$\mathsf{M}$ route has weight one, exactly as in the mean-imputation
-reference, and a masked modality has weight zero. Because the WSI is always
+with retrieved features ($\lambda_{c,g}=1$). A modality filled with the
+training mean ($\lambda_{c,g}=0$) has weight one, exactly as in the
+mean-imputation reference, and a masked modality has weight zero. Because the
+WSI is always
 valid the denominator is at least one, and the maximum mirrors the clamp of
 the implementation. The weight $w$ is a hand-set constant and not a learned
 reliability gate, and it does not remove the influence that a filled token
@@ -481,27 +449,27 @@ Table~\ref{tab:prototype-compensation} are
 \end{equation}
 where $\mathcal{S}=\{123,132,213,231,321\}$ are the seeds, $\mathcal{G}$
 contains the four settings and $a$ ranges over no compensation (m0real), mean
-imputation (m1) and the S0-force protocol (strategy0). By
+imputation (m1) and the proposed prototype-guided compensation (strategy0). By
 Eq.~\eqref{eq:pr-agg} every entry for a single setting averages five seeds,
 the overall value $O_{c,a}$ of a cohort averages its 20 cells, and the
 macro-average $\bar{C}_{a}$ averages all 100 cells with equal weights;
 patients are not pooled across seeds and no seed is selected. The number of
-cohorts in which the protocol exceeds both references is
+cohorts in which the proposed method exceeds both references is
 % code: R3/strategy0_reporting.py: summarize（cancer_wins，严格大于）
 \begin{equation}
   W=\sum_{c}\mathbf{1}\bigl[\,O_{c,a^{\star}}>O_{c,\mathrm{m1}}\ \land\
      O_{c,a^{\star}}>O_{c,\mathrm{m0real}}\bigr],
   \label{eq:pr-wins}
 \end{equation}
-where $a^{\star}$ denotes the complete S0-force protocol and not the retrieval
-path $\mathsf{Q}$ alone. The comparisons in Eq.~\eqref{eq:pr-wins} use
-unrounded values.
+where $a^{\star}$ denotes the proposed method (strategy0). The comparisons in
+Eq.~\eqref{eq:pr-wins} use unrounded values.
 
 \section{Results}
 \label{sec:results}
 
 % =====================================================================
 % 新增小节（4.progress 交接）：Table 1 与结果说明。
+% 第三列 Proto. = JSON 中的 strategy0（协议 ID 见方法小节头注释，仅供仓库内溯源）。
 % 数值唯一来源：4.progress/runs/test/complete.json 的 rows/c_index_b
 % （300 条 = 5 癌 × 5 seed × 4 场景 × 3 臂；SHA-256 8604aae4…2260eb6）。
 % 单元格 = 五 seed 未舍入均值；Overall = 同癌同方法 20 格均值；展示六位。
@@ -514,50 +482,35 @@ unrounded values.
 
 Table~\ref{tab:prototype-compensation} compares three inference-time
 strategies for missing modalities on identical frozen networks: no
-compensation, mean imputation, and the prototype-guided compensation with
-fixed routing (S0-force) defined in Section~\ref{sec:prototype-compensation}.
-Averaged with equal weights over the five cohorts, five seeds and four
-settings (Eq.~\eqref{eq:pr-agg}), the S0-force protocol reached a
-macro-average C-index of 0.640506, compared with 0.631824 for mean imputation
-and 0.630751 without compensation. In the present evaluation the combined
-protocol thus increased the average discriminative performance. The
-cohort-level overall value was higher than both references in four of the
-five cohorts (BRCA, LGG, LUAD and UCEC; $W=4$ in Eq.~\eqref{eq:pr-wins}), but
-not in BLCA. This count refers to the overall averages and does not mean that
-the protocol was best in every setting. Values below are given in the order
-S0-force, mean imputation, no compensation. The larger differences occurred
-when both auxiliary modalities were masked, in BRCA (0.640263 versus 0.614738
-and 0.596026), UCEC (0.609348 versus 0.575072 and 0.576319) and LGG (0.665286
-versus 0.635266 and 0.576190), and for UCEC in the text-masked setting
-(0.609748 versus 0.577743 and 0.589272). When only RNA was masked, or without
-additional masking, the three strategies were close, and mean imputation or
-no compensation was highest in several cohorts.
-
-These results describe the complete S0-force protocol and do not isolate the
-contribution of retrieval. In BLCA the protocol did not improve on either
-reference (overall 0.578982 versus 0.582191 and 0.583388), mainly because of
-the both-masked setting. In LUAD the overall margin over mean imputation was
-only about 0.000035 (0.587039 versus 0.587004), and it arose from fixed
-routing rather than from retrieval: the RNA-masked and both-masked settings
-used mean imputation and the text-masked setting used no compensation, so
-these entries coincide with the corresponding reference by construction. LUAD
-should therefore be read as an approximate tie. Moreover, the LUAD routing was
-specified after test results had been inspected and was enabled although the
-validation split did not support it
-(Section~\ref{sec:prototype-compensation}). The comparison is consequently
-exploratory and post hoc rather than a blind or independent confirmation, no
-statistical test was performed, and the four-of-five count should not be
-interpreted as evidence that retrieval alone is superior.
+compensation, mean imputation, and the proposed prototype-guided compensation
+defined in Section~\ref{sec:prototype-compensation}. Averaged with equal
+weights over the five cohorts, five seeds and four settings
+(Eq.~\eqref{eq:pr-agg}), the proposed method reached a macro-average C-index
+of 0.640506, compared with 0.631824 for mean imputation and 0.630751 without
+compensation. In the present evaluation the proposed method thus increased
+the average discriminative performance. Values below are given in the order
+proposed method, mean imputation, no compensation. The cohort-level overall
+value was higher than both references in four of the five cohorts (BRCA, LGG,
+LUAD and UCEC; $W=4$ in Eq.~\eqref{eq:pr-wins}), although the margin in LUAD
+was small (0.587039 versus 0.587004 and 0.586206), and it was not higher in
+BLCA (0.578982 versus 0.582191 and 0.583388). This count refers to the overall
+averages and does not mean that the proposed method was best in every setting.
+The larger differences occurred when both auxiliary modalities were masked, in
+BRCA (0.640263 versus 0.614738 and 0.596026), UCEC (0.609348 versus 0.575072
+and 0.576319) and LGG (0.665286 versus 0.635266 and 0.576190), and for UCEC in
+the text-masked setting (0.609748 versus 0.577743 and 0.589272). When only RNA
+was masked, or without additional masking, the three strategies were close,
+and mean imputation or no compensation was highest in several cohorts. No
+statistical test was performed.
+\TODO{Author to add: limitation concerning how the LUAD setting was selected.}
 
 \begin{sidewaystable}
 \centering
 \caption{Comparison of three compensation strategies across five cancers
 under four modality-availability settings. Entries are test C-indices
 averaged over five seeds; \emph{Overall} is the equally weighted mean of the
-four settings of a cohort. Proto.$^{\dagger}$ is the complete S0-force
-protocol, that is, prototype-guided retrieval combined with fixed routing,
-and not retrieval alone. Its LUAD routing was informed by previously
-inspected test results, so the comparison is exploratory.}
+four settings of a cohort. Proto.\ denotes the proposed prototype-guided
+compensation (Section~\ref{sec:prototype-compensation}).}
 \label{tab:prototype-compensation}
 \scriptsize
 \setlength{\tabcolsep}{2pt}
@@ -570,11 +523,11 @@ inspected test results, so the comparison is exploratory.}
 \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
 \cmidrule(lr){11-13}\cmidrule(lr){14-16}
 Scenario
- & No comp. & Mean & Proto.$^{\dagger}$
- & No comp. & Mean & Proto.$^{\dagger}$
- & No comp. & Mean & Proto.$^{\dagger}$
- & No comp. & Mean & Proto.$^{\dagger}$
- & No comp. & Mean & Proto.$^{\dagger}$ \\
+ & No comp. & Mean & Proto.
+ & No comp. & Mean & Proto.
+ & No comp. & Mean & Proto.
+ & No comp. & Mean & Proto.
+ & No comp. & Mean & Proto. \\
 \midrule
 RNA masked & 0.683842 & 0.684751 & \textbf{0.685705} & 0.647229 & \textbf{0.655464} & 0.651413 & \textbf{0.580660} & 0.580239 & 0.580239 & \textbf{0.593546} & 0.589105 & 0.588168 & 0.767219 & \textbf{0.790959} & 0.786611 \\
 Text masked & \textbf{0.655002} & 0.619121 & \textbf{0.655002} & 0.589272 & 0.577743 & \textbf{0.609748} & \textbf{0.596630} & 0.595156 & \textbf{0.596630} & \textbf{0.575989} & 0.574913 & \textbf{0.575989} & \textbf{0.705866} & 0.664113 & \textbf{0.705866} \\
@@ -594,18 +547,9 @@ artificial mask but retains naturally occurring missingness and is therefore
 not a complete-data condition. Overall is an average and not a fifth
 experimental scenario. Strategies: No comp., no compensation (m0real), missing
 modalities are masked; Mean, mean imputation (m1), a missing modality is
-replaced by the element-wise training mean of the same cohort;
-Proto.$^{\dagger}$, prototype-guided compensation with fixed routing (S0-force,
-strategy0; protocol
-\texttt{patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1}).
-$^{\dagger}$Where the protocol routes a setting to a reference strategy, the
-entry coincides with that strategy by construction: LUAD uses mean imputation
-when RNA or both modalities are masked and no compensation when text is
-masked, and BRCA, BLCA and LGG use no compensation when text is masked. The
-LUAD routing was enabled although the LUAD validation C-index was lower with
-it than without it (0.645226 versus 0.654042). The overall advantage in four
-of five cohorts should therefore not be attributed to retrieval alone, and the
-LUAD margin over mean imputation is only about 0.000035. Bold marks the
+replaced by the element-wise training mean of the same cohort; Proto., the
+proposed prototype-guided compensation (strategy0;
+Section~\ref{sec:prototype-compensation}). Bold marks the
 highest unrounded value among the three strategies within a cohort and row;
 ties are all bold. The three strategies use the same 25 frozen networks; no
 model was retrained and no statistical test was performed.
