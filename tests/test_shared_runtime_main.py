@@ -132,6 +132,41 @@ def test_real_main_artifact_transaction_two_seeds(tmp_path, main_fixture):
     assert produced[0].isdisjoint(produced[1])
 
 
+def test_git_stamp_gate_and_ledger_through_real_main(tmp_path, main_fixture, monkeypatch):
+    from trimodalsurv import gitstamp
+    args_factory, _, _ = main_fixture
+    monkeypatch.delenv(gitstamp.ALLOW_DIRTY_ENV)
+    dataset = TensorDataset(torch.zeros(2, 1))
+    prediction = ({'loss': 0.3, 'c-index': 0.6, 'metric': 0.6},
+                  {'patient_id': ['synthetic-0', 'synthetic-1'], 'idx': [0, 1], 'cancer_type': ['A', 'A'],
+                   'risk': [-1.0, -2.0], 'time': [1.0, 2.0], 'censorship': [0.0, 1.0]})
+    # 固定“源码与 commit 不一致”，不依赖仓库当下是否干净。
+    with patch.object(gitstamp, '_head_blob_hashes', return_value={}):
+        # 未放行：先于任何副作用拒跑——不读数据、不建 run 目录、不写产物。
+        with patch.object(runtime, 'get_dataset_tcga_sur', side_effect=AssertionError('must not load data')):
+            with pytest.raises(gitstamp.DirtyWorktreeError, match='拒绝运行'):
+                runtime.main(args_factory())
+        assert not (tmp_path / 'records').exists() and not (tmp_path / 'out').exists()
+        assert gitstamp.read_ledger(gitstamp.ledger_path()) == []
+        # 放行：dirty 留痕，run 目录自带 git 身份，账本恰好多一行。
+        args = args_factory()
+        args.allow_dirty, args.note = True, '盖章冒烟'
+        with patch.object(runtime, 'get_dataset_tcga_sur', return_value=(dataset, dataset, dataset)), \
+             patch.object(runtime, 'finetune_epoch', lambda *a, **k: {'loss': 0.4, 'c-index': 0.6, 'metric': 0.6}), \
+             patch.object(runtime, 'prediction', lambda *a, **k: prediction):
+            runtime.main(args)
+    (run,) = (tmp_path / 'records').iterdir()
+    git = json.loads((run / 'git.json').read_text())
+    assert (git['source'], len(git['commit']), git['dirty'], git['allow_dirty']) == ('git', 40, True, True)
+    assert run.name.split('_')[1].startswith(git['commit'][:7] + '-dirty-')
+    assert json.loads((run / 'resolved_config.yaml').read_text())['git']['commit'] == git['commit']
+    (row,) = gitstamp.read_ledger(gitstamp.ledger_path())
+    assert (row['commit'], row['dirty'], row['status'], row['seed'], row['cancer'], row['note']) == \
+        (git['commit'], '1', 'done', '123', 'A', '盖章冒烟')
+    assert json.loads(row['metrics']) == {'loss': 0.3, 'c-index': 0.6}
+    assert row['split_id'] == json.loads((run / 'resolved_config.yaml').read_text())['inputs'][0]['sha256'][:12]
+
+
 @pytest.mark.parametrize('kind', ['predictions', 'metrics', 'plots'])
 def test_real_main_rejects_existing_artifact_before_data(tmp_path, main_fixture, kind):
     args_factory, config_factory, _ = main_fixture

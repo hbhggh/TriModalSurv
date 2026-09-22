@@ -12,6 +12,7 @@
 | [test_experiment_presets.py](test_experiment_presets.py) | 实验预设与参数覆盖 |
 | [test_script_dispatch.py](test_script_dispatch.py) | 脚本分发与初始化顺序 |
 | [test_run_provenance.py](test_run_provenance.py) | 运行参数、来源与产物记录 |
+| [test_gitstamp.py](test_gitstamp.py) | commit 身份、拒跑门、无 `.git` 拷贝的 stamp 与可重建账本 |
 | [test_shared_runtime_main.py](test_shared_runtime_main.py) | 公共主流程的受控产物写入与冲突拒绝 |
 
 ## 验证边界

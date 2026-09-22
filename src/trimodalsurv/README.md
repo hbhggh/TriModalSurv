@@ -14,6 +14,7 @@ lastReviewed: '2026-09-17T10:00:57.378Z'
 | [training/](training/)     | 共享训练流程、损失和运行工具；主流程为 `runtime.py` |
 | [evaluation/](evaluation/) | 公共风险计算、评估辅助与缺失评测逻辑                |
 | [config.py](config.py)     | 配置解析及运行参数、来源记录相关能力                |
+| [gitstamp.py](gitstamp.py) | 运行即盖章：commit 身份、拒跑门、可重建账本         |
 
 ## 代码边界
 

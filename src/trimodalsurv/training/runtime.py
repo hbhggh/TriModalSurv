@@ -53,6 +53,9 @@ def parsing_args(argv=None):
     parser.add_argument("--preset", default=None, help="必须显式选择实验配置中的预设")
     parser.add_argument("--run_record_root", default=None, help="独占运行记录目录的父目录")
     parser.add_argument("--dry_run", action="store_true", help="只解析配置和构造模型，不构建数据或写产物")
+    parser.add_argument("--allow-dirty", "--allow_dirty", dest="allow_dirty", action="store_true",
+                        help="调试用：源码未提交也运行；账本标记 dirty，该结果不得进论文")
+    parser.add_argument("--note", default="", help="写入账本的一句话说明")
     parser.add_argument('--seed', type=int, default=123)
     parser.add_argument('--epochs', type=int, default=50)
     parser.add_argument('--batch_size', type=int, default=None)
@@ -744,7 +747,17 @@ def main(args, *, model_factory=None, lifecycle=None):
         modalities = {k: config.parse_to_modality(v) for k, v in config.obj.modality.items()}
         model = (model_factory or load_model)(network_type=args.network_type, device="cpu", modalities=modalities, hidden_size=args.hidden_size, pred_dim=config.obj.network.pred_dim, n_token=config.obj.network.n_token, cancer_types=args.cancer_types.split("_") if args.cancer_types != "None" else None, compensator=args.compensator, fusion_type=args.fusion_type, proto_per_bin=args.proto_per_bin)
         print(json.dumps({"runtime": vars(args), "model": actual_model_spec(model)}, sort_keys=True))
+        # dry-run 只报告盖章状态、不拒绝；走 stderr，不干扰 stdout 的 JSON。
+        from trimodalsurv.config import runtime_source_fingerprints
+        from trimodalsurv.gitstamp import git_identity
+        stamp = git_identity(runtime_source_fingerprints(args))
+        print(f"[git-stamp] source={stamp['source']} commit={stamp['commit']} dirty_files={len(stamp['dirty_files'])}", file=sys.stderr)
         return
+    # 运行即盖章：先于任何副作用；源码与 commit 不一致即拒跑（--allow-dirty 放行并在账本留痕）。
+    from trimodalsurv.config import runtime_source_fingerprints
+    from trimodalsurv.gitstamp import require_git_identity
+    source_fingerprints = runtime_source_fingerprints(args)
+    git_stamp = require_git_identity(source_fingerprints, allow_dirty=getattr(args, 'allow_dirty', False))
     _append_compensator_suffix(args)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     gpu_config = resolve_gpu_config(args)
@@ -852,14 +865,15 @@ def main(args, *, model_factory=None, lifecycle=None):
     if args.train and Path(model_dumper.model_path).exists():
         raise FileExistsError(f"拒绝覆盖已有checkpoint: {model_dumper.model_path}")
     from trimodalsurv.config import (resolved_config, file_fingerprint, write_resolved_config,
-        runtime_source_fingerprints, run_record_root, start_run_record, finalize_run_record)
+        run_record_root, start_run_record, finalize_run_record)
     run_record = None
     if accelerator.is_main_process:
         provenance = resolved_config(
             args, _unwrap_model(model),
             inputs=[file_fingerprint(args.report_label_path), file_fingerprint(args.model_config), file_fingerprint(args.gpu_config)],
-            checkpoints=[], sources=runtime_source_fingerprints(args),
+            checkpoints=[], sources=source_fingerprints,
         )
+        provenance['git'] = git_stamp
         provenance['gpu_config'] = gpu_config
         provenance['historical_training'] = {'status': '本次实际运行配置', 'optimizer': 'Adam', 'weight_decay': 1, 'mixed_precision': 'bf16'}
         write_resolved_config(str(model_dumper.model_path) + '.resolved.json', provenance)
@@ -965,7 +979,7 @@ def main(args, *, model_factory=None, lifecycle=None):
     if accelerator.is_main_process:
         model_dumper.dump_results(dump_dict)
         finalize_run_record(run_record, checkpoint_path=model_dumper.model_path,
-            artifacts=[save_pred_csv, model_dumper.task_path_str + '_results.json'])
+            artifacts=[save_pred_csv, model_dumper.task_path_str + '_results.json'], metrics=dump_dict)
 
 
 

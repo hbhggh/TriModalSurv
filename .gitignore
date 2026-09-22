@@ -28,6 +28,18 @@ tmp_*/
 /experiments/**/results/**/logs/
 /experiments/**/results/**/*.npz
 
+# 运行即盖章：账本与 stamp 都是派生物（账本可由 run 目录重建，stamp 由 HEAD 生成），跨分支唯一，不进 Git。
+/results.tsv
+/results.tsv.tmp
+/GIT_STAMP.json
+/GIT_STAMP.json.tmp
+
+# LaTeX 编译产物：只跟踪 .tex 和最终 .pdf。
+/manuscript/**/*.aux
+/manuscript/**/*.log
+/manuscript/**/*.out
+/manuscript/**/*.synctex.gz
+
 # 全项目重构：原始归档/仓库元数据/本轮传输包保留磁盘，不进源码提交。
 /archive/
 /docs/refactor/**/*.tar

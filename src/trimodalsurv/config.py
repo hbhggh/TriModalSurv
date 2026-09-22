@@ -5,8 +5,8 @@ import argparse
 import copy
 import hashlib
 import json
+import math
 import sys
-import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -147,7 +147,10 @@ def run_record_root(args, *, experiment_dir=None):
 
 def start_run_record(root, payload, *, checkpoint_path, modalities=None, run_id=None):
     """只在真实启动时调用；目录独占，失败留下 pending，不伪装成功。"""
-    run_id = run_id or (datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ') + '-' + uuid.uuid4().hex[:8])
+    from . import gitstamp
+    # 入口已过拒跑门的身份随 payload['git'] 传入；未传的调用方只记录、不拒绝。
+    git = dict(payload.get('git') or gitstamp.git_identity(payload.get('source_fingerprints') or []))
+    run_id = run_id or gitstamp.new_run_id(git)
     if Path(run_id).name != run_id or run_id in {'.', '..'}:
         raise ValueError('run_id 必须是单个目录名')
     target = Path(root).resolve() / run_id
@@ -155,6 +158,8 @@ def start_run_record(root, payload, *, checkpoint_path, modalities=None, run_id=
     target.mkdir(exist_ok=False)
     for name in ('raw', 'logs', 'audit'):
         (target / name).mkdir()
+    git['recorded_at_utc'] = datetime.now(timezone.utc).isoformat()
+    write_resolved_config(target / 'git.json', git)
     write_resolved_config(target / 'resolved_config.yaml', payload)
     write_resolved_config(target / 'source_manifest.json', {'files': payload['source_fingerprints']})
     write_resolved_config(target / 'data_manifest.json', {
@@ -170,10 +175,24 @@ def start_run_record(root, payload, *, checkpoint_path, modalities=None, run_id=
         handle.write('# 本次运行记录\n\n状态见 `audit/completion.json`。缺少完成证据表示尚未正常结束。\n'
                      '旧 checkpoint 输出路径保持不变；本目录记录真实配置、来源及最终产物指纹。\n'
                      '此页不生成科研结论，指标解释须基于本次原始结果。\n')
+    gitstamp.watch_run(target)
     return target
 
 
-def finalize_run_record(run_dir, *, checkpoint_path, artifacts=()):
+def _ledger_metrics(metrics):
+    # 完成记录禁止 NaN；非有限值改写成字符串，指标异常不应让已跑完的运行在收尾时失败。
+    clean = {}
+    for key, value in (metrics or {}).items():
+        try:
+            number = float(value)
+        except (TypeError, ValueError):
+            clean[str(key)] = str(value)
+        else:
+            clean[str(key)] = number if math.isfinite(number) else repr(number)
+    return clean
+
+
+def finalize_run_record(run_dir, *, checkpoint_path, artifacts=(), metrics=None):
     """正常结束时写一次完成证据；checkpoint 缺失或重复提交均拒绝。"""
     target = Path(run_dir)
     checkpoint = file_fingerprint(checkpoint_path)
@@ -192,8 +211,16 @@ def finalize_run_record(run_dir, *, checkpoint_path, artifacts=()):
         copied.append({'source': before, 'copy': after})
     write_resolved_config(target / 'audit' / 'completion.json', {
         'status': 'complete', 'checkpoint': checkpoint, 'artifacts': copied,
+        'metrics': _ledger_metrics(metrics),
         'finished_at_utc': datetime.now(timezone.utc).isoformat(),
     })
+    from . import gitstamp
+    ledger = gitstamp.unwatch_run(target)
+    try:
+        gitstamp.append_ledger(gitstamp.ledger_row(target), path=ledger)
+    except OSError as error:
+        # 账本只是索引，run 目录才是信源；记账失败不得把已完成的运行变成失败。
+        print(f'[git-stamp] 账本追加失败（可用 scripts/git_stamp.py --rebuild-ledger 重建）: {error}', file=sys.stderr)
 
 
 def training_artifact_paths(task_path):
