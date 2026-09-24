@@ -20,3 +20,13 @@ NPJ-C 内部仍对 200 行做 `mean(dim=1)` 再进 `Linear(768, 256)`。200 行�
 ## 为什么结论只到"组合"
 
 只换了 Text，结论支持"换 Text 后的三模态 encoder 组合优于现有组合"，不支持"每个模态的 encoder 都更好"。`none` 下完整患者不走检索，Proto.† 在这些患者上等于基础模型；新臂的 25 个 ckpt 在现行代码上重训，所以 Δ 同时包含 encoder 效应与重训方差。
+
+## 第二轮 A0（bcmbert8192，用户裁决 2026-09-24）
+
+轮 C 只编码前 200 token，而 2506 份报告的 NeuML token 数中位 1044、P95 3059、最大 6822，86.4% 被截断；各癌种 ≤200 token 的覆盖率 LGG 26.5%、BRCA 14.6%、BLCA 12.0%、LUAD 13.2%、UCEC 2.1%。模型卡与 `sentence_bert_config.json`、`tokenizer_config.json` 的上限都是 8192，所以 A0 只改一件事：分词不截断，全文逐份单样本（B=1，无补齐）前向，对全部有效 token 求均值后仍广播回 200 行。
+
+- 与轮 C 的关系：≤200 token 的报告两档特征相同（测试 `test_short_text_identical_across_profiles`）；其余报告只多了被截掉的内容。
+- "广播抹平方差"不成立：mean([v, …, v]) = v，NPJ-C 的 `mean(dim=1)` 之后与单向量完全相同；信息损失只发生在截断处。
+- 解释边界：NeuML 的嵌入微调数据是 PubMed 标题–摘要对（摘要级长度），8192 是配置上限而非"训练过长文档"；A0 不保证修复 LGG/BRCA（LGG 报告最短却在轮 C 跌得最多）。
+- 对照臂 legacytext-rerun：原有 Text 特征在现行代码上重训，拆出重训方差；三臂同配方，Q 只对 Table 1。
+

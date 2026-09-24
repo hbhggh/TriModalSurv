@@ -5,6 +5,7 @@
 所以只能跑 assets/preflight/smoke；replay/test 必须用锁定的真实证据，不在本地运行。
 """
 import csv
+import hashlib
 import json
 import pickle
 from pathlib import Path
@@ -100,7 +101,7 @@ def synthetic(tmp_path_factory, config):
         writer.writeheader()
         writer.writerows({'patient_id': pid, 'cancer': CANCER} for pid in SPLITS['test'])
     (features / 'manifest.json').write_text(json.dumps({
-        'status': 'complete', 'partial': False, 'encoder': encoder_model.spec_from_config(config).as_dict(),
+        'status': 'complete', 'partial': False, 'encoder': encoder_model.spec_from_config(config, 'bcmbert200').as_dict(),
         'patients': patients}))
 
     # 训练前资产锁：先跑 assets 阶段锁定内容，之后才“开始训练”（写 run record）。
@@ -128,7 +129,7 @@ def synthetic(tmp_path_factory, config):
             'state_sha': state_sha, 'record': record}
 
 
-def _start_training_record(results_root, run_id, config, run_root, network, checkpoint):
+def _start_training_record(results_root, run_id, config, run_root, network, checkpoint, profile='bcmbert200'):
     """用训练端真实的 resolved_config() 与 start_run_record() 写 run record（bcmbert200 档案）。
 
     模态路径按 training/runtime.py 的做法在运行根下 resolve（软链被解析到可变资产根）。
@@ -139,12 +140,12 @@ def _start_training_record(results_root, run_id, config, run_root, network, chec
     contract = config['training_contract']
     runtime = {**contract['runtime'], 'seed': 123, 'cancer_types': CANCER}
     inputs = [file_fingerprint(run_root / 'data/TCGA_9523_ex12.csv'),
-              file_fingerprint(evaluate.REPO_ROOT / contract['model_config']['bcmbert200']),
+              file_fingerprint(evaluate.REPO_ROOT / contract['model_config'][profile]),
               file_fingerprint(evaluate.REPO_ROOT / contract['gpu_config'])]
     payload = resolved_config(argparse.Namespace(**runtime), network, inputs=inputs, checkpoints=[], sources=[])
     payload['git'] = {'source': 'git', 'commit': COMMIT, 'branch': None, 'dirty': False}
-    text = str((run_root / contract['text_path']['bcmbert200']).resolve())
-    assert text != str(run_root / contract['text_path']['bcmbert200'])  # 软链确实被解析
+    text = str((run_root / contract['text_path'][profile]).resolve())
+    assert text != str(run_root / contract['text_path'][profile])  # 软链确实被解析
     target = start_run_record(results_root, payload, checkpoint_path=checkpoint, run_id=run_id,
                               modalities={'text': {'path': text, 'feature_dim': 768}})
     gitstamp.unwatch_run(target)  # 本测试不走 finalize，避免退出时记 crash
@@ -172,7 +173,10 @@ def _legacy(synthetic, name, *, text='fake', checkpoint='fake'):
     }
     preflight = synthetic['root'] / f'{name}-preflight.json'
     valid = synthetic['root'] / f'{name}-valid.json'
-    preflight.write_text(json.dumps({'reports': {CANCER: report}}))
+    # 替身证据里的历史 text 患者集合摘要（正式运行取 config.legacy.text_keys_sha256）
+    text_keys = {_cache_name('text', s): hashlib.sha256('\n'.join(sorted(p for p in ids if p not in NO_TEXT)).encode())
+                 .hexdigest() for s, ids in SPLITS.items()}
+    preflight.write_text(json.dumps({'reports': {CANCER: report}, 'text_keys_sha256': text_keys}))
     valid.write_text(json.dumps({'sha256': {k: v for k, v in actual.items() if '_valid_' in k}}))
     return preflight, valid
 
@@ -326,22 +330,22 @@ def test_frozen_worktree_requires_external_mutable_assets(config, tmp_path):
     run_root, external = tmp_path / 'run', tmp_path / 'mutable'
     (run_root / 'data').mkdir(parents=True)
     (run_root / 'tmp_sur_cache').mkdir()
-    assert evaluate.check_run_root_layout(run_root, config) == {'frozen_worktree': False}
+    assert evaluate.check_run_root_layout(run_root, config, profile='bcmbert200') == {'frozen_worktree': False}
     (run_root / 'GIT_STAMP.json').write_text('{}')
     with pytest.raises(ValueError, match='冻结工作树内'):
-        evaluate.check_run_root_layout(run_root, config)
+        evaluate.check_run_root_layout(run_root, config, profile='bcmbert200')
     (run_root / 'tmp_sur_cache').rmdir()
     (external / 'cache').mkdir(parents=True)
     (run_root / 'tmp_sur_cache').symlink_to(external / 'cache', target_is_directory=True)
-    assert evaluate.check_run_root_layout(run_root, config) == {
+    assert evaluate.check_run_root_layout(run_root, config, profile='bcmbert200') == {
         'frozen_worktree': True, 'cache_dir_external': True, 'feature_dir_external': None}
     (run_root / 'data/text_embeddings_bcmbert200').mkdir()
     with pytest.raises(ValueError, match='冻结工作树内'):
-        evaluate.check_run_root_layout(run_root, config)
+        evaluate.check_run_root_layout(run_root, config, profile='bcmbert200')
     (run_root / 'data/text_embeddings_bcmbert200').rmdir()
     (external / 'features').mkdir()
     (run_root / 'data/text_embeddings_bcmbert200').symlink_to(external / 'features', target_is_directory=True)
-    report = evaluate.check_run_root_layout(run_root, config)
+    report = evaluate.check_run_root_layout(run_root, config, profile='bcmbert200')
     assert report['feature_dir_external'] is True
     assert str(tmp_path) not in json.dumps(report)  # 不记录绝对路径（仓库公开）
 
@@ -414,3 +418,223 @@ def test_assets_replaced_after_training_are_refused(synthetic):
             evaluate.main(_preflight_with_lock(synthetic, 'replaced', synthetic['lock']))
     finally:
         manifest_path.write_text(original)
+
+
+# ----------------------------------------------------------------------------- A0（bcmbert8192）
+
+
+PINNED_MODEL_FILES = json.loads((EXPERIMENT_DIR / 'config.yaml').read_text())['text_encoders']['bcmbert8192'][
+    'model_files_sha256']
+
+
+def _write_8192_features(directory, source_cache_dir, run_root, *, manifest_overrides=None, swap=None):
+    """在 directory 写 8192 档的广播特征与 schema 2 manifest；返回 {split: {pid: array}}。
+
+    swap=(旧, 新)：同一 split 内用「新」患者顶替「旧」患者（人数不变的身份漂移，用于负例）。"""
+    rng = np.random.default_rng(8192)
+    patients, per_split = {}, {}
+    for split in SPLITS:
+        with (source_cache_dir / _cache_name('text', split)).open('rb') as handle:
+            pids = sorted(pickle.load(handle))
+        if swap and swap[0] in pids:
+            pids = sorted(set(pids) - {swap[0]} | {swap[1]})
+        per_split[split] = {}
+        for pid in pids:
+            array = np.tile(rng.normal(size=(1, 768)).astype(np.float32) + 0.2, (200, 1))
+            _dump(directory / f'{pid}.pkl', array)
+            per_split[split][pid] = array
+            patients[pid] = {'cancer': CANCER, 'split': split, 'sha256': sha256_file(directory / f'{pid}.pkl')}
+    refs = sorted(path.stem for path in (run_root / 'data/text_embeddings_parsed').glob('*.pkl'))
+    manifest = {'schema_version': 2, 'status': 'complete', 'partial': False, 'profile': 'bcmbert8192',
+                'slot_rows': 200, 'batching': {'batch_size': 1, 'padding': 'longest', 'truncation': False},
+                'encoder': encoder_model.LOCKED_SPECS['bcmbert8192'].as_dict(), 'patients': patients,
+                'labels': {'sha256': sha256_file(run_root / 'data/TCGA_9523_ex12.csv'), 'text_column': 'text'},
+                'reference_dir': {'n_files': len(refs), 'listing_sha256': hashlib.sha256('\n'.join(refs).encode()).hexdigest()},
+                'extractor': {'files': evaluate.extractor_source_hashes(),
+                              'git': {'source': 'stamp', 'commit': COMMIT, 'dirty': False}},
+                'model_files': dict(PINNED_MODEL_FILES)}
+    manifest.update(manifest_overrides or {})
+    (directory / 'manifest.json').write_text(json.dumps(manifest))
+    return per_split
+
+
+def _build_8192_root(base, name, *, text_cache_from_200=False, manifest_overrides=None, swap=None, forge_refs=False):
+    """兄弟运行根：data/ 复制两个 CSV、旧 Text 特征目录（只需文件名），text_embeddings_bcmbert8192 软链到外部目录，
+    全新 tmp_sur_cache。forge_refs：连旧 Text 特征目录也按 swap 改名（只有与历史 text 缓存逐人比对才能发现）。"""
+    import shutil
+    root = base['root']
+    run_root = root / name
+    external = root / f'mutable-{name}' / 'text_embeddings_bcmbert8192'
+    (run_root / 'data').mkdir(parents=True)
+    external.mkdir(parents=True)
+    for csv_name in ('TCGA_9523_ex12.csv', 'missing_manifest_v1.csv'):
+        shutil.copyfile(base['run_root'] / 'data' / csv_name, run_root / 'data' / csv_name)
+    references = run_root / 'data' / 'text_embeddings_parsed'
+    references.mkdir()
+    old_cache = base['run_root'] / 'tmp_sur_cache'
+    for split in SPLITS:
+        with (old_cache / _cache_name('text', split)).open('rb') as handle:
+            for pid in pickle.load(handle):
+                if not (forge_refs and pid == swap[0]):
+                    (references / f'{pid}.pkl').write_bytes(b'')
+    if forge_refs:
+        (references / f'{swap[1]}.pkl').write_bytes(b'')
+    (run_root / 'data' / 'text_embeddings_bcmbert8192').symlink_to(external, target_is_directory=True)
+    cache = run_root / 'tmp_sur_cache'
+    cache.mkdir()
+    features = _write_8192_features(external, old_cache, run_root, manifest_overrides=manifest_overrides, swap=swap)
+    for split in SPLITS:
+        for modality in ('img', 'rna'):
+            shutil.copyfile(old_cache / _cache_name(modality, split), cache / _cache_name(modality, split))
+        if text_cache_from_200:  # 模拟沿用 bcmbert200 的 text 缓存（坑 D2）
+            shutil.copyfile(old_cache / _cache_name('text', split), cache / _cache_name('text', split))
+        else:
+            _dump(cache / _cache_name('text', split), features[split])
+    return run_root
+
+
+@pytest.fixture(scope='module')
+def synthetic_8192(synthetic, config):
+    """A0 档案的端到端夹具：资产锁先于训练记录；ckpt 独立结果根。"""
+    import shutil
+    root = synthetic['root']
+    run_root = _build_8192_root(synthetic, 'run8192')
+    early = {'root': root, 'run_root': run_root}
+    assert evaluate.main(_argv(early, 'assets', 'bcmbert8192', 'exec8192', *_legacy(early, 'lock8192'))) == 0
+    lock = root / 'exec8192' / 'runs' / 'assets' / evaluate.ASSETS_LOCK
+    assert json.loads(lock.read_text())['profile'] == 'bcmbert8192'
+    up = evaluate.Upstream(config)
+    checkpoint_root = root / 'weights8192'
+    checkpoint = up.i01.checkpoint_path(checkpoint_root, CANCER, 123)
+    checkpoint.parent.mkdir(parents=True)
+    shutil.copyfile(synthetic['checkpoint'], checkpoint)
+    ucfg = evaluate.build_upstream_config(config, run_root=run_root, checkpoint_root=checkpoint_root,
+                                          execution_root=root / 'unused8192', device='cpu', gpu_id=None,
+                                          retrieval_backend='reference', batch_size=2, cpu_threads=1)
+    network = up.rt.build_model(ucfg, CANCER, 'cpu')
+    record = _start_training_record(checkpoint_root / 'results', 'run8192', config, run_root, network, checkpoint,
+                                    profile='bcmbert8192')
+    (record / 'audit' / 'completion.json').write_text(json.dumps(
+        {'status': 'complete', 'checkpoint': {'sha256': sha256_file(checkpoint)}}))
+    return {'root': root, 'run_root': run_root, 'checkpoint_root': checkpoint_root, 'checkpoint': checkpoint,
+            'lock': lock, 'state_sha': synthetic['state_sha'], 'record': record}
+
+
+def test_bcmbert8192_assets_lock_preflight(synthetic_8192):
+    preflight, valid = _legacy(synthetic_8192, 'new8192')
+    assert evaluate.main(_argv(synthetic_8192, 'preflight', 'bcmbert8192', 'exec8192', preflight, valid)) == 0
+    ready = json.loads((synthetic_8192['root'] / 'exec8192' / 'runs' / 'preflight' / 'preflight.json').read_text())
+    assert ready['status'] == 'READY_SYNTHETIC' and ready['profile'] == 'bcmbert8192'
+    assert ready['checkpoints'][CANCER]['123']['training']['text_path'] == 'data/text_embeddings_bcmbert8192'
+    assets = ready['assets']
+    assert assets['profile'] == 'bcmbert8192'
+    files = assets['cancers'][CANCER]['files']
+    assert {files[_cache_name('text', s)]['status'] for s in SPLITS} == {'new'}
+
+
+def test_bcmbert8192_rejects_bcmbert200_text_cache(synthetic):
+    run_root = _build_8192_root(synthetic, 'run8192-stale', text_cache_from_200=True)
+    early = {'root': synthetic['root'], 'run_root': run_root}
+    with pytest.raises(ValueError, match='text 缓存条目与特征文件不一致'):
+        evaluate.main(_argv(early, 'assets', 'bcmbert8192', 'exec8192-stale', *_legacy(early, 'stale8192')))
+
+
+@pytest.mark.parametrize('overrides', [{'profile': 'bcmbert200'}, {'schema_version': 1},
+                                       {'batching': {'batch_size': 16, 'padding': 'longest', 'truncation': False}},
+                                       {'slot_rows': 8192}])
+def test_feature_manifest_profile_and_schema_gates(synthetic, overrides):
+    name = 'run8192-gate-' + next(iter(overrides))
+    run_root = _build_8192_root(synthetic, name, manifest_overrides=overrides)
+    early = {'root': synthetic['root'], 'run_root': run_root}
+    with pytest.raises(ValueError, match='manifest'):
+        evaluate.main(_argv(early, 'assets', 'bcmbert8192', f'exec-{name}', *_legacy(early, name)))
+
+
+def _assets_8192(synthetic, name, *extra, **build):
+    run_root = _build_8192_root(synthetic, name, **build)
+    early = {'root': synthetic['root'], 'run_root': run_root}
+    return evaluate.main(_argv(early, 'assets', 'bcmbert8192', f'exec-{name}', *_legacy(early, name), *extra))
+
+
+EXTRACTOR_FILES = {'experiments/I05_text_encoder_bcmbert/model.py': '0' * 64}
+
+
+@pytest.mark.parametrize('name,overrides,match', [
+    ('old-extractor', {'extractor': {'files': EXTRACTOR_FILES, 'git': {'commit': COMMIT, 'dirty': False}}}, '提取器源码'),
+    ('dirty-extractor', 'dirty', '干净源码身份'),
+    ('model-files', {'model_files': {**PINNED_MODEL_FILES, 'model.safetensors': '1' * 64}}, '模型文件哈希'),
+    ('no-model-files', {'model_files': {}}, '模型文件哈希'),
+    ('labels', {'labels': {'sha256': '2' * 64}}, '标签哈希'),
+    ('listing', {'reference_dir': {'listing_sha256': '3' * 64}}, '清单'),
+])
+def test_feature_manifest_generation_identity_gates(synthetic, name, overrides, match):
+    """Codex 首审 finding 2/3：旧版或 dirty 提取器、换过的模型文件、别的标签或旧特征清单生成的 manifest 都拒绝。"""
+    if overrides == 'dirty':
+        overrides = {'extractor': {'files': evaluate.extractor_source_hashes(),
+                                   'git': {'commit': COMMIT, 'dirty': True}}}
+    with pytest.raises(ValueError, match=match):
+        _assets_8192(synthetic, f'run8192-id-{name}', manifest_overrides=overrides)
+
+
+def test_feature_manifest_split_must_match_frozen_labels(synthetic):
+    """manifest 自报的 split 与冻结标签不同即拒（缓存按同样的错误 split 自洽也没用）。"""
+    run_root = _build_8192_root(synthetic, 'run8192-split')
+    path = run_root / 'data/text_embeddings_bcmbert8192/manifest.json'
+    manifest = json.loads(path.read_text())
+    manifest['patients']['V0']['split'] = 'train'
+    path.write_text(json.dumps(manifest))
+    early = {'root': synthetic['root'], 'run_root': run_root}
+    with pytest.raises(ValueError, match='冻结标签不符'):
+        evaluate.main(_argv(early, 'assets', 'bcmbert8192', 'exec-split', *_legacy(early, 'split')))
+
+
+def test_equal_count_patient_identity_drift_is_refused(synthetic):
+    """等人数顶替：train 里用无旧 Text 的 T5 顶替 T0，manifest 与缓存自洽、各计数不变 → 仍须拒绝。"""
+    with pytest.raises(ValueError, match='患者集合'):
+        _assets_8192(synthetic, 'run8192-drift', swap=('T0', 'T5'))
+
+
+def test_synced_reference_manifest_cache_tampering_is_refused_without_arguments(synthetic):
+    """复审 round2：旧 Text 特征目录、manifest、新特征、缓存一起按等人数换名（T0→T5），标签与计数都自洽；
+    不传任何额外参数，也必须由固定的历史 text 患者集合摘要拒绝。"""
+    with pytest.raises(ValueError, match='历史 text 缓存逐人不同'):
+        _assets_8192(synthetic, 'run8192-forged', swap=('T0', 'T5'), forge_refs=True)
+
+
+def test_formal_runs_take_text_key_digests_from_config(config, tmp_path):
+    """正式运行（不覆盖历史证据）只用 config 固定的 15 个摘要；配置缺项即拒绝加载。"""
+    legacy = evaluate.load_legacy(config)
+    assert legacy['text_keys_sha256'] == config['legacy']['text_keys_sha256'] and len(legacy['text_keys_sha256']) == 15
+    broken = json.loads((EXPERIMENT_DIR / 'config.yaml').read_text())
+    broken['legacy']['text_keys_sha256'].pop('text_sur_valid_all_LGG.pkl')
+    path = tmp_path / 'config.yaml'
+    path.write_text(json.dumps(broken))
+    with pytest.raises(ValueError, match='text_keys_sha256'):
+        evaluate.load_config(path)
+
+
+def test_bcmbert8192_training_record_must_point_to_8192_features(synthetic_8192, config):
+    legacy = {'preflight': json.loads(_legacy(synthetic_8192, 'inputs8192')[0].read_text())}
+    kwargs = dict(profile='bcmbert8192', cancer=CANCER, seed=123, run_root=synthetic_8192['run_root'])
+    good = evaluate.check_training_record(synthetic_8192['record'], config, legacy, **kwargs)
+    assert good['text_path'] == 'data/text_embeddings_bcmbert8192'
+    # 同一份 8192 记录拿去当 bcmbert200 档案核对：Text 目录与 model_config 都对不上
+    with pytest.raises(ValueError):
+        evaluate.check_training_record(synthetic_8192['record'], config, legacy,
+                                       **{**kwargs, 'profile': 'bcmbert200'})
+
+
+def test_frozen_worktree_layout_checks_the_profiles_feature_dir(config, tmp_path):
+    run_root, external = tmp_path / 'run', tmp_path / 'mutable'
+    (run_root / 'data').mkdir(parents=True)
+    (external / 'cache').mkdir(parents=True)
+    (run_root / 'tmp_sur_cache').symlink_to(external / 'cache', target_is_directory=True)
+    (run_root / 'GIT_STAMP.json').write_text('{}')
+    (run_root / 'data/text_embeddings_bcmbert8192').mkdir()  # 8192 特征目录落在工作树内
+    with pytest.raises(ValueError, match='冻结工作树内'):
+        evaluate.check_run_root_layout(run_root, config, profile='bcmbert8192')
+    # 200 档案不看 8192 的目录
+    assert evaluate.check_run_root_layout(run_root, config, profile='bcmbert200')['feature_dir_external'] is None
+    assert evaluate.check_run_root_layout(run_root, config, profile='legacytext-rerun') == {
+        'frozen_worktree': True, 'feature_dir_external': None, 'cache_dir_external': True}
+

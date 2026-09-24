@@ -1,4 +1,4 @@
-"""测试用的最小分词器与编码器替身：只实现方案 A 用到的接口，不依赖 transformers。"""
+"""测试用的最小分词器与编码器替身：只实现 I05 编码器用到的接口（max_length / longest / 不补齐，截断可关），不依赖 transformers。"""
 from types import SimpleNamespace
 
 import numpy as np
@@ -21,11 +21,14 @@ class FakeTokenizer:
             if truncation and max_length is not None:
                 body = body[:max_length - 2]
             sequences.append([CLS, *body, SEP] if add_special_tokens else body)
-        if padding == 'max_length':
-            masks = [[1] * len(ids) + [0] * (max_length - len(ids)) for ids in sequences]
-            sequences = [ids + [PAD] * (max_length - len(ids)) for ids in sequences]
+        if padding in ('max_length', 'longest', True):
+            width = max_length if padding == 'max_length' else max(len(ids) for ids in sequences)
+            masks = [[1] * len(ids) + [0] * (width - len(ids)) for ids in sequences]
+            sequences = [ids + [PAD] * (width - len(ids)) for ids in sequences]
         else:
             masks = [[1] * len(ids) for ids in sequences]
+            if return_tensors == 'pt' and len({len(ids) for ids in sequences}) > 1:
+                raise ValueError('长短不一的序列不补齐就不能转成张量')  # 与 HF 行为一致
         if return_tensors == 'pt':
             import torch
             return {'input_ids': torch.tensor(sequences, dtype=torch.long),

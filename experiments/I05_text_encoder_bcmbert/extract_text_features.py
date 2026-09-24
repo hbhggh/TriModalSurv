@@ -307,12 +307,13 @@ def cmd_audit(args, *, tokenizer=None) -> dict:
                     'reference_outside_labels': plan['reference_outside_labels']},
         'reference_features': audit_reference(args.reference_dir, plan['targets'], records),
         'environment': environment(),
-        'encoder': encoder_model.spec_from_config(config).as_dict(),
+        'profile': args.profile,
+        'encoder': encoder_model.spec_from_config(config, args.profile).as_dict(),
     }
     if tokenizer is None and args.with_tokenizer:
         from transformers import AutoTokenizer
         from huggingface_hub import snapshot_download
-        spec = encoder_model.spec_from_config(config)
+        spec = encoder_model.spec_from_config(config, args.profile)
         snapshot = snapshot_download(repo_id=spec.model_id, revision=spec.revision,
                                      allow_patterns=['tokenizer*', 'special_tokens_map.json', 'config.json'])
         tokenizer = AutoTokenizer.from_pretrained(snapshot)
@@ -326,6 +327,9 @@ def cmd_audit(args, *, tokenizer=None) -> dict:
         report['token_lengths'] = {
             'summary': summarize(lengths),
             'fraction_truncated_at_200': sum(length > encoder_model.MAX_LENGTH for length in lengths) / len(lengths),
+            'profile_max_length': encoder_model.LOCKED_SPECS[args.profile].max_length,
+            'n_over_profile_max_length': sum(length > encoder_model.LOCKED_SPECS[args.profile].max_length
+                                             for length in lengths),
             'n_short_reports': len(short),
             'short_reports_with_all_old_rows_nonzero': sum(
                 per_patient[pid]['n_nonzero_rows'] == per_patient[pid]['n_rows'] for pid, _ in short),
@@ -352,9 +356,18 @@ def cmd_audit(args, *, tokenizer=None) -> dict:
     return report
 
 
+def resolve_batch_size(cli, locked: int) -> int:
+    """批大小由档案锁定；CLI 给了不同的值就拒绝，而不是覆盖（它决定补齐组成与浮点复现）。"""
+    if cli is not None and int(cli) != int(locked):
+        raise ValueError(f'--batch-size {cli} 与档案锁定的 {locked} 不同；不要传 --batch-size')
+    return int(locked)
+
+
 def cmd_extract(args, *, backend=None) -> dict:
     config = load_config(args.config)
-    spec = encoder_model.spec_from_config(config)
+    spec = encoder_model.spec_from_config(config, args.profile)
+    section = config['text_encoders'][args.profile]
+    batch_size = resolve_batch_size(args.batch_size, section['batch_size'])
     out_dir, reference_dir = Path(args.out_dir), Path(args.reference_dir)
     _check_output_dir(out_dir, reference_dir)
     records, label_meta = read_labels(args.labels, text_column=args.text_column, cancers=tuple(args.cancers))
@@ -377,19 +390,28 @@ def cmd_extract(args, *, backend=None) -> dict:
                                                                 local_files_only=args.local_files_only)
     else:
         tokenizer, model, snapshot = backend
+    model_files = {}
+    if snapshot is not None:
+        for name in MODEL_FILES:
+            candidate = Path(snapshot) / name
+            if candidate.is_file():
+                model_files[name] = sha256_file(candidate)
+        # 先于任何编码：锁定 revision 下的模型文件必须逐个等于 config 固定的哈希（Codex 首审 finding 2）
+        if model_files != section['model_files_sha256']:
+            raise ValueError('下载到的模型文件与 config 锁定的 sha256 不同，拒绝提取')
     encoder = encoder_model.FrozenTextEncoder(tokenizer, model, spec=spec, device=args.device,
-                                              batch_size=args.batch_size)
+                                              batch_size=batch_size, rows=encoder_model.SLOT_ROWS)
     targets = sorted(targets, key=lambda pid: (records[pid]['cancer'], pid))
     texts = [records[pid]['text'] for pid in targets]
     lengths = encoder.token_lengths(texts)
     out_dir.mkdir(parents=True, exist_ok=True)
     patients = {}
-    chunk = max(args.batch_size, 1) * 4
+    chunk = max(batch_size * 4, 64)  # 只影响进度打印粒度，不影响编码的批次组成
     for start in range(0, len(targets), chunk):
         batch_ids = targets[start:start + chunk]
         features, valid_counts = encoder.encode_with_counts(texts[start:start + chunk])
         for offset, (pid, array, count) in enumerate(zip(batch_ids, features, valid_counts)):
-            encoder_model.check_feature(array, context=pid, max_length=spec.max_length,
+            encoder_model.check_feature(array, context=pid, rows=encoder_model.SLOT_ROWS,
                                         hidden_size=spec.hidden_size)
             path = out_dir / f'{pid}.pkl'
             digest = write_pickle_exclusive(path, array)
@@ -398,6 +420,8 @@ def cmd_extract(args, *, backend=None) -> dict:
                     or not np.array_equal(reloaded, array) or sha256_file(path) != digest):
                 raise ValueError(f'{pid}: 回读复验失败')
             length = lengths[start + offset]
+            if not spec.truncation and count != length:
+                raise ValueError(f'{pid}: 不截断档案的有效 token 数 {count} != 全文 token 数 {length}')
             patients[pid] = {'cancer': records[pid]['cancer'], 'split': records[pid]['split'],
                              'sha256': digest, 'n_valid_tokens': count, 'n_tokens_untruncated': length,
                              'truncated': bool(length > spec.max_length),
@@ -406,20 +430,15 @@ def cmd_extract(args, *, backend=None) -> dict:
     counts = defaultdict(Counter)
     for record in patients.values():
         counts[record['cancer']][record['split']] += 1
-    model_files = {}
-    if snapshot is not None:
-        for name in MODEL_FILES:
-            candidate = Path(snapshot) / name
-            if candidate.is_file():
-                model_files[name] = sha256_file(candidate)
-    section = config['text_encoder']
     manifest = {
-        'schema_version': 1, 'status': 'complete', 'partial': args.limit is not None,
-        'experiment': config['experiment'],
-        'encoder': {**spec.as_dict(), 'base_model': section['base_model'], 'padding': section['padding'],
-                    'padding_side': section['padding_side'], 'truncation': section['truncation'],
+        'schema_version': 2, 'status': 'complete', 'partial': args.limit is not None,
+        'experiment': config['experiment'], 'profile': args.profile, 'slot_rows': encoder_model.SLOT_ROWS,
+        # padding / truncation 取自代码实际使用的 spec，而不是抄 config
+        'encoder': {**spec.as_dict(), 'base_model': section['base_model'], 'padding_side': section['padding_side'],
                     'special_tokens': section['special_tokens'], 'pad_rows': section['pad_rows'],
                     'dtype': section['dtype']},
+        'batching': {'batch_size': batch_size, 'padding': spec.padding, 'truncation': spec.truncation,
+                     'order': 'sorted by (cancer, patient_id)'},
         'pickle_protocol': PICKLE_PROTOCOL,
         'labels': {'path': Path(args.labels).as_posix(), 'sha256': sha256_file(args.labels),
                    'text_column': args.text_column},
@@ -446,6 +465,9 @@ def build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest='command', required=True)
     for name in ('audit', 'extract'):
         item = sub.add_parser(name)
+        item.add_argument('--profile', choices=tuple(encoder_model.LOCKED_SPECS),
+                          required=(name == 'extract'), default=None if name == 'extract' else 'bcmbert200',
+                          help='特征档案（config.text_encoders）；extract 必须显式给出')
         item.add_argument('--labels', type=Path, required=True, help='标签 CSV（默认运行口径 data/TCGA_9523_ex12.csv）')
         item.add_argument('--reference-dir', type=Path, required=True, help='旧 Text 特征目录 data/text_embeddings_parsed')
         item.add_argument('--text-column', default='text')
@@ -457,10 +479,10 @@ def build_parser() -> argparse.ArgumentParser:
     audit.add_argument('--legacy-preflight', type=Path)
     audit.add_argument('--legacy-valid-source', type=Path)
     extract = sub.choices['extract']
-    extract.add_argument('--out-dir', type=Path, required=True, help='新特征目录 data/text_embeddings_bcmbert200')
+    extract.add_argument('--out-dir', type=Path, required=True, help='新特征目录（档案的 feature_dir 所指向的外部目录）')
     extract.add_argument('--device', default='cuda', help='真实提取必须 cuda；cpu 只用于注入替身后端的测试')
     extract.add_argument('--gpu-id', type=int, help='物理卡号，先用 tools/gpu_survey.py 选卡')
-    extract.add_argument('--batch-size', type=int, default=16)
+    extract.add_argument('--batch-size', type=int, default=None, help='由档案锁定；给出不同值即拒绝')
     extract.add_argument('--limit', type=int, help='冒烟：每癌只取前 N 人，manifest 标 partial')
     extract.add_argument('--hf-cache-dir')
     extract.add_argument('--local-files-only', action='store_true')

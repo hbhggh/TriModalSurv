@@ -148,7 +148,7 @@ def test_test_gates(tmp_path):
     kwargs = dict(replay_record=replay, review_record=review, approval_record=approval, source_digest=digest,
                   protocol_id=protocol, commit=commit)
     assert set(evaluate.check_test_gates(**kwargs)) == {'replay_record_sha256', 'review_record_sha256',
-                                                        'user_approval_sha256'}
+                                                        'rebind_record_sha256', 'user_approval_sha256'}
     for field, value in (('reviewer', 'Claude'), ('decision', 'CONCERNS'), ('source_hashes_sha256', 'b' * 64),
                          ('protocol_id', 'other'), ('commit', 'd' * 40)):
         review.write_text(json.dumps({**good_review, field: value}))
@@ -173,6 +173,91 @@ def test_test_gates(tmp_path):
     assert evaluate.check_test_gates(**kwargs)
     with pytest.raises(ValueError):
         evaluate.check_test_gates(**{**kwargs, 'review_record': None})
+    rebind = tmp_path / 'rebind.json'
+    rebind.write_text('{}')
+    with pytest.raises(ValueError, match='不应再给换绑记录'):  # 审查已直接绑定 S 时不接受多余的换绑
+        evaluate.check_test_gates(**kwargs, rebind_record=rebind)
+
+
+def test_test_gates_review_on_candidate_needs_tree_rebind(tmp_path):
+    """Codex 首审 finding 1：审查在候选 H、正式运行在 S（commit 不同、tree 相同）时，
+    必须有绑定这份审查记录且证明 tree(H)=tree(S) 的换绑记录，用户授权还要引用它。"""
+    digest, protocol, candidate, frozen, tree = 'a' * 64, 'proto', 'b' * 40, 'c' * 40, 'e' * 40
+    replay, review = tmp_path / 'replay.json', tmp_path / 'review.json'
+    rebind, approval = tmp_path / 'rebind.json', tmp_path / 'approval.json'
+    replay.write_text(json.dumps({'status': 'IDENTICAL', 'source_hashes_sha256': digest}))
+    review.write_text(json.dumps({'reviewer': 'Codex', 'decision': 'PASS', 'source_hashes_sha256': digest,
+                                  'protocol_id': protocol, 'commit': candidate}))
+    good_rebind = {'kind': 'review_rebind', 'review_record_sha256': evaluate.sha256_file(review),
+                   'review_commit': candidate, 'commit': frozen, 'review_tree': tree, 'commit_tree': tree}
+    rebind.write_text(json.dumps(good_rebind))
+
+    def good_approval():
+        return {'authority': 'user', 'decision': 'APPROVE_FORMAL_TEST', 'stage': 'test', 'protocol_id': protocol,
+                'source_hashes_sha256': digest, 'commit': frozen, 'review_record_sha256': evaluate.sha256_file(review),
+                'rebind_record_sha256': evaluate.sha256_file(rebind), 'approved_at': '2026-09-24T10:00:00+08:00'}
+
+    approval.write_text(json.dumps(good_approval()))
+    kwargs = dict(replay_record=replay, review_record=review, approval_record=approval, source_digest=digest,
+                  protocol_id=protocol, commit=frozen)
+    gates = evaluate.check_test_gates(**kwargs, rebind_record=rebind)
+    assert gates['rebind_record_sha256'] == evaluate.sha256_file(rebind)
+    with pytest.raises(ValueError, match='review-rebind-record'):  # H≠S 而没有换绑记录
+        evaluate.check_test_gates(**kwargs)
+    for field, value in (('kind', 'other'), ('review_record_sha256', '0' * 64), ('review_commit', 'd' * 40),
+                         ('commit', 'd' * 40), ('commit_tree', 'f' * 40), ('review_tree', 'short')):
+        rebind.write_text(json.dumps({**good_rebind, field: value}))
+        approval.write_text(json.dumps(good_approval()))  # 授权引用的是被改后的换绑记录，只剩换绑本身的问题
+        with pytest.raises(ValueError, match='换绑记录'):
+            evaluate.check_test_gates(**kwargs, rebind_record=rebind)
+    rebind.write_text(json.dumps(good_rebind))
+    approval.write_text(json.dumps({**good_approval(), 'rebind_record_sha256': None}))  # 授权没引用换绑记录
+    with pytest.raises(ValueError, match='用户授权记录'):
+        evaluate.check_test_gates(**kwargs, rebind_record=rebind)
+
+
+def test_rebind_tool_proves_tree_equality_with_git(tmp_path):
+    """tools/rebind_review.py：tree 相同且 S 在 main 上才写换绑记录；verify 用 git 重算。"""
+    import subprocess
+    from experiments.I05_text_encoder_bcmbert.tools import rebind_review
+
+    repo = tmp_path / 'repo'
+    repo.mkdir()
+
+    def git(*args):
+        return subprocess.run(['git', '-C', str(repo), '-c', 'user.name=t', '-c', 'user.email=t@t', *args],
+                              check=True, stdout=subprocess.PIPE, text=True).stdout.strip()
+
+    git('init', '-q', '-b', 'main')
+    (repo / 'a.py').write_text('x = 1\n')
+    git('add', 'a.py')
+    git('commit', '-qm', 'base')
+    git('checkout', '-qb', 'dev')
+    (repo / 'a.py').write_text('x = 2\n')
+    git('commit', '-qam', 'h1')
+    candidate = git('rev-parse', 'HEAD')
+    git('checkout', '-q', 'main')
+    git('merge', '-q', '--squash', 'dev')
+    git('commit', '-qm', 'squash')
+    frozen = git('rev-parse', 'HEAD')
+    review = tmp_path / 'review.json'
+    review.write_text(json.dumps({'reviewer': 'Codex', 'decision': 'PASS', 'commit': candidate}))
+    record = rebind_review.build_rebind(review, frozen, repo=repo)
+    assert record['review_tree'] == record['commit_tree'] and record['commit'] == frozen
+    out = tmp_path / 'rebind.json'
+    out.write_text(json.dumps(record))
+    assert rebind_review.verify_rebind(review, out, repo=repo)['commit'] == frozen
+    out.write_text(json.dumps({**record, 'commit_tree': 'f' * 40}))
+    with pytest.raises(ValueError, match='不符'):
+        rebind_review.verify_rebind(review, out, repo=repo)
+    (repo / 'a.py').write_text('x = 3\n')  # S 之后 main 再前进一个不同的 tree
+    git('commit', '-qam', 'drift')
+    with pytest.raises(ValueError, match='tree 不同'):
+        rebind_review.build_rebind(review, git('rev-parse', 'HEAD'), repo=repo)
+    git('checkout', '-q', 'dev')
+    git('commit', '-q', '--allow-empty', '-m', 'same tree, off main')
+    with pytest.raises(ValueError, match='不在 main'):  # tree 相同但不在 main 上
+        rebind_review.build_rebind(review, git('rev-parse', 'dev'), repo=repo)
 
 
 def test_argument_rules(config):

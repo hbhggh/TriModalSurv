@@ -2,7 +2,7 @@
 
 **问题**：只把 Text 特征提取器换成冻结的 `NeuML/bioclinical-modernbert-base-embeddings`（revision `048ad4491de0fb4e2695bfe4705da67caf4804b8`），NPJ-C、原型检索方法（S0-force）与训练配方全部不变，在历史 `none`（保留天然缺失）下，五癌五 seed 平均 B 口径 C-index 能否相对论文 Table 1 `None / Proto.†` 严格胜出至少 4/5。
 
-**当前阶段**：**已收官（negative）**。Phase 0–5 完成，none 严格胜 2/5，Q 未达标，结果账本见 [experiments/BioClinical ModernBERT/results/index.md](../BioClinical%20ModernBERT/results/index.md)，结果表已回传论文目录；节点二审查的问题均已补齐，用户 2026-09-24 裁决按 negative 收官，代码保留在仓库。以下为开发阶段记录：Codex 候选审查（exp 分支 `347612b`）给出 4 项 high，复核 r2（`2f374e7`）确认其中 3 项落地，又提出 2 项 high（Text 路径格式、commit 可被 CLI 解耦）；复核 r3（`14f722e`）再提 2 项 high（Text 路径不能证明特征内容、替身证据参数仍能打开 commit 与 CPU 旁路）。全部已按下文修复。用户裁决审查只审一次，不再复审；squash、freeze 后由执行方机械核对 provenance，再由用户逐道授权。
+**当前阶段**：**第二轮 A0 进行中（2026-09-24）**。轮 C（bcmbert200，前 200 token）已按 negative 收官（none 严格胜 2/5），账本见 [experiments/BioClinical ModernBERT/results/index.md](../BioClinical%20ModernBERT/results/index.md)；第二轮新增档案 `bcmbert8192`（全文 ≤8192 token）与对照臂 `legacytext-rerun`，见下文「第二轮 A0」。
 
 **分工（用户裁决 2026-09-23）**：代码开发由 Claude Code（Claude Opus 5.5）执行；Codex 只审核生成的计划书与实验结果，不参与任何代码生成。
 
@@ -106,7 +106,35 @@ test 需要三份记录，都是 JSON：
   {"authority": "user", "decision": "APPROVE_FORMAL_TEST", "stage": "test", "protocol_id": "<bcmbert200 协议 ID>", "source_hashes_sha256": "<preflight 打印的值>", "commit": "<冻结的 main commit>", "review_record_sha256": "<上面审查记录文件的 sha256>", "approved_at": "<ISO 8601 时间>"}
   ```
 
+- `--review-rebind-record`（第二轮起，Codex 首审 finding 1）：审查发生在候选 H、正式运行在 squash 后的 S 时，审查记录的 `commit` 写 H，另用 `tools/rebind_review.py build --review-record <审查记录> --commit <S> --out <换绑记录>` 在有 `.git` 的机器上生成换绑记录（git 重算 tree(H) == tree(S) 且 S 在 main 上才写出；`verify` 子命令可复核）。此时用户授权记录还要加一个键 `"rebind_record_sha256": "<换绑记录的 sha256>"`；审查记录直接绑定 S 时不给换绑记录，授权也不写这个键。
+
 **Phase 5 渲染**：`tools/render_encoder_tables.py --new <输出根>/runs/test/complete.json --out-dir "experiments/BioClinical ModernBERT/results/<run_id>/"`；按用户裁决同时渲染到 `manuscript/消融实验/2.innovation-secode-part- Encoder/4.BioClinical ModernBERT-程序性知识/`。
+
+## 第二轮 A0：bcmbert8192 与 legacytext-rerun（用户裁决 2026-09-24）
+
+**改了什么**：同一权重、同一 revision，分词不再截断到 200，而是全文（≤8192 token，2506 份报告最长 6822）逐份单样本前向、不补齐，对全部有效 token 求均值后广播回 200 行 → `[200,768]`。槽位、NPJ-C、原型检索方法、训练配方全部不变。对照臂 `legacytext-rerun` 用原有 Text 特征在现行代码上按同一配方重训 25 个，用来拆分重训方差。
+
+**三臂的比较口径**：Q 只看 bcmbert8192 vs Table 1 None/Proto.†；bcmbert8192 vs 轮 C bcmbert200（只差上下文长度）与 vs legacytext-rerun（只差 Text 管线）是同代码对照，只作信息性报告。
+
+**顺序（AGENTS.md「Git 工作流」第 4–8 条）**：dev 上 `scripts/gitflow.sh candidate` → Codex 审查（`scripts/codex_review.sh`）→ **从候选 H 的干净快照上机冒烟**（`git archive H` + `GIT_STAMP.json` commit=H）→ 冒烟通过后在主目录 `squash` → `freeze` → 正式实验从 run worktree 部署，资产锁在 S 上重写。
+
+**运行根布局**（两份，均按上文「运行根布局」只读；可变资产在运行根外）：
+
+| 运行根 | `data/` 里额外的软链 | `tmp_sur_cache` |
+|---|---|---|
+| bcmbert8192 | `text_embeddings_bcmbert8192` → `<可变资产根>/text_embeddings_bcmbert8192/` | 全新目录：复制 30 个历史 img/rna 缓存，text 由预热从 8192 特征生成。**不得**复用 bcmbert200 的 text 缓存（缓存键不含特征路径，坑 D2；assets 会逐条拒绝） |
+| legacytext-rerun | 无（用 `text_embeddings_parsed`） | 历史 45 个缓存（img/rna/text 三模态 × 三 split） |
+
+**命令**（占位符同上文；每个 GPU 阶段前先 `tools/gpu_survey.py` 选卡）：
+
+1. 审计（只读，统计 NeuML 分词长度）：`extract_text_features.py audit --profile bcmbert8192 --with-tokenizer --labels data/TCGA_9523_ex12.csv --reference-dir data/text_embeddings_parsed --out <审计输出>/a0-audit.json`
+2. 提取（B=1 由档案锁定，不要传 `--batch-size`）：`extract_text_features.py extract --profile bcmbert8192 --labels data/TCGA_9523_ex12.csv --reference-dir data/text_embeddings_parsed --out-dir <可变资产根>/text_embeddings_bcmbert8192 --device cuda --gpu-id <GPU>`；完成后把特征目录设为只读。
+3. 预热 text 缓存：`scripts/train_launcher.py --_prewarm-cancer <癌种> --model-config experiments/I05_text_encoder_bcmbert/model_config_bcmbert8192.yml --label data/TCGA_9523_ex12.csv`
+4. 资产锁：`evaluate.py --profile bcmbert8192 --stage assets --run-root <8192 运行根> --execution-root <输出根>/exec`；legacytext 同理（`--profile legacytext-rerun`，运行根换成 legacytext 的）。schema 2 的特征 manifest 在这里还要过三道生成身份门（Codex 首审 finding 2/3）：提取器源码闭包与当前代码逐字节相同且 `dirty=false`；`model_files` 等于 config 固定的 8 个模型文件 sha256（提取器在编码前也核对）；标签哈希等于冻结标签，患者集合恰为「标签 ∩ `text_embeddings_parsed`」，逐人癌种 / split 等于冻结标签，text 缓存每个 split 的患者由「有 WSI、有旧特征、标签 split 相符」独立推出后逐人比对，并且其集合摘要必须等于 config `legacy.text_keys_sha256` 固定的历史 text 缓存患者集合（复审 round2；无条件执行，不依赖任何参数）。
+5. 冒烟：`train_launcher.py --plan experiments/I05_text_encoder_bcmbert/train_plan_smoke_bcmbert8192.yaml --model-config experiments/I05_text_encoder_bcmbert/model_config_bcmbert8192.yml --result-path <冒烟结果根>/out --state-file … --logs-dir … --gpus <卡> --per_gpu 1` → `evaluate.py --profile bcmbert8192 --stage smoke … --cancers BLCA --seeds 123 --assets-lock <输出根>/exec/runs/assets/assets-lock.json`；回放 `evaluate.py --profile legacy-replay --stage replay --replay-tier same-host …`（源码摘要变了，必须重跑）。
+6. 正式训练（freeze 之后）：`train_plan_bcmbert8192.yaml` + `model_config_bcmbert8192.yml`；`train_plan_legacytext.yaml` + 默认 `configs/models/surv_multimodal_mainmoe_uni2.yml`。两者各用独立的 `--result-path` / `--state-file`（三档 ckpt 文件名相同）。
+7. 评测：两档各自 `preflight` → `test`（test 门记录按协议 ID 各一份；审查记录绑定 H 时附 `--review-rebind-record`）。
+8. 渲染：`tools/render_encoder_tables.py --profile bcmbert8192 --new <8192 complete.json> --reference bcmbert200=<轮 C complete.json> --reference legacytext-rerun=<legacytext complete.json> --out-dir <账本 run 目录>`，并同样渲染到 `manuscript/消融实验/2.innovation-secode-part- Encoder/5.如何修补BioClinical-ModernBERT.md/`。
 
 ## 本地验证
 

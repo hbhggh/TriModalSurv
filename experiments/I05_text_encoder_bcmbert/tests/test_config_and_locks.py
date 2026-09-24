@@ -26,23 +26,39 @@ def launcher():
     return module
 
 
-def test_encoder_lock_matches_user_decision(config):
-    spec = model.spec_from_config(config)
+@pytest.mark.parametrize('profile, max_length, padding, truncation, batch_size', [
+    ('bcmbert200', 200, 'max_length', True, 16),
+    ('bcmbert8192', 8192, 'longest', False, 1),
+])
+def test_encoder_lock_matches_user_decision(config, profile, max_length, padding, truncation, batch_size):
+    spec = model.spec_from_config(config, profile)
     assert spec.model_id == 'NeuML/bioclinical-modernbert-base-embeddings'
     assert spec.revision == '048ad4491de0fb4e2695bfe4705da67caf4804b8'
-    assert (spec.max_length, spec.hidden_size) == (200, 768)
-    assert config['shapes']['text'] == [200, 768]
+    assert (spec.max_length, spec.hidden_size, spec.padding, spec.truncation) == (max_length, 768, padding, truncation)
+    assert config['text_encoders'][profile]['batch_size'] == model.LOCKED_BATCH_SIZE[profile] == batch_size
+    # 槽位行数与分词长度是两个量：两档都广播回 200 行
+    assert model.SLOT_ROWS == 200 and config['shapes']['text'] == [200, 768]
 
 
-def test_encoder_lock_rejects_any_drift(config):
+@pytest.mark.parametrize('profile, key, value', [
+    ('bcmbert200', 'revision', 'main'), ('bcmbert200', 'pad_rows', 'keep'), ('bcmbert200', 'batch_size', 1),
+    ('bcmbert200', 'padding', 'longest'), ('bcmbert8192', 'padding', 'max_length'),
+    ('bcmbert8192', 'truncation', True), ('bcmbert8192', 'max_length', 4096), ('bcmbert8192', 'batch_size', 16),
+])
+def test_encoder_lock_rejects_any_drift(config, profile, key, value):
     drifted = json.loads(json.dumps(config))
-    drifted['text_encoder']['revision'] = 'main'
+    drifted['text_encoders'][profile][key] = value
     with pytest.raises(ValueError):
-        model.spec_from_config(drifted)
+        model.spec_from_config(drifted, profile)
+
+
+def test_encoder_lock_rejects_unknown_profile_and_slot_drift(config):
+    with pytest.raises(ValueError, match='未知的特征档案'):
+        model.spec_from_config(config, 'legacy-replay')
     drifted = json.loads(json.dumps(config))
-    drifted['text_encoder']['pad_rows'] = 'keep'
-    with pytest.raises(ValueError):
-        model.spec_from_config(drifted)
+    drifted['shapes']['text'] = [8192, 768]
+    with pytest.raises(ValueError, match='槽位'):
+        model.spec_from_config(drifted, 'bcmbert8192')
 
 
 def test_upstream_pins_equal_current_files(config):
@@ -74,21 +90,38 @@ def test_route_table_matches_s0_force_module(config):
     assert config['frozen_combo_spec']['candidate_id'] == s0['upstream']['combo_candidate_id']
 
 
-def test_model_config_changes_only_text_path():
+@pytest.mark.parametrize('name, text_path', [('model_config.yml', 'data/text_embeddings_bcmbert200'),
+                                            ('model_config_bcmbert8192.yml', 'data/text_embeddings_bcmbert8192')])
+def test_model_config_changes_only_text_path(name, text_path):
     yaml = pytest.importorskip('yaml')
     default = yaml.safe_load((REPO_ROOT / 'configs/models/surv_multimodal_mainmoe_uni2.yml').read_text())
-    ours = yaml.safe_load((EXPERIMENT_DIR / 'model_config.yml').read_text())
-    assert ours['modality']['text']['path'] == 'data/text_embeddings_bcmbert200'
+    ours = yaml.safe_load((EXPERIMENT_DIR / name).read_text())
+    assert ours['modality']['text']['path'] == text_path
+    # 不依赖 PyYAML 的解析与 PyYAML 一致（evaluate.load_config 用它做交叉核对）
+    assert evaluate._model_config_text_path(EXPERIMENT_DIR / name) == text_path
+    assert evaluate._model_config_text_path(REPO_ROOT / 'configs/models/surv_multimodal_mainmoe_uni2.yml') == \
+        default['modality']['text']['path']
     ours['modality']['text']['path'] = default['modality']['text']['path']
     assert ours == default
 
 
-def test_train_plan_is_25_seed_major_runs(config, launcher):
-    runs = launcher.load_plan(EXPERIMENT_DIR / 'train_plan.yaml')
+PLANS = {'bcmbert200': 'train_plan.yaml', 'bcmbert8192': 'train_plan_bcmbert8192.yaml',
+         'legacytext-rerun': 'train_plan_legacytext.yaml'}
+SMOKE_PLANS = {'bcmbert200': 'train_plan_smoke.yaml', 'bcmbert8192': 'train_plan_smoke_bcmbert8192.yaml'}
+
+
+def test_formal_plans_have_disjoint_names(launcher):
+    names = [run.name for plan in PLANS.values() for run in launcher.load_plan(EXPERIMENT_DIR / plan)]
+    assert len(names) == len(set(names)) == 75
+
+
+@pytest.mark.parametrize('profile', sorted(PLANS))
+def test_train_plan_is_25_seed_major_runs(config, launcher, profile):
+    runs = launcher.load_plan(EXPERIMENT_DIR / PLANS[profile])
     assert len(runs) == 25 and len({run.name for run in runs}) == 25
     assert {(run.cancer, run.seed) for run in runs} == {(c, s) for c in config['cancers'] for s in config['seeds']}
     for run in runs:
-        assert (run.arm, run.network_type, run.compensator) == ('e0_bcmbert200', 'NPJC', 'none')
+        assert (run.arm, run.network_type, run.compensator) == (config['arms'][profile], 'NPJC', 'none')
         assert run.extra_args == ('--bin_mode', 'author')
     seeds = [run.seed for run in runs]
     assert seeds == sorted(seeds)
@@ -97,15 +130,17 @@ def test_train_plan_is_25_seed_major_runs(config, launcher):
 
 def test_plan_parses_identically_without_pyyaml(launcher):
     yaml = pytest.importorskip('yaml')
-    for name in ('train_plan.yaml', 'train_plan_smoke.yaml'):
+    for name in (*PLANS.values(), *SMOKE_PLANS.values()):
         text = (EXPERIMENT_DIR / name).read_text(encoding='utf-8')
         assert launcher._simple_yaml_load(text) == yaml.safe_load(text)
 
 
-def test_smoke_plan_is_isolated_from_formal_names(launcher):
-    smoke = launcher.load_plan(EXPERIMENT_DIR / 'train_plan_smoke.yaml')
-    formal = {run.name for run in launcher.load_plan(EXPERIMENT_DIR / 'train_plan.yaml')}
-    assert len(smoke) == 1 and smoke[0].name not in formal and smoke[0].arm != 'e0_bcmbert200'
+@pytest.mark.parametrize('profile', sorted(SMOKE_PLANS))
+def test_smoke_plan_is_isolated_from_formal_names(config, launcher, profile):
+    smoke = launcher.load_plan(EXPERIMENT_DIR / SMOKE_PLANS[profile])
+    formal = {run.name for plan in PLANS.values() for run in launcher.load_plan(EXPERIMENT_DIR / plan)}
+    assert len(smoke) == 1 and smoke[0].name not in formal and smoke[0].arm != config['arms'][profile]
+    assert (smoke[0].cancer, smoke[0].seed) == ('BLCA', 123)
 
 
 def test_seeds_locked_by_user(config, launcher, tmp_path):
@@ -113,8 +148,10 @@ def test_seeds_locked_by_user(config, launcher, tmp_path):
     locked = [123, 132, 213, 231, 321]
     assert config['seeds'] == locked and list(evaluate.REQUIRED_SEEDS) == locked
     assert config['smoke']['seed'] in locked
-    assert sorted({run.seed for run in launcher.load_plan(EXPERIMENT_DIR / 'train_plan.yaml')}) == sorted(locked)
-    assert [run.seed for run in launcher.load_plan(EXPERIMENT_DIR / 'train_plan_smoke.yaml')] == [123]
+    for plan in PLANS.values():
+        assert sorted({run.seed for run in launcher.load_plan(EXPERIMENT_DIR / plan)}) == sorted(locked)
+    for plan in SMOKE_PLANS.values():
+        assert [run.seed for run in launcher.load_plan(EXPERIMENT_DIR / plan)] == [123]
     from experiments.I05_text_encoder_bcmbert.tools import check_launch_contract, render_encoder_tables
     assert list(check_launch_contract.SEEDS) == locked and list(render_encoder_tables.REQUIRED_SEEDS) == locked
     for seeds in ([123, 132, 213, 231], [123, 132, 213, 231, 322], [321, 231, 213, 132, 123]):
@@ -130,8 +167,9 @@ def test_seeds_locked_by_user(config, launcher, tmp_path):
 
 def test_profiles_and_protocol_ids(config):
     assert set(config['profiles']) == set(evaluate.PROFILES)
-    assert len(set(config['protocol_ids'].values())) == 3
+    assert len(set(config['protocol_ids'].values())) == 4
     assert config['profiles']['bcmbert200'] == {'text_cache': 'new', 'checkpoints': 'new'}
+    assert config['profiles']['bcmbert8192'] == {'text_cache': 'new', 'checkpoints': 'new'}
     assert config['profiles']['legacy-replay'] == {'text_cache': 'legacy', 'checkpoints': 'legacy'}
 
 
@@ -166,3 +204,22 @@ def test_identity_closure_works_with_stamp_only_checkout(config, tmp_path):
     assert good['source'] == 'stamp' and good['dirty'] is False
     everything = gitstamp.git_identity([file_fingerprint(tmp_path / rel) for rel in relatives], root=tmp_path)
     assert everything['dirty'] is True and everything['dirty_files'] == excluded  # 复现修复前的误判
+
+
+@pytest.mark.parametrize('mutate, match', [
+    (lambda c: c['training_contract']['text_path'].update(bcmbert8192='data/text_embeddings_bcmbert200'), 'text_path'),
+    (lambda c: c['text_encoders']['bcmbert8192'].update(feature_dir='data/text_embeddings_bcmbert200'), '互不相同'),
+    (lambda c: c['training_contract']['model_config'].update(
+        bcmbert8192='experiments/I05_text_encoder_bcmbert/model_config.yml'), 'model config 的 text.path'),
+    (lambda c: c['text_encoders'].pop('bcmbert8192'), 'text_encoders'),
+    (lambda c: c['training_contract']['text_path'].pop('legacytext-rerun'), 'training_contract'),
+])
+def test_profile_contract_cross_checks(config, tmp_path, mutate, match):
+    """每个新特征档案在编码器锁、训练契约与 model config 文件三处必须指向同一个 Text 目录。"""
+    broken = json.loads(json.dumps(config))
+    mutate(broken)
+    path = tmp_path / 'broken.yaml'
+    path.write_text(json.dumps(broken))
+    with pytest.raises(ValueError, match=match):
+        evaluate.load_config(path)
+

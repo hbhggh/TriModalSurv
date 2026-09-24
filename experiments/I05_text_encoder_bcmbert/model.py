@@ -10,6 +10,10 @@
 
 分词器和模型都可以注入，所以测试不依赖 transformers；真实后端由 :func:`load_backend` 按锁定的
 revision 加载。本模块不训练、不微调，也不改 NPJ-C 的任何层。
+
+两个档案（config.text_encoders）：``bcmbert200`` 截断或补齐到 200 token（轮 C）；``bcmbert8192``（A0，
+用户裁决 2026-09-24）全文不截断（≤ 8192 token）、逐份单样本、不补齐。两者都广播回槽位的 200 行，
+所以“分词长度”（随档案）与“槽位行数”（``SLOT_ROWS``，恒为 200）是两个量。
 """
 from __future__ import annotations
 
@@ -23,7 +27,10 @@ import numpy as np
 MODEL_ID = 'NeuML/bioclinical-modernbert-base-embeddings'
 REVISION = '048ad4491de0fb4e2695bfe4705da67caf4804b8'
 BASE_MODEL_ID = 'thomas-sounack/BioClinical-ModernBERT-base'
+# bcmbert200 档案的分词长度；audit 也用它统计"旧 200 行口径"。槽位行数是另一个量，见 SLOT_ROWS。
 MAX_LENGTH = 200
+# NPJ-C Text 槽位的行数，必须等于 config.shapes.text[0]；与分词长度无关。
+SLOT_ROWS = 200
 HIDDEN_SIZE = 768
 ATTN_IMPLEMENTATION = 'eager'
 MIN_TRANSFORMERS = (4, 48, 0)
@@ -41,21 +48,40 @@ class EncoderSpec:
     max_length: int = MAX_LENGTH
     hidden_size: int = HIDDEN_SIZE
     attn_implementation: str = ATTN_IMPLEMENTATION
+    # 分词器实际使用的补齐与截断策略（bcmbert200 的历史 manifest 已按同名同值记录这两项）
+    padding: str = 'max_length'
+    truncation: bool = True
 
     def as_dict(self) -> dict:
         return asdict(self)
 
 
-def spec_from_config(config: dict) -> EncoderSpec:
-    """从 I05 config 读取编码器设置，并要求与本模块的锁定值逐项相同。"""
-    section = config['text_encoder']
+# 按档案的锁表：config.text_encoders[profile] 必须与这里逐项相同。batch_size 单独锁，因为它不改变
+# 单个样本的数学定义（B=1 时无补齐），但决定 'longest' 补齐的批次组成，影响浮点复现。
+LOCKED_SPECS = {
+    'bcmbert200': EncoderSpec(),
+    'bcmbert8192': EncoderSpec(max_length=8192, padding='longest', truncation=False),
+}
+LOCKED_BATCH_SIZE = {'bcmbert200': 16, 'bcmbert8192': 1}
+
+
+def spec_from_config(config: dict, profile: str) -> EncoderSpec:
+    """从 I05 config 读取某个档案的编码器设置，并要求与本模块的锁表逐项相同。"""
+    if profile not in LOCKED_SPECS:
+        raise ValueError(f'未知的特征档案 {profile!r}；可选 {sorted(LOCKED_SPECS)}')
+    section = config['text_encoders'][profile]
     spec = EncoderSpec(model_id=section['model_id'], revision=section['revision'],
                        max_length=int(section['max_length']), hidden_size=int(section['hidden_size']),
-                       attn_implementation=section['attn_implementation'])
-    if spec != EncoderSpec():
-        raise ValueError(f'config.text_encoder 与 model.py 锁定值不一致: {spec} != {EncoderSpec()}')
+                       attn_implementation=section['attn_implementation'], padding=section['padding'],
+                       truncation=bool(section['truncation']))
+    if spec != LOCKED_SPECS[profile]:
+        raise ValueError(f'config.text_encoders.{profile} 与 model.py 锁定值不一致: {spec} != {LOCKED_SPECS[profile]}')
     if section.get('pad_rows') != PAD_ROWS or section.get('padding_side') != 'right':
         raise ValueError(f'方案 C 要求右侧补齐且 pad_rows == {PAD_ROWS!r}')
+    if int(section.get('batch_size', -1)) != LOCKED_BATCH_SIZE[profile]:
+        raise ValueError(f'{profile} 的 batch_size 必须是 {LOCKED_BATCH_SIZE[profile]}')
+    if list(config['shapes']['text']) != [SLOT_ROWS, spec.hidden_size]:
+        raise ValueError(f"config.shapes.text {config['shapes']['text']} 与槽位 [{SLOT_ROWS}, {spec.hidden_size}] 不符")
     return spec
 
 
@@ -71,10 +97,10 @@ def _prefix_counts(mask: np.ndarray) -> np.ndarray:
     return counts
 
 
-def masked_mean_broadcast(hidden, attention_mask) -> tuple[np.ndarray, np.ndarray]:
-    """有效 token 的均值（float64 累加后转 float32）广播到全部 L 行；返回 (features[B, L, H], 有效 token 数)。
+def masked_mean_broadcast(hidden, attention_mask, *, rows: int = SLOT_ROWS) -> tuple[np.ndarray, np.ndarray]:
+    """有效 token 的均值（float64 累加后转 float32）广播到槽位的 ``rows`` 行；返回 (features[B, rows, H], 有效 token 数)。
 
-    pad 位置的隐藏状态完全不参与计算。
+    pad 位置的隐藏状态完全不参与计算。广播行数与分词序列长度 L 无关（A0 下 L 可达数千）。
     """
     h = np.asarray(hidden)
     m = np.asarray(attention_mask)
@@ -85,16 +111,16 @@ def masked_mean_broadcast(hidden, attention_mask) -> tuple[np.ndarray, np.ndarra
         raise ValueError(f'有效 token 数 < {MIN_VALID_TOKENS}')
     weights = m.astype(np.float64)[..., None]
     mean = ((h.astype(np.float64) * weights).sum(axis=1) / counts[:, None]).astype(np.float32)
-    features = np.ascontiguousarray(np.repeat(mean[:, None, :], h.shape[1], axis=1))
+    features = np.ascontiguousarray(np.repeat(mean[:, None, :], int(rows), axis=1))
     return features, counts
 
 
-def check_feature(array, *, context: str, max_length: int = MAX_LENGTH, hidden_size: int = HIDDEN_SIZE) -> None:
-    """写出前的逐人断言（坑 D6）：形状、dtype、有限值、非零，且 200 行逐位相同（方案 C 的广播形态）。"""
+def check_feature(array, *, context: str, rows: int = SLOT_ROWS, hidden_size: int = HIDDEN_SIZE) -> None:
+    """写出前的逐人断言（坑 D6）：形状 ``[rows, hidden]``、dtype、有限值、非零，且各行逐位相同（广播形态）。"""
     if not isinstance(array, np.ndarray) or array.dtype != np.float32:
         raise ValueError(f'{context}: 必须是 float32 ndarray')
-    if array.shape != (max_length, hidden_size):
-        raise ValueError(f'{context}: 形状 {array.shape} != {(max_length, hidden_size)}')
+    if array.shape != (rows, hidden_size):
+        raise ValueError(f'{context}: 形状 {array.shape} != {(rows, hidden_size)}')
     if not np.isfinite(array).all():
         raise ValueError(f'{context}: 含非有限值')
     if not np.any(array[0] != 0):
@@ -118,11 +144,13 @@ class FrozenTextEncoder:
     """把报告文本编码成方案 C 的 ``[200, 768]`` 特征（有效 token 均值广播到 200 行）；只做推理。"""
 
     def __init__(self, tokenizer, model, *, spec: EncoderSpec = EncoderSpec(), device: str = 'cpu',
-                 batch_size: int = 16):
+                 batch_size: int = 16, rows: int = SLOT_ROWS):
         if batch_size < 1:
             raise ValueError('batch_size 必须为正')
+        if spec.padding not in ('max_length', 'longest'):
+            raise ValueError(f'不支持的 padding 策略 {spec.padding!r}')
         self.tokenizer, self.model, self.spec = tokenizer, model, spec
-        self.device, self.batch_size = device, int(batch_size)
+        self.device, self.batch_size, self.rows = device, int(batch_size), int(rows)
         if getattr(self.tokenizer, 'padding_side', 'right') != 'right':
             raise ValueError('方案 C 要求 tokenizer.padding_side == "right"')
         if hasattr(self.model, 'eval'):
@@ -137,7 +165,7 @@ class FrozenTextEncoder:
         return self.encode_with_counts(texts)[0]
 
     def encode_with_counts(self, texts: Sequence[str]) -> tuple[list[np.ndarray], list[int]]:
-        """返回 (特征列表, 每人截断后的有效 token 数)。"""
+        """返回 (特征列表, 每人进入编码器的有效 token 数)。"""
         import torch
 
         texts = list(texts)
@@ -147,23 +175,27 @@ class FrozenTextEncoder:
         valid_counts: list[int] = []
         for start in range(0, len(texts), self.batch_size):
             batch = texts[start:start + self.batch_size]
-            encoded = self.tokenizer(batch, max_length=self.spec.max_length, truncation=True,
-                                     padding='max_length', return_tensors='pt')
+            encoded = self.tokenizer(batch, max_length=self.spec.max_length, truncation=self.spec.truncation,
+                                     padding=self.spec.padding, return_tensors='pt')
             ids, mask = encoded['input_ids'], encoded['attention_mask']
-            if tuple(ids.shape) != (len(batch), self.spec.max_length):
+            if ids.ndim != 2 or ids.shape[0] != len(batch):
+                raise ValueError(f'分词输出形状 {tuple(ids.shape)} 与批大小 {len(batch)} 不符')
+            if self.spec.padding == 'max_length' and ids.shape[1] != self.spec.max_length:
                 raise ValueError(f'分词输出形状 {tuple(ids.shape)} 不是 ({len(batch)}, {self.spec.max_length})')
+            if ids.shape[1] > self.spec.max_length:
+                # 不截断的档案：超过模型上限就失败，而不是静默截断（"全文"承诺的硬门）
+                raise ValueError(f'报告长 {ids.shape[1]} token，超过上限 {self.spec.max_length}，拒绝截断')
             with torch.inference_mode():
                 output = self.model(input_ids=ids.to(self.device), attention_mask=mask.to(self.device))
             hidden = output.last_hidden_state if hasattr(output, 'last_hidden_state') else output[0]
             hidden = hidden.detach().to('cpu', dtype=torch.float32).numpy()
-            if hidden.shape != (len(batch), self.spec.max_length, self.spec.hidden_size):
+            if hidden.shape != (len(batch), ids.shape[1], self.spec.hidden_size):
                 raise ValueError(f'last_hidden_state 形状 {hidden.shape} 不符')
             mask_np = mask.detach().cpu().numpy()
-            features, counts = masked_mean_broadcast(hidden, mask_np)
+            features, counts = masked_mean_broadcast(hidden, mask_np, rows=self.rows)
             for offset in range(len(batch)):
                 context = f'batch{start // self.batch_size}/item{offset}'
-                check_feature(features[offset], context=context, max_length=self.spec.max_length,
-                              hidden_size=self.spec.hidden_size)
+                check_feature(features[offset], context=context, rows=self.rows, hidden_size=self.spec.hidden_size)
                 results.append(np.ascontiguousarray(features[offset]))
                 valid_counts.append(int(counts[offset]))
         return results, valid_counts
@@ -195,6 +227,6 @@ def load_backend(spec: EncoderSpec = EncoderSpec(), *, device: str = 'cpu', cach
     return tokenizer, model, snapshot
 
 
-__all__ = ['MODEL_ID', 'REVISION', 'BASE_MODEL_ID', 'MAX_LENGTH', 'HIDDEN_SIZE', 'EncoderSpec',
-           'spec_from_config', 'masked_mean_broadcast', 'check_feature', 'transformers_version_ok',
+__all__ = ['MODEL_ID', 'REVISION', 'BASE_MODEL_ID', 'MAX_LENGTH', 'SLOT_ROWS', 'HIDDEN_SIZE', 'EncoderSpec',
+           'LOCKED_SPECS', 'LOCKED_BATCH_SIZE', 'spec_from_config', 'masked_mean_broadcast', 'check_feature', 'transformers_version_ok',
            'FrozenTextEncoder', 'load_backend']

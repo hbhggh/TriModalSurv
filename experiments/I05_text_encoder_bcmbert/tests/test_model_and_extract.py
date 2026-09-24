@@ -1,4 +1,4 @@
-"""方案 A 编码器包装与特征提取流程（替身后端，不需要 transformers 与数据）。"""
+"""I05 编码器包装与特征提取流程（bcmbert200 / bcmbert8192 两档；替身后端，不需要 transformers 与数据）。"""
 import csv
 import json
 import pickle
@@ -18,7 +18,7 @@ def test_masked_mean_broadcast_ignores_pads():
     hidden[0, 3:] = 1e6  # pad 位的隐藏状态不得进入均值
     hidden[1] = np.arange(15, dtype=np.float32).reshape(5, 3)
     mask = np.array([[1, 1, 1, 0, 0], [1, 1, 1, 1, 1]])
-    out, counts = model.masked_mean_broadcast(hidden, mask)
+    out, counts = model.masked_mean_broadcast(hidden, mask, rows=5)
     assert out.dtype == np.float32 and out.shape == (2, 5, 3) and counts.tolist() == [3, 5]
     np.testing.assert_array_equal(out[0], np.tile([3, 4, 5], (5, 1)).astype(np.float32))
     np.testing.assert_allclose(out[1], np.tile(hidden[1].mean(axis=0), (5, 1)))
@@ -104,7 +104,7 @@ def test_extract_only_encodes_reference_patients(workspace):
     root, labels, reference = workspace
     out = root / 'text_embeddings_bcmbert200'
     extract.main(['extract', '--labels', str(labels), '--reference-dir', str(reference), '--out-dir', str(out),
-                  '--cancers', 'LUAD', 'BRCA', '--batch-size', '2', '--device', 'cpu'],
+                  '--cancers', 'LUAD', 'BRCA', '--profile', 'bcmbert200', '--device', 'cpu'],
                  backend=(FakeTokenizer(), FakeModel(), None))
     assert sorted(path.name for path in out.glob('*.pkl')) == ['P1.pkl', 'P2.pkl', 'P4.pkl']
     manifest = json.loads((out / 'manifest.json').read_text())
@@ -118,6 +118,10 @@ def test_extract_only_encodes_reference_patients(workspace):
         model.check_feature(array, context=pid)
         assert 3 <= entry['n_valid_tokens'] <= 200
         assert array.shape == (200, 768) and array.dtype == np.float32
+    assert manifest['schema_version'] == 2 and manifest['profile'] == 'bcmbert200' and manifest['slot_rows'] == 200
+    assert manifest['batching'] == {'batch_size': 16, 'padding': 'max_length', 'truncation': True,
+                                    'order': 'sorted by (cancer, patient_id)'}
+    assert (manifest['encoder']['padding'], manifest['encoder']['truncation']) == ('max_length', True)
     assert set(manifest['extractor']['files']) == {f'experiments/I05_text_encoder_bcmbert/{name}'
                                                     for name in extract.SOURCE_FILES}
 
@@ -132,24 +136,24 @@ def test_extract_refuses_missing_text_and_unsafe_outputs(workspace):
     _write_labels(labels, rows)
     with pytest.raises(ValueError, match='缺报告原文'):
         extract.main(['extract', '--labels', str(labels), '--reference-dir', str(reference),
-                      '--out-dir', str(root / 'new'), '--cancers', 'LUAD', '--device', 'cpu'], backend=backend)
+                      '--out-dir', str(root / 'new'), '--cancers', 'LUAD', '--profile', 'bcmbert200', '--device', 'cpu'], backend=backend)
     with pytest.raises(ValueError, match='旧 Text 特征目录'):
         extract.main(['extract', '--labels', str(labels), '--reference-dir', str(reference),
-                      '--out-dir', str(reference / 'nested'), '--cancers', 'BRCA', '--device', 'cpu'],
+                      '--out-dir', str(reference / 'nested'), '--cancers', 'BRCA', '--profile', 'bcmbert200', '--device', 'cpu'],
                      backend=backend)
     busy = root / 'busy'
     busy.mkdir()
     (busy / 'keep.txt').write_text('x')
     with pytest.raises(FileExistsError):
         extract.main(['extract', '--labels', str(labels), '--reference-dir', str(reference),
-                      '--out-dir', str(busy), '--cancers', 'BRCA', '--device', 'cpu'], backend=backend)
+                      '--out-dir', str(busy), '--cancers', 'BRCA', '--profile', 'bcmbert200', '--device', 'cpu'], backend=backend)
 
 
 def test_extract_limit_marks_partial(workspace):
     root, labels, reference = workspace
     out = root / 'smoke'
     extract.main(['extract', '--labels', str(labels), '--reference-dir', str(reference), '--out-dir', str(out),
-                  '--cancers', 'LUAD', '--limit', '1', '--device', 'cpu'],
+                  '--cancers', 'LUAD', '--limit', '1', '--profile', 'bcmbert200', '--device', 'cpu'],
                  backend=(FakeTokenizer(), FakeModel(), None))
     manifest = json.loads((out / 'manifest.json').read_text())
     assert manifest['partial'] is True and len(manifest['patients']) == 1
@@ -198,5 +202,139 @@ def test_real_extraction_refuses_cpu_before_loading_model(workspace):
     root, labels, reference = workspace
     with pytest.raises(ValueError, match='禁止使用 CPU'):
         extract.main(['extract', '--labels', str(labels), '--reference-dir', str(reference),
-                      '--out-dir', str(root / 'cpu'), '--cancers', 'BRCA', '--device', 'cpu'])
+                      '--out-dir', str(root / 'cpu'), '--cancers', 'BRCA', '--profile', 'bcmbert8192', '--device', 'cpu'])
     assert not (root / 'cpu').exists() or not any((root / 'cpu').iterdir())
+
+
+# ----------------------------------------------------------------------------- A0（bcmbert8192）
+
+
+class SpyTokenizer(FakeTokenizer):
+    """记录每次编码调用的参数，用来确认档案的截断与补齐策略真正生效。"""
+
+    def __init__(self):
+        self.calls = []
+
+    def __call__(self, texts, **kwargs):
+        if kwargs.get('return_tensors') == 'pt':
+            self.calls.append({key: kwargs.get(key) for key in ('max_length', 'truncation', 'padding')})
+        return super().__call__(texts, **kwargs)
+
+
+def test_masked_mean_rows_fixed_to_slot():
+    """广播行数恒为槽位的 200 行，与分词序列长度 L 无关（L=5 与 L=300 同形）。"""
+    rng = np.random.default_rng(0)
+    for length in (5, 300):
+        hidden = rng.normal(size=(2, length, 4)).astype(np.float32)
+        mask = np.ones((2, length), dtype=int)
+        out, counts = model.masked_mean_broadcast(hidden, mask)
+        assert out.shape == (2, model.SLOT_ROWS, 4) and counts.tolist() == [length, length]
+        np.testing.assert_array_equal(out[0], np.tile(hidden[0].astype(np.float64).mean(0).astype(np.float32),
+                                                      (model.SLOT_ROWS, 1)))
+
+
+def test_check_feature_rejects_sequence_length_rows():
+    with pytest.raises(ValueError, match='形状'):
+        model.check_feature(np.ones((8192, 768), np.float32), context='rows')
+
+
+def test_frozen_encoder_8192_no_truncation_no_pad():
+    spec = model.LOCKED_SPECS['bcmbert8192']
+    tokenizer = SpyTokenizer()
+    encoder = model.FrozenTextEncoder(tokenizer, FakeModel(), spec=spec, batch_size=1)
+    texts = [' '.join(['word'] * 400), 'tumor free margins']
+    features, counts = encoder.encode_with_counts(texts)
+    assert counts == [402, 5] == encoder.token_lengths(texts)
+    assert [f.shape for f in features] == [(200, 768)] * 2
+    assert tokenizer.calls == [{'max_length': 8192, 'truncation': False, 'padding': 'longest'}] * 2
+    with pytest.raises(ValueError, match='8192'):
+        encoder.encode([' '.join(['word'] * 9000)])
+
+
+def test_short_text_identical_across_profiles():
+    """≤200 token 的报告两档都不截断：200 档（与长文同批、有补齐）与 8192 档（单样本）特征逐位相同。"""
+    short = 'grade 3 invasive carcinoma'
+    batch = [short, ' '.join(['word'] * 150)]
+    old = model.FrozenTextEncoder(FakeTokenizer(), FakeModel(), batch_size=2).encode(batch)[0]
+    new = model.FrozenTextEncoder(FakeTokenizer(), FakeModel(), spec=model.LOCKED_SPECS['bcmbert8192'],
+                                  batch_size=1).encode([short])[0]
+    np.testing.assert_array_equal(old, new)
+
+
+def test_longest_batch_equals_single_sample():
+    spec = model.LOCKED_SPECS['bcmbert8192']
+    texts = ['grade 3 invasive carcinoma', ' '.join(['word'] * 300), 'tumor free margins']
+    single = model.FrozenTextEncoder(FakeTokenizer(), FakeModel(), spec=spec, batch_size=1).encode(texts)
+    batched = model.FrozenTextEncoder(FakeTokenizer(), FakeModel(), spec=spec, batch_size=3).encode(texts)
+    for a, b in zip(single, batched):
+        np.testing.assert_array_equal(a, b)
+
+
+def _long_workspace(workspace, words):
+    root, labels, reference = workspace
+    rows = list(csv.DictReader(labels.open(encoding='utf-8')))
+    rows[0]['text'] = ' '.join(['word'] * words)
+    _write_labels(labels, rows)
+    return root, labels, reference
+
+
+def test_extract_bcmbert8192_manifest(workspace):
+    root, labels, reference = _long_workspace(workspace, 400)
+    out = root / 'text_embeddings_bcmbert8192'
+    extract.main(['extract', '--labels', str(labels), '--reference-dir', str(reference), '--out-dir', str(out),
+                  '--cancers', 'LUAD', 'BRCA', '--profile', 'bcmbert8192', '--device', 'cpu'],
+                 backend=(FakeTokenizer(), FakeModel(), None))
+    manifest = json.loads((out / 'manifest.json').read_text())
+    assert manifest['schema_version'] == 2 and manifest['profile'] == 'bcmbert8192' and manifest['slot_rows'] == 200
+    assert manifest['batching'] == {'batch_size': 1, 'padding': 'longest', 'truncation': False,
+                                    'order': 'sorted by (cancer, patient_id)'}
+    encoder = manifest['encoder']
+    assert (encoder['max_length'], encoder['padding'], encoder['truncation']) == (8192, 'longest', False)
+    assert manifest['truncation']['n_truncated'] == 0
+    assert manifest['patients']['P1']['n_valid_tokens'] == manifest['patients']['P1']['n_tokens_untruncated'] == 402
+    for pid, entry in manifest['patients'].items():
+        assert entry['n_valid_tokens'] == entry['n_tokens_untruncated'] and entry['truncated'] is False
+        array = extract.load_feature(out / f'{pid}.pkl')
+        model.check_feature(array, context=pid)
+
+
+def test_extract_8192_refuses_overlong_report(workspace):
+    root, labels, reference = _long_workspace(workspace, 9000)
+    out = root / 'overlong'
+    with pytest.raises(ValueError, match='拒绝截断'):
+        extract.main(['extract', '--labels', str(labels), '--reference-dir', str(reference), '--out-dir', str(out),
+                      '--cancers', 'LUAD', '--profile', 'bcmbert8192', '--device', 'cpu'],
+                     backend=(FakeTokenizer(), FakeModel(), None))
+    assert not (out / 'manifest.json').exists()
+
+
+@pytest.mark.parametrize('profile', ['bcmbert200', 'bcmbert8192'])
+def test_extract_rejects_batch_size_override(workspace, profile):
+    root, labels, reference = workspace
+    with pytest.raises(ValueError, match='--batch-size'):
+        extract.main(['extract', '--labels', str(labels), '--reference-dir', str(reference),
+                      '--out-dir', str(root / f'bs-{profile}'), '--cancers', 'LUAD', '--profile', profile,
+                      '--batch-size', '2', '--device', 'cpu'], backend=(FakeTokenizer(), FakeModel(), None))
+
+
+def test_extract_requires_profile(workspace):
+    root, labels, reference = workspace
+    with pytest.raises(SystemExit):
+        extract.main(['extract', '--labels', str(labels), '--reference-dir', str(reference),
+                      '--out-dir', str(root / 'noprofile'), '--device', 'cpu'], backend=(FakeTokenizer(), FakeModel(), None))
+
+
+
+def test_extract_refuses_unpinned_model_files(workspace):
+    """Codex 首审 finding 2：真实后端的模型快照必须逐文件等于 config 锁定的 sha256，否则在编码前拒绝。"""
+    root, labels, reference = workspace
+    snapshot = root / 'snapshot'
+    (snapshot / '1_Pooling').mkdir(parents=True)
+    for name in extract.MODEL_FILES:
+        (snapshot / name).write_text('not the pinned weights')
+    out = root / 'unpinned'
+    with pytest.raises(ValueError, match='模型文件'):
+        extract.main(['extract', '--labels', str(labels), '--reference-dir', str(reference), '--out-dir', str(out),
+                      '--cancers', 'LUAD', '--profile', 'bcmbert8192', '--device', 'cpu'],
+                     backend=(FakeTokenizer(), FakeModel(), snapshot))
+    assert not (out.exists() and any(out.glob('*.pkl')))

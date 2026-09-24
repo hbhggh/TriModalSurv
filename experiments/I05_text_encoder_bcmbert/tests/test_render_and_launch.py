@@ -112,13 +112,21 @@ def test_chance_of_four_of_five_under_null():
     assert render.chance_at_least(4) == 6 / 32
 
 
-def test_launch_contract_only_allows_two_differences():
+@pytest.mark.parametrize('plan, model_config, expected', [
+    ('train_plan.yaml', 'experiments/I05_text_encoder_bcmbert/model_config.yml', {('--model_config', '--result_path')}),
+    ('train_plan_bcmbert8192.yaml', 'experiments/I05_text_encoder_bcmbert/model_config_bcmbert8192.yml',
+     {('--model_config', '--result_path')}),
+    ('train_plan_legacytext.yaml', 'configs/models/surv_multimodal_mainmoe_uni2.yml', {('--result_path',)}),
+])
+def test_launch_contract_only_allows_two_differences(plan, model_config, expected):
     completed = subprocess.run([sys.executable, str(EXPERIMENT_DIR / 'tools' / 'check_launch_contract.py'),
-                                '--python', sys.executable], cwd=REPO_ROOT, capture_output=True, text=True)
+                                '--python', sys.executable, '--plan', str(EXPERIMENT_DIR / plan),
+                                '--model-config', str(REPO_ROOT / model_config)],
+                               cwd=REPO_ROOT, capture_output=True, text=True)
     assert completed.returncode == 0, completed.stdout + completed.stderr
     report = json.loads(completed.stdout)
     assert report['ok'] and report['n_i05'] == report['n_e0'] == 25 and report['seed_major_order']
-    assert {tuple(value) for value in report['observed_differences'].values()} == {('--model_config', '--result_path')}
+    assert {tuple(value) for value in report['observed_differences'].values()} == expected
 
 
 def test_formal_launcher_is_executable_in_checkout():
@@ -138,4 +146,79 @@ def test_independent_concordance_matches_hand_computed_cases():
     assert verify.concordance_numpy([1, 1, 1], [1, 2, 3], [2, 2, 1]) == (0.5 + 1 + 1) / 3
     # 同一时刻：事件 0 与删失 1 可比，删失不作为比较的起点
     assert verify.concordance_numpy([1, 0, 1], [1, 1, 2], [3, 1, 2]) == (1 + 1) / 2
+
+
+LEDGER_200 = LEDGER_TEST
+
+
+def _fake_complete(tmp_path, config, profile, shift, name):
+    """把账本 bcmbert200 的 complete.json 改写成另一档案的合成 test 结果（none 行整体平移 shift）。"""
+    payload = json.loads(LEDGER_200.read_text(encoding='utf-8'))
+    payload['profile'] = profile
+    payload['protocol_id'] = config['protocol_ids'][profile]
+    payload['run_fingerprint'] = name * 64
+    for row in payload['rows']:
+        if row['grid'] == 'none':
+            row['c_index_b'] = min(1.0, row['c_index_b'] + shift)
+    path = tmp_path / f'{profile}-complete.json'
+    path.write_text(json.dumps(payload))
+    return path
+
+
+def test_load_new_checks_profile_and_protocol(config, tmp_path):
+    with pytest.raises(ValueError, match='bcmbert8192'):
+        render.load_new(LEDGER_200, config, 'bcmbert8192')
+    path = _fake_complete(tmp_path, config, 'bcmbert8192', 0.0, 'a')
+    broken = json.loads(path.read_text())
+    broken['protocol_id'] = config['protocol_ids']['bcmbert200']
+    path.write_text(json.dumps(broken))
+    with pytest.raises(ValueError, match='协议'):
+        render.load_new(path, config, 'bcmbert8192')
+    with pytest.raises(ValueError, match='参考臂只能是'):
+        render.load_reference(LEDGER_200, config, 'legacy-replay')
+
+
+def test_render_bcmbert8192_with_references(config, baseline, tmp_path):
+    values, meta = baseline
+    new, new_meta = render.load_new(_fake_complete(tmp_path, config, 'bcmbert8192', 0.02, 'b'), config, 'bcmbert8192')
+    references = {'bcmbert200': render.load_reference(LEDGER_200, config, 'bcmbert200'),
+                  'legacytext-rerun': render.load_reference(
+                      _fake_complete(tmp_path, config, 'legacytext-rerun', -0.01, 'c'), config, 'legacytext-rerun')}
+    first = render.render_all(config, values, new, meta, new_meta, profile='bcmbert8192', references=references)
+    second = render.render_all(config, values, new, meta, new_meta, profile='bcmbert8192', references=references)
+    assert first == second
+    table_md = first['encoder-table.md']
+    label = render.NEW_LABELS['bcmbert8192']
+    assert f'| {label} |' in table_md and '| 我们提出来的 Encoder |' not in table_md
+    ref200 = references['bcmbert200'][0]
+    means200 = [f"{sum(ref200[(c, s, 'none')] for s in config['seeds']) / 5:.6f}" for c in config['display_cancer_order']]
+    assert f"| {render.REFERENCE_LABELS['bcmbert200']} | " + ' | '.join(means200) + ' |' in table_md
+    # 全部 none 行 +0.02 → 相对 bcmbert200 五癌全胜；相对 legacytext（−0.01）同样全胜
+    assert '相对 bcmbert200 严格胜 5/5（同代码对照，信息性，不进 Q）。' in table_md
+    assert '相对 legacytext-rerun 严格胜 5/5（同代码对照，信息性，不进 Q）。' in table_md
+    assert '## 同代码对照（none，五 seed 均值，不进 Q）' in first['癌症为单位.md']
+    assert '## 同代码对照（none，逐 seed，不进 Q）' in first['seed单位-实验结果.md']
+    assert '唯一差别是上下文长度' in first['癌症为单位.md'] and '不截断（全文 ≤ 8192 token' in first['癌症为单位.md']
+    with pytest.raises(ValueError, match='参考臂'):
+        render.render_all(config, values, None, meta, None, profile='bcmbert8192', references=references)
+    with pytest.raises(ValueError, match='参考臂'):
+        render.render_all(config, values, new, meta, new_meta, profile='bcmbert200', references=references)
+
+
+def test_render_bcmbert8192_template_without_results(config, baseline):
+    values, meta = baseline
+    documents = render.render_all(config, values, None, meta, None, profile='bcmbert8192')
+    assert f"| {render.NEW_LABELS['bcmbert8192']} | 未实验 |" in documents['encoder-table.md']
+    assert '不截断（全文 ≤ 8192 token' in documents['癌症为单位.md']
+
+
+A0_DOC_DIR = REPO_ROOT / 'manuscript/消融实验/2.innovation-secode-part- Encoder/5.如何修补BioClinical-ModernBERT.md'
+
+
+def test_a0_documents_are_script_output(config, baseline):
+    """第 5 号目录（A0）的三份结果文件必须是脚本的 bcmbert8192 输出（结果产出前为模板）。"""
+    values, meta = baseline
+    rendered = render.render_all(config, values, None, meta, None, profile='bcmbert8192')
+    for name, text in rendered.items():
+        assert (A0_DOC_DIR / name).read_text(encoding='utf-8') == text, f'{name} 与脚本输出不一致'
 

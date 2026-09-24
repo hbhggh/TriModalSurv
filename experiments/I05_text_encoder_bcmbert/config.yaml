@@ -1,14 +1,16 @@
 {
   "schema_version": 1,
   "experiment": "I05_text_encoder_bcmbert",
-  "arm": "e0_bcmbert200",
+  "arms": {"bcmbert200": "e0_bcmbert200", "bcmbert8192": "e0_bcmbert8192", "legacytext-rerun": "e0_legacytext_rerun"},
   "protocol_ids": {
     "bcmbert200": "patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1-i05-bcmbert200-v1",
+    "bcmbert8192": "patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1-i05-bcmbert8192-v1",
     "legacy-replay": "patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1-i05-legacy-replay-v1",
     "legacytext-rerun": "patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1-i05-legacytext-rerun-v1"
   },
   "profiles": {
     "bcmbert200": {"text_cache": "new", "checkpoints": "new"},
+    "bcmbert8192": {"text_cache": "new", "checkpoints": "new"},
     "legacy-replay": {"text_cache": "legacy", "checkpoints": "legacy"},
     "legacytext-rerun": {"text_cache": "legacy", "checkpoints": "new"}
   },
@@ -17,24 +19,69 @@
   "seeds": [123, 132, 213, 231, 321],
   "grids": ["none", "rna_100", "text_100", "both_100"],
   "q_grid": "none",
-  "text_encoder": {
-    "model_id": "NeuML/bioclinical-modernbert-base-embeddings",
-    "revision": "048ad4491de0fb4e2695bfe4705da67caf4804b8",
-    "base_model": "thomas-sounack/BioClinical-ModernBERT-base",
-    "max_length": 200,
-    "hidden_size": 768,
-    "attn_implementation": "eager",
-    "padding": "max_length",
-    "padding_side": "right",
-    "truncation": true,
-    "special_tokens": "keep [CLS]/[SEP]",
-    "pad_rows": "masked_mean_broadcast",
-    "dtype": "float32",
-    "pickle_protocol": 4,
-    "min_transformers": "4.48.0",
-    "text_column": "text",
-    "feature_dir": "data/text_embeddings_bcmbert200",
-    "reference_feature_dir": "data/text_embeddings_parsed"
+  "text_encoders": {
+    "bcmbert200": {
+      "model_id": "NeuML/bioclinical-modernbert-base-embeddings",
+      "revision": "048ad4491de0fb4e2695bfe4705da67caf4804b8",
+      "base_model": "thomas-sounack/BioClinical-ModernBERT-base",
+      "max_length": 200,
+      "hidden_size": 768,
+      "attn_implementation": "eager",
+      "padding": "max_length",
+      "padding_side": "right",
+      "truncation": true,
+      "special_tokens": "keep [CLS]/[SEP]",
+      "pad_rows": "masked_mean_broadcast",
+      "dtype": "float32",
+      "pickle_protocol": 4,
+      "min_transformers": "4.48.0",
+      "text_column": "text",
+      "feature_dir": "data/text_embeddings_bcmbert200",
+      "reference_feature_dir": "data/text_embeddings_parsed",
+      "batch_size": 16,
+      "manifest_min_schema": 1,
+      "model_files_sha256": {
+        "1_Pooling/config.json": "1c8bc7bd750c5c20d8707f1c5c578f5d69bb3d1d5ebcf4b2fde5128de154ec1c",
+        "config.json": "538e9f673853ce14052162fe312520fa75455fcc3dce1ce2901b5ec0cfc1abf0",
+        "model.safetensors": "534c57864a88abf86f2cf68b043b98a22593f51ef7bede1b69a133c0c2318d4f",
+        "modules.json": "8f4b264b80206c830bebbdcae377e137925650a433b689343a63bdc9b3145460",
+        "sentence_bert_config.json": "eb9b44b13c0f52a3b3685c3b1cbdea1ba8b04bea123b98f61610048940776eb1",
+        "special_tokens_map.json": "ea97ecdbcc73713039d8d64dbb05e3689495c96657fbd9a18f5bed381be81049",
+        "tokenizer.json": "bb637767e8dfb8044597df6c58243bff2e592ae9e3b310c0bbdb8591f6ac543d",
+        "tokenizer_config.json": "c16f1b07f93d05be753ec0acf8cb511d895a8bdb09669f6b156df81e3f96c2eb"
+      }
+    },
+    "bcmbert8192": {
+      "model_id": "NeuML/bioclinical-modernbert-base-embeddings",
+      "revision": "048ad4491de0fb4e2695bfe4705da67caf4804b8",
+      "base_model": "thomas-sounack/BioClinical-ModernBERT-base",
+      "max_length": 8192,
+      "hidden_size": 768,
+      "attn_implementation": "eager",
+      "padding": "longest",
+      "padding_side": "right",
+      "truncation": false,
+      "special_tokens": "keep [CLS]/[SEP]",
+      "pad_rows": "masked_mean_broadcast",
+      "dtype": "float32",
+      "pickle_protocol": 4,
+      "min_transformers": "4.48.0",
+      "text_column": "text",
+      "feature_dir": "data/text_embeddings_bcmbert8192",
+      "reference_feature_dir": "data/text_embeddings_parsed",
+      "batch_size": 1,
+      "manifest_min_schema": 2,
+      "model_files_sha256": {
+        "1_Pooling/config.json": "1c8bc7bd750c5c20d8707f1c5c578f5d69bb3d1d5ebcf4b2fde5128de154ec1c",
+        "config.json": "538e9f673853ce14052162fe312520fa75455fcc3dce1ce2901b5ec0cfc1abf0",
+        "model.safetensors": "534c57864a88abf86f2cf68b043b98a22593f51ef7bede1b69a133c0c2318d4f",
+        "modules.json": "8f4b264b80206c830bebbdcae377e137925650a433b689343a63bdc9b3145460",
+        "sentence_bert_config.json": "eb9b44b13c0f52a3b3685c3b1cbdea1ba8b04bea123b98f61610048940776eb1",
+        "special_tokens_map.json": "ea97ecdbcc73713039d8d64dbb05e3689495c96657fbd9a18f5bed381be81049",
+        "tokenizer.json": "bb637767e8dfb8044597df6c58243bff2e592ae9e3b310c0bbdb8591f6ac543d",
+        "tokenizer_config.json": "c16f1b07f93d05be753ec0acf8cb511d895a8bdb09669f6b156df81e3f96c2eb"
+      }
+    }
   },
   "shapes": {"img": [128, 1536], "text": [200, 768], "rna": [2048, 256]},
   "model": {
@@ -82,8 +129,9 @@
                 "pretrain_path": "", "finetune_head_only": false, "simulate_missing_modality": "",
                 "modality_dropout": 0.0, "allow_dirty": false},
     "model_config": {"bcmbert200": "experiments/I05_text_encoder_bcmbert/model_config.yml",
+                     "bcmbert8192": "experiments/I05_text_encoder_bcmbert/model_config_bcmbert8192.yml",
                      "legacytext-rerun": "configs/models/surv_multimodal_mainmoe_uni2.yml"},
-    "text_path": {"bcmbert200": "data/text_embeddings_bcmbert200", "legacytext-rerun": "data/text_embeddings_parsed"},
+    "text_path": {"bcmbert200": "data/text_embeddings_bcmbert200", "bcmbert8192": "data/text_embeddings_bcmbert8192", "legacytext-rerun": "data/text_embeddings_parsed"},
     "gpu_config": "configs/gpu_train.yaml"
   },
   "gpu_policy": {
@@ -156,7 +204,25 @@
     "test_complete_sha256": "8604aae480e76a0b5f2117e5d625bbd84255b6ec21f775d1da1e1073e2260eb6",
     "test_run_fingerprint": "a825b3cc4df41cf56afe228be531a4fc13f69c520bf35a2f2305101652387ec2",
     "artifacts_2progress": "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/runs/test",
-    "artifacts_4progress": "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/4.progress/runs/test"
+    "artifacts_4progress": "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/4.progress/runs/test",
+    "text_keys_sha256_rule": "sha256(按字典序排序的 patient_id 以换行连接)；取自 legacy_preflight / valid_source 锁定哈希核验过的历史 text 缓存，15 份共 2506 人",
+    "text_keys_sha256": {
+      "text_sur_test_all_BLCA.pkl": "d4b04ee6b2a4bbe221a6682d864cc3bdafc232c4d9a196dff026466abfaf1659",
+      "text_sur_test_all_BRCA.pkl": "70dd05e3850819099072fe2195a816d095d4464a16741af0d9d262860aa5899b",
+      "text_sur_test_all_LGG.pkl": "73e634095f241451e2c846370e58631929e3412320d169d7d3880c68bd0cd7bb",
+      "text_sur_test_all_LUAD.pkl": "635d74803eb755f8a74be798dbdd26c65cf98ad363a75c73900c84bcc94852b2",
+      "text_sur_test_all_UCEC.pkl": "cb4ee7832438653474eeef52ddb4d380f29764560f907b7c983c143b6daeda4a",
+      "text_sur_train_all_BLCA.pkl": "84e5b6d0b2fc5ac79fb3405a8ff1349643ee80c3cf4007c3b98a46dfbfd9a040",
+      "text_sur_train_all_BRCA.pkl": "5fea21721bcb3b47a2d23ae24ff5e7b7449e3a319bf3dfa8f99838074315b313",
+      "text_sur_train_all_LGG.pkl": "cf19c33fe4e12d87bbdb5ae53caa0b16191a7d01780d0e7e756babc45c914fd0",
+      "text_sur_train_all_LUAD.pkl": "7edb21c388187498002f1e3644dc92e0194582901d81b11749043146fefd4bd3",
+      "text_sur_train_all_UCEC.pkl": "441a2fe40d88b025c09b1891e335f1b80b1af620f7d4c76377ac8f843dbcf89b",
+      "text_sur_valid_all_BLCA.pkl": "c518fe23b37be3f646380b915d63c0b54135ea8922185064dc3412e022ae57e2",
+      "text_sur_valid_all_BRCA.pkl": "58e358fe19fadef9fe17b56f4ef93a2234870cd856d062b45b358dd14e0881f6",
+      "text_sur_valid_all_LGG.pkl": "b31829c164558b456b52a81b156f7dd6ad3651b026468c3ed95378d6765cc7f3",
+      "text_sur_valid_all_LUAD.pkl": "df565b947733a5edc0cb5ddd2997f29908334267a34e3e266fba6df433ee9987",
+      "text_sur_valid_all_UCEC.pkl": "4b5519446e5d0489230893e7a5a8dc00b1c3b3363bb4cd9697247a3b427fdfcc"
+    }
   },
   "table1_none_proto": {
     "source": "manuscript/bmc_initial_draft/main.tex Table 1 None 行 Proto.† 列；与 legacy.test_complete 的 strategy0/none 五 seed 均值逐位相同",

@@ -1,0 +1,110 @@
+{
+  "review": "Adversarial Review",
+  "target": {
+    "mode": "branch",
+    "label": "branch diff against main",
+    "baseRef": "main",
+    "explicit": true
+  },
+  "threadId": "01a0d296-cf62-7fa1-838f-fdf5dd9b1f72",
+  "context": {
+    "repoRoot": "<仓库根>",
+    "branch": "dev",
+    "summary": "Reviewing branch dev against main from merge-base 56818d83f9d6b17f10f2633228920a328e6fe724."
+  },
+  "codex": {
+    "status": 0,
+    "stderr": "",
+    "stdout": "{\"verdict\":\"needs-attention\",\"summary\":\"不应发车：正式 test 门与“先审 H、后 squash 得 S”的新流程直接冲突；资产门还未把特征生成身份及患者级 split 绑定到冻结输入。\",\"findings\":[{\"severity\":\"high\",\"title\":\"审查记录绑定 H，但正式 test 强制要求绑定 S\",\"body\":\"新计划在候选提交 H 上完成 Codex 审查，冒烟通过后再 squash 生成不同 commit 的 S；这里却要求 review.commit 必须等于正式运行的 S。即使 tree(H)=tree(S)，H 的 PASS 记录也必然被拒绝，而流程中没有在 S 上重新审查或生成受控换绑证明的步骤，正式 test 会卡死。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":817,\"line_end\":822,\"confidence\":0.99,\"recommendation\":\"增加可审计的 H→S tree 等价证明并允许审查记录以 tree/source digest 绑定，或在 freeze 后生成由原审查记录、H、S、tree 哈希共同签署的换绑记录；同时补覆盖 H≠S、tree 相同的门禁测试。\"},{\"severity\":\"high\",\"title\":\"特征 manifest 未与获审提取器及模型文件绑定\",\"body\":\"资产门只核对 encoder 参数、schema、profile、batch_size 和 slot_rows，未核对 manifest.extractor 的源码哈希/commit，也未核对 manifest.model_files。因而旧版、dirty 或错误提取器生成的特征，只要写出相同表面字段和自洽患者哈希，就能被资产锁接受并进入正式训练；当前 H→S 流程也没有代码级证明这些特征确由获审 H 生成。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":302,\"line_end\":322,\"confidence\":0.97,\"recommendation\":\"核对 manifest.extractor.files 与获审 H/S 的源码哈希，验证 H 与 S 的 tree 等价，并校验锁定 revision 下必需模型文件的完整哈希集合；为旧/dirty extractor、缺失或篡改 model_files 增加拒绝测试。\"},{\"severity\":\"high\",\"title\":\"Text 患者集合只做自洽检查，不能阻止 split 身份漂移\",\"body\":\"新 Text 缓存的期望 key 直接取自 feature_manifest，随后也只比较 manifest 自报的 cancer/split；manifest.labels.sha256 没有与当前冻结标签核对，患者集合也没有与历史 Text key 逐患者比对。若错误标签生成的 manifest 与缓存彼此自洽，并保持各 split 人数及缺失人数不变，门禁可通过，但具体患者可能跨 train/test 调换，造成泄漏或改变评测样本。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":370,\"line_end\":400,\"confidence\":0.95,\"recommendation\":\"要求 manifest.labels.sha256 等于当前冻结标签哈希；从冻结标签逐患者核对 cancer/split，并要求新 Text 缓存的患者 key 与历史对应 split 的 Text key 完全一致，而不只比较计数；补“等人数交换 train/test 患者仍应拒绝”的负例。\"}],\"next_steps\":[\"先修复三处 provenance/患者身份门并补负例测试。\",\"修复后仅复审这些核心逻辑；通过前不要进入候选冒烟。\"]}",
+    "reasoning": [
+      "**Following strict JSON output rules**",
+      "**Considering citation constraints**",
+      "**Checking git diff completeness**",
+      "**Checking tokenizer settings**",
+      "**Extracting specific content slices**",
+      "**Inspecting locks and records**",
+      "**Verifying training plan integration**",
+      "**Examining model config and manifest integrity**",
+      "**Verifying asset locking and config migration** I’m exploring how asset locking interacts with different commit histories and config migrations, especially ensuring that cached features from an earlier commit can still be valid if the underlying tree matches, and checking how overwrites are handled during execution roots changes. I want to confirm that the plan and scripts properly handle these edge cases.",
+      "**Analyzing parser logic and test constraints**",
+      "**Analyzing cache and manifest behavior**",
+      "**Examining testing and manifest limitations**",
+      "**Assessing partial failure risks**",
+      "**Analyzing source identity timing issue**",
+      "**Analyzing commit and review mismatch**",
+      "**Identifying provenance and asset validation gaps** I’m seeing that formal testing is blocked due to commit versus tree validation issues, and there are gaps in how asset extraction and manifest source identity are verified between commits H and S. The plan’s reliance on tree equality without thorough hash comparisons creates a vulnerability where outdated or incorrect assets might be accepted, so I’m considering how to improve checks to ensure artifact provenance aligns with user approvals and actual source states.",
+      "**Reviewing model config and snapshot integrity**",
+      "**Analyzing review artifacts and workflow mismatches**",
+      "**Analyzing tokenizer and cache behavior**",
+      "**Examining manifest and label consistency**",
+      "**Analyzing dataset leakage risks**",
+      "**Examining patient set consistency**"
+    ]
+  },
+  "result": {
+    "verdict": "needs-attention",
+    "summary": "不应发车：正式 test 门与“先审 H、后 squash 得 S”的新流程直接冲突；资产门还未把特征生成身份及患者级 split 绑定到冻结输入。",
+    "findings": [
+      {
+        "severity": "high",
+        "title": "审查记录绑定 H，但正式 test 强制要求绑定 S",
+        "body": "新计划在候选提交 H 上完成 Codex 审查，冒烟通过后再 squash 生成不同 commit 的 S；这里却要求 review.commit 必须等于正式运行的 S。即使 tree(H)=tree(S)，H 的 PASS 记录也必然被拒绝，而流程中没有在 S 上重新审查或生成受控换绑证明的步骤，正式 test 会卡死。",
+        "file": "experiments/I05_text_encoder_bcmbert/evaluate.py",
+        "line_start": 817,
+        "line_end": 822,
+        "confidence": 0.99,
+        "recommendation": "增加可审计的 H→S tree 等价证明并允许审查记录以 tree/source digest 绑定，或在 freeze 后生成由原审查记录、H、S、tree 哈希共同签署的换绑记录；同时补覆盖 H≠S、tree 相同的门禁测试。"
+      },
+      {
+        "severity": "high",
+        "title": "特征 manifest 未与获审提取器及模型文件绑定",
+        "body": "资产门只核对 encoder 参数、schema、profile、batch_size 和 slot_rows，未核对 manifest.extractor 的源码哈希/commit，也未核对 manifest.model_files。因而旧版、dirty 或错误提取器生成的特征，只要写出相同表面字段和自洽患者哈希，就能被资产锁接受并进入正式训练；当前 H→S 流程也没有代码级证明这些特征确由获审 H 生成。",
+        "file": "experiments/I05_text_encoder_bcmbert/evaluate.py",
+        "line_start": 302,
+        "line_end": 322,
+        "confidence": 0.97,
+        "recommendation": "核对 manifest.extractor.files 与获审 H/S 的源码哈希，验证 H 与 S 的 tree 等价，并校验锁定 revision 下必需模型文件的完整哈希集合；为旧/dirty extractor、缺失或篡改 model_files 增加拒绝测试。"
+      },
+      {
+        "severity": "high",
+        "title": "Text 患者集合只做自洽检查，不能阻止 split 身份漂移",
+        "body": "新 Text 缓存的期望 key 直接取自 feature_manifest，随后也只比较 manifest 自报的 cancer/split；manifest.labels.sha256 没有与当前冻结标签核对，患者集合也没有与历史 Text key 逐患者比对。若错误标签生成的 manifest 与缓存彼此自洽，并保持各 split 人数及缺失人数不变，门禁可通过，但具体患者可能跨 train/test 调换，造成泄漏或改变评测样本。",
+        "file": "experiments/I05_text_encoder_bcmbert/evaluate.py",
+        "line_start": 370,
+        "line_end": 400,
+        "confidence": 0.95,
+        "recommendation": "要求 manifest.labels.sha256 等于当前冻结标签哈希；从冻结标签逐患者核对 cancer/split，并要求新 Text 缓存的患者 key 与历史对应 split 的 Text key 完全一致，而不只比较计数；补“等人数交换 train/test 患者仍应拒绝”的负例。"
+      }
+    ],
+    "next_steps": [
+      "先修复三处 provenance/患者身份门并补负例测试。",
+      "修复后仅复审这些核心逻辑；通过前不要进入候选冒烟。"
+    ]
+  },
+  "rawOutput": "{\"verdict\":\"needs-attention\",\"summary\":\"不应发车：正式 test 门与“先审 H、后 squash 得 S”的新流程直接冲突；资产门还未把特征生成身份及患者级 split 绑定到冻结输入。\",\"findings\":[{\"severity\":\"high\",\"title\":\"审查记录绑定 H，但正式 test 强制要求绑定 S\",\"body\":\"新计划在候选提交 H 上完成 Codex 审查，冒烟通过后再 squash 生成不同 commit 的 S；这里却要求 review.commit 必须等于正式运行的 S。即使 tree(H)=tree(S)，H 的 PASS 记录也必然被拒绝，而流程中没有在 S 上重新审查或生成受控换绑证明的步骤，正式 test 会卡死。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":817,\"line_end\":822,\"confidence\":0.99,\"recommendation\":\"增加可审计的 H→S tree 等价证明并允许审查记录以 tree/source digest 绑定，或在 freeze 后生成由原审查记录、H、S、tree 哈希共同签署的换绑记录；同时补覆盖 H≠S、tree 相同的门禁测试。\"},{\"severity\":\"high\",\"title\":\"特征 manifest 未与获审提取器及模型文件绑定\",\"body\":\"资产门只核对 encoder 参数、schema、profile、batch_size 和 slot_rows，未核对 manifest.extractor 的源码哈希/commit，也未核对 manifest.model_files。因而旧版、dirty 或错误提取器生成的特征，只要写出相同表面字段和自洽患者哈希，就能被资产锁接受并进入正式训练；当前 H→S 流程也没有代码级证明这些特征确由获审 H 生成。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":302,\"line_end\":322,\"confidence\":0.97,\"recommendation\":\"核对 manifest.extractor.files 与获审 H/S 的源码哈希，验证 H 与 S 的 tree 等价，并校验锁定 revision 下必需模型文件的完整哈希集合；为旧/dirty extractor、缺失或篡改 model_files 增加拒绝测试。\"},{\"severity\":\"high\",\"title\":\"Text 患者集合只做自洽检查，不能阻止 split 身份漂移\",\"body\":\"新 Text 缓存的期望 key 直接取自 feature_manifest，随后也只比较 manifest 自报的 cancer/split；manifest.labels.sha256 没有与当前冻结标签核对，患者集合也没有与历史 Text key 逐患者比对。若错误标签生成的 manifest 与缓存彼此自洽，并保持各 split 人数及缺失人数不变，门禁可通过，但具体患者可能跨 train/test 调换，造成泄漏或改变评测样本。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":370,\"line_end\":400,\"confidence\":0.95,\"recommendation\":\"要求 manifest.labels.sha256 等于当前冻结标签哈希；从冻结标签逐患者核对 cancer/split，并要求新 Text 缓存的患者 key 与历史对应 split 的 Text key 完全一致，而不只比较计数；补“等人数交换 train/test 患者仍应拒绝”的负例。\"}],\"next_steps\":[\"先修复三处 provenance/患者身份门并补负例测试。\",\"修复后仅复审这些核心逻辑；通过前不要进入候选冒烟。\"]}",
+  "parseError": null,
+  "reasoningSummary": [
+    "**Following strict JSON output rules**",
+    "**Considering citation constraints**",
+    "**Checking git diff completeness**",
+    "**Checking tokenizer settings**",
+    "**Extracting specific content slices**",
+    "**Inspecting locks and records**",
+    "**Verifying training plan integration**",
+    "**Examining model config and manifest integrity**",
+    "**Verifying asset locking and config migration** I’m exploring how asset locking interacts with different commit histories and config migrations, especially ensuring that cached features from an earlier commit can still be valid if the underlying tree matches, and checking how overwrites are handled during execution roots changes. I want to confirm that the plan and scripts properly handle these edge cases.",
+    "**Analyzing parser logic and test constraints**",
+    "**Analyzing cache and manifest behavior**",
+    "**Examining testing and manifest limitations**",
+    "**Assessing partial failure risks**",
+    "**Analyzing source identity timing issue**",
+    "**Analyzing commit and review mismatch**",
+    "**Identifying provenance and asset validation gaps** I’m seeing that formal testing is blocked due to commit versus tree validation issues, and there are gaps in how asset extraction and manifest source identity are verified between commits H and S. The plan’s reliance on tree equality without thorough hash comparisons creates a vulnerability where outdated or incorrect assets might be accepted, so I’m considering how to improve checks to ensure artifact provenance aligns with user approvals and actual source states.",
+    "**Reviewing model config and snapshot integrity**",
+    "**Analyzing review artifacts and workflow mismatches**",
+    "**Analyzing tokenizer and cache behavior**",
+    "**Examining manifest and label consistency**",
+    "**Analyzing dataset leakage risks**",
+    "**Examining patient set consistency**"
+  ]
+}

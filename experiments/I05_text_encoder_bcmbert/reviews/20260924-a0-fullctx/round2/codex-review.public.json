@@ -1,0 +1,83 @@
+{
+  "review": "Adversarial Review",
+  "target": {
+    "mode": "branch",
+    "label": "branch diff against main",
+    "baseRef": "main",
+    "explicit": true
+  },
+  "threadId": "01a0d2b0-3f5d-75f1-84fb-81be5698e00c",
+  "context": {
+    "repoRoot": "<仓库根>",
+    "branch": "dev",
+    "summary": "Reviewing branch dev against main from merge-base 56818d83f9d6b17f10f2633228920a328e6fe724."
+  },
+  "codex": {
+    "status": 0,
+    "stderr": "",
+    "stdout": "{\"verdict\":\"needs-attention\",\"summary\":\"不应放行：第 3 条 high 仍可通过省略可选参数绕过，患者身份门没有强制闭合。\",\"findings\":[{\"severity\":\"high\",\"title\":\"历史 Text 患者集合核对仍是可选门\",\"body\":\"新实现从当前运行根的 `text_embeddings_parsed` 推导患者集合；该目录与 manifest、新特征和缓存可被同步替换。唯一绑定历史逐患者集合的检查受 `legacy_cache_dir is not None` 控制，而 CLI 未要求正式 assets 阶段必须提供它。攻击或操作失误只需在同一 cancer/split 内等人数替换旧 Text 文件名，并同步生成 manifest 与缓存，即可保持标签、split、人数和缺失计数全部自洽后通过，错误患者可能进入训练或评测。新增测试也只证明“传入 `--legacy-cache-dir` 时拒绝”，没有覆盖省略参数必须失败。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":423,\"line_end\":432,\"confidence\":0.99,\"recommendation\":\"对 schema>=2 且 `text_cache=new` 的 assets/preflight/smoke/test 强制要求可信的历史缓存目录，并始终逐 split 比较历史 Text key；更稳妥的是把历史患者集合摘要固定进受审配置或冻结证据。增加省略 `--legacy-cache-dir` 以及同步篡改 reference、manifest、cache 的负例测试。\"}],\"next_steps\":[\"先把历史 Text key 核对改成不可省略的硬门，再复审这一处。\"]}",
+    "reasoning": [
+      "**Preparing for JSON-only code review**",
+      "**Reviewing partial update and relevant commits**",
+      "**Locating reference point**",
+      "**Completing truncated output** I’m working to retrieve the missing middle section of the output by focusing on lines around 60 to 160, aiming to fill the gaps left by truncation and include relevant references to codex.",
+      "**Inspecting commit details**",
+      "**Requesting detailed function info**",
+      "**Focusing on exact ranges**",
+      "**Reviewing model and feature manifest checks**",
+      "**Analyzing text patient collection integrity**",
+      "**Examining optional cache and validation**",
+      "**Analyzing rebind vulnerability details**",
+      "**Checking model loading for remote code trust**",
+      "**Analyzing review record verification**",
+      "**Evaluating model profile and configuration risks** I’m reviewing severity around potential data leakage in legacy cache handling and how model hash sets are validated. The checks focus on keys and manifests but might miss malformed configs that remain self-consistent. I'm also weighing how transformer version drift could impact reproducibility versus the stable, hashed feature files. Tests should confirm these risks.",
+      "**Analyzing test limitations and code regions**",
+      "**Examining rebind logic and review workflow**",
+      "**Analyzing commit and review artifact issues**",
+      "**Analyzing test behavior with legacy cache**",
+      "**Evaluating asset lock verification**"
+    ]
+  },
+  "result": {
+    "verdict": "needs-attention",
+    "summary": "不应放行：第 3 条 high 仍可通过省略可选参数绕过，患者身份门没有强制闭合。",
+    "findings": [
+      {
+        "severity": "high",
+        "title": "历史 Text 患者集合核对仍是可选门",
+        "body": "新实现从当前运行根的 `text_embeddings_parsed` 推导患者集合；该目录与 manifest、新特征和缓存可被同步替换。唯一绑定历史逐患者集合的检查受 `legacy_cache_dir is not None` 控制，而 CLI 未要求正式 assets 阶段必须提供它。攻击或操作失误只需在同一 cancer/split 内等人数替换旧 Text 文件名，并同步生成 manifest 与缓存，即可保持标签、split、人数和缺失计数全部自洽后通过，错误患者可能进入训练或评测。新增测试也只证明“传入 `--legacy-cache-dir` 时拒绝”，没有覆盖省略参数必须失败。",
+        "file": "experiments/I05_text_encoder_bcmbert/evaluate.py",
+        "line_start": 423,
+        "line_end": 432,
+        "confidence": 0.99,
+        "recommendation": "对 schema>=2 且 `text_cache=new` 的 assets/preflight/smoke/test 强制要求可信的历史缓存目录，并始终逐 split 比较历史 Text key；更稳妥的是把历史患者集合摘要固定进受审配置或冻结证据。增加省略 `--legacy-cache-dir` 以及同步篡改 reference、manifest、cache 的负例测试。"
+      }
+    ],
+    "next_steps": [
+      "先把历史 Text key 核对改成不可省略的硬门，再复审这一处。"
+    ]
+  },
+  "rawOutput": "{\"verdict\":\"needs-attention\",\"summary\":\"不应放行：第 3 条 high 仍可通过省略可选参数绕过，患者身份门没有强制闭合。\",\"findings\":[{\"severity\":\"high\",\"title\":\"历史 Text 患者集合核对仍是可选门\",\"body\":\"新实现从当前运行根的 `text_embeddings_parsed` 推导患者集合；该目录与 manifest、新特征和缓存可被同步替换。唯一绑定历史逐患者集合的检查受 `legacy_cache_dir is not None` 控制，而 CLI 未要求正式 assets 阶段必须提供它。攻击或操作失误只需在同一 cancer/split 内等人数替换旧 Text 文件名，并同步生成 manifest 与缓存，即可保持标签、split、人数和缺失计数全部自洽后通过，错误患者可能进入训练或评测。新增测试也只证明“传入 `--legacy-cache-dir` 时拒绝”，没有覆盖省略参数必须失败。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":423,\"line_end\":432,\"confidence\":0.99,\"recommendation\":\"对 schema>=2 且 `text_cache=new` 的 assets/preflight/smoke/test 强制要求可信的历史缓存目录，并始终逐 split 比较历史 Text key；更稳妥的是把历史患者集合摘要固定进受审配置或冻结证据。增加省略 `--legacy-cache-dir` 以及同步篡改 reference、manifest、cache 的负例测试。\"}],\"next_steps\":[\"先把历史 Text key 核对改成不可省略的硬门，再复审这一处。\"]}",
+  "parseError": null,
+  "reasoningSummary": [
+    "**Preparing for JSON-only code review**",
+    "**Reviewing partial update and relevant commits**",
+    "**Locating reference point**",
+    "**Completing truncated output** I’m working to retrieve the missing middle section of the output by focusing on lines around 60 to 160, aiming to fill the gaps left by truncation and include relevant references to codex.",
+    "**Inspecting commit details**",
+    "**Requesting detailed function info**",
+    "**Focusing on exact ranges**",
+    "**Reviewing model and feature manifest checks**",
+    "**Analyzing text patient collection integrity**",
+    "**Examining optional cache and validation**",
+    "**Analyzing rebind vulnerability details**",
+    "**Checking model loading for remote code trust**",
+    "**Analyzing review record verification**",
+    "**Evaluating model profile and configuration risks** I’m reviewing severity around potential data leakage in legacy cache handling and how model hash sets are validated. The checks focus on keys and manifests but might miss malformed configs that remain self-consistent. I'm also weighing how transformer version drift could impact reproducibility versus the stable, hashed feature files. Tests should confirm these risks.",
+    "**Analyzing test limitations and code regions**",
+    "**Examining rebind logic and review workflow**",
+    "**Analyzing commit and review artifact issues**",
+    "**Analyzing test behavior with legacy cache**",
+    "**Evaluating asset lock verification**"
+  ]
+}

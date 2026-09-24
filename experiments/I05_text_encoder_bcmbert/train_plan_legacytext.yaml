@@ -1,0 +1,180 @@
+# I05 对照臂 legacytext-rerun 正式训练清单：25 个 run，arm e0_legacytext_rerun = E0/NPJ-C 骨架 + 原有 Text 特征（data/text_embeddings_parsed），在现行代码上按同一配方重训。
+# 用途（用户裁决 2026-09-24）：拆分重训方差——与 Table 1 的差异只来自重训，与 bcmbert8192 的差异只来自 Text 管线。
+# --model-config 用默认 configs/models/surv_multimodal_mainmoe_uni2.yml，与既有 e0 臂逐参相同，只差 --result-path。
+# 正式发车须从 main 冻结的 run worktree 经 jobrun.sh 托管，并使用独立的 --result-path / --state-file。
+runs:
+  - name: e0_legacytext_rerun_LGG_s123
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: LGG
+    seed: 123
+    bin_mode: author
+  - name: e0_legacytext_rerun_BRCA_s123
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: BRCA
+    seed: 123
+    bin_mode: author
+  - name: e0_legacytext_rerun_BLCA_s123
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: BLCA
+    seed: 123
+    bin_mode: author
+  - name: e0_legacytext_rerun_LUAD_s123
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: LUAD
+    seed: 123
+    bin_mode: author
+  - name: e0_legacytext_rerun_UCEC_s123
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: UCEC
+    seed: 123
+    bin_mode: author
+  - name: e0_legacytext_rerun_LGG_s132
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: LGG
+    seed: 132
+    bin_mode: author
+  - name: e0_legacytext_rerun_BRCA_s132
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: BRCA
+    seed: 132
+    bin_mode: author
+  - name: e0_legacytext_rerun_BLCA_s132
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: BLCA
+    seed: 132
+    bin_mode: author
+  - name: e0_legacytext_rerun_LUAD_s132
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: LUAD
+    seed: 132
+    bin_mode: author
+  - name: e0_legacytext_rerun_UCEC_s132
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: UCEC
+    seed: 132
+    bin_mode: author
+  - name: e0_legacytext_rerun_LGG_s213
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: LGG
+    seed: 213
+    bin_mode: author
+  - name: e0_legacytext_rerun_BRCA_s213
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: BRCA
+    seed: 213
+    bin_mode: author
+  - name: e0_legacytext_rerun_BLCA_s213
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: BLCA
+    seed: 213
+    bin_mode: author
+  - name: e0_legacytext_rerun_LUAD_s213
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: LUAD
+    seed: 213
+    bin_mode: author
+  - name: e0_legacytext_rerun_UCEC_s213
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: UCEC
+    seed: 213
+    bin_mode: author
+  - name: e0_legacytext_rerun_LGG_s231
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: LGG
+    seed: 231
+    bin_mode: author
+  - name: e0_legacytext_rerun_BRCA_s231
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: BRCA
+    seed: 231
+    bin_mode: author
+  - name: e0_legacytext_rerun_BLCA_s231
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: BLCA
+    seed: 231
+    bin_mode: author
+  - name: e0_legacytext_rerun_LUAD_s231
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: LUAD
+    seed: 231
+    bin_mode: author
+  - name: e0_legacytext_rerun_UCEC_s231
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: UCEC
+    seed: 231
+    bin_mode: author
+  - name: e0_legacytext_rerun_LGG_s321
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: LGG
+    seed: 321
+    bin_mode: author
+  - name: e0_legacytext_rerun_BRCA_s321
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: BRCA
+    seed: 321
+    bin_mode: author
+  - name: e0_legacytext_rerun_BLCA_s321
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: BLCA
+    seed: 321
+    bin_mode: author
+  - name: e0_legacytext_rerun_LUAD_s321
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: LUAD
+    seed: 321
+    bin_mode: author
+  - name: e0_legacytext_rerun_UCEC_s321
+    arm: e0_legacytext_rerun
+    network_type: NPJC
+    compensator: none
+    cancer: UCEC
+    seed: 321
+    bin_mode: author

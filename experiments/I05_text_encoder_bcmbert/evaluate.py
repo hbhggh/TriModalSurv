@@ -36,12 +36,13 @@ for _path in (str(REPO_ROOT / 'src'), str(REPO_ROOT)):
 
 from experiments.I05_text_encoder_bcmbert import gpu_policy  # noqa: E402
 from experiments.I05_text_encoder_bcmbert import model as encoder_model  # noqa: E402
+from experiments.I05_text_encoder_bcmbert import extract_text_features as extractor  # noqa: E402
 from experiments.I05_text_encoder_bcmbert.extract_text_features import (  # noqa: E402
     cache_content_digest, load_feature, sha256_file, write_json_exclusive)
 
 DEFAULT_CONFIG = EXPERIMENT_DIR / 'config.yaml'
 STAGES = ('assets', 'preflight', 'smoke', 'replay', 'test')
-PROFILES = ('bcmbert200', 'legacy-replay', 'legacytext-rerun')
+PROFILES = ('bcmbert200', 'bcmbert8192', 'legacy-replay', 'legacytext-rerun')
 MODALITIES = ('img', 'text', 'rna')
 SPLITS = ('train', 'valid', 'test')
 REPORTED_PROTOCOLS = ('strategy0', 'm1', 'm0real')
@@ -99,14 +100,18 @@ def cache_keys(path) -> set:
 
 def load_config(path=DEFAULT_CONFIG) -> dict:
     config = read_json(path)
-    required = {'protocol_ids', 'profiles', 'cancers', 'seeds', 'grids', 'text_encoder', 'shapes', 'model',
+    required = {'protocol_ids', 'profiles', 'cancers', 'seeds', 'grids', 'text_encoders', 'shapes', 'model',
                 'numerics', 'frozen_combo_spec', 's0_force', 'runtime', 'gpu_policy', 'smoke', 'assets',
                 'upstream', 'legacy', 'training_contract'}
     missing = required - set(config)
     if missing:
         raise ValueError(f'config 缺少字段: {sorted(missing)}')
     if set(config['profiles']) != set(PROFILES) or set(config['protocol_ids']) != set(PROFILES):
-        raise ValueError('config 的资产档案必须恰为 bcmbert200 / legacy-replay / legacytext-rerun')
+        raise ValueError(f'config 的资产档案必须恰为 {" / ".join(PROFILES)}')
+    check_profile_contract(config)
+    expected_names = {cache_path('.', 'text', split, cancer).name for cancer in config['cancers'] for split in SPLITS}
+    if set(config['legacy'].get('text_keys_sha256') or {}) != expected_names:
+        raise ValueError('legacy.text_keys_sha256 必须恰好固定五癌 × 三 split 的历史 text 患者集合摘要')
     if tuple(config['seeds']) != REQUIRED_SEEDS or config['smoke']['seed'] not in REQUIRED_SEEDS:
         raise ValueError('I05 的实验种子必须是 123、132、213、231、321（用户锁定）')
     gpu_policy.validate_policy(config['gpu_policy'])
@@ -232,9 +237,13 @@ def load_legacy(config, *, repo_root=REPO_ROOT, preflight_override=None, valid_o
         raise ValueError('legacy-preflight.json 与锁定哈希不一致')
     if valid_override is None and sha256_file(valid_path) != legacy['valid_source_sha256']:
         raise ValueError('valid-source.json 与锁定哈希不一致')
-    return {'preflight': read_json(preflight_path), 'valid': read_json(valid_path),
+    preflight = read_json(preflight_path)
+    overridden = preflight_override is not None or valid_override is not None
+    # 历史 text 患者集合摘要（复审 round2）：正式运行只取 config 固定值；替身证据只用于 _SYNTHETIC 合成运行
+    text_keys = preflight.get('text_keys_sha256', {}) if overridden else legacy['text_keys_sha256']
+    return {'preflight': preflight, 'valid': read_json(valid_path),
             'preflight_sha256': sha256_file(preflight_path), 'valid_sha256': sha256_file(valid_path),
-            'overridden': preflight_override is not None or valid_override is not None}
+            'text_keys_sha256': text_keys, 'overridden': overridden}
 
 
 def load_legacy_test_complete(config, repo_root=REPO_ROOT) -> dict:
@@ -254,20 +263,116 @@ def legacy_cache_sha(legacy, cancer, modality, split):
     return legacy['preflight']['reports'][cancer]['provenance']['cache_hashes'].get(name)
 
 
+def _model_config_text_path(path) -> str:
+    """不依赖 PyYAML，读出 model config 里 modality.text.path 的原样字符串。"""
+    section = None
+    for raw in Path(path).read_text(encoding='utf-8').splitlines():
+        line = raw.split('#', 1)[0].rstrip()
+        if not line.strip():
+            continue
+        indent = len(line) - len(line.lstrip())
+        key = line.strip().split(':', 1)[0]
+        if indent == 0:
+            section = 'modality' if key == 'modality' else None
+        elif section == 'modality' and indent == 2:
+            section = 'modality.text' if key == 'text' else 'modality'
+        elif section == 'modality.text' and key == 'path':
+            return line.split(':', 1)[1].strip()
+    raise ValueError(f'{path} 里找不到 modality.text.path')
+
+
+def check_profile_contract(config, repo_root=REPO_ROOT) -> None:
+    """每个新特征档案在三处（编码器锁、训练契约、model config 文件）必须指向同一个 Text 目录。"""
+    profiles, encoders = config['profiles'], config['text_encoders']
+    contract = config['training_contract']
+    new_text = {name for name, value in profiles.items() if value['text_cache'] == 'new'}
+    new_ckpt = {name for name, value in profiles.items() if value['checkpoints'] == 'new'}
+    if set(encoders) != new_text:
+        raise ValueError(f'text_encoders 的档案 {sorted(encoders)} 必须恰为新特征档案 {sorted(new_text)}')
+    if set(contract['model_config']) != new_ckpt or set(contract['text_path']) != new_ckpt:
+        raise ValueError(f'training_contract 的 model_config / text_path 必须恰为新训练档案 {sorted(new_ckpt)}')
+    for name, section in sorted(encoders.items()):
+        if set(section.get('model_files_sha256') or {}) != set(extractor.MODEL_FILES):
+            raise ValueError(f'{name}: model_files_sha256 必须恰好固定 {len(extractor.MODEL_FILES)} 个模型文件的哈希')
+    feature_dirs = [encoders[name]['feature_dir'] for name in sorted(encoders)]
+    if len(set(feature_dirs)) != len(feature_dirs):
+        raise ValueError('不同档案的 feature_dir 必须互不相同（缓存键不含特征路径，混用会静默命中，坑 D2）')
+    for name in sorted(new_ckpt):
+        text_path = contract['text_path'][name]
+        if name in encoders:
+            encoder_model.spec_from_config(config, name)
+            if text_path != encoders[name]['feature_dir']:
+                raise ValueError(f'{name}: training_contract.text_path {text_path} != feature_dir {encoders[name]["feature_dir"]}')
+        declared = _model_config_text_path(Path(repo_root) / contract['model_config'][name])
+        if declared != text_path:
+            raise ValueError(f'{name}: model config 的 text.path {declared} != training_contract.text_path {text_path}')
+
+
 # ----------------------------------------------------------------------------- 资产门
 
-def _feature_manifest(config, run_root, spec_check=True):
-    feature_dir = Path(run_root) / config['text_encoder']['feature_dir']
+def extractor_source_hashes() -> dict:
+    """当前代码树里提取器源码闭包的 sha256，键与 manifest.extractor.files 相同（相对仓库根）。"""
+    prefix = EXPERIMENT_DIR.relative_to(REPO_ROOT).as_posix()
+    return {f'{prefix}/{name}': sha256_file(EXPERIMENT_DIR / name) for name in extractor.SOURCE_FILES}
+
+
+def _feature_manifest(config, run_root, profile, spec_check=True):
+    section = config['text_encoders'][profile]
+    feature_dir = Path(run_root) / section['feature_dir']
     manifest_path = feature_dir / 'manifest.json'
     manifest = read_json(manifest_path)
     if manifest.get('status') != 'complete' or manifest.get('partial') is not False:
         raise ValueError('新特征 manifest 未完成或是冒烟用的部分提取')
     if spec_check:
-        expected = encoder_model.spec_from_config(config).as_dict()
+        expected = encoder_model.spec_from_config(config, profile).as_dict()
         actual = {key: manifest['encoder'].get(key) for key in expected}
         if actual != expected:
             raise ValueError(f'新特征 manifest 的编码器设置与锁定值不一致: {actual}')
+    schema = int(manifest.get('schema_version', 1))
+    if schema < int(section['manifest_min_schema']):
+        raise ValueError(f'{profile} 要求特征 manifest schema ≥ {section["manifest_min_schema"]}，实际 {schema}')
+    if schema >= 2:
+        batching = manifest.get('batching') or {}
+        if (manifest.get('profile') != profile or batching.get('batch_size') != section['batch_size']
+                or manifest.get('slot_rows') != encoder_model.SLOT_ROWS):
+            raise ValueError(f'新特征 manifest 的档案、batching 或槽位行数与 {profile} 不符')
+        # 生成身份（Codex 首审 finding 2）：特征必须由与当前代码逐字节相同的干净提取器、
+        # 在锁定 revision 的锁定模型文件上生成；旧版 / dirty 提取器或被换过的权重都拒绝。
+        source = manifest.get('extractor') or {}
+        if source.get('files') != extractor_source_hashes():
+            raise ValueError('新特征 manifest 的提取器源码与当前代码不同（旧版或改过的提取器），拒绝')
+        if (source.get('git') or {}).get('dirty') is not False:
+            raise ValueError('新特征 manifest 的提取器不是干净源码身份（dirty 或无 commit），拒绝')
+        if manifest.get('model_files') != section['model_files_sha256']:
+            raise ValueError('新特征 manifest 的模型文件哈希与 config 锁定值不同，拒绝')
     return feature_dir, manifest, sha256_file(manifest_path)
+
+
+def _expected_text_patients(config, run_root, profile, manifest, label_sha) -> dict:
+    """由冻结输入独立推出每位新特征患者的 (癌种, split)（Codex 首审 finding 3）。
+
+    manifest 的标签哈希必须等于冻结标签；manifest 的患者集合必须恰为「五癌标签 ∩ 旧 Text 特征目录」，
+    且逐人的癌种 / split 等于冻结标签。返回 {patient_id: (cancer, split)}，供逐 split 推出 text 缓存的期望患者。
+    """
+    section = config['text_encoders'][profile]
+    if (manifest.get('labels') or {}).get('sha256') != label_sha:
+        raise ValueError('新特征 manifest 的标签哈希与冻结标签不同：特征可能按别的 split 生成，拒绝')
+    records, _ = extractor.read_labels(Path(run_root) / config['assets']['label'],
+                                       text_column=section['text_column'], cancers=tuple(config['cancers']))
+    refs = extractor.reference_ids(Path(run_root) / section['reference_feature_dir'])
+    listing = hashlib.sha256('\n'.join(refs).encode()).hexdigest()
+    if (manifest.get('reference_dir') or {}).get('listing_sha256') != listing:
+        raise ValueError('新特征 manifest 记录的旧 Text 特征目录清单与运行根不同，拒绝')
+    targets = set(extractor.plan_targets(records, refs)['targets'])
+    patients = manifest['patients']
+    if set(patients) != targets:
+        extra, missing = sorted(set(patients) - targets), sorted(targets - set(patients))
+        raise ValueError(f'新特征 manifest 的患者集合不等于「标签 ∩ 旧 Text 特征」：多 {extra[:5]}，少 {missing[:5]}')
+    for pid, entry in patients.items():
+        label = records[pid]
+        if (entry.get('cancer'), entry.get('split')) != (label['cancer'], label['split']):
+            raise ValueError(f'{pid}: 新特征 manifest 的癌种或 split 与冻结标签不符')
+    return {pid: (records[pid]['cancer'], records[pid]['split']) for pid in targets}
 
 
 def check_assets(config, legacy, *, run_root, profile, cancers, legacy_cache_dir=None) -> dict:
@@ -279,9 +384,12 @@ def check_assets(config, legacy, *, run_root, profile, cancers, legacy_cache_dir
     manifest_sha = sha256_file(run_root / config['assets']['manifest'])
     report = {'profile': profile, 'text_cache': kind, 'label_sha256': label_sha, 'manifest_sha256': manifest_sha,
               'cancers': {}}
-    feature_dir = feature_manifest = None
+    feature_dir = feature_manifest = labelled = None
     if kind == 'new':
-        feature_dir, feature_manifest, report['feature_manifest_sha256'] = _feature_manifest(config, run_root)
+        feature_dir, feature_manifest, report['feature_manifest_sha256'] = _feature_manifest(config, run_root, profile)
+        if int(feature_manifest.get('schema_version', 1)) >= 2:
+            labelled = _expected_text_patients(config, run_root, profile, feature_manifest, label_sha)
+            report['feature_extractor_commit'] = feature_manifest['extractor']['git'].get('commit')
     for cancer in cancers:
         legacy_report = legacy['preflight']['reports'][cancer]
         provenance = legacy_report['provenance']
@@ -319,9 +427,19 @@ def check_assets(config, legacy, *, run_root, profile, cancers, legacy_cache_dir
             text = load_cache_dict(cache_path(cache_dir, 'text', split, cancer))
             text_keys[split] = set(text)
             if kind == 'new':
-                expected_keys = {pid for pid in img_keys[split] if pid in feature_manifest['patients']}
+                if labelled is not None:
+                    # 期望集合由冻结输入推出：有 WSI（历史缓存）、有旧 Text 特征、冻结标签的癌种与 split 相符
+                    expected_keys = {pid for pid in img_keys[split] if labelled.get(pid) == (cancer, split)}
+                else:
+                    expected_keys = {pid for pid in img_keys[split] if pid in feature_manifest['patients']}
                 if text_keys[split] != expected_keys:
                     raise ValueError(f'{cancer}/{split}: text 缓存患者集合与"有 WSI 且有新特征"的集合不一致')
+                if labelled is not None:
+                    # 硬门，不依赖任何参数：患者集合必须等于历史 text 缓存（config 固定的集合摘要）
+                    name = cache_path('.', 'text', split, cancer).name
+                    digest = hashlib.sha256('\n'.join(sorted(text_keys[split])).encode()).hexdigest()
+                    if digest != legacy['text_keys_sha256'].get(name):
+                        raise ValueError(f'{cancer}/{split}: text 缓存患者集合与历史 text 缓存逐人不同')
                 for pid, value in text.items():
                     entry = feature_manifest['patients'][pid]
                     if entry['cancer'] != cancer or entry['split'] != split:
@@ -755,8 +873,36 @@ def compare_replay(new_rows, legacy_rows, *, tier, parity=None) -> dict:
 
 # ----------------------------------------------------------------------------- 门
 
-def check_test_gates(*, replay_record, review_record, approval_record, source_digest, protocol_id, commit) -> dict:
-    """test 阶段必须同时具备：同源码的回放 PASS、Codex 审查 PASS、用户授权。审查记录不由 Claude 代写。"""
+REBIND_KIND = 'review_rebind'
+
+
+def _is_sha1(value) -> bool:
+    return isinstance(value, str) and len(value) == 40 and all(char in '0123456789abcdef' for char in value)
+
+
+def check_review_rebind(rebind_record, *, review_record, review_commit, commit) -> str:
+    """审查发生在候选 H、正式运行在 squash 后的 S（Codex 首审 finding 1）：换绑记录由
+    tools/rebind_review.py 在有 .git 的机器上生成，证明 tree(H) == tree(S) 并绑定这份审查记录。
+    服务器上没有 .git，无法重算 tree；因此换绑记录的 sha256 还必须写进用户授权记录。返回其 sha256。"""
+    if rebind_record is None:
+        raise ValueError('审查记录绑定的 commit 与冻结 commit 不同：需要 --review-rebind-record（tree(H)=tree(S) 的换绑记录）')
+    rebind = read_json(rebind_record)
+    expected = {'kind': REBIND_KIND, 'review_record_sha256': sha256_file(review_record),
+                'review_commit': review_commit, 'commit': commit}
+    mismatched = sorted(key for key, value in expected.items() if rebind.get(key) != value)
+    if mismatched:
+        raise ValueError(f'换绑记录与本次审查记录或冻结 commit 不符: {mismatched}')
+    tree, review_tree = rebind.get('commit_tree'), rebind.get('review_tree')
+    if not (_is_sha1(tree) and _is_sha1(review_tree)) or tree != review_tree:
+        raise ValueError('换绑记录没有证明 tree(审查 commit) == tree(冻结 commit)，需要在冻结 commit 上重审')
+    return sha256_file(rebind_record)
+
+
+def check_test_gates(*, replay_record, review_record, approval_record, source_digest, protocol_id, commit,
+                     rebind_record=None) -> dict:
+    """test 阶段必须同时具备：同源码的回放 PASS、Codex 审查 PASS、用户授权。审查记录不由 Claude 代写。
+
+    审查记录的 commit 可以是候选 H（审查先于 squash），此时必须附 H→S 换绑记录，且用户授权记录要引用它。"""
     if not (replay_record and review_record and approval_record):
         raise ValueError('test 需要 --replay-record、--review-record、--user-approval-record 三份记录')
     replay = read_json(replay_record)
@@ -765,18 +911,26 @@ def check_test_gates(*, replay_record, review_record, approval_record, source_di
     review = read_json(review_record)
     if review.get('reviewer') != 'Codex' or review.get('decision') != 'PASS':
         raise ValueError('需要 reviewer=Codex、decision=PASS 的审查记录')
-    if (review.get('source_hashes_sha256') != source_digest or review.get('protocol_id') != protocol_id
-            or review.get('commit') != commit):
-        raise ValueError('审查记录绑定的源码、协议或冻结 commit 与当前不同，需要重审')
+    if review.get('source_hashes_sha256') != source_digest or review.get('protocol_id') != protocol_id:
+        raise ValueError('审查记录绑定的源码或协议与当前不同，需要重审')
+    review_commit = review.get('commit')
+    if not _is_sha1(review_commit):
+        raise ValueError('审查记录缺少完整的 commit')
+    rebind_sha = None
+    if review_commit != commit:
+        rebind_sha = check_review_rebind(rebind_record, review_record=review_record, review_commit=review_commit,
+                                         commit=commit)
+    elif rebind_record is not None:
+        raise ValueError('审查记录已直接绑定冻结 commit，不应再给换绑记录')
     approval = read_json(approval_record)
     expected = {'authority': 'user', 'decision': 'APPROVE_FORMAL_TEST', 'stage': 'test', 'protocol_id': protocol_id,
                 'source_hashes_sha256': source_digest, 'commit': commit,
-                'review_record_sha256': sha256_file(review_record)}
+                'review_record_sha256': sha256_file(review_record), 'rebind_record_sha256': rebind_sha}
     mismatched = sorted(key for key, value in expected.items() if approval.get(key) != value)
     if mismatched or not str(approval.get('approved_at', '')).strip():
         raise ValueError(f'用户授权记录不属于本轮正式评测: {mismatched or ["approved_at"]}')
     return {'replay_record_sha256': sha256_file(replay_record), 'review_record_sha256': sha256_file(review_record),
-            'user_approval_sha256': sha256_file(approval_record)}
+            'rebind_record_sha256': rebind_sha, 'user_approval_sha256': sha256_file(approval_record)}
 
 
 # ----------------------------------------------------------------------------- 入口
@@ -805,6 +959,8 @@ def build_parser():
     parser.add_argument('--replay-tier', choices=REPLAY_TIERS)
     parser.add_argument('--replay-record', type=Path)
     parser.add_argument('--review-record', type=Path)
+    parser.add_argument('--review-rebind-record', type=Path,
+                        help='审查记录绑定候选 H 时必需：tools/rebind_review.py 生成的 tree(H)=tree(S) 换绑记录')
     parser.add_argument('--user-approval-record', type=Path)
     parser.add_argument('--allow-dirty', action='store_true', help='只允许非正式阶段；结果不得进论文')
     return parser
@@ -855,7 +1011,7 @@ def _protect_outputs(run_root, execution_root, checkpoint_root, config):
             raise ValueError(f'输出根不得位于或包含受保护目录: {item}')
 
 
-def check_run_root_layout(run_root, config) -> dict:
+def check_run_root_layout(run_root, config, *, profile) -> dict:
     """冻结 run worktree 只读：可变资产（缓存、新特征）必须经符号链接落在工作树之外。
 
     以 GIT_STAMP.json 或 .git 识别冻结工作树；合成测试根没有这两个标记，不受此门约束。
@@ -866,10 +1022,15 @@ def check_run_root_layout(run_root, config) -> dict:
     report = {'frozen_worktree': frozen}
     if not frozen:
         return report
-    for key, relative in (('cache_dir', config['assets']['cache_dir']),
-                          ('feature_dir', config['text_encoder']['feature_dir'])):
+    encoder = config['text_encoders'].get(profile)
+    checks = [('cache_dir', config['assets']['cache_dir'])]
+    if encoder is not None:  # legacy 档案不读新特征目录
+        checks.append(('feature_dir', encoder['feature_dir']))
+    else:
+        report['feature_dir_external'] = None
+    for key, relative in checks:
         path = run_root / relative
-        if not path.exists():  # legacy 档案不读新特征目录；缺失的必需资产由 check_assets 报错
+        if not path.exists():  # 缺失的必需资产由 check_assets 报错
             report[f'{key}_external'] = None
             continue
         target = path.resolve()
@@ -885,7 +1046,8 @@ def main(argv=None) -> int:
     cancers, seeds = _validate_args(args, config)
     verify_pins(config)
     spec = frozen_spec(config)
-    encoder_model.spec_from_config(config)
+    if config['profiles'][args.profile]['text_cache'] == 'new':
+        encoder_model.spec_from_config(config, args.profile)
     identity = source_identity(identity_closure(config), allow_dirty=args.allow_dirty)
     commit, commit_source = resolve_expected_commit(args.expected_commit, identity)
     up = Upstream(config)
@@ -893,7 +1055,7 @@ def main(argv=None) -> int:
     run_root, execution_root = args.run_root.resolve(), args.execution_root.resolve()
     checkpoint_root = args.checkpoint_root.resolve() if args.checkpoint_root else None
     _protect_outputs(run_root, execution_root, checkpoint_root, config)
-    layout = check_run_root_layout(run_root, config)
+    layout = check_run_root_layout(run_root, config, profile=args.profile)
     runtime = config['runtime']
     device = args.device or runtime['device']
     ucfg = build_upstream_config(config, run_root=run_root, checkpoint_root=checkpoint_root,
@@ -946,7 +1108,7 @@ def main(argv=None) -> int:
     if args.stage == 'test':
         gates = check_test_gates(replay_record=args.replay_record, review_record=args.review_record,
                                  approval_record=args.user_approval_record, source_digest=source_digest,
-                                 protocol_id=protocol_id, commit=commit)
+                                 protocol_id=protocol_id, commit=commit, rebind_record=args.review_rebind_record)
     compute_metric = args.stage != 'smoke'
     if device == 'cuda':
         # I05 的选卡规则（空闲卡优先，其次利用率 < 70% 的在用卡）取代上游只认空闲卡的门禁。

@@ -2,13 +2,15 @@
 
 本账本自 2026-09-24 起位于 `experiments/BioClinical ModernBERT/results/`（由 `experiments/I05_text_encoder_bcmbert/results/` 迁入，用户裁决）；两份四场景结果表、4×5 表与 Q 判定同时回传论文目录 `manuscript/消融实验/2.innovation-secode-part- Encoder/4.BioClinical ModernBERT-程序性知识/`。
 
-**溯源说明（用户裁决 2026-09-24）**：用户选择把 main 上 I05 的全部提交压成一行（接受溯源失效）。训练与推理所用的冻结 commit `6631662` 因此不再是 main 的祖先，按 AGENTS.md「Git 工作流」第 9 条，本 run 结果的 commit 溯源失效，仅作 negative 记录，不进论文；`run/i05-bcmbert200-20260924*` 四个 tag 仍保留原 commit，可 `git show 6631662:<路径>` 读回当时源码。
+**溯源说明（用户裁决 2026-09-24）**：用户选择把 main 上 I05 的全部提交压成一行（接受溯源失效）。训练与推理所用的冻结 commit `6631662` 因此不再是 main 的祖先，按 AGENTS.md「Git 工作流」第 9 条，本 run 结果的 commit 溯源失效，仅作 negative 记录，不进论文；中间冻结点 a/b/c 的 tag 已删除；`run/i05-bcmbert200-20260924d` 于 2026-09-24 按用户裁决重建并指向 `6631662`，可 `git show 6631662:<路径>` 读回当时源码。
 
 按 `results/<run_id>/` 保存；已有结果不覆盖。证据是服务器原始 JSON 的脱敏副本（只把家目录绝对路径前缀替换为 `~`，数值不变），原文件 sha256 见各目录 `evidence/evidence-manifest.json`。
 
 | run_id | 阶段 | 档案 | 状态 | 说明 |
 |---|---|---|---|---|
 | [`i05-bcmbert200-20260924d`](i05-bcmbert200-20260924d/encoder-table.md) | test（Phase 4）| bcmbert200 | **negative**（Q 未达标；用户 2026-09-24 裁决收官） | none 下严格胜 **2/5**（BLCA +0.004892、LUAD +0.012390）；LGG −0.053623、BRCA −0.033292、UCEC −0.016292。冻结 commit `6631662`（tag `run/i05-bcmbert200-20260924d`），训练与推理均在 tako |
+| `i05-a0-<日期>`（待定） | 第二轮 | bcmbert8192 | 未运行 | A0：全文 ≤8192 token，masked mean 广播 200 行；Q 对 Table 1，另报相对 bcmbert200 与 legacytext-rerun 的同代码 Δ |
+| `i05-legacytext-<日期>`（待定） | 第二轮 | legacytext-rerun | 未运行 | 原有 Text 在现行代码按同一配方重训 25 个，拆分重训方差（不进 Q） |
 
 结果要进论文，必须满足：`git.json` 与账本里的 commit 在 main 上、`dirty=0`、有对应的 `run/<run_id>` tag（AGENTS.md「Git 工作流」第 9 条）。本 run 满足：25 个训练记录 commit = `663166247783`、dirty=false，tag `run/i05-bcmbert200-20260924d` 存在。
 
