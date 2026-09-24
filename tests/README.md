@@ -14,6 +14,7 @@
 | [test_run_provenance.py](test_run_provenance.py) | 运行参数、来源与产物记录 |
 | [test_gitstamp.py](test_gitstamp.py) | commit 身份、拒跑门、无 `.git` 拷贝的 stamp 与可重建账本 |
 | [test_shared_runtime_main.py](test_shared_runtime_main.py) | 公共主流程的受控产物写入与冲突拒绝 |
+| [test_workflow_scripts.py](test_workflow_scripts.py) | Git 工作流脚本（临时仓库）：`cleanup` 冻结身份核对、`ci.sh` 参数先于副作用、`gitflow.sh` 帮助路径、bash 3.2 多字节变量名 |
 
 ## 验证边界
 
