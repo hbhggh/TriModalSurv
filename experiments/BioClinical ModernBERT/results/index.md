@@ -9,7 +9,7 @@
 | run_id | 阶段 | 档案 | 状态 | 说明 |
 |---|---|---|---|---|
 | [`i05-bcmbert200-20260924d`](i05-bcmbert200-20260924d/encoder-table.md) | test（Phase 4）| bcmbert200 | **negative**（Q 未达标；用户 2026-09-24 裁决收官） | none 下严格胜 **2/5**（BLCA +0.004892、LUAD +0.012390）；LGG −0.053623、BRCA −0.033292、UCEC −0.016292。冻结 commit `6631662`（tag `run/i05-bcmbert200-20260924d`），训练与推理均在 tako |
-| [`i05-a0-20260924`](i05-a0-20260924/encoder-table.md) | test（第二轮 A0）| bcmbert8192 | **negative**（Q 未达标；待用户裁决） | none 下严格胜 **2/5**（BLCA +0.006107、LUAD +0.014180）；LGG −0.078951、BRCA −0.033837、UCEC −0.014200。相对轮 C bcmbert200 严格胜 3/5（信息性）。冻结 commit `3c46f37`（tag `run/i05-a0-20260924`，在 main 上），训练与推理均在 tako |
+| [`i05-a0-20260924`](i05-a0-20260924/encoder-table.md) | test（第二轮 A0）| bcmbert8192 | **negative**（Q 未达标；用户 2026-09-24 裁决收官） | none 下严格胜 **2/5**（BLCA +0.006107、LUAD +0.014180）；LGG −0.078951、BRCA −0.033837、UCEC −0.014200。相对轮 C bcmbert200 严格胜 3/5（信息性）。冻结 commit `3c46f37`（tag `run/i05-a0-20260924`，在 main 上），训练与推理均在 tako |
 | `i05-a0-20260924`（同一 run，对照臂） | 第二轮 | legacytext-rerun | **未评测**（用户裁决记为发现） | 25 个重训 ckpt 与历史 E0 **逐字节相同**（25/25 sha256 相等，`i05-a0-20260924/checkpoint-sha256-legacytext-rerun.txt`）：冻结环境下未观察到重跑漂移；加上回放 IDENTICAL，此臂 test 结果必然等于 Table 1（节点二审查：不推广为“训练在任意环境下完全确定”）。preflight 按“仍是历史 E0 权重”门拒绝（设计行为） |
 
 结果要进论文，必须满足：`git.json` 与账本里的 commit 在 main 上、`dirty=0`、有对应的 `run/<run_id>` tag（AGENTS.md「Git 工作流」第 9 条）。本 run 满足：25 个训练记录 commit = `663166247783`、dirty=false，tag `run/i05-bcmbert200-20260924d` 存在。
@@ -69,4 +69,6 @@ Codex 结果审查（`review-node2-results.json`）指出归档缺少逐患者�
 | 独立验真 | 本机 numpy 与 tako sksurv 两路重算 300 行 C-index 均 max\|Δ\| = 0；tako 现场读取 25 个只读 .pth 原件哈希，与清单及逐行记录一致 | `verify-local-numpy.json`、`verify-tako-sksurv-ckpt.json` |
 | 渲染 | 两份结果表与 4×5 表由脚本从原始 JSON 生成（参考臂：轮 C bcmbert200），同时回传论文目录 5.x | 本目录三份 md |
 
-`raw/`（逐患者预测、训练记录全目录、日志）只保存在本地结果目录与 tako `~/i05_a0_out/`（ckpt 已设只读）；逐文件哈希见 `raw-evidence-manifest.json`。
+节点二 Codex 结果审查（`experiments/I05_text_encoder_bcmbert/reviews/20260924-a0-results/`）：数值、Q、commit/tag、换绑与门记录均可核；1 条 medium（重训方差口径）已采纳。用户 2026-09-24 裁决按 negative 收官。
+
+`raw/`（逐患者预测、训练记录全目录、日志）只保存在本地结果目录与 tako `~/i05_a0_out/`、`~/i05_a0_out_cand/`（ckpt 已设只读；2026-09-24 清理其余临时目录时保留）；逐文件哈希见 `raw-evidence-manifest.json`。
