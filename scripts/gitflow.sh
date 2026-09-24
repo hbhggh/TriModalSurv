@@ -7,7 +7,8 @@
 #   squash "<msg>"     主目录: DEV squash 进 MAIN 得 S，校验树一致，DEV 归位到 S
 #   freeze <run_id>    主目录: 给 MAIN 打 tag TAG_PREFIX<run_id>，建 run worktree（分支 RUN_BRANCH_PREFIX<run_id>，或 detached），写 stamp
 #   cleanup <run_id>   任意目录: 核对 tag TAG_PREFIX<run_id> 存在、run worktree HEAD 等于该 tag 的提交、
-#                      检出 RUN_BRANCH_PREFIX<run_id>（前缀为空则须 detached）、该提交仍在 MAIN 上且树干净
+#                      检出 RUN_BRANCH_PREFIX<run_id>（前缀为空则须 detached）、该提交仍在 MAIN 上、树干净
+#                      （被 .gitignore 隐藏的文件也算，只放行 GIT_STAMP.json 与字节码缓存）
 #                      → 删 worktree 与 run 分支（tag 保留）；任一不符即拒绝并保留现场，不 -D、不 --force
 #   status             任意目录: worktree 列表 + graph + run tag
 #   help | -h | --help 任意目录（含仓库外）: 打印本说明
@@ -181,6 +182,14 @@ cmd_cleanup() {
     || die "tag ${tag} 的 ${frozen:0:7} 不在 ${MAIN_BRANCH} 上（${MAIN_BRANCH} 被改写？）。不删，保留现场 ${run_dir}"
   [ -z "$(git -C "$run_dir" status --porcelain)" ] \
     || die "run worktree 不干净（有未提交改动或未跟踪文件；结果不该写在这里）。不删，保留现场，也不要 --force；先看: git -C ${run_dir} status"
+  # status --porcelain 看不见被 .gitignore 隐藏的文件，而 worktree remove 会一并删掉它们（checkpoint、日志等）。
+  # 只放行可再生的派生物：根目录的 GIT_STAMP.json、.DS_Store、__pycache__/ 里的 .pyc；其余一律拒绝。
+  # 逐个枚举被忽略的文件（status --ignored 会把整个目录折叠成一行，目录里混入的 checkpoint 会被一并放过）。
+  local ignored
+  ignored="$(git -c core.quotePath=false -C "$run_dir" ls-files --others --ignored --exclude-standard \
+    | grep -v -E '^GIT_STAMP\.json$|(^|/)\.DS_Store$|(^|/)__pycache__/[^/]+\.pyc$' || true)"
+  [ -z "$ignored" ] \
+    || die "run worktree 里有被 .gitignore 隐藏的文件（${ignored//$'\n'/, }），worktree remove 会把它们一起删掉。不删，保留现场；先把需要的产物移到 worktree 之外"
   git worktree remove "$run_dir"   # 不加 --force：上面已核对干净，git 这里再兜一次
   git worktree prune
   if [ -n "$head_ref" ]; then

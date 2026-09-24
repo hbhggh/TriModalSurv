@@ -20,7 +20,7 @@ Claude Code 与 Codex/Codex Companion 都必须遵守本文件。冲突时以本
 - 硬约束是互审，不是谁指挥谁：一方执行大的研究计划（正式实验、新创新臂、跨模块重构）之前，另一方必须 review 计划与 diff；实验结果产出之后，另一方必须 review 结果与结论。
 - 执行方（无论是谁）不得自行决定开始正式训练、重下数据、重启任务；review 通过不等于启动授权，仍需用户点头。
 - 任何一方执行完，必须由另一方 review。禁止同一方执行完直接宣布通过。
-- 当前指定（用户裁决 2026-09-23，用户另行指定前有效）：**代码开发由 Claude Code（Claude Opus 5.5）执行，不由 Codex 执行**；Claude 同时任指挥官。Codex 只负责审核，不参与任何代码生成：实验开始前审核生成的研究计划书（含代码 diff，按 CLAUDE.md 节点一全清单），实验结束后审核实验结果与结论（节点二）。这是本节"由用户按任务指定"规则下的当前指定，不改变互审与启动授权规则；在此指定下，本文件其他条目中关于 Codex 执行派单的要求暂不适用。
+- 当前指定（用户裁决 2026-09-23，用户另行指定前有效）：**代码开发由 Claude Code（Claude Opus 5.5）执行，不由 Codex 执行**；Claude 同时任指挥官。Codex 只负责审核，不参与任何代码生成：实验开始前审核生成的研究计划书（含代码 diff，按 CLAUDE.md 节点一全清单），实验结束后审核实验结果与结论（节点二）。这是本节"由用户按任务指定"规则下的当前指定，不改变互审与启动授权规则；在此指定下，本文件其他条目中关于 Codex 执行派单的要求暂不适用。Codex 审核由 Claude 自动发起、自动接收并处理，不再中断工作流等用户手动发起（用户裁决 2026-09-23，见「互审 · 自动审查闭环」）。
 
 ## 停机门
 
@@ -57,13 +57,25 @@ Claude Code 与 Codex/Codex Companion 都必须遵守本文件。冲突时以本
 - 执行方完成的任务，必须回到另一方做检查；执行方的 patch / review 结论，必须由另一方再看一遍才能进入下一 Gate。
 - 两个强制审查节点：大的研究计划执行前（计划 + diff + provenance），实验结果产出后（结果 + 结论 + 账本）。审查清单见 CLAUDE.md 节点一 / 节点二，对哪一方担任审查者都适用。
 - adversarial review 通过，不等于可以开正式实验；还要等用户点头。
-- 审查只审一次、只看核心逻辑（用户裁决 2026-09-23，细则见 CLAUDE.md 节点一）：修掉阻断项即进入上机前置条件评估，不做多轮复审与代码打磨；freeze 后的 provenance 三项由执行方机械核对并交原始输出。
+- 审查只看核心逻辑（用户裁决 2026-09-23；复审规则 2026-09-24，见下方「自动审查闭环」第 3 条与 CLAUDE.md 节点一）：首审无核心逻辑问题即放行，有则修复后复审一次，不做多轮复审与代码打磨；freeze 后的 provenance 三项由执行方机械核对并交原始输出。
 
-每次执行任务前，必须完整阅读并遵守 [TPBHQ-认知分析引擎](TPBHQ-认知分析引擎.md) 中的约束。
+### 自动审查闭环（用户裁决 2026-09-23）
+
+Claude 担任执行方时，写完代码到交付用户之间是一条不中断的流水线，不再"提醒用户发起审查"：
+
+1. **自测**：Claude 跑相关测试与 `scripts/ci.sh`，红灯先自修，绿了才进审查。
+2. **自动发起首审**：Claude 用 Bash（后台运行，完成后自动接续）调用 `bash scripts/codex_review.sh <审查目录> [--base <ref>]`。它固定走 companion `adversarial-review --wait --json`，Codex 只读、模型 `gpt-5.6-sol`。未提交改动审工作树；dev 候选用 `--base main` 审分支。审查目录：实验任务放 `experiments/<ID>/reviews/<YYYYMMDD>-<主题>/`，其他任务放 `docs/reviews/<YYYYMMDD>-<主题>/`；原文 `codex-review.json` 不覆盖、不改写；它含本机绝对路径（`repoRoot`），按 `.gitignore` 只留本地，入库的是只把仓库根替换为 `<仓库根>`、其余逐字不变的 `codex-review.public.json`。
+3. **只审核心逻辑，至多复审一次**（复审规则：用户裁决 2026-09-24）：审查只看正确性、数据划分与泄漏、mask / loss / risk 口径、provenance、破坏性操作、测试是否真覆盖了声称的行为；语法、风格、命名等不影响正确性的问题不报、不处理。「核心逻辑问题」指 Codex 标为 high / critical 的 finding，或经采纳后必须修改运行逻辑（不只是文档措辞）的 finding。
+   - 首审无核心逻辑问题 → 放行，不复审。
+   - 首审有核心逻辑问题 → 修复、补测后自动复审一次（仍用 `codex_review.sh`，输出到同一审查目录的 `round2/`，焦点写明「复审首审 finding 的修复」）。复审无核心逻辑问题 → 放行；复审仍有核心逻辑问题 → 按第 5 条停下交用户，不自动第三轮。
+   - 审查之后另起的、并非回应审查意见的实质变更，由执行方向用户说明，用户决定是否作为新的审查点（CLAUDE.md 节点一末条）。
+4. **Claude 逐条处理**：在同目录写 `claude-response.md`，每条 finding 写明"采纳：修复位置 + 补测结果"或"不采纳：理由与证据"，采纳项修完重跑测试。
+5. **必须停下交用户裁决的情形**：复审仍有核心逻辑问题；Claude 不采纳任一 high / critical 级 finding；修复会改变研究方向、实验口径或规则文件；审查调用失败（先按「执行纪律」查进程，不重复发起第二次审查）。例外：调用在产出任何结论前被外部中断（如宿主应用退出），且已核实无存活作业、无任何产出时，可重新发起一次；这不算复审，须在 `claude-response.md` 记录中断证据。其余情形全自动，完成后一次性向用户汇报：审查结论、逐条处理表、测试结果、审查目录路径。
+6. **边界不变**：审查通过 ≠ 启动授权；正式实验、重下数据、重启任务仍需用户明确点头。节点一 / 节点二（CLAUDE.md）同样走本闭环，焦点按对应清单追加。Codex 不写代码，companion 只用只读的 `adversarial-review` / `review`。
 
 ## [T/B/P/A/Q] 热路径协议（编译后的 A，本文件内必须执行）
 
-完整陈述性定义见 `TPBHQ-认知分析引擎.md`。本节省略原理，不省略动作。不得以“将去阅读 sidecar”代替本节的执行；本节省力出现在本文件正文里，才视为已挂载。
+原陈述性定义文件 `TPBHQ-认知分析引擎.md` 已由用户删除（2026-09-24），本节即唯一定义。不得以“将去阅读 sidecar”代替本节的执行；本节省力出现在本文件正文里，才视为已挂载。
 
 ### 开局动作
 
@@ -78,7 +90,7 @@ Claude Code 与 Codex/Codex Companion 都必须遵守本文件。冲突时以本
 
 1. 思维锚点前缀：上述回复的第一句话必须是状态确认，例如 `[系统状态：S_state 已就绪 | 当前阶段：执行 A / 验证 Q]`。未经核验不得写“已就绪”。
 2. 拒绝无边界编码：缺少前提 $P$ 或验收标准 $Q$ 时，禁止直接写代码，必须反问补齐约束清单。
-3. 强制唤醒词：用户说出 `Code Red: Recalibrate` 时，立刻停止发散，重新读取 `TPBHQ-认知分析引擎.md` 与本节，并只回复：`引擎已重新挂载，等待第 1 组约束清单`。
+3. 强制唤醒词：用户说出 `Code Red: Recalibrate` 时，立刻停止发散，重新读取本节，并只回复：`引擎已重新挂载，等待第 1 组约束清单`。
 
 ## Git 工作流（策略一：先 Squash 后跑；用户裁决 2026-09-22）
 
@@ -90,11 +102,12 @@ Claude Code 与 Codex/Codex Companion 都必须遵守本文件。冲突时以本
 2. 创新靠目录与文件名隔离（`experiments/<ID>/`、config 选择），不靠分支；多个创新共用 `dev`。
 3. 开发只在 dev worktree：小步 commit，前缀带实验 ID（`feat(I05): ...`）；每步跑 `scripts/ci.sh`，红灯不 commit。
 4. 候选 H = `scripts/gitflow.sh candidate` 通过（CI 退出码 0 + 工作树干净）。通过后才进入互审。
-5. 互审通过后在主目录 `scripts/gitflow.sh squash "feat(I05): ..."`：`main` 得 S，脚本校验 tree(S) = tree(H) 并把 `dev` 归位到 S。`dev` 领先 `main` 超过正在做的一个创新即违规。
-6. 冻结：`scripts/gitflow.sh freeze <run_id>` 从 `main` 打 `run/<run_id>` tag、建分支 `train/<run_id>` 的 run worktree（HEAD = `main`）、调用 `scripts/git_stamp.py` 生成 `GIT_STAMP.json`。分支前缀 `train/` 与 tag 前缀 `run/` 必须不同。同步到训练服务器的源码只能来自 run worktree；`GIT_STAMP.json` 随代码同步。
-7. run worktree 与 `train/*` 分支只读，禁止 commit。发现 bug 回 `dev` 修，重新 candidate → squash → freeze 新 run_id；旧 run 结果作废并在账本标 invalid。
-8. 结果 provenance：`git.json` / `results.tsv` 里的 commit 必须 `git branch --contains` 命中 `main` 且 `dirty=0`；不满足的结果不得进论文。
-9. 结果差不 revert：账本标 negative，代码留在树里；确需清理另起 `chore(I05): drop` commit。
-10. 收尾 `scripts/gitflow.sh cleanup <run_id>`：先核对 run worktree HEAD 仍在 `main` 上（`git merge-base --is-ancestor`），再删 worktree 与 `train/<run_id>` 分支；tag 保留。核对失败说明实验期间有 commit 混入，该 run 结果 invalid，不得 `-D` 强删。结果回传到主目录 `experiments/<ID>/results/<run_id>/`，永远不放进 run worktree。
-11. `main` 只经 squash 前进；禁止 rebase / force-push `main`；squash 后 `git push origin main`。
-12. 与 STATUS.md 第 1 节「全量运行时从确定 commit 建临时 worktree」一致：那个「确定 commit」现在就是 `main` HEAD = S。
+5. 冒烟（用户裁决 2026-09-24）：互审通过后，从 H 的干净快照上机冒烟（`git archive H` 打包、校验和传输，`GIT_STAMP.json` 的 commit = H 随代码同步）；冒烟通过才进入 squash，不过则回 dev 修复、重新 candidate。冒烟产物只判通/不崩，不进账本主表。涉及正式实验的创新必须经过这一步；只靠测试验收的改动（修 bug、重构、文档）可跳过。
+6. 冒烟通过后在主目录 `scripts/gitflow.sh squash "feat(I05): ..."`：`main` 得 S，脚本校验 tree(S) = tree(H) 并把 `dev` 归位到 S。`dev` 领先 `main` 超过正在做的一个创新即违规。
+7. 冻结：`scripts/gitflow.sh freeze <run_id>` 从 `main` 打 `run/<run_id>` tag、建分支 `train/<run_id>` 的 run worktree（HEAD = `main`）、调用 `scripts/git_stamp.py` 生成 `GIT_STAMP.json`。分支前缀 `train/` 与 tag 前缀 `run/` 必须不同。**正式实验**同步到训练服务器的源码只能来自 run worktree（冒烟见第 5 条）；`GIT_STAMP.json` 随代码同步。绑定 commit 的训练前资产锁须在 S 上重写一次，早于全部正式训练；其余冒烟阶段生成的数据资产（特征、缓存）按内容哈希复用。
+8. run worktree 与 `train/*` 分支只读，禁止 commit。发现 bug 回 `dev` 修，重新 candidate → 冒烟 → squash → freeze 新 run_id；旧 run 结果作废并在账本标 invalid。
+9. 结果 provenance：`git.json` / `results.tsv` 里的 commit 必须 `git branch --contains` 命中 `main` 且 `dirty=0`；不满足的结果不得进论文。
+10. 结果差不 revert：账本标 negative，代码留在树里；确需清理另起 `chore(I05): drop` commit。
+11. 收尾 `scripts/gitflow.sh cleanup <run_id>`：先核对 `run/<run_id>` tag 存在、run worktree HEAD 严格等于该 tag 的提交（只核对"仍在 `main` 上"不够）、仍检出 `train/<run_id>`（detached 模式须仍为 detached）、该提交仍在 `main` 上且树干净（被 `.gitignore` 隐藏的文件也算，只放行 `GIT_STAMP.json` 与字节码缓存），再删 worktree 与 `train/<run_id>` 分支；tag 保留。核对失败说明实验期间源码被切换或有 commit 混入，该 run 结果 invalid；保留现场，不得 `-D` / `--force` 强删。结果回传到主目录 `experiments/<ID>/results/<run_id>/`，永远不放进 run worktree。
+12. `main` 只经 squash 前进；禁止 rebase / force-push `main`；squash 后 `git push origin main`。
+13. 与 STATUS.md 第 1 节「全量运行时从确定 commit 建临时 worktree」一致：那个「确定 commit」现在就是 `main` HEAD = S。

@@ -1,4 +1,5 @@
-"""Git 工作流脚本回归（scripts/gitflow.sh、scripts/ci.sh）：只在临时目录里建仓库与假项目，不碰真实仓库。"""
+"""Git 工作流脚本回归（scripts/gitflow.sh、scripts/ci.sh、scripts/codex_review.sh）：只在临时目录里建仓库与假项目，不碰真实仓库。"""
+import json
 import os
 import re
 import shutil
@@ -10,9 +11,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 GITFLOW = ROOT / 'scripts' / 'gitflow.sh'
 CI = ROOT / 'scripts' / 'ci.sh'
+CODEX_REVIEW = ROOT / 'scripts' / 'codex_review.sh'
 # 外层环境里的这些变量会改变脚本行为，或把 git 指回真实仓库（GIT_DIR 等），子进程一律清掉
 LEAKY = ('MAIN_BRANCH', 'DEV_BRANCH', 'TAG_PREFIX', 'RUN_BRANCH_PREFIX', 'WT_ROOT', 'CI_CMD', 'STAMP_CMD',
-         'TEST_CMD', 'PYTHON_BIN', 'CDPATH', 'BASH_ENV', 'ENV')
+         'TEST_CMD', 'PYTHON_BIN', 'CDPATH', 'BASH_ENV', 'ENV', 'CODEX_COMPANION', 'CODEX_MODEL')
 
 
 def _env(ceiling, **values):
@@ -59,6 +61,7 @@ class GitflowCleanupTests(_Sandbox):
     def setUp(self):
         super().setUp()
         (self.repo / 'model.py').write_text('V = 1\n', encoding='utf-8')
+        (self.repo / '.gitignore').write_text('logs/\n*.pth\nGIT_STAMP.json\n__pycache__/\n', encoding='utf-8')
         self.git('add', '-A')
         self.git('commit', '-q', '-m', 'c1')
         self.c1 = self.git('rev-parse', 'HEAD')
@@ -161,6 +164,32 @@ class GitflowCleanupTests(_Sandbox):
         self.assert_refused(self.gitflow('cleanup', 'r1'), run_dir, '不干净')
         self.assertTrue((run_dir / 'results.csv').exists())
 
+    def test_ignored_run_outputs_are_refused(self):
+        # 审查 r1 #1：status --porcelain 看不见被忽略的 checkpoint / 日志，worktree remove 会连它们一起删
+        run_dir = self.freeze()
+        (run_dir / 'logs').mkdir()
+        (run_dir / 'logs' / 'train.log').write_text('epoch 1\n', encoding='utf-8')
+        (run_dir / 'best.pth').write_bytes(b'weights')
+        self.assert_refused(self.gitflow('cleanup', 'r1'), run_dir, 'logs/', 'best.pth')
+        self.assertTrue((run_dir / 'logs' / 'train.log').exists())
+        self.assertTrue((run_dir / 'best.pth').exists())
+
+    def test_checkpoint_hidden_in_pycache_is_refused(self):
+        # 审查 r2 #1：status --ignored 把整个 __pycache__/ 折叠成一行，目录里混入的 checkpoint 曾被一并放行
+        run_dir = self.freeze()
+        (run_dir / '__pycache__').mkdir()
+        (run_dir / '__pycache__' / 'model.cpython-310.pyc').write_bytes(b'pyc')
+        (run_dir / '__pycache__' / 'best.pth').write_bytes(b'weights')
+        self.assert_refused(self.gitflow('cleanup', 'r1'), run_dir, '__pycache__/best.pth')
+        self.assertTrue((run_dir / '__pycache__' / 'best.pth').exists())
+
+    def test_regenerable_ignored_files_do_not_block_cleanup(self):
+        run_dir = self.freeze()
+        (run_dir / 'GIT_STAMP.json').write_text('{}\n', encoding='utf-8')  # freeze 用 git_stamp.py 时写在这里
+        (run_dir / '__pycache__').mkdir()
+        (run_dir / '__pycache__' / 'model.cpython-310.pyc').write_bytes(b'pyc')
+        self.assert_removed(self.gitflow('cleanup', 'r1'), run_dir)
+
 
 class GitflowHelpTests(_Sandbox):
     """审查 [medium]：帮助在仓库探测与 cd 之后才处理，且按相对 $0 读自身。"""
@@ -199,7 +228,7 @@ class GitflowMultibyteTests(_Sandbox):
 
     def test_no_unbraced_variable_before_multibyte_text(self):
         pattern = re.compile(r'\$[A-Za-z_][A-Za-z0-9_]*[^\x00-\x7f]')
-        offenders = [f'{script.name}:{number}: {line.strip()}' for script in (GITFLOW, CI)
+        offenders = [f'{script.name}:{number}: {line.strip()}' for script in (GITFLOW, CI, CODEX_REVIEW)
                      for number, line in enumerate(script.read_text(encoding='utf-8').splitlines(), 1)
                      if not line.lstrip().startswith('#') and pattern.search(line)]
         self.assertEqual(offenders, [])
@@ -218,6 +247,122 @@ class GitflowMultibyteTests(_Sandbox):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(self.git('rev-parse', 'main^{tree}'), tree)
         self.assertEqual(self.git('rev-parse', 'dev'), self.git('rev-parse', 'main'))
+
+
+class CodexReviewEntryTests(_Sandbox):
+    """自动审查入口：参数与防覆盖检查都先于调用 Codex；用不存在的 companion 保证测试永不真的发起审查。"""
+
+    def setUp(self):
+        super().setUp()
+        self.env = dict(self.env, CODEX_COMPANION=str(self.tmp / 'no-such-companion.mjs'))
+        self.out = self.tmp / 'review'
+
+    def review(self, *args):
+        return _run(['bash', CODEX_REVIEW, *args], self.repo, self.env)
+
+    def test_help_prints_usage(self):
+        result = self.review('--help')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('codex-review.json', result.stdout)
+        self.assertFalse(self.out.exists())
+
+    def test_usage_errors_exit_2_without_side_effects(self):
+        for args in ([], ['--bogus', self.out], [self.out, '--base']):
+            with self.subTest(args=args):
+                result = self.review(*args)
+                self.assertEqual(result.returncode, 2, result.stderr)
+                self.assertFalse(self.out.exists())
+
+    def test_existing_review_is_never_overwritten(self):
+        self.out.mkdir()
+        (self.out / 'codex-review.json').write_text('{"old": true}', encoding='utf-8')
+        result = self.review(self.out)
+        self.assertEqual(result.returncode, 2)
+        self.assertIn('不覆盖', result.stderr)
+        self.assertEqual((self.out / 'codex-review.json').read_text(encoding='utf-8'), '{"old": true}')
+
+    def test_missing_companion_fails_before_writing(self):
+        result = self.review(self.out)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn('找不到 companion', result.stderr)
+        self.assertFalse(self.out.exists())
+
+
+def _companion_schema():
+    """真实 companion 自带的审查 schema；codex_review.sh 按它校验，测试也用同一份，不自造。"""
+    root = Path.home() / '.claude' / 'plugins' / 'cache' / 'openai-codex' / 'codex'
+    found = sorted(root.glob('*/schemas/review-output.schema.json'))
+    return found[-1] if found else None
+
+
+@unittest.skipIf(shutil.which('node') is None or _companion_schema() is None, '需要 node 与已安装的 Codex 插件 schema')
+class CodexReviewOutputTests(_Sandbox):
+    """审查 r1 #2 / r2 #2、#3：只有完全符合 schema 的结论才原子发布为 codex-review.json；其余保留失败现场并以 1 退出。"""
+
+    FINDING = {'severity': 'high', 'title': 't', 'body': 'b', 'file': 'x.py', 'line_start': 1, 'line_end': 2,
+               'confidence': 0.9, 'recommendation': 'r'}
+
+    def setUp(self):
+        super().setUp()
+        plugin = self.tmp / 'plugin'  # 模拟插件目录：scripts/ 下是替身，schemas/ 下是真实 schema 的拷贝
+        (plugin / 'scripts').mkdir(parents=True)
+        (plugin / 'schemas').mkdir()
+        shutil.copy2(_companion_schema(), plugin / 'schemas' / 'review-output.schema.json')
+        fake = plugin / 'scripts' / 'fake-companion.mjs'  # 替身：原样吐出环境变量里的内容，不接触真实 Codex
+        fake.write_text('import fs from "node:fs";\n'
+                        'if (process.env.FAKE_RACE) fs.writeFileSync(process.env.FAKE_RACE, "{\\"other\\": true}");\n'
+                        'process.stdout.write(process.env.FAKE_OUT || "");\n'
+                        'process.exit(Number(process.env.FAKE_EXIT || 0));\n', encoding='utf-8')
+        self.env = dict(self.env, CODEX_COMPANION=str(fake))
+        self.out = self.tmp / 'review'
+
+    def body(self, **result):
+        base = {'verdict': 'needs-attention', 'summary': 's', 'findings': [dict(self.FINDING)], 'next_steps': ['n']}
+        base.update(result)
+        return json.dumps({'review': 'Adversarial Review', 'result': base})
+
+    def review(self, out, exit_code=0, **env):
+        env = dict(self.env, FAKE_OUT=out, FAKE_EXIT=str(exit_code), **env)
+        return _run(['bash', CODEX_REVIEW, self.out], self.repo, env)
+
+    def partials(self):
+        return sorted(p.name for p in self.out.glob('.codex-review.*'))
+
+    def test_schema_valid_verdict_is_published(self):
+        body = self.body()
+        result = self.review(body)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual((self.out / 'codex-review.json').read_text(encoding='utf-8'), body)
+        self.assertEqual(self.partials(), [])
+
+    def test_degraded_outputs_never_become_official(self):
+        bad_finding = lambda **kw: [dict(self.FINDING, **kw)]
+        cases = {'malformed': ('{"result": ', 0), 'parse-error': ('{"parseError": "x", "result": null}', 0),
+                 'no-result': ('{"review": "Adversarial Review"}', 0),
+                 'bad-verdict': (self.body(verdict='pass'), 0),
+                 'no-next-steps': (json.dumps({'result': {'verdict': 'approve', 'summary': 's', 'findings': []}}), 0),
+                 'empty-summary': (self.body(summary=''), 0),
+                 'empty-finding': (self.body(findings=[{}]), 0),
+                 'bad-severity': (self.body(findings=bad_finding(severity='blocker')), 0),
+                 'line-zero': (self.body(findings=bad_finding(line_start=0)), 0),
+                 'confidence-2': (self.body(findings=bad_finding(confidence=2)), 0),
+                 'extra-field': (self.body(findings=bad_finding(extra='x')), 0),
+                 'companion-failed': (self.body(), 3)}
+        for count, (label, (body, code)) in enumerate(cases.items(), 1):
+            with self.subTest(label):
+                result = self.review(body, code)
+                self.assertEqual(result.returncode, 1, result.stdout)
+                self.assertFalse((self.out / 'codex-review.json').exists())
+                self.assertEqual(len(self.partials()), count)  # 每次失败现场各自保留，不被后一次截断
+
+    def test_concurrent_publish_never_overwrites(self):
+        # 审查 r2 #3：另一审查在本次校验期间先发布了正式文件 → 本次失败退出，先到者原样保留，本次原始输出可追溯
+        official = self.out / 'codex-review.json'
+        result = self.review(self.body(), FAKE_RACE=str(official))
+        self.assertEqual(result.returncode, 1, result.stdout)
+        self.assertIn('不覆盖', result.stderr)
+        self.assertEqual(official.read_text(encoding='utf-8'), '{"other": true}')
+        self.assertEqual(len(self.partials()), 1)
 
 
 class CiArgumentTests(unittest.TestCase):

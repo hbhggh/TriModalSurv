@@ -96,7 +96,7 @@ def test_documents_quote_script_numbers_only(config, baseline):
     """坑 V23：文档里的对照行必须等于脚本从原始 JSON 算出的值；论文目录的模板必须是脚本原样输出。"""
     values, meta = baseline
     means = [f"{sum(values[(c, s, 'none')] for s in config['seeds']) / 5:.6f}" for c in config['display_cancer_order']]
-    for name, prefix in (('研究计划书-BioClinical ModernBERT.md', '| 现有系统 None / Proto.†（Table 1） |'),
+    for name, prefix in (('4.2研究计划书-BioClinical ModernBERT.md', '| 现有系统 None / Proto.†（Table 1） |'),
                          ('innovation-BioClinical ModernBERT.md', '| 现有系统 None / Proto.† |')):
         lines = [line for line in (DOC_DIR / name).read_text(encoding='utf-8').splitlines() if line.startswith(prefix)]
         assert lines == [prefix + ' ' + ' | '.join(means) + ' |'], name

@@ -207,3 +207,11 @@
 | G1 | `gitflow.sh cleanup` 只核对 run worktree HEAD「可从 main 到达」，被切到 main 上更早的提交也放行，删掉现场而 tag 仍指原冻结提交，源码漂移被漏报。 | 身份/冻结类核对一律与冻结锚点（`run/<id>` tag）逐值相等比较并核对检出形态，不用 is-ancestor 代替相等；拒绝时保留现场，不 -D/--force。 | docs/workflow/git-workflow-fix-20260923.md（Post-Mortem 1）；回归 tests/test_workflow_scripts.py |
 | G2 | shell 入口在处理参数前就产生副作用或环境探测：`ci.sh --help` 照样清缓存并跑全仓测试；`gitflow.sh` 先 cd 再按相对 `$0` 读帮助、仓库外先被探测拒绝。 | 脚本第一步解析参数（`-h/--help` 退 0、未知参数非零），之后才探测环境、cd、清理或测试；读取自身文件前先解析绝对路径。 | 同上（Post-Mortem 2、3） |
 | G3 | macOS `/bin/bash` 3.2 在 UTF-8 locale 下把紧跟 `$var` 的全角标点首字节并入变量名，`set -u` 下在 git 操作完成后崩溃并以 1 退出；C locale 自测看不到。 | 变量后紧跟中文或全角标点一律写 `${var}`，用静态扫描守住；shell 脚本自测至少在 UTF-8 locale 下跑一遍。 | 同上（Post-Mortem 4） |
+
+## Git 工作流脚本补充（2026-09-23，续）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| G4 | Claude 会话被放在隔离 worktree，而任务目标是主检出里的未跟踪文件；做完调研与 RED 才被 harness hook 拒绝写主检出，只能中途改为「worktree 开发 + 用户拷回」。 | 开工第一步比较会话目录与用户指定仓库；目标文件只在主检出（未跟踪或有他方未提交改动）时，先问用户执行位置，拷回按文件指纹核对，追加型文件只追加不覆盖。 | docs/workflow/git-workflow-fix-20260923.md；本会话 2026-09-23 |
+| G5 | `git status --porcelain` 看不见被 `.gitignore` 隐藏的文件，而 `git worktree remove` 会连同被忽略的 checkpoint / 日志一起删除；只看 porcelain 的「干净」门放行了不可逆删除。 | 删除目录前用 `git ls-files --others --ignored --exclude-standard` 逐个枚举被忽略的**文件**（`status --ignored` 会把整个目录折叠成一行，首轮修复因此漏掉 `__pycache__/best.pth`），白名单按「路径 + 扩展名」精确匹配，其余拒绝并保留现场。 | docs/reviews/20260923-auto-review-loop/（首审 finding 1、复审 round2 finding 1 与 claude-response.md）；回归 tests/test_workflow_scripts.py |
+| G6 | 外部工具输出先定名为正式结果再校验：坏输出占住正式文件名、堵死重试，含 parseError 或缺字段的输出仍以 0 退出，固定临时名还会截断上次失败现场。 | 外部输出一律写唯一临时文件，按工具自带 schema 完整校验（必需字段、枚举、类型、范围、每个子项结构，不能只挑几个字段）通过后，用硬链接原子发布（目标已存在即失败，不做「先查后 mv」）；失败以非零退出并保留原始输出。 | 同上（首审 finding 2、复审 finding 2、3） |

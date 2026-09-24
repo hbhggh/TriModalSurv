@@ -1,6 +1,6 @@
 # 科研 Git 工作流迁移模板：策略一（先 Squash 后跑）× Worktree
 
-> 一句话：**dev 上小步 commit → CI 与 review 通过 → squash 成 main 上一个 commit S → 从 S 建冻结 run worktree（分支 `train/<id>`）跑正式实验 → 结果盖章指向 S → 删 run worktree 和 `train/<id>`，S 永远留在 main。**
+> 一句话：**dev 上小步 commit → CI 与 review 通过，并且 smoke 实验结束 → squash 成 main 上一个 commit S → 从 S 建冻结 run worktree（分支 `train/<id>`）跑正式实验 → 结果盖章指向 S → 删 run worktree 和 `train/<id>`，S 永远留在 main。**
 >
 > 配套脚本：`scripts/ci.sh`、`scripts/gitflow.sh`。两者与项目无关，拷进任何仓库的 `scripts/` 即可用。
 
@@ -102,7 +102,7 @@ main（主目录）                  dev（长期开发 worktree）
 scripts/gitflow.sh init          # 主目录运行：建 dev 分支和 <主目录>.worktrees/dev
 ```
 
-### 每个创新的循环（8 步）
+### 每个创新的循环（9 步；第 5 步冒烟为用户裁决 2026-09-24 新增）
 
 | 步 | 在哪里 | 命令 / 动作 | 得到什么 |
 |---|---|---|---|
@@ -110,10 +110,11 @@ scripts/gitflow.sh init          # 主目录运行：建 dev 分支和 <主目�
 | 2 | dev worktree | 改坏了：`git restore <file>` 回到上一个 commit；整段作废：`git reset --keep <好的 commit>` | 廉价回退 |
 | 3 | dev worktree | `scripts/gitflow.sh candidate` | CI 退出码 0 + 树干净 → 候选 H，并打印 main..H 的 commit 与文件清单供 review |
 | 4 | 任意 | Review：看 `git diff main..dev`，重点是数据泄漏、mask、loss、config、seed、结果路径 | Review PASS / 阻断 |
-| 5 | 主目录 | `scripts/gitflow.sh squash "feat(inn2): implement prototype bank"` | main 上一个 commit S；脚本校验 tree(S) == tree(H)，并把 dev 归位到 S |
-| 6 | 主目录 | `scripts/gitflow.sh freeze inn2-v1` | tag `run/inn2-v1` → S；分支 `train/inn2-v1` 的 run worktree，HEAD = S；stamp 记 commit = S、dirty = false |
-| 7 | run worktree | 从这里同步或启动正式实验。**禁止修改、禁止 commit**。结果写到 worktree 外，账本追加 `run_id, commit, 指标` | 结果绑定 S |
-| 8 | 主目录 | 判定：好 → 无需 Git 操作；差 → 账本标 negative，代码留着。然后 `scripts/gitflow.sh cleanup inn2-v1` | 脚本先核对：tag `run/inn2-v1` 存在；run worktree HEAD **严格等于**该 tag 的提交（只「仍在 main 上」不够——切到 main 上更早的提交也在 main 上）；仍检出 `train/inn2-v1`（detached 模式须仍为 detached）；该提交仍在 main 上；树干净。全部成立才删 worktree 与 `train/inn2-v1` 分支；tag 与账本保留。任一不符即拒绝并保留现场 |
+| 5 | 训练服务器 | 冒烟：`git archive H` 打包 → sha256 校验 → 传输 → 解包；在 dev worktree 运行 `scripts/git_stamp.py` 生成 `GIT_STAMP.json`（commit = H）随代码同步；1 癌 1 seed 训练 + 推理冒烟 + 必要的回放门。冒烟产物只判通/不崩，不进账本主表；失败回第 1 步 | 冒烟 PASS 才能 squash。tree(S) = tree(H)，所以冒烟时按文件内容计算的源码摘要与回放记录在 S 上仍然有效 |
+| 6 | 主目录 | `scripts/gitflow.sh squash "feat(inn2): implement prototype bank"` | main 上一个 commit S；脚本校验 tree(S) == tree(H)，并把 dev 归位到 S |
+| 7 | 主目录 | `scripts/gitflow.sh freeze inn2-v1` | tag `run/inn2-v1` → S；分支 `train/inn2-v1` 的 run worktree，HEAD = S；stamp 记 commit = S、dirty = false |
+| 8 | run worktree | 从这里同步或启动正式实验（绑定 commit 的资产锁在这里重写一次）。**禁止修改、禁止 commit**。结果写到 worktree 外，账本追加 `run_id, commit, 指标` | 结果绑定 S |
+| 9 | 主目录 | 判定：好 → 无需 Git 操作；差 → 账本标 negative，代码留着。然后 `scripts/gitflow.sh cleanup inn2-v1` | 脚本先核对：tag `run/inn2-v1` 存在；run worktree HEAD **严格等于**该 tag 的提交（只「仍在 main 上」不够——切到 main 上更早的提交也在 main 上）；仍检出 `train/inn2-v1`（detached 模式须仍为 detached）；该提交仍在 main 上；树干净（被 .gitignore 隐藏的文件也算，只放行 `GIT_STAMP.json` 与字节码缓存——`worktree remove` 会连同被忽略的 checkpoint、日志一起删掉）。全部成立才删 worktree 与 `train/inn2-v1` 分支；tag 与账本保留。任一不符即拒绝并保留现场 |
 
 dev 归位后立刻可以开始下一个创新；正在跑的 run worktree 钉在 S 不动。
 
@@ -144,13 +145,14 @@ git show e9832fa:config.py               # 不切目录直接读当时的配置
 2. dev 是唯一长期开发分支，检出在 <主目录>.worktrees/dev/；多个创新共用 dev，靠文件名/config 隔离，不靠分支。
 3. 开发只在 dev worktree：小步 commit，前缀带创新 ID；每步跑 scripts/ci.sh，红灯不 commit。
 4. 候选 H = scripts/gitflow.sh candidate 通过（CI 退出码 0 + 工作树干净）。通过后才进入 review。
-5. Review 通过后在主目录 scripts/gitflow.sh squash "<msg>"：main 得 S，dev 归位到 S。dev 领先 main 超过一个创新即违规。
-6. 正式实验只从 scripts/gitflow.sh freeze <run_id> 建的 run worktree 启动：分支 train/<run_id>，HEAD = main；stamp 的 commit 必须等于 main HEAD。
-7. run worktree 与 train/* 分支只读，禁止 commit。发现 bug 回 dev 修，重新 candidate → squash → freeze 新 run_id；旧结果作废。
-8. 结果 provenance：账本里的 commit 必须 git branch --contains 命中 main，否则结果不得进论文。
-9. 结果差不 revert：账本标 negative，代码留在树里；确需清理另起 chore(<ID>): drop。
-10. 收尾 scripts/gitflow.sh cleanup <run_id>：先核对 tag run/<run_id> 存在、run worktree HEAD 严格等于该 tag 的提交（只核对"仍在 main 上"不够）、仍检出 train/<run_id>（detached 模式须仍为 detached）、该提交仍在 main 上且树干净，再删 worktree 与 train/<run_id> 分支；tag 与账本保留；核对失败保留现场，不得 -D / --force 强删。结果永远不放在 run worktree 内。
-11. main 只经 squash 前进；禁止 rebase / force-push main。
+5. Review 通过后从 H 的干净快照（git archive H + GIT_STAMP commit=H）上机冒烟；冒烟通过才 squash，冒烟产物不进账本。
+6. 冒烟通过后在主目录 scripts/gitflow.sh squash "<msg>"：main 得 S，dev 归位到 S。dev 领先 main 超过一个创新即违规。
+7. 正式实验只从 scripts/gitflow.sh freeze <run_id> 建的 run worktree 启动：分支 train/<run_id>，HEAD = main；stamp 的 commit 必须等于 main HEAD。
+8. run worktree 与 train/* 分支只读，禁止 commit。发现 bug 回 dev 修，重新 candidate → 冒烟 → squash → freeze 新 run_id；旧结果作废。
+9. 结果 provenance：账本里的 commit 必须 git branch --contains 命中 main，否则结果不得进论文。
+10. 结果差不 revert：账本标 negative，代码留在树里；确需清理另起 chore(<ID>): drop。
+11. 收尾 scripts/gitflow.sh cleanup <run_id>：先核对 tag run/<run_id> 存在、run worktree HEAD 严格等于该 tag 的提交（只核对"仍在 main 上"不够）、仍检出 train/<run_id>（detached 模式须仍为 detached）、该提交仍在 main 上且树干净（被 .gitignore 隐藏的文件也算，只放行 GIT_STAMP.json 与字节码缓存），再删 worktree 与 train/<run_id> 分支；tag 与账本保留；核对失败保留现场，不得 -D / --force 强删。结果永远不放在 run worktree 内。
+12. main 只经 squash 前进；禁止 rebase / force-push main。
 ```
 
 ---

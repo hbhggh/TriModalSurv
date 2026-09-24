@@ -1,0 +1,90 @@
+{
+  "review": "Adversarial Review",
+  "target": {
+    "mode": "branch",
+    "label": "branch diff against main",
+    "baseRef": "main",
+    "explicit": true
+  },
+  "threadId": "01a0ceb3-f726-7330-a26d-989fdefe3421",
+  "context": {
+    "repoRoot": "<仓库根>",
+    "branch": "exp/innovation-encoder",
+    "summary": "Reviewing branch exp/innovation-encoder against main from merge-base 0a53b0179c7feb2d53df8d03306af6855ac187b3."
+  },
+  "codex": {
+    "status": 0,
+    "stderr": "",
+    "stdout": "{\"verdict\":\"needs-attention\",\"summary\":\"暂不能发布。Text 绝对路径格式已修正，但训练数据身份仍未闭合；commit 修复也保留了可由公开 CLI 触发的旁路。\",\"findings\":[{\"severity\":\"high\",\"title\":\"Text 路径相等不能证明 checkpoint 使用了当前特征内容\",\"body\":\"门禁只比较训练记录中的绝对路径与当前软链接解析结果，没有绑定训练时的 feature manifest 或 text cache 内容哈希。同一路径下的特征或缓存若在训练后被替换，check_assets 会验证替换后的当前内容，而该 checkpoint 仍可通过训练身份门，被错误归因为使用当前 BioClinical ModernBERT 特征训练。这会直接破坏“唯一变量是 Text encoder”的实验因果口径。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":419,\"line_end\":424,\"confidence\":0.98,\"recommendation\":\"训练启动时把 feature manifest 哈希及各癌种、split 的实际 text cache 内容哈希写入不可变 run record；preflight 必须逐项与当前资产比较。增加“相同路径、训练后替换内容必须拒绝”的回归测试。\"},{\"severity\":\"high\",\"title\":\"任意 legacy override 仍可重新启用 commit 覆盖旁路\",\"body\":\"代码仅凭传入 --legacy-preflight 或 --legacy-valid-source 就把运行判定为 synthetic，随后 resolve_expected_commit 接受任意 --expected-commit，并跳过 dirty、allow_dirty、当前 identity 和 GIT_STAMP 一致性检查。没有任何条件证明调用来自本地测试夹具。因此真实 preflight/smoke 可携带 override，把旧 checkpoint 和旧 commit 记录标成 READY；这与“CLI 只作核对”的修复目标冲突。正式 test 会再次检查，但前置放行证据已经不可信。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":851,\"line_end\":852,\"confidence\":0.99,\"recommendation\":\"删除生产入口中的 commit 覆盖例外；合成测试通过 monkeypatch/injected identity 构造身份。若必须保留测试模式，应使用不可从普通 CLI 开启的测试注入，并保证所有阶段仍要求 expected_commit 等于实测 identity。\"}],\"next_steps\":[\"修复两项门禁并加入对应负例后，重新运行 I05 测试与全仓 CI。\",\"squash、freeze 后仍须对最终 main commit 和 run worktree执行节点一复审。\"]}",
+    "reasoning": [
+      "**Preparing for read-only review**",
+      "**Investigating file differences and locations**",
+      "**Investigating git and parser issues**",
+      "**Analyzing synthetic bypass potential**",
+      "**Checking gitstamp function**",
+      "**Investigating path resolution mismatch**",
+      "**Considering running tests in read-only environment**",
+      "**Analyzing test validation and potential bypass risks**",
+      "**Analyzing checkpoint training integrity**",
+      "**Identifying training record weaknesses**",
+      "**Adjusting Python command and chunk reading**",
+      "**Balancing JSON schema with citation requirements**",
+      "**Prioritizing schema validity over citation placement**",
+      "**Assessing worktree and test integrity**",
+      "**Reviewing content binding and provenance gaps** I’m analyzing how path-only verification missed content-based issues and noting gaps in binding training records to content hashes. I want to verify what fingerprints are recorded and assess if risks from stale features or manipulations remain, considering severity and recommendations.",
+      "**Analyzing code changes and test setup**",
+      "**Clarifying citation approach for JSON output**"
+    ]
+  },
+  "result": {
+    "verdict": "needs-attention",
+    "summary": "暂不能发布。Text 绝对路径格式已修正，但训练数据身份仍未闭合；commit 修复也保留了可由公开 CLI 触发的旁路。",
+    "findings": [
+      {
+        "severity": "high",
+        "title": "Text 路径相等不能证明 checkpoint 使用了当前特征内容",
+        "body": "门禁只比较训练记录中的绝对路径与当前软链接解析结果，没有绑定训练时的 feature manifest 或 text cache 内容哈希。同一路径下的特征或缓存若在训练后被替换，check_assets 会验证替换后的当前内容，而该 checkpoint 仍可通过训练身份门，被错误归因为使用当前 BioClinical ModernBERT 特征训练。这会直接破坏“唯一变量是 Text encoder”的实验因果口径。",
+        "file": "experiments/I05_text_encoder_bcmbert/evaluate.py",
+        "line_start": 419,
+        "line_end": 424,
+        "confidence": 0.98,
+        "recommendation": "训练启动时把 feature manifest 哈希及各癌种、split 的实际 text cache 内容哈希写入不可变 run record；preflight 必须逐项与当前资产比较。增加“相同路径、训练后替换内容必须拒绝”的回归测试。"
+      },
+      {
+        "severity": "high",
+        "title": "任意 legacy override 仍可重新启用 commit 覆盖旁路",
+        "body": "代码仅凭传入 --legacy-preflight 或 --legacy-valid-source 就把运行判定为 synthetic，随后 resolve_expected_commit 接受任意 --expected-commit，并跳过 dirty、allow_dirty、当前 identity 和 GIT_STAMP 一致性检查。没有任何条件证明调用来自本地测试夹具。因此真实 preflight/smoke 可携带 override，把旧 checkpoint 和旧 commit 记录标成 READY；这与“CLI 只作核对”的修复目标冲突。正式 test 会再次检查，但前置放行证据已经不可信。",
+        "file": "experiments/I05_text_encoder_bcmbert/evaluate.py",
+        "line_start": 851,
+        "line_end": 852,
+        "confidence": 0.99,
+        "recommendation": "删除生产入口中的 commit 覆盖例外；合成测试通过 monkeypatch/injected identity 构造身份。若必须保留测试模式，应使用不可从普通 CLI 开启的测试注入，并保证所有阶段仍要求 expected_commit 等于实测 identity。"
+      }
+    ],
+    "next_steps": [
+      "修复两项门禁并加入对应负例后，重新运行 I05 测试与全仓 CI。",
+      "squash、freeze 后仍须对最终 main commit 和 run worktree执行节点一复审。"
+    ]
+  },
+  "rawOutput": "{\"verdict\":\"needs-attention\",\"summary\":\"暂不能发布。Text 绝对路径格式已修正，但训练数据身份仍未闭合；commit 修复也保留了可由公开 CLI 触发的旁路。\",\"findings\":[{\"severity\":\"high\",\"title\":\"Text 路径相等不能证明 checkpoint 使用了当前特征内容\",\"body\":\"门禁只比较训练记录中的绝对路径与当前软链接解析结果，没有绑定训练时的 feature manifest 或 text cache 内容哈希。同一路径下的特征或缓存若在训练后被替换，check_assets 会验证替换后的当前内容，而该 checkpoint 仍可通过训练身份门，被错误归因为使用当前 BioClinical ModernBERT 特征训练。这会直接破坏“唯一变量是 Text encoder”的实验因果口径。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":419,\"line_end\":424,\"confidence\":0.98,\"recommendation\":\"训练启动时把 feature manifest 哈希及各癌种、split 的实际 text cache 内容哈希写入不可变 run record；preflight 必须逐项与当前资产比较。增加“相同路径、训练后替换内容必须拒绝”的回归测试。\"},{\"severity\":\"high\",\"title\":\"任意 legacy override 仍可重新启用 commit 覆盖旁路\",\"body\":\"代码仅凭传入 --legacy-preflight 或 --legacy-valid-source 就把运行判定为 synthetic，随后 resolve_expected_commit 接受任意 --expected-commit，并跳过 dirty、allow_dirty、当前 identity 和 GIT_STAMP 一致性检查。没有任何条件证明调用来自本地测试夹具。因此真实 preflight/smoke 可携带 override，把旧 checkpoint 和旧 commit 记录标成 READY；这与“CLI 只作核对”的修复目标冲突。正式 test 会再次检查，但前置放行证据已经不可信。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":851,\"line_end\":852,\"confidence\":0.99,\"recommendation\":\"删除生产入口中的 commit 覆盖例外；合成测试通过 monkeypatch/injected identity 构造身份。若必须保留测试模式，应使用不可从普通 CLI 开启的测试注入，并保证所有阶段仍要求 expected_commit 等于实测 identity。\"}],\"next_steps\":[\"修复两项门禁并加入对应负例后，重新运行 I05 测试与全仓 CI。\",\"squash、freeze 后仍须对最终 main commit 和 run worktree执行节点一复审。\"]}",
+  "parseError": null,
+  "reasoningSummary": [
+    "**Preparing for read-only review**",
+    "**Investigating file differences and locations**",
+    "**Investigating git and parser issues**",
+    "**Analyzing synthetic bypass potential**",
+    "**Checking gitstamp function**",
+    "**Investigating path resolution mismatch**",
+    "**Considering running tests in read-only environment**",
+    "**Analyzing test validation and potential bypass risks**",
+    "**Analyzing checkpoint training integrity**",
+    "**Identifying training record weaknesses**",
+    "**Adjusting Python command and chunk reading**",
+    "**Balancing JSON schema with citation requirements**",
+    "**Prioritizing schema validity over citation placement**",
+    "**Assessing worktree and test integrity**",
+    "**Reviewing content binding and provenance gaps** I’m analyzing how path-only verification missed content-based issues and noting gaps in binding training records to content hashes. I want to verify what fingerprints are recorded and assess if risks from stale features or manipulations remain, considering severity and recommendations.",
+    "**Analyzing code changes and test setup**",
+    "**Clarifying citation approach for JSON output**"
+  ]
+}

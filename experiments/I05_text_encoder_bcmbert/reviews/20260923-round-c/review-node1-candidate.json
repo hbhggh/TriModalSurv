@@ -1,0 +1,126 @@
+{
+  "review": "Adversarial Review",
+  "target": {
+    "mode": "branch",
+    "label": "branch diff against main",
+    "baseRef": "main",
+    "explicit": true
+  },
+  "threadId": "01a0ce9d-be2b-7292-a92f-79ff66ced59a",
+  "context": {
+    "repoRoot": "<仓库根>",
+    "branch": "exp/innovation-encoder",
+    "summary": "Reviewing branch exp/innovation-encoder against main from merge-base 0a53b0179c7feb2d53df8d03306af6855ac187b3."
+  },
+  "codex": {
+    "status": 0,
+    "stderr": "",
+    "stdout": "{\"verdict\":\"needs-attention\",\"summary\":\"不应发车。节点一 provenance 未成立，且训练身份、用户授权和冻结工作树边界均存在可绕过或不可执行的问题。\",\"findings\":[{\"severity\":\"high\",\"title\":\"节点一审查被安排在 squash/freeze 之前，当前 provenance 明确不合格\",\"body\":\"计划先做 Codex 审查，审查通过后才 squash 到 main 并 freeze；这与 CLAUDE.md 节点一要求的审查时已满足 main HEAD、run worktree、GIT_STAMP 三项 provenance 相反。只读核验显示 HEAD=347612b，main=0a53b，仅 exp/innovation-encoder 包含 HEAD；当前工作树还有大量修改/删除，且没有指向该提交的 run tag 或 run worktree。因此本次最多是候选 diff 审查，不能签发节点一 PASS。\",\"file\":\"manuscript/消融实验/2.innovation-secode-part- Encoder/4.BioClinical ModernBERT-程序性知识/研究计划书-BioClinical ModernBERT.md\",\"line_start\":63,\"line_end\":71,\"confidence\":1,\"recommendation\":\"先完成 candidate→squash→freeze；提交 main/run worktree/GIT_STAMP/tag 一致性、干净状态、原始测试与 --dry_run 输出，再按最终冻结提交重新审查。\"},{\"severity\":\"high\",\"title\":\"新 checkpoint 只绑定 commit，未证明使用了获审训练配方\",\"body\":\"新权重门只检查 checkpoint 不同于历史权重、run git.json 的 dirty=false 和 commit 相等。它没有读取 resolved_config.yaml，也没有核对 model_config 哈希、Text 路径、label、lr、epochs、batch_size、bin_mode 或实际启动命令。同一 commit 下用旧 Text 配置或任意 CLI 超参训练出的 checkpoint，只要生成正常 completion.json，便可通过此门并进入正式评测，破坏“唯一变量是 Text encoder”的因果口径。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":397,\"line_end\":406,\"confidence\":0.99,\"recommendation\":\"在 check_checkpoints 中读取每个 run 的 resolved_config.yaml/输入指纹，逐项锁定 model_config 内容哈希、Text 路径、label、训练超参、癌种、seed、network_type、compensator 和 bin_mode；同时把实际 dry-run 命令摘要绑定到审查记录。\"},{\"severity\":\"high\",\"title\":\"任意非空旧文件都能冒充本轮用户授权\",\"body\":\"test 门对用户授权只执行非空文本检查，没有验证 authority、decision、stage、protocol_id、source digest、commit 或审批时间。一个其他实验或旧版本留下的任意非空说明文件即可解锁本轮正式 test；这使“审查通过不等于启动授权”的硬门实际可被陈旧状态绕过。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":634,\"line_end\":649,\"confidence\":0.99,\"recommendation\":\"改为结构化授权记录，并强制校验 authority=user、decision、允许阶段、protocol_id、source_hashes_sha256、冻结 commit/run_id，以及所引用审查记录的 sha256。\"},{\"severity\":\"high\",\"title\":\"Phase 1 会写入声明为只读的冻结 run worktree\",\"body\":\"文档先声明 run worktree 内的 data 是真实数据只读链接，随后要求在该 worktree 中向 data/text_embeddings_bcmbert200 写新特征，并向 tmp_sur_cache 复制/预热缓存。这既可能因只读链接直接失败，也违反 run worktree 只读纪律；即使 Git 的源码闭包未计入这些未跟踪数据，冻结运行根也已被可变资产污染，清理或重试时难以证明复用的是同一批特征。\",\"file\":\"experiments/I05_text_encoder_bcmbert/README.md\",\"line_start\":35,\"line_end\":58,\"confidence\":0.98,\"recommendation\":\"把新特征、缓存和所有运行产物放到 run worktree 外的独立 execution/data root；通过显式配置指向它们，并将路径、manifest、内容哈希绑定到训练 run record，保持冻结源码树只读。\"}],\"next_steps\":[\"由 Claude 修复上述四项并补齐原始测试、dry-run 与 Phase 0 证据。\",\"完成 squash/freeze 后，用最终 main commit 和干净 run worktree重新提交节点一复审。\"]}",
+    "reasoning": [
+      "**Preparing for structured JSON review**",
+      "**Noticing JSON formatting**",
+      "**Preparing to locate citation in memory**",
+      "**Troubleshooting command error**",
+      "**Investigating truncated outputs**",
+      "**Analyzing dirty worktree and diffs**",
+      "**Analyzing model configuration discrepancies**",
+      "**Evaluating partial extraction**",
+      "**Evaluating all sections**",
+      "**Noting missing section 330-570**",
+      "**Analyzing test gate weaknesses**",
+      "**Inspecting launcher arm handling**",
+      "**Checking GPU configuration details**",
+      "**Assessing snapshot and testing limitations**",
+      "**Analyzing branch provenance and GPU enforcement issues**",
+      "**Analyzing data directory restrictions**",
+      "**Examining data source and review process** There is concern about missing Phase0 artifacts critical for running the plan, which blocks formal evaluation. The review process relies on user-provided files for gate checks without strong verification, creating a trust boundary risk. I’m considering how approvals could be structured with signed or verifiable metadata to improve integrity.",
+      "**Analyzing checkpoint validation limitations**",
+      "**Evaluating dry run limitations and branch discrepancies** I'm considering how dry runs can’t fully guarantee actual training arguments since those are only fully recorded in the training run’s resolved config. There’s a risk that new training parameters might slip past validation if a checkpoint is reused. I’m also noticing branch and worktree inconsistencies—like uncommitted changes and dirty states—that complicate verifying provenance and proper sequencing in the research plan. I want to look more closely at test coverage and untracked JSON artifacts to confirm these issues.",
+      "**Verifying file states with git commands**",
+      "**Reviewing commit output constraints**",
+      "**Identifying key findings and blockers**",
+      "**Analyzing GPU policy and training constraints**",
+      "**Evaluating training provenance and review blockers** I'm reviewing training provenance details and encountering four critical blockers related to source hashing and test evidence, with a potential fifth medium-level issue due to missing local test outputs. The summary points to no shipment until these are resolved, emphasizing a need for structured next steps and clearer test documentation.",
+      "**Clarifying commit and JSON validation**"
+    ]
+  },
+  "result": {
+    "verdict": "needs-attention",
+    "summary": "不应发车。节点一 provenance 未成立，且训练身份、用户授权和冻结工作树边界均存在可绕过或不可执行的问题。",
+    "findings": [
+      {
+        "severity": "high",
+        "title": "节点一审查被安排在 squash/freeze 之前，当前 provenance 明确不合格",
+        "body": "计划先做 Codex 审查，审查通过后才 squash 到 main 并 freeze；这与 CLAUDE.md 节点一要求的审查时已满足 main HEAD、run worktree、GIT_STAMP 三项 provenance 相反。只读核验显示 HEAD=347612b，main=0a53b，仅 exp/innovation-encoder 包含 HEAD；当前工作树还有大量修改/删除，且没有指向该提交的 run tag 或 run worktree。因此本次最多是候选 diff 审查，不能签发节点一 PASS。",
+        "file": "manuscript/消融实验/2.innovation-secode-part- Encoder/4.BioClinical ModernBERT-程序性知识/研究计划书-BioClinical ModernBERT.md",
+        "line_start": 63,
+        "line_end": 71,
+        "confidence": 1,
+        "recommendation": "先完成 candidate→squash→freeze；提交 main/run worktree/GIT_STAMP/tag 一致性、干净状态、原始测试与 --dry_run 输出，再按最终冻结提交重新审查。"
+      },
+      {
+        "severity": "high",
+        "title": "新 checkpoint 只绑定 commit，未证明使用了获审训练配方",
+        "body": "新权重门只检查 checkpoint 不同于历史权重、run git.json 的 dirty=false 和 commit 相等。它没有读取 resolved_config.yaml，也没有核对 model_config 哈希、Text 路径、label、lr、epochs、batch_size、bin_mode 或实际启动命令。同一 commit 下用旧 Text 配置或任意 CLI 超参训练出的 checkpoint，只要生成正常 completion.json，便可通过此门并进入正式评测，破坏“唯一变量是 Text encoder”的因果口径。",
+        "file": "experiments/I05_text_encoder_bcmbert/evaluate.py",
+        "line_start": 397,
+        "line_end": 406,
+        "confidence": 0.99,
+        "recommendation": "在 check_checkpoints 中读取每个 run 的 resolved_config.yaml/输入指纹，逐项锁定 model_config 内容哈希、Text 路径、label、训练超参、癌种、seed、network_type、compensator 和 bin_mode；同时把实际 dry-run 命令摘要绑定到审查记录。"
+      },
+      {
+        "severity": "high",
+        "title": "任意非空旧文件都能冒充本轮用户授权",
+        "body": "test 门对用户授权只执行非空文本检查，没有验证 authority、decision、stage、protocol_id、source digest、commit 或审批时间。一个其他实验或旧版本留下的任意非空说明文件即可解锁本轮正式 test；这使“审查通过不等于启动授权”的硬门实际可被陈旧状态绕过。",
+        "file": "experiments/I05_text_encoder_bcmbert/evaluate.py",
+        "line_start": 634,
+        "line_end": 649,
+        "confidence": 0.99,
+        "recommendation": "改为结构化授权记录，并强制校验 authority=user、decision、允许阶段、protocol_id、source_hashes_sha256、冻结 commit/run_id，以及所引用审查记录的 sha256。"
+      },
+      {
+        "severity": "high",
+        "title": "Phase 1 会写入声明为只读的冻结 run worktree",
+        "body": "文档先声明 run worktree 内的 data 是真实数据只读链接，随后要求在该 worktree 中向 data/text_embeddings_bcmbert200 写新特征，并向 tmp_sur_cache 复制/预热缓存。这既可能因只读链接直接失败，也违反 run worktree 只读纪律；即使 Git 的源码闭包未计入这些未跟踪数据，冻结运行根也已被可变资产污染，清理或重试时难以证明复用的是同一批特征。",
+        "file": "experiments/I05_text_encoder_bcmbert/README.md",
+        "line_start": 35,
+        "line_end": 58,
+        "confidence": 0.98,
+        "recommendation": "把新特征、缓存和所有运行产物放到 run worktree 外的独立 execution/data root；通过显式配置指向它们，并将路径、manifest、内容哈希绑定到训练 run record，保持冻结源码树只读。"
+      }
+    ],
+    "next_steps": [
+      "由 Claude 修复上述四项并补齐原始测试、dry-run 与 Phase 0 证据。",
+      "完成 squash/freeze 后，用最终 main commit 和干净 run worktree重新提交节点一复审。"
+    ]
+  },
+  "rawOutput": "{\"verdict\":\"needs-attention\",\"summary\":\"不应发车。节点一 provenance 未成立，且训练身份、用户授权和冻结工作树边界均存在可绕过或不可执行的问题。\",\"findings\":[{\"severity\":\"high\",\"title\":\"节点一审查被安排在 squash/freeze 之前，当前 provenance 明确不合格\",\"body\":\"计划先做 Codex 审查，审查通过后才 squash 到 main 并 freeze；这与 CLAUDE.md 节点一要求的审查时已满足 main HEAD、run worktree、GIT_STAMP 三项 provenance 相反。只读核验显示 HEAD=347612b，main=0a53b，仅 exp/innovation-encoder 包含 HEAD；当前工作树还有大量修改/删除，且没有指向该提交的 run tag 或 run worktree。因此本次最多是候选 diff 审查，不能签发节点一 PASS。\",\"file\":\"manuscript/消融实验/2.innovation-secode-part- Encoder/4.BioClinical ModernBERT-程序性知识/研究计划书-BioClinical ModernBERT.md\",\"line_start\":63,\"line_end\":71,\"confidence\":1,\"recommendation\":\"先完成 candidate→squash→freeze；提交 main/run worktree/GIT_STAMP/tag 一致性、干净状态、原始测试与 --dry_run 输出，再按最终冻结提交重新审查。\"},{\"severity\":\"high\",\"title\":\"新 checkpoint 只绑定 commit，未证明使用了获审训练配方\",\"body\":\"新权重门只检查 checkpoint 不同于历史权重、run git.json 的 dirty=false 和 commit 相等。它没有读取 resolved_config.yaml，也没有核对 model_config 哈希、Text 路径、label、lr、epochs、batch_size、bin_mode 或实际启动命令。同一 commit 下用旧 Text 配置或任意 CLI 超参训练出的 checkpoint，只要生成正常 completion.json，便可通过此门并进入正式评测，破坏“唯一变量是 Text encoder”的因果口径。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":397,\"line_end\":406,\"confidence\":0.99,\"recommendation\":\"在 check_checkpoints 中读取每个 run 的 resolved_config.yaml/输入指纹，逐项锁定 model_config 内容哈希、Text 路径、label、训练超参、癌种、seed、network_type、compensator 和 bin_mode；同时把实际 dry-run 命令摘要绑定到审查记录。\"},{\"severity\":\"high\",\"title\":\"任意非空旧文件都能冒充本轮用户授权\",\"body\":\"test 门对用户授权只执行非空文本检查，没有验证 authority、decision、stage、protocol_id、source digest、commit 或审批时间。一个其他实验或旧版本留下的任意非空说明文件即可解锁本轮正式 test；这使“审查通过不等于启动授权”的硬门实际可被陈旧状态绕过。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":634,\"line_end\":649,\"confidence\":0.99,\"recommendation\":\"改为结构化授权记录，并强制校验 authority=user、decision、允许阶段、protocol_id、source_hashes_sha256、冻结 commit/run_id，以及所引用审查记录的 sha256。\"},{\"severity\":\"high\",\"title\":\"Phase 1 会写入声明为只读的冻结 run worktree\",\"body\":\"文档先声明 run worktree 内的 data 是真实数据只读链接，随后要求在该 worktree 中向 data/text_embeddings_bcmbert200 写新特征，并向 tmp_sur_cache 复制/预热缓存。这既可能因只读链接直接失败，也违反 run worktree 只读纪律；即使 Git 的源码闭包未计入这些未跟踪数据，冻结运行根也已被可变资产污染，清理或重试时难以证明复用的是同一批特征。\",\"file\":\"experiments/I05_text_encoder_bcmbert/README.md\",\"line_start\":35,\"line_end\":58,\"confidence\":0.98,\"recommendation\":\"把新特征、缓存和所有运行产物放到 run worktree 外的独立 execution/data root；通过显式配置指向它们，并将路径、manifest、内容哈希绑定到训练 run record，保持冻结源码树只读。\"}],\"next_steps\":[\"由 Claude 修复上述四项并补齐原始测试、dry-run 与 Phase 0 证据。\",\"完成 squash/freeze 后，用最终 main commit 和干净 run worktree重新提交节点一复审。\"]}",
+  "parseError": null,
+  "reasoningSummary": [
+    "**Preparing for structured JSON review**",
+    "**Noticing JSON formatting**",
+    "**Preparing to locate citation in memory**",
+    "**Troubleshooting command error**",
+    "**Investigating truncated outputs**",
+    "**Analyzing dirty worktree and diffs**",
+    "**Analyzing model configuration discrepancies**",
+    "**Evaluating partial extraction**",
+    "**Evaluating all sections**",
+    "**Noting missing section 330-570**",
+    "**Analyzing test gate weaknesses**",
+    "**Inspecting launcher arm handling**",
+    "**Checking GPU configuration details**",
+    "**Assessing snapshot and testing limitations**",
+    "**Analyzing branch provenance and GPU enforcement issues**",
+    "**Analyzing data directory restrictions**",
+    "**Examining data source and review process** There is concern about missing Phase0 artifacts critical for running the plan, which blocks formal evaluation. The review process relies on user-provided files for gate checks without strong verification, creating a trust boundary risk. I’m considering how approvals could be structured with signed or verifiable metadata to improve integrity.",
+    "**Analyzing checkpoint validation limitations**",
+    "**Evaluating dry run limitations and branch discrepancies** I'm considering how dry runs can’t fully guarantee actual training arguments since those are only fully recorded in the training run’s resolved config. There’s a risk that new training parameters might slip past validation if a checkpoint is reused. I’m also noticing branch and worktree inconsistencies—like uncommitted changes and dirty states—that complicate verifying provenance and proper sequencing in the research plan. I want to look more closely at test coverage and untracked JSON artifacts to confirm these issues.",
+    "**Verifying file states with git commands**",
+    "**Reviewing commit output constraints**",
+    "**Identifying key findings and blockers**",
+    "**Analyzing GPU policy and training constraints**",
+    "**Evaluating training provenance and review blockers** I'm reviewing training provenance details and encountering four critical blockers related to source hashing and test evidence, with a potential fifth medium-level issue due to missing local test outputs. The summary points to no shipment until these are resolved, emphasizing a need for structured next steps and clearer test documentation.",
+    "**Clarifying commit and JSON validation**"
+  ]
+}

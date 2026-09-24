@@ -1,0 +1,93 @@
+{
+  "review": "Adversarial Review",
+  "target": {
+    "mode": "branch",
+    "label": "branch diff against 663166247783",
+    "baseRef": "663166247783",
+    "explicit": true
+  },
+  "threadId": "01a0d103-c5ae-7140-8312-bc4fa9f2f5d7",
+  "context": {
+    "repoRoot": "<仓库根>",
+    "branch": "exp/innovation-encoder",
+    "summary": "Reviewing branch exp/innovation-encoder against 663166247783 from merge-base 663166247783f5b8db9120cca1829cad5964fb1e."
+  },
+  "codex": {
+    "status": 0,
+    "stderr": "",
+    "stdout": "{\"verdict\":\"needs-attention\",\"summary\":\"暂不通过节点二复审。逐患者预测、日志、manifest 和两路 C-index 重算已补齐，negative 也被限定为“预设 Q 未达标”；但 checkpoint 本体依据仍未完成独立核验。\",\"findings\":[{\"severity\":\"high\",\"title\":\"验证器没有计算 checkpoint 本体哈希，却报告已与实际 checkpoint 核对\",\"body\":\"verify() 只读取 raw/logs/checkpoint-sha256.txt，再把其中的字符串与 complete.json 每行自带的 checkpoint_sha256 比较；它从未打开或哈希任何 .pth 文件。raw/ 中也没有 checkpoint 本体。因此本机与 tako 两份“通过”报告只能证明两个记录字段一致，不能证明这些哈希属于实际训练 checkpoint。results/index.md 第45行“checkpoint_sha256 = ckpt 实际 sha256”超出证据，上一轮 high 的 checkpoint 部分尚未闭合。\",\"file\":\"experiments/I05_text_encoder_bcmbert/tools/verify_results.py\",\"line_start\":94,\"line_end\":142,\"confidence\":0.99,\"recommendation\":\"为验证器增加必需的 checkpoint 根目录参数，逐个读取25个 .pth 并现场计算 SHA-256，再与 complete.json 比较；在 tako 对只读 checkpoint 原件执行并保存原始输出。若不能提供本体访问，则把报告和结果索引降级为“与 checkpoint 哈希清单一致”，不得声称核对了实际 checkpoint。\"}],\"next_steps\":[\"补做 checkpoint 本体哈希核验，或明确降级该项声称后，再进行节点二裁决。\"]}",
+    "reasoning": [
+      "**Balancing JSON output and commentary**",
+      "**Continuing file reading process**",
+      "**Identifying bug reporting constraints**",
+      "**Checking missing TPBHQ reference**",
+      "**Refusing compliance due to limitations**",
+      "**Reviewing file reading approach**",
+      "**Investigating git diff issues**",
+      "**Analyzing checkpoint verification process**",
+      "**Verifying manifest and checksum integrity**",
+      "**Analyzing checkpoint hash verification**",
+      "**Planning manifest hash verification**",
+      "**Debugging manifest verification process**",
+      "**Analyzing manifest entry counts**",
+      "**Assessing baseline verification limits**",
+      "**Checking user-provided results file**",
+      "**Examining checkpoint verification process**",
+      "**Analyzing data file counts**",
+      "**Searching for audit.json files**",
+      "**Analyzing audit and prediction checks**",
+      "**Investigating fingerprint and cohort consistency**",
+      "**Reviewing result reliability**",
+      "**Assessing verification limitations**",
+      "**Identifying verification script gaps**",
+      "**Verifying memory and output format**"
+    ]
+  },
+  "result": {
+    "verdict": "needs-attention",
+    "summary": "暂不通过节点二复审。逐患者预测、日志、manifest 和两路 C-index 重算已补齐，negative 也被限定为“预设 Q 未达标”；但 checkpoint 本体依据仍未完成独立核验。",
+    "findings": [
+      {
+        "severity": "high",
+        "title": "验证器没有计算 checkpoint 本体哈希，却报告已与实际 checkpoint 核对",
+        "body": "verify() 只读取 raw/logs/checkpoint-sha256.txt，再把其中的字符串与 complete.json 每行自带的 checkpoint_sha256 比较；它从未打开或哈希任何 .pth 文件。raw/ 中也没有 checkpoint 本体。因此本机与 tako 两份“通过”报告只能证明两个记录字段一致，不能证明这些哈希属于实际训练 checkpoint。results/index.md 第45行“checkpoint_sha256 = ckpt 实际 sha256”超出证据，上一轮 high 的 checkpoint 部分尚未闭合。",
+        "file": "experiments/I05_text_encoder_bcmbert/tools/verify_results.py",
+        "line_start": 94,
+        "line_end": 142,
+        "confidence": 0.99,
+        "recommendation": "为验证器增加必需的 checkpoint 根目录参数，逐个读取25个 .pth 并现场计算 SHA-256，再与 complete.json 比较；在 tako 对只读 checkpoint 原件执行并保存原始输出。若不能提供本体访问，则把报告和结果索引降级为“与 checkpoint 哈希清单一致”，不得声称核对了实际 checkpoint。"
+      }
+    ],
+    "next_steps": [
+      "补做 checkpoint 本体哈希核验，或明确降级该项声称后，再进行节点二裁决。"
+    ]
+  },
+  "rawOutput": "{\"verdict\":\"needs-attention\",\"summary\":\"暂不通过节点二复审。逐患者预测、日志、manifest 和两路 C-index 重算已补齐，negative 也被限定为“预设 Q 未达标”；但 checkpoint 本体依据仍未完成独立核验。\",\"findings\":[{\"severity\":\"high\",\"title\":\"验证器没有计算 checkpoint 本体哈希，却报告已与实际 checkpoint 核对\",\"body\":\"verify() 只读取 raw/logs/checkpoint-sha256.txt，再把其中的字符串与 complete.json 每行自带的 checkpoint_sha256 比较；它从未打开或哈希任何 .pth 文件。raw/ 中也没有 checkpoint 本体。因此本机与 tako 两份“通过”报告只能证明两个记录字段一致，不能证明这些哈希属于实际训练 checkpoint。results/index.md 第45行“checkpoint_sha256 = ckpt 实际 sha256”超出证据，上一轮 high 的 checkpoint 部分尚未闭合。\",\"file\":\"experiments/I05_text_encoder_bcmbert/tools/verify_results.py\",\"line_start\":94,\"line_end\":142,\"confidence\":0.99,\"recommendation\":\"为验证器增加必需的 checkpoint 根目录参数，逐个读取25个 .pth 并现场计算 SHA-256，再与 complete.json 比较；在 tako 对只读 checkpoint 原件执行并保存原始输出。若不能提供本体访问，则把报告和结果索引降级为“与 checkpoint 哈希清单一致”，不得声称核对了实际 checkpoint。\"}],\"next_steps\":[\"补做 checkpoint 本体哈希核验，或明确降级该项声称后，再进行节点二裁决。\"]}",
+  "parseError": null,
+  "reasoningSummary": [
+    "**Balancing JSON output and commentary**",
+    "**Continuing file reading process**",
+    "**Identifying bug reporting constraints**",
+    "**Checking missing TPBHQ reference**",
+    "**Refusing compliance due to limitations**",
+    "**Reviewing file reading approach**",
+    "**Investigating git diff issues**",
+    "**Analyzing checkpoint verification process**",
+    "**Verifying manifest and checksum integrity**",
+    "**Analyzing checkpoint hash verification**",
+    "**Planning manifest hash verification**",
+    "**Debugging manifest verification process**",
+    "**Analyzing manifest entry counts**",
+    "**Assessing baseline verification limits**",
+    "**Checking user-provided results file**",
+    "**Examining checkpoint verification process**",
+    "**Analyzing data file counts**",
+    "**Searching for audit.json files**",
+    "**Analyzing audit and prediction checks**",
+    "**Investigating fingerprint and cohort consistency**",
+    "**Reviewing result reliability**",
+    "**Assessing verification limitations**",
+    "**Identifying verification script gaps**",
+    "**Verifying memory and output format**"
+  ]
+}

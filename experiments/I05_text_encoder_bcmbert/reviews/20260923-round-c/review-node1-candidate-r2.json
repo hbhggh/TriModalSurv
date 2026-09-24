@@ -1,0 +1,106 @@
+{
+  "review": "Adversarial Review",
+  "target": {
+    "mode": "branch",
+    "label": "branch diff against main",
+    "baseRef": "main",
+    "explicit": true
+  },
+  "threadId": "01a0ceab-92de-7c50-b366-4c80f1970b2a",
+  "context": {
+    "repoRoot": "<仓库根>",
+    "branch": "exp/innovation-encoder",
+    "summary": "Reviewing branch exp/innovation-encoder against main from merge-base 0a53b0179c7feb2d53df8d03306af6855ac187b3."
+  },
+  "codex": {
+    "status": 0,
+    "stderr": "",
+    "stdout": "{\"verdict\":\"needs-attention\",\"summary\":\"暂不能发布。四项修复中，审查顺序、结构化授权和外置资产布局已落地；但训练身份门与真实训练记录格式不兼容，且冻结 commit 仍可被 CLI 参数解耦。完整 pytest 因只读环境无可用临时目录未能运行。\",\"findings\":[{\"severity\":\"high\",\"title\":\"真实训练记录的绝对 Text 路径会被身份门全部拒绝\",\"body\":\"训练入口在写 data_manifest.json 前会对 modality.path 调用 resolve()，因此记录的是软链接解析后的绝对路径；这里却按未解析的相对字符串 data/text_embeddings_bcmbert200 比较。测试替身手工写入相对路径，掩盖了生产格式差异。正式训练完成后，所有新 checkpoint 都会在 preflight 被拒绝，25 个训练结果无法进入评测。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":398,\"line_end\":401,\"confidence\":1,\"recommendation\":\"将记录路径与 `(run_root / contract_path).resolve()` 比较，或同时记录稳定逻辑路径及解析目标/内容哈希；测试必须使用真实 start_run_record 格式并覆盖外部软链接布局。\"},{\"severity\":\"high\",\"title\":\"--expected-commit 可绕过当前冻结工作树身份\",\"body\":\"expected commit 可直接取任意 CLI 值，随后只要求 checkpoint、审查记录和授权记录彼此匹配该值；代码已经取得当前工作树 identity.commit，却从未比较两者。因此在当前冻结提交 Y 上传入旧提交 X，并提供绑定 X 的训练及审批记录，所有门都可通过。若 X 的训练代码不同，结果仍会被当前已审代码接受，破坏冻结 provenance。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":829,\"line_end\":846,\"confidence\":0.98,\"recommendation\":\"正式阶段禁止自由覆盖 commit，强制 `expected_commit == identity.commit == GIT_STAMP.commit == git HEAD`；为 CLI/GIT_STAMP/current identity 任意一项不一致增加拒绝测试。\"}],\"next_steps\":[\"修复上述两项后，重跑完整 I05 测试，并用真实软链接运行根生成一份生产格式 training record 做 preflight 回归。\",\"此次只能作为候选复核；squash/freeze 后仍需按最终冻结 commit 执行节点一复审。\"]}",
+    "reasoning": [
+      "**Preparing for code review**",
+      "**Reviewing skills and documentation**",
+      "**Searching for missing files**",
+      "**Searching for TPBHQ directory**",
+      "**Handling dirty working tree**",
+      "**Inspecting code diffs and functions**",
+      "**Requesting specific lines**",
+      "**Analyzing git root and config validation**",
+      "**Examining runtime parameter mismatches**",
+      "**Checking extra arguments handling**",
+      "**Checking fusion_type impact**",
+      "**Analyzing config and path inconsistencies**",
+      "**Identifying commit verification vulnerability**",
+      "**Reviewing file path and testing constraints**",
+      "**Preparing environment for test run**",
+      "**Analyzing post-mortem feasibility**",
+      "**Evaluating source hash and record integrity**",
+      "**Reviewing file path resolution and config validation** I'm verifying how the code resolves file paths, especially ensuring that symbolic links correctly point to external targets as expected. I'm also checking how configuration values like batch size are handled during runtime and how the system compares configuration file hashes to detect changes or potential issues. This involves ensuring that the training data manifest path resolution aligns with runtime and contract expectations, taking symlinks and runtime contexts into account.",
+      "**Analyzing symlink race conditions and commit validation** I'm examining risks around symlink checks being done only once, which opens a TOCTOU race condition where files might be swapped after the initial check, causing costly pipeline failures. I'm also looking into how the system handles expected versus actual git commits during evaluation, noting that the current process may accept checkpoints from unreviewed commits because it doesn't rigorously compare identities—posing a significant integrity concern.",
+      "**Verifying repository cleanliness and diffs**",
+      "**Fixing heredoc bug**",
+      "**Reviewing broad branch diff**",
+      "**Ensuring JSON compliance with citations**",
+      "**Identifying commit mismatch issue**",
+      "**Confirming commit and working tree state**"
+    ]
+  },
+  "result": {
+    "verdict": "needs-attention",
+    "summary": "暂不能发布。四项修复中，审查顺序、结构化授权和外置资产布局已落地；但训练身份门与真实训练记录格式不兼容，且冻结 commit 仍可被 CLI 参数解耦。完整 pytest 因只读环境无可用临时目录未能运行。",
+    "findings": [
+      {
+        "severity": "high",
+        "title": "真实训练记录的绝对 Text 路径会被身份门全部拒绝",
+        "body": "训练入口在写 data_manifest.json 前会对 modality.path 调用 resolve()，因此记录的是软链接解析后的绝对路径；这里却按未解析的相对字符串 data/text_embeddings_bcmbert200 比较。测试替身手工写入相对路径，掩盖了生产格式差异。正式训练完成后，所有新 checkpoint 都会在 preflight 被拒绝，25 个训练结果无法进入评测。",
+        "file": "experiments/I05_text_encoder_bcmbert/evaluate.py",
+        "line_start": 398,
+        "line_end": 401,
+        "confidence": 1,
+        "recommendation": "将记录路径与 `(run_root / contract_path).resolve()` 比较，或同时记录稳定逻辑路径及解析目标/内容哈希；测试必须使用真实 start_run_record 格式并覆盖外部软链接布局。"
+      },
+      {
+        "severity": "high",
+        "title": "--expected-commit 可绕过当前冻结工作树身份",
+        "body": "expected commit 可直接取任意 CLI 值，随后只要求 checkpoint、审查记录和授权记录彼此匹配该值；代码已经取得当前工作树 identity.commit，却从未比较两者。因此在当前冻结提交 Y 上传入旧提交 X，并提供绑定 X 的训练及审批记录，所有门都可通过。若 X 的训练代码不同，结果仍会被当前已审代码接受，破坏冻结 provenance。",
+        "file": "experiments/I05_text_encoder_bcmbert/evaluate.py",
+        "line_start": 829,
+        "line_end": 846,
+        "confidence": 0.98,
+        "recommendation": "正式阶段禁止自由覆盖 commit，强制 `expected_commit == identity.commit == GIT_STAMP.commit == git HEAD`；为 CLI/GIT_STAMP/current identity 任意一项不一致增加拒绝测试。"
+      }
+    ],
+    "next_steps": [
+      "修复上述两项后，重跑完整 I05 测试，并用真实软链接运行根生成一份生产格式 training record 做 preflight 回归。",
+      "此次只能作为候选复核；squash/freeze 后仍需按最终冻结 commit 执行节点一复审。"
+    ]
+  },
+  "rawOutput": "{\"verdict\":\"needs-attention\",\"summary\":\"暂不能发布。四项修复中，审查顺序、结构化授权和外置资产布局已落地；但训练身份门与真实训练记录格式不兼容，且冻结 commit 仍可被 CLI 参数解耦。完整 pytest 因只读环境无可用临时目录未能运行。\",\"findings\":[{\"severity\":\"high\",\"title\":\"真实训练记录的绝对 Text 路径会被身份门全部拒绝\",\"body\":\"训练入口在写 data_manifest.json 前会对 modality.path 调用 resolve()，因此记录的是软链接解析后的绝对路径；这里却按未解析的相对字符串 data/text_embeddings_bcmbert200 比较。测试替身手工写入相对路径，掩盖了生产格式差异。正式训练完成后，所有新 checkpoint 都会在 preflight 被拒绝，25 个训练结果无法进入评测。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":398,\"line_end\":401,\"confidence\":1,\"recommendation\":\"将记录路径与 `(run_root / contract_path).resolve()` 比较，或同时记录稳定逻辑路径及解析目标/内容哈希；测试必须使用真实 start_run_record 格式并覆盖外部软链接布局。\"},{\"severity\":\"high\",\"title\":\"--expected-commit 可绕过当前冻结工作树身份\",\"body\":\"expected commit 可直接取任意 CLI 值，随后只要求 checkpoint、审查记录和授权记录彼此匹配该值；代码已经取得当前工作树 identity.commit，却从未比较两者。因此在当前冻结提交 Y 上传入旧提交 X，并提供绑定 X 的训练及审批记录，所有门都可通过。若 X 的训练代码不同，结果仍会被当前已审代码接受，破坏冻结 provenance。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":829,\"line_end\":846,\"confidence\":0.98,\"recommendation\":\"正式阶段禁止自由覆盖 commit，强制 `expected_commit == identity.commit == GIT_STAMP.commit == git HEAD`；为 CLI/GIT_STAMP/current identity 任意一项不一致增加拒绝测试。\"}],\"next_steps\":[\"修复上述两项后，重跑完整 I05 测试，并用真实软链接运行根生成一份生产格式 training record 做 preflight 回归。\",\"此次只能作为候选复核；squash/freeze 后仍需按最终冻结 commit 执行节点一复审。\"]}",
+  "parseError": null,
+  "reasoningSummary": [
+    "**Preparing for code review**",
+    "**Reviewing skills and documentation**",
+    "**Searching for missing files**",
+    "**Searching for TPBHQ directory**",
+    "**Handling dirty working tree**",
+    "**Inspecting code diffs and functions**",
+    "**Requesting specific lines**",
+    "**Analyzing git root and config validation**",
+    "**Examining runtime parameter mismatches**",
+    "**Checking extra arguments handling**",
+    "**Checking fusion_type impact**",
+    "**Analyzing config and path inconsistencies**",
+    "**Identifying commit verification vulnerability**",
+    "**Reviewing file path and testing constraints**",
+    "**Preparing environment for test run**",
+    "**Analyzing post-mortem feasibility**",
+    "**Evaluating source hash and record integrity**",
+    "**Reviewing file path resolution and config validation** I'm verifying how the code resolves file paths, especially ensuring that symbolic links correctly point to external targets as expected. I'm also checking how configuration values like batch size are handled during runtime and how the system compares configuration file hashes to detect changes or potential issues. This involves ensuring that the training data manifest path resolution aligns with runtime and contract expectations, taking symlinks and runtime contexts into account.",
+    "**Analyzing symlink race conditions and commit validation** I'm examining risks around symlink checks being done only once, which opens a TOCTOU race condition where files might be swapped after the initial check, causing costly pipeline failures. I'm also looking into how the system handles expected versus actual git commits during evaluation, noting that the current process may accept checkpoints from unreviewed commits because it doesn't rigorously compare identities—posing a significant integrity concern.",
+    "**Verifying repository cleanliness and diffs**",
+    "**Fixing heredoc bug**",
+    "**Reviewing broad branch diff**",
+    "**Ensuring JSON compliance with citations**",
+    "**Identifying commit mismatch issue**",
+    "**Confirming commit and working tree state**"
+  ]
+}

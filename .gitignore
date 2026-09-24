@@ -46,3 +46,7 @@ tmp_*/
 /docs/refactor/**/*.index
 /docs/refactor/**/*.bin
 /docs/refactor/**/validation-evidence/**/*.pt
+
+# 审查原文含本机绝对路径：只留本地，入库的是 codex-review.public.json（AGENTS.md「自动审查闭环」第 2 条）
+**/reviews/**/codex-review.json
+**/reviews/**/raw/
