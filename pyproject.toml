@@ -18,5 +18,5 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src", "."]
-testpaths = ["tests", "experiments/I01_patient_retrieval/tests", "experiments/I02_population_prototypes/tests", "experiments/I03_npj_d_dm_e1/tests", "experiments/I04_cap4_multi_prototypes/tests"]
+testpaths = ["tests", "experiments/I01_patient_retrieval/tests", "experiments/I02_population_prototypes/tests", "experiments/I03_npj_d_dm_e1/tests", "experiments/I04_cap4_multi_prototypes/tests", "experiments/I05_text_encoder_bcmbert/tests"]
 addopts = "--import-mode=importlib -p no:cacheprovider"

@@ -11,6 +11,7 @@
 | [I02_population_prototypes/](I02_population_prototypes/README.md) | 人群配对原型；编码后的原型补偿 |
 | [I03_npj_d_dm_e1/](I03_npj_d_dm_e1/README.md) | NPJ-D、Dm 与旧 E1 的历史对照 |
 | [I04_cap4_multi_prototypes/](I04_cap4_multi_prototypes/README.md) | 时间箱内多原型；已有 D 版实现 |
+| [I05_text_encoder_bcmbert/](I05_text_encoder_bcmbert/README.md) | Text encoder 换成冻结的 BioClinical ModernBERT 嵌入版；消融实验二，已收官：negative（none 严格胜 2/5），代码保留 |
 | [_comparisons/](_comparisons/index.md) | 跨实验结果导航与比较边界 |
 | [mcat-1536/](mcat-1536/manifest.md) | MCAT 对照的实验清单 |
 | [npj-uni2/](npj-uni2/manifest.md) | NPJ UNI2 对照的实验清单 |

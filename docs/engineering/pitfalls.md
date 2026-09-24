@@ -93,6 +93,8 @@
 | E29 | Office Viewer 独立 Lute 测试通过，原生 Webview 的嵌套 HTML 正文仍会丢字或错序，且刷新会出现阅读位置漂移。 | 区分目录映射与正文解析；使用原生同输入基线对照和阅读块像素验收，完整界面门未过则仅回滚本次增量；禁止以程序测试替代原生通过。 | /Users/wuhao/Documents/Codex/patches/office-outline-richtext-scroll-20260915/README.md |
 | E30 | 独立滚动修复随富文本整体回滚，且磁盘安装不等于旧Webview已加载，用户仍遇到刷新回顶。 | 无依赖功能独立打包，分别报告候选/安装/加载/原生验收状态；加载补丁仅重开已保存的目标Markdown，避免重载未保存的其他Webview。 | /Users/wuhao/Documents/Codex/patches/office-reading-position-20260915/README.md |
 | E31 | GPU 查询命令依赖 Mac 的 SSH 别名，却未注明运行位置；在 landau/tako 执行时 hitode/tetra 没有别名映射且 DNS 解析失败。 | 给出跨机命令前确认发起端，在同一端核对 ssh -G 的 HostName/Port 并实测连接；现有四机查询注明在已配置别名和认证的 Mac 本机运行。 | 2026-09-15 17:40 JST 本会话 SSH 查询排障：Mac 四机 nvidia-smi 均 exit 0；landau/tako 的 ssh -G 保留裸主机名、getent hosts 均 exit 2。 |
+| E32 | Office Viewer 目录颜色候选 B 因正文嵌套 span 的既有缺陷被整体回滚，原生已通过的单层 span/font 颜色随之丢失一周；且 Lute obsidian-tag 双层 DOM 使目录文本比对双计数而静默跳过。 | 候选按功能粒度拆分验收与回滚，不因正文既有缺陷否定目录增量；目录文本映射测试矩阵必须含运行时 Lute 配置（obsidian 开/obsidianTag 关）与标签开启形态，并固定用户真实标题为用例。 | docs/workflow/office-viewer/outline-sync-fix.md（2026-09-22 补丁 C）；/Users/wuhao/Documents/Codex/patches/office-outline-color-20260922/README.md |
+| E33 | Codex CLI 0.154.0 删除 `codex mcp-server`，用户级 MCP 配置被当成交互提示词启动、每次会话 CONNECTION_CLOSED，主控失去 `mcp__codex__*` 工具却按旧协议等待。 | 派单通道以官方 Codex 插件 companion（`task` / `--resume-last` / `status --wait`）为准，不再配置 MCP；Codex 升级后先 `codex --help` 核对子命令存在，连接失败先手工 stdio 握手看 stderr 再归因。 | ~/.claude/CLAUDE.md「派单通道（2026-09-22 改版）」；本会话诊断记录 |
 
 ## 评测与复现
 
@@ -152,6 +154,7 @@
 - `20260902-NPJ-GPU合同/notes.md`：PM `15` → V18；`102` → V19；`76` → E9（Torch Dynamo 对无 `__spec__` 模块替身的同一根因，另一次出现）；`88` → S1（导入生产模块在源码旁写 `.pyc` 的同一根因，非 `py_compile` 触发）。C11 出自该文件正文裁决记录，无对应 PM 标题。
 - `20260902-A测缺失补偿/notes.md`（20260905 续扫，9-03/9-04 新增段）：PM `446` → C14；`459` → M7；`477` → C13；`484` → C10（实测修订，出处列已含）；`500、510` → V27（同一 ID 已合并这两处出现）。
 - `20260902-A测缺失补偿/notes_eps_codex.md` / `notes_eps_opus.md`（A/B 首单双引擎过程档）：codex PM `118` → C15；opus PM `347` → V28、`354` → V29；E18 出自 codex 文件正文环境记录，无对应 PM 标题。
+- 2026-09-23 I05（研究计划书 Post-Mortem 3）：对 companion 子命令传 `--help` 被当作审查正文，误发起一次只读对抗审查 → C8（同一根因，再次出现）；补充做法：查用法只读插件源码的 `printUsage`，不对子命令传探测参数。
 
 
 ## 2026-09-16 补充
@@ -179,3 +182,28 @@
 | I01-R15-04 | 配置反序列化的list维度与NumPy tuple形状直接比较，把真实RNA误判为非法。        | 比较前规范化维度序列，测试同时覆盖配置list和自动推断tuple，真实前向通过后才进入正式运行。      | experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/evidence/acceleration-authorization.md |
 | I01-R15-05 | 配置中未被运行消费者读取的源码快照路径可长期悬空，跨机复制才暴露归档缺口。    | 迁移除校验运行资产哈希外还须核对所有声明的证据路径；新配置修正引用、旧证据不改。               | experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/evidence/migration-progress.md         |
 | I01-R15-06 | 将同机逐值等价门直接套到不同GPU/CPU，数值级差异触发停机且易诱发事后静默放宽。 | 同机与跨硬件容差分开预先批准；donor/mask/路由严格一致，浮点差异单列，失败保留证据并先询问。    | experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/evidence/migration-progress.md         |
+
+## I05 Encoder 消融补充（2026-09-23）
+
+| ID     | 坑（一句话）                                                                                                                   | Prevention Rule（一句话）                                                                                         | 出处                                                                                             |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| I05-01 | 计划定稿与交付期间，用户在目标目录新增并改名了选择记录，只在探索阶段列过一次目录导致漏读新材料、引用失效路径。                   | 定稿与生成交付物前，重新列出目标目录与证据目录，按修改时间核对新增或改名文件，再引用路径。                        | manuscript/消融实验/2.innovation-secode-part- Encoder/4.BioClinical ModernBERT-程序性知识/研究计划书-BioClinical ModernBERT.md（Post-Mortem 1） |
+| I05-02 | 在另一设备上从已存 logits 重算 B 口径风险，与历史存值出现 ≤3.6e-7 的 float32 差，而 logits 逐值相同。                            | 组合或复用历史预测时逐患者取已存的风险值，不跨设备重算；必须重算时按跨硬件容差单列差异。                          | 同上（Post-Mortem 2）；复现测试 experiments/I05_text_encoder_bcmbert/tests/test_strategy0_and_replay.py |
+| I05-03 | 放行门只检查记录存在或身份字段，没有把内容绑定到获审配方、冻结 commit 与本轮协议：同 commit 他配方的 ckpt、任意非空旧授权文件都能过门；节点一审查被排在 freeze 之前；可变资产被安排写进只读 run worktree。 | 放行门逐字段绑定获审对象（配方、commit、协议、上游记录哈希）并配换字段即拒的负例测试；节点一复审必须在 freeze 之后；冻结工作树内不放可变资产，经软链接入外部可变资产根。 | manuscript/消融实验/2.innovation-secode-part- Encoder/4.BioClinical ModernBERT-程序性知识/研究计划书-BioClinical ModernBERT.md（Post-Mortem 4）；Codex 候选审查 347612b |
+| I05-04 | 从本机终端复制命令进公开仓库文档，带用户名的本机绝对路径被提交。 | 提交前对新增或修改文件 `git grep -n "/Users/\|/home/"`，自写内容用占位符；用户原文照录不改但交付时说明。 | 同上（Post-Mortem 5） |
+| I05-05 | 校验另一模块写出的记录时，只读了中间解析函数，没跟到写出前的 resolve 赋值；测试替身按同一错误假设手写，自洽地掩盖了与生产格式的差异。身份参数（commit）允许 CLI 覆盖而不与实测身份比较。 | 测试必须用被校验模块真实的写出函数生成记录；读字段来源跟到写出前最后一次赋值；身份类参数从运行时实测身份派生，CLI 只作核对。 | manuscript/消融实验/2.innovation-secode-part- Encoder/4.BioClinical ModernBERT-程序性知识/研究计划书-BioClinical ModernBERT.md（Post-Mortem 6）；Codex 复核 2f374e7 |
+| I05-06 | 修门禁只修审查点名的症状（路径格式、CLI 覆盖），没追问门要证明的命题：路径相等不证明特征内容；测试便利分支挂在公开 CLI 参数（替身证据）上，给生产入口留了 commit 与 CPU 旁路。 | 修门禁前先写出它要证明的命题，逐个输入检查内容、时间先后与身份是否绑定；测试专用放行只经代码注入（monkeypatch），不挂任何公开 CLI 参数。 | manuscript/消融实验/2.innovation-secode-part- Encoder/4.BioClinical ModernBERT-程序性知识/研究计划书-BioClinical ModernBERT.md（Post-Mortem 7）；Codex 复核 14f722e |
+| I05-07 | 测试注入了假源码身份，但 commit 门还读仓库根的 GIT_STAMP.json；开发目录无此文件而冻结工作树有，测试只在开发目录跑过，freeze 后 17 个 error。 | freeze 后必须在 run worktree 里重跑实验测试；注入身份的测试同时隔离所有身份来源（.git、GIT_STAMP.json）。 | manuscript/消融实验/2.innovation-secode-part- Encoder/4.BioClinical ModernBERT-程序性知识/研究计划书-BioClinical ModernBERT.md（Post-Mortem 8） |
+| I05-08 | 交给 gitstamp 身份门的清单含 stamp 不记录的 JSON 数据文件；有 .git 时通过，只有 GIT_STAMP 的服务器上误判 dirty 拒跑。 | 身份门清单必须在“只有 GIT_STAMP、没有 .git”的目录里测过；非源码文件用 sha256 内容锁保护，不进身份门。 | manuscript/消融实验/2.innovation-secode-part- Encoder/4.BioClinical ModernBERT-程序性知识/研究计划书-BioClinical ModernBERT.md（Post-Mortem 9） |
+| I05-09 | scripts/launch_formal.sh 在 git 里无可执行位，历史服务器副本手工 chmod 过；从干净冻结版本部署后 train_launcher Popen 直接 PermissionError，dry-run 查不出。 | 被 Popen 直接执行的脚本要有“检出后可执行”的测试；干净部署后先跑真实冒烟。 | manuscript/消融实验/2.innovation-secode-part- Encoder/4.BioClinical ModernBERT-程序性知识/研究计划书-BioClinical ModernBERT.md（Post-Mortem 10） |
+| I05-10 | 用裸管道 git archive/tar 经 ssh 同步代码，连接中断时远端只解出部分文件且命令不报错。 | 同步一律打包、算校验和、传输后远端校验再解压，并逐文件比对。 | 研究计划书-BioClinical ModernBERT.md（Post-Mortem 11） |
+| I05-11 | jobrun.sh 的 `$cmd >> log` 对 `a && b` 只重定向最后一条，前面命令失败时日志为空；tako 只有 conda 环境目录、没有 conda 本体。 | 交给 jobrun 的复合命令整体包成 `{ ...; } 2>&1`；新主机建环境前先确认 conda 本体。 | 同上（Post-Mortem 12） |
+| I05-12 | 对含未跟踪文件的目录执行 `git add -A <目录>`，把含本机绝对路径的 Codex 审查输出一并提交进公开仓库。 | 提交前只 add 明确列出的文件；对暂存区做路径扫描（`git diff --cached \| grep "^+" \| grep -E "/home/\|/Users/"`），非零即中止提交。 | I05 账本迁移提交（amend 修正） |
+
+## Git 工作流脚本补充（2026-09-23）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| G1 | `gitflow.sh cleanup` 只核对 run worktree HEAD「可从 main 到达」，被切到 main 上更早的提交也放行，删掉现场而 tag 仍指原冻结提交，源码漂移被漏报。 | 身份/冻结类核对一律与冻结锚点（`run/<id>` tag）逐值相等比较并核对检出形态，不用 is-ancestor 代替相等；拒绝时保留现场，不 -D/--force。 | docs/workflow/git-workflow-fix-20260923.md（Post-Mortem 1）；回归 tests/test_workflow_scripts.py |
+| G2 | shell 入口在处理参数前就产生副作用或环境探测：`ci.sh --help` 照样清缓存并跑全仓测试；`gitflow.sh` 先 cd 再按相对 `$0` 读帮助、仓库外先被探测拒绝。 | 脚本第一步解析参数（`-h/--help` 退 0、未知参数非零），之后才探测环境、cd、清理或测试；读取自身文件前先解析绝对路径。 | 同上（Post-Mortem 2、3） |
+| G3 | macOS `/bin/bash` 3.2 在 UTF-8 locale 下把紧跟 `$var` 的全角标点首字节并入变量名，`set -u` 下在 git 操作完成后崩溃并以 1 退出；C locale 自测看不到。 | 变量后紧跟中文或全角标点一律写 `${var}`，用静态扫描守住；shell 脚本自测至少在 UTF-8 locale 下跑一遍。 | 同上（Post-Mortem 4） |

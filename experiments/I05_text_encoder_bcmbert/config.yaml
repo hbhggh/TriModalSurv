@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "experiment": "I05_text_encoder_bcmbert",
+  "arm": "e0_bcmbert200",
+  "protocol_ids": {
+    "bcmbert200": "patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1-i05-bcmbert200-v1",
+    "legacy-replay": "patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1-i05-legacy-replay-v1",
+    "legacytext-rerun": "patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1-i05-legacytext-rerun-v1"
+  },
+  "profiles": {
+    "bcmbert200": {"text_cache": "new", "checkpoints": "new"},
+    "legacy-replay": {"text_cache": "legacy", "checkpoints": "legacy"},
+    "legacytext-rerun": {"text_cache": "legacy", "checkpoints": "new"}
+  },
+  "cancers": ["BLCA", "BRCA", "LGG", "LUAD", "UCEC"],
+  "display_cancer_order": ["LGG", "BRCA", "BLCA", "LUAD", "UCEC"],
+  "seeds": [123, 132, 213, 231, 321],
+  "grids": ["none", "rna_100", "text_100", "both_100"],
+  "q_grid": "none",
+  "text_encoder": {
+    "model_id": "NeuML/bioclinical-modernbert-base-embeddings",
+    "revision": "048ad4491de0fb4e2695bfe4705da67caf4804b8",
+    "base_model": "thomas-sounack/BioClinical-ModernBERT-base",
+    "max_length": 200,
+    "hidden_size": 768,
+    "attn_implementation": "eager",
+    "padding": "max_length",
+    "padding_side": "right",
+    "truncation": true,
+    "special_tokens": "keep [CLS]/[SEP]",
+    "pad_rows": "masked_mean_broadcast",
+    "dtype": "float32",
+    "pickle_protocol": 4,
+    "min_transformers": "4.48.0",
+    "text_column": "text",
+    "feature_dir": "data/text_embeddings_bcmbert200",
+    "reference_feature_dir": "data/text_embeddings_parsed"
+  },
+  "shapes": {"img": [128, 1536], "text": [200, 768], "rna": [2048, 256]},
+  "model": {
+    "network_type": "NPJC",
+    "compensator": "none",
+    "hidden_size": 256,
+    "pred_dim": 4,
+    "dropout_rate": 0.1,
+    "mlp_ratio": 4,
+    "n_backbone": 1,
+    "n_head": 4,
+    "modality_order": ["img", "text", "rna"]
+  },
+  "numerics": {"norm_epsilon": 1e-12, "logit_atol": 1e-06, "logit_rtol": 0, "risk_clamp": 1e-06},
+  "frozen_combo_spec": {
+    "alpha": 1.0,
+    "candidate_id": "combo-l1-a1-w0p5",
+    "enabled_rules": [1, 2, 3, 4, 5],
+    "inactive_parameters": [],
+    "lambda": 1.0,
+    "protocol": "combo",
+    "ucec_exception": true,
+    "w": 0.5
+  },
+  "s0_force": {
+    "enabled": true,
+    "luad_route": {
+      "text_100": "m0real",
+      "rna_100": "m1",
+      "both_100": "m1",
+      "none_rna_missing": "m1",
+      "none_both_missing": "m1",
+      "none_text_only_or_complete": "upstream_combo"
+    }
+  },
+  "runtime": {
+    "device": "cuda",
+    "batch_size": 383,
+    "cpu_threads": 4,
+    "retrieval_backend": "gpu_cached"
+  },
+  "training_contract": {
+    "runtime": {"network_type": "NPJC", "compensator": "none", "lr": 0.0001, "epochs": 50, "batch_size": 32,
+                "hidden_size": 256, "bin_mode": "author", "train": true, "task_type": "surv", "n_image_tokens": 128,
+                "pretrain_path": "", "finetune_head_only": false, "simulate_missing_modality": "",
+                "modality_dropout": 0.0, "allow_dirty": false},
+    "model_config": {"bcmbert200": "experiments/I05_text_encoder_bcmbert/model_config.yml",
+                     "legacytext-rerun": "configs/models/surv_multimodal_mainmoe_uni2.yml"},
+    "text_path": {"bcmbert200": "data/text_embeddings_bcmbert200", "legacytext-rerun": "data/text_embeddings_parsed"},
+    "gpu_config": "configs/gpu_train.yaml"
+  },
+  "gpu_policy": {
+    "device": "cuda",
+    "cpu_forbidden": true,
+    "hosts": ["landau", "tako", "hitode", "tetra"],
+    "prefer": "idle_first",
+    "shared_utilization_lt_percent": 70.0,
+    "min_free_memory_mib": 8192,
+    "samples": 3,
+    "sample_interval_seconds": 2.0
+  },
+  "smoke": {"seed": 123, "base_ids": 4, "include_all_padded": true},
+  "assets": {
+    "cache_dir": "tmp_sur_cache",
+    "label": "data/TCGA_9523_ex12.csv",
+    "manifest": "data/missing_manifest_v1.csv"
+  },
+  "upstream": {
+    "inference_root": "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result",
+    "route_module": "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/4.progress/luad_m1_force/model.py",
+    "selection_lock": "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/runs/valid/selection-lock.json",
+    "rules": [
+      "01_text100_skip_compensate",
+      "02_wsi_meanpool_key",
+      "03_shrinkage_lambda",
+      "04_wsi_rna_joint_sim",
+      "05_imputed_token_downweight"
+    ],
+    "baseline_source_sha256": {
+      "experiments/I01_patient_retrieval/model.py": "e4e08b0c9ee78da8b2a7c4d01250516693fc087bf567d18ef6a944b27cc10c13",
+      "experiments/I01_patient_retrieval/evaluate.py": "e92812ef5316b3d0d212deda0e37793e3de84dd9b44410b25ebe7caecb658b5a",
+      "src/trimodalsurv/models/npjc.py": "f0c03c1516a3976ca71ac5f0b8a4b752f3f98a91f44e6abb7f0edcda399eac2f",
+      "src/trimodalsurv/evaluation/common.py": "179d878ef3be4639579a89b7d6b21d9908ebc7fb5d019500d45a85e94d982029",
+      "experiments/I01_patient_retrieval/config.yaml": "285ca9f918d4565cf2b1e58f321cc5430153371adf9e19f19bfa48ad8a2d4aa7"
+    },
+    "source_sha256": {
+      "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/run.py": "3c6808fa453a40608b750665f9daa5bab2ad0edff1ef5fb9ee93d454d6290cb9",
+      "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/runtime.py": "89ff2696657189792248a6bf9a2964ba091c1fa6e028d4e33843695db8d4dbf8",
+      "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/inference.py": "b6581528aa0ba7aed718dbdd1f44b871a30c7de8839e949637c8cc4b849fcf99",
+      "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/selection.py": "9c6e241080a9a0c3f7ca46dd18269681c4ce27c04df593c9568ae8e53718fc40",
+      "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/reporting.py": "e3778e226aae83bc1f94c7fa968bbc2816f09a2e45a03a8ff3d61d60c1b38ca6",
+      "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/acceleration.py": "c9cd3013b69c9d060fb75095a164142317dd8c93aa1b8b8efe69b9fcd33b58e7",
+      "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/config.yaml": "6d2c224fe3997cd58fc4a67bb0517183ec220480d2a30216dbb13f6b1d0c4b80",
+      "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/01_text100_skip_compensate/model.py": "7cc7f22fa7a609b7777aa94cba25e482fd71d79aae2abc8c3853854da5e17217",
+      "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/01_text100_skip_compensate/config.yaml": "f74b2d5dfd4d8ba1ecb75b054c6d2e0a8a848dc95348c91037db0897b0ac525f",
+      "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/02_wsi_meanpool_key/model.py": "2ba602b5204fc923769a83ce4748190552ad6f95541e79111f41a11d1c58e435",
+      "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/02_wsi_meanpool_key/config.yaml": "08b82243b931d967a54f206cf70ac29465b1f433b10508f5ce4bad574830034a",
+      "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/03_shrinkage_lambda/model.py": "a0cc7c337f41c062168b407d74c7d692b49f90bc12ef8938fd609dd1e36e49f0",
+      "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/03_shrinkage_lambda/config.yaml": "bb8ef837dced04a1d205dc74f23db93349b050eb90414e5e18e638ecbb2c8dcd",
+      "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/04_wsi_rna_joint_sim/model.py": "70ee79ca14acfdaa9a5d316c79cdd02f4905d2072926dc7d242ff9934c89b113",
+      "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/04_wsi_rna_joint_sim/config.yaml": "6c527da8b03671775c310c76f52ec667db3253987b06a740e582a9cd6c90c5de",
+      "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/05_imputed_token_downweight/model.py": "48ba0f81673a631015d8ee722c47aaef46b9c4f7b3432801199817794e9cb446",
+      "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/05_imputed_token_downweight/config.yaml": "9bc7e60594dbc32c2ad639ee1bf69e854f7108d47f42161e5c2122138c163650",
+      "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/4.progress/luad_m1_force/model.py": "0e2174d2fc5220c4f34c20470ca0a65c522a71780d2d855eef12802790ed0109",
+      "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/runs/valid/selection-lock.json": "cd74151fb6c355c1234c1971d0bad36282d7da37718716867de42e289e03c0b3",
+      "experiments/I01_patient_retrieval/model.py": "e4e08b0c9ee78da8b2a7c4d01250516693fc087bf567d18ef6a944b27cc10c13",
+      "experiments/I01_patient_retrieval/evaluate.py": "e92812ef5316b3d0d212deda0e37793e3de84dd9b44410b25ebe7caecb658b5a",
+      "experiments/I01_patient_retrieval/config.yaml": "285ca9f918d4565cf2b1e58f321cc5430153371adf9e19f19bfa48ad8a2d4aa7",
+      "src/trimodalsurv/models/npjc.py": "f0c03c1516a3976ca71ac5f0b8a4b752f3f98a91f44e6abb7f0edcda399eac2f",
+      "src/trimodalsurv/evaluation/common.py": "179d878ef3be4639579a89b7d6b21d9908ebc7fb5d019500d45a85e94d982029"
+    }
+  },
+  "legacy": {
+    "preflight": "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/evidence/legacy-preflight.json",
+    "preflight_sha256": "c5c674f69ae04e49748d7a73187a22d651a511493bdceb20e251d67f0624f11a",
+    "valid_source": "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/evidence/valid-source.json",
+    "valid_source_sha256": "76b5f16afad735896ab37335419803ecdeececb90f61a744d6a29bda1c0b2507",
+    "test_complete": "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/4.progress/runs/test/complete.json",
+    "test_complete_sha256": "8604aae480e76a0b5f2117e5d625bbd84255b6ec21f775d1da1e1073e2260eb6",
+    "test_run_fingerprint": "a825b3cc4df41cf56afe228be531a4fc13f69c520bf35a2f2305101652387ec2",
+    "artifacts_2progress": "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/2.progress/result/runs/test",
+    "artifacts_4progress": "experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/4.progress/runs/test"
+  },
+  "table1_none_proto": {
+    "source": "manuscript/bmc_initial_draft/main.tex Table 1 None 行 Proto.† 列；与 legacy.test_complete 的 strategy0/none 五 seed 均值逐位相同",
+    "LGG": 0.797723,
+    "BRCA": 0.688112,
+    "BLCA": 0.589972,
+    "LUAD": 0.582485,
+    "UCEC": 0.650968
+  }
+}

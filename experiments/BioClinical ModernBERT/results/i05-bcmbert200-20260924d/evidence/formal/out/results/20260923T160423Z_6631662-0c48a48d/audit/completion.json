@@ -1,0 +1,35 @@
+{
+  "artifacts": [
+    {
+      "copy": {
+        "path": "~/i05_out_20260924d/formal/out/results/20260923T160423Z_6631662-0c48a48d/raw/00-test_pred_and_label_tcga_uni2_img_1536text_768rna_256_NPJC_BRCA_surv.csv",
+        "sha256": "f62ebf29fece44be89462f9a3eda287a4ac3e548d170ae0c5fe27e18f4a1697f"
+      },
+      "source": {
+        "path": "~/i05_out_20260924d/formal/out/231/test_pred_and_label_tcga_uni2_img_1536text_768rna_256_NPJC_BRCA_surv.csv",
+        "sha256": "f62ebf29fece44be89462f9a3eda287a4ac3e548d170ae0c5fe27e18f4a1697f"
+      }
+    },
+    {
+      "copy": {
+        "path": "~/i05_out_20260924d/formal/out/results/20260923T160423Z_6631662-0c48a48d/raw/01-tcga_uni2_img_1536text_768rna_256_NPJC_BRCA_surv_results.json",
+        "sha256": "074c4f4cfde9bed4c40e828a0d1cca407b4320f292a5eff8c0b713ecf2531721"
+      },
+      "source": {
+        "path": "~/i05_out_20260924d/formal/out/231/tcga_uni2_img_1536text_768rna_256_NPJC_BRCA_surv_results.json",
+        "sha256": "074c4f4cfde9bed4c40e828a0d1cca407b4320f292a5eff8c0b713ecf2531721"
+      }
+    }
+  ],
+  "checkpoint": {
+    "path": "~/i05_out_20260924d/formal/out/231/tcga_uni2_img_1536text_768rna_256_NPJC_BRCA_surv.pth",
+    "sha256": "ffc13b67c5a8502fa40cae0c33671d7502bfabb624a23add1494369eae318dac"
+  },
+  "finished_at_utc": "2026-09-23T16:06:34.791099+00:00",
+  "metrics": {
+    "BRCA_c-index": 0.6849097308958783,
+    "c-index": 0.6849097308958783,
+    "loss": 0.3968464210629463
+  },
+  "status": "complete"
+}

@@ -1,0 +1,40 @@
+{
+ "checkpoint_check": "hashed_checkpoint_files",
+ "checkpoint_list_matches_files": true,
+ "checkpoint_mismatch": [],
+ "label_mismatch": [],
+ "max_abs_diff_numpy": 0.0,
+ "max_abs_diff_sksurv": 0.0,
+ "mismatch_numpy": [],
+ "mismatch_sksurv": [],
+ "n_checkpoints": 25,
+ "n_rows": 300,
+ "ok": true,
+ "q": {
+  "baseline_mean": {
+   "BLCA": 0.5899722414989591,
+   "BRCA": 0.6881117293062337,
+   "LGG": 0.7977225672877847,
+   "LUAD": 0.5824850824850825,
+   "UCEC": 0.6509681727131092
+  },
+  "delta": {
+   "BLCA": 0.004892435808466211,
+   "BRCA": -0.033291699784262496,
+   "LGG": -0.05362318840579705,
+   "LUAD": 0.012390312390312408,
+   "UCEC": -0.016292009793011375
+  },
+  "met": false,
+  "new_mean": {
+   "BLCA": 0.5948646773074253,
+   "BRCA": 0.6548200295219712,
+   "LGG": 0.7440993788819876,
+   "LUAD": 0.5948753948753949,
+   "UCEC": 0.6346761629200979
+  },
+  "strict_wins": 2
+ },
+ "sksurv_available": true,
+ "status": "COMPLETED"
+}

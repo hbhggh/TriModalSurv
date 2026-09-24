@@ -12,6 +12,7 @@
 - **结果保存**：日志、checkpoint、逐 seed 指标、配置和运行记录保存在临时 worktree 之外，使用独立 run ID，避免覆盖。
 - **运行结束**：确认训练、评测及相关子进程已结束，结果与复现材料已保存，再删除临时 worktree；保留对应 commit 和结果入口。 
 - **实验授权**：记录计划规模不等于允许启动。仍遵守 [AGENTS.md](AGENTS.md) 的冒烟停机、互审及正式实验授权要求。
+- **角色分工（用户裁决 2026-09-23）**：代码开发由 Claude Code（Claude Opus 5.5）执行，Claude 同时任指挥官；Codex 只负责审核生成的研究计划书（含代码 diff）和实验结果，不参与任何代码生成。详见 [AGENTS.md](AGENTS.md)「角色」与 [CLAUDE.md](CLAUDE.md)。
 
 ### 当前落地情况
 
@@ -37,6 +38,7 @@ ID 固定，不因改名或排序变化而重编号；后续从 `I05` 继续追�
 | [I02](#i02) | E1-M³Surv 人群级配对原型 | NPJ-C                   | 候选方案；未核实独立实现       | 未登记有效实验批次；25 seed 为后续目标          | 锁定聚类空间、配对方式、原型数和更新规则               |
 | [I03](#i03) | NPJ-D／Dm／旧 E1 对照     | NPJ-D 与 NPJ-C          | 历史实现已归档                 | 五癌各 25 seed 已收官，报告 r6                  | 保留历史结果，供后续匹配对照使用                       |
 | [I04](#i04) | CAP4 × L：时间箱内多原型 | **NPJ-C（用户已确定）** | 底座变更已定；实现与配置待迁移 | NPJ-C 尚无实验结果；已有冒烟仅属于旧 NPJ-D 版本 | 将 CAPL 接入 NPJ-C，明确新版本的同底座对照；未授权全量 |
+| [I05](#i05) | Text encoder 换成 BioClinical ModernBERT 嵌入版（消融实验二） | NPJ-C + 原型检索方法（S0-force） | **已收官（negative）**：用户 2026-09-24 裁决，代码保留 | **negative**：none 严格胜 2/5（BLCA、LUAD），Q 未达标；`i05-bcmbert200-20260924d` | 无；如需再做，另立新 Q |
 
 阶段使用明确文字：方案讨论／开发中／待互审／冒烟中／冒烟结束／待正式授权／正式运行中／已收官／暂停／舍弃。没有运行核验时不要填写“运行中”。
 
@@ -491,6 +493,22 @@ print("来源文件数：" + str(counts))
 
 来源：E04 的 `smoke/v3/README.md`。全表均属于旧 NPJ-D 底座，保留对照版本差别；这些读数不是 NPJ-C 结果，也不是 25-seed 正式结果。本次只读历史归档，未重新运行测试、训练、评测或核验远端进程。
 
+`<a id="i05"></a>`
+
+## I05｜Text encoder 换成 BioClinical ModernBERT 嵌入版（消融实验二）
+
+- **一句话问题**：只把 Text 特征提取器换成冻结的 BioClinical ModernBERT 嵌入版，NPJ-C、原型检索方法与训练配方不变，在历史 `none`（保留天然缺失）下，五癌五 seed 平均 B 口径 C-index 能否相对论文 Table 1 `None / Proto.†` 严格胜出至少 4/5。
+- **类型**：消融（辅助创新点）。
+- **底座／机制／与已有主线的区别**：底座与方法沿用 I01 的原型检索方法（S0-force 冻结 combo `combo-l1-a1-w0p5` 与 LUAD 路由），不重新选参；唯一改动是 Text 特征（`NeuML/bioclinical-modernbert-base-embeddings`，revision `048ad4491de0fb4e2695bfe4705da67caf4804b8`，方案 A：截断或补齐到 200 token、pad 行置零，形状 `[200,768]` 不变）。
+- **模块路径／配置目录／启动预设**：[experiments/I05_text_encoder_bcmbert/](experiments/I05_text_encoder_bcmbert/README.md)；训练 arm `e0_bcmbert200`（`train_plan.yaml`，25 个 run）；推理 `evaluate.py` 的 `bcmbert200` 档案。
+- **对照与必须一致的实验协议**：Table 1 `None / Proto.†`（4.progress test 指纹 `a825b3cc…`）；五癌 LGG/BRCA/BLCA/LUAD/UCEC；种子必须是 123、132、213、231、321；B 口径 C-index；训练配方与既有 e0 臂逐参相同（dry-run 只差 `--model_config` 与 `--result_path`）。
+- **已锁定事项／尚未决定事项**：已锁定模型与 revision、方案 C（2026-09-24 取代方案 A）、四场景模板（只有 none 进 Q）、种子、GPU 规则（禁止 CPU；四台服务器空闲卡优先，没有空闲卡时可用利用率低于 70% 的在用卡）。尚未决定：是否加跑"旧 Text 同代码重训"成对臂；在 landau 以外主机运行时的 jobrun 托管方式。
+- **当前开发阶段／负责者／复核记录**：待互审。代码由 Claude Code（Claude Opus 5.5）开发并完成本地测试；Codex 只审核计划书与实验结果，不参与代码生成，Codex 候选审查（`347612b`，needs-attention，4 项 high）已由 Claude 修复并补测；Codex 复核（`2f374e7`）确认 3 项落地，另提 2 项 high（Text 路径格式、commit 可被 CLI 解耦），也已修复；复核 r3（`14f722e`）再提 2 项 high（Text 路径不能证明特征内容、替身证据参数仍开 commit 与 CPU 旁路），已用训练前资产锁与测试注入点修复，用户裁决审查只审一次、只看核心逻辑，不再复审；freeze 后的 provenance 由执行方机械核对。
+- **当前实验阶段／最近批次 ID／结果入口**：Phase 5 完成；`i05-bcmbert200-20260924d`（冻结 commit `6631662`）；结果账本 [experiments/BioClinical ModernBERT/results/index.md](experiments/BioClinical%20ModernBERT/results/index.md)；结果表已回传 `manuscript/消融实验/2.innovation-secode-part- Encoder/4.BioClinical ModernBERT-程序性知识/`。**溯源说明（用户裁决 2026-09-24）**：用户选择把 main 上 I05 的全部提交压成一行（接受溯源失效）。训练与推理所用的冻结 commit `6631662` 因此不再是 main 的祖先，按 AGENTS.md「Git 工作流」第 8 条，本 run 结果的 commit 溯源失效，仅作 negative 记录，不进论文；`run/i05-bcmbert200-20260924*` 四个 tag 仍保留原 commit，可 `git show 6631662:<路径>` 读回当时源码。
+- **结果结论与解释边界**：**negative**。none 下五 seed 平均 B 口径 C-index，新 encoder 相对 Table 1 None/Proto.† 严格胜 2/5（BLCA +0.004892、LUAD +0.012390），LGG −0.053623、BRCA −0.033292、UCEC −0.016292，Q（≥ 4/5）未达标。回放 IDENTICAL，推理链路与 Table 1 一致；Δ 同时包含 encoder 效应与重训方差（未加跑旧 Text 同代码重训臂，无法拆分）；方案 C 只编码前 200 token（86% 截断）。按 AGENTS.md 结果差不 revert，代码留在树里。
+- **下一项待处理事项／用户裁决记录**：**已收官**。用户 2026-09-24 裁决：按 negative 收官，代码保留在仓库（AGENTS.md「结果差不 revert」）。节点二 Codex 结果审查两轮：首轮缺原始证据、复审缺 ckpt 本体哈希，均已补齐（见结果索引）。若日后再做，可另立新 Q：加跑旧 Text 同代码重训臂以拆分重训方差，或去掉 200 token 截断。服务器临时目录已于 2026-09-24 按用户指示清理（tako 7 个、landau 5 个及 jobrun 登记）；证据原件只保留 tako `~/i05_out_20260924d/`（25 个只读 ckpt、逐患者预测、签署记录、训练记录）。文档见 `manuscript/消融实验/2.innovation-secode-part- Encoder/4.BioClinical ModernBERT-程序性知识/`。
+- **最近更新时间／证据**：2026-09-24；上机阶段全部完成，证据见 results 目录；执行中的修复见研究计划书 Post-Mortem 8–12。
+
 ## 7. 开发过程记录（追加，不覆盖历史）
 
 每次有实质变化，更新总览和对应主线说明，再追加一行。多人同时工作时先重新读取本文件；共享入口由当次明确的负责者合并，避免覆盖他人的记录。
@@ -504,6 +522,14 @@ print("来源文件数：" + str(counts))
 | 2026-09-10                 | 全项目   | 工作方式确定／登记 | 用户确定单目录单分支开发、commit 临时 worktree 冻结运行；创建本文件    | 本对话；Git 对象与当前本地源码只读核对                                              | 目录归集、源码归档及冻结启动入口尚未落地                  |
 | 2026-09-10 22:45:09        | I04      | 用户裁决／底座变更 | 后续 CAP4 × L 开发底座由 NPJ-D 改为 NPJ-C；更新总览和主线定义         | 用户本轮明确要求；旧 D 冒烟数值保留并标明底座                                       | NPJ-C 实现／配置迁移及同底座对照待落实；尚无 C 版实验结果 |
 | 2026-09-10 22:57:49        | I03      | 历史结果均值汇总   | 按癌种和实验臂新增四种缺失场景的 25-seed 算术平均 C-index 表（B 口径） | E03-R 原始 JSON 共 1500 个读数；60/60 均值经 Decimal 独立求和一致；复算代码附于 I03 | 仅汇总既有结果；未新增训练或评测                          |
+| 2026-09-22                 | 全项目   | 工作方式更新／登记 | 用户裁决 Git 工作流为策略一（先 Squash 后跑）：长期 `dev` worktree 小步开发 → CI/互审 → squash 进 `main` 得 S → 从 S 建 detached run worktree 冻结 → stamp 指向 S；角色改为对称互审 | 演示仓库 `~/Desktop/git-workflow-demo` 两个创新完整走通，`scripts/gitflow.sh` 自测通过；本仓库只改 AGENTS.md / CLAUDE.md / scripts/README.md，新增 `scripts/ci.sh`、`scripts/gitflow.sh`、`docs/workflow/git-workflow.md` | 尚未运行 `scripts/gitflow.sh init` 建 dev worktree；主目录未提交改动（todo.md 等）需先处理，否则 `squash` 门禁会拒绝 |
+| 2026-09-23                 | I05      | 新主线登记／代码落地 | 用户锁定 k1 = BioClinical ModernBERT 嵌入版；代码开发由 Claude Code（Claude Opus 5.5）执行，Codex 只审核计划书与实验结果、不参与代码生成 | I05 本地测试与发车契约核对通过；模板基线数值由脚本从原始 JSON 生成 | Codex 候选审查未发起；未上机、未训练、未评测 |
+| 2026-09-23                 | I05      | 候选审查／修复     | Codex 候选审查 needs-attention，4 项 high：节点一审查排在 freeze 前、新 ckpt 未绑训练配方、用户授权只查非空、可变资产写进冻结 run worktree | 新增训练身份门（`training_contract`）、审查记录绑 commit、结构化用户授权、冻结工作树布局门；I05 测试 63 个通过 | 待 Codex 复核候选；未上机、未训练、未评测 |
+| 2026-09-23                 | I05      | 候选复核／修复     | Codex 复核 `2f374e7`：原 4 项中审查顺序、结构化授权、外置资产布局已落地；新提 2 项 high：训练记录 Text 路径为 resolve 后的绝对路径被身份门误拒、`--expected-commit` 可绕过当前源码身份 | Text 路径改与运行根解析结果比较；新增 `resolve_expected_commit`；测试改用训练端真实写出函数；I05 测试 67 个通过 | 未上机、未训练、未评测 |
+| 2026-09-23                 | I05      | 候选复核 r3／修复  | Codex 复核 `14f722e`：Text 路径格式已修正；新提 2 项 high：路径相等不能证明训练所用特征内容、替身证据参数仍可开 commit 覆盖（与 CPU）旁路 | 新增训练前资产锁（锁早于训练、当前内容 = 锁、绑定 commit）；commit 例外删除，身份与 CPU 放行改为测试注入；I05 测试 69 个通过 | 未上机、未训练、未评测 |
+| 2026-09-23                 | 全项目／I05 | 用户裁决 | 审查闭环只审一次、只看核心逻辑，不做多轮复审与代码打磨；授权 I05 Phase 0（landau）与手工 squash / freeze，不推送 main | CLAUDE.md 节点一、AGENTS.md 互审节同步 | 未上机、未训练、未评测 |
+| 2026-09-24                 | I05      | 上机执行／结果     | Phase 0–5 全部完成：方案 C 提特征（tako）、冒烟、回放 IDENTICAL、25 个正式训练、test 300 行、渲染 | none 严格胜 2/5（BLCA、LUAD），Q 未达标 → negative；`i05-bcmbert200-20260924d`，冻结 commit `6631662` | 待 Codex 结果审查与用户裁决 |
+| 2026-09-24                 | I05      | 节点二审查／用户裁决 | Codex 结果审查两轮（缺原始证据；缺 ckpt 本体哈希）均已补齐：两路重算 300 行 C-index 逐值相同，25 个 ckpt 原件现场哈希一致 | 用户裁决按 negative 收官，代码保留 | I05 收官 |
 
 Bug 详情仍按项目格式记入所属战役的 `notes.md`，Prevention Rule 回到唯一坑台账；本表只放摘要和链接，不另建重复问题台账。
 

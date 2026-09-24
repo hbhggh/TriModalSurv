@@ -1,0 +1,831 @@
+{
+  "assets": {
+    "cancers": {
+      "BLCA": {
+        "counts": {
+          "test": {
+            "img": 138,
+            "rna": 138,
+            "text": 138
+          },
+          "train": {
+            "img": 136,
+            "rna": 134,
+            "text": 136
+          },
+          "valid": {
+            "img": 68,
+            "rna": 68,
+            "text": 68
+          }
+        },
+        "files": {
+          "img_sur_test_all_BLCA.pkl": {
+            "sha256": "99dc24ef3c1fc9218e53ffcc2716a50d04e5f14de722f7e8a40888c431fc0306",
+            "status": "identical"
+          },
+          "img_sur_train_all_BLCA.pkl": {
+            "sha256": "bbea24c789320132c96cbda6dae582e2c5db2a08a06189322e24f315af9573dc",
+            "status": "identical"
+          },
+          "img_sur_valid_all_BLCA.pkl": {
+            "sha256": "8bf588e26f484d3529d59ef77859ee1fda582d7c1e2909433874e9c8ce1de338",
+            "status": "identical"
+          },
+          "rna_sur_test_all_BLCA.pkl": {
+            "sha256": "0c2101468e915153e2c94d51e8e0be743f81fb1e080a4b7a621de530728b42fe",
+            "status": "identical"
+          },
+          "rna_sur_train_all_BLCA.pkl": {
+            "sha256": "5e54691b33d1c9cee2260ec51dee8e3858cfd1cf26f61baae8e7e5b3aa6e3690",
+            "status": "identical"
+          },
+          "rna_sur_valid_all_BLCA.pkl": {
+            "sha256": "5f1014cebc68b3e8017a81d8d5e328f3c72db3c155d17f591534af508591055a",
+            "status": "identical"
+          },
+          "text_sur_test_all_BLCA.pkl": {
+            "content_sha256": "fae7ec476d87db5238642feb9514faf3cae91bc6daa08a91a28480b2a68dd4f4",
+            "sha256": "fc832a5b52a3d3b9fa656ad5306c12ef91f7f23956af60ec4314157634e3ea05",
+            "status": "new"
+          },
+          "text_sur_train_all_BLCA.pkl": {
+            "content_sha256": "fb9e071ccdf42188061812a09a2fdd936ec917cccf99a80c9a3a6aeee9bfdfc3",
+            "sha256": "ca87af49f3b8a1946b29a3b54d4459f978bbab1709bec4115752311b8096266d",
+            "status": "new"
+          },
+          "text_sur_valid_all_BLCA.pkl": {
+            "content_sha256": "a3c60abc41062bce62ebdc4706f87337fa8c9ef2876a510e3900f5c5d2203d99",
+            "sha256": "db162aa004d2dd58936109f8fbfddeaef03be4c1c787dfc2444c813f067f41a8",
+            "status": "new"
+          }
+        },
+        "test_natural_missing": {
+          "rna": 0,
+          "text": 0
+        }
+      },
+      "BRCA": {
+        "counts": {
+          "test": {
+            "img": 383,
+            "rna": 382,
+            "text": 347
+          },
+          "train": {
+            "img": 383,
+            "rna": 383,
+            "text": 352
+          },
+          "valid": {
+            "img": 192,
+            "rna": 191,
+            "text": 172
+          }
+        },
+        "files": {
+          "img_sur_test_all_BRCA.pkl": {
+            "sha256": "7029296f35b4b317d74bdea8e10c351a3c9c1efbfa0ef05d7b40d057d245064a",
+            "status": "identical"
+          },
+          "img_sur_train_all_BRCA.pkl": {
+            "sha256": "9fed35276097e7c78afa3ed3144cd59875ea8c6ade337a91ca739ee7b7e7ed84",
+            "status": "identical"
+          },
+          "img_sur_valid_all_BRCA.pkl": {
+            "sha256": "fdedbc48ef45d896583d6cdc2868cae31509e7bbad746036a6cd4b3519d7171c",
+            "status": "identical"
+          },
+          "rna_sur_test_all_BRCA.pkl": {
+            "sha256": "c7a3c85f02bf1e6334742548298d63c305920108d0a82265b7d93ed253dd10dd",
+            "status": "identical"
+          },
+          "rna_sur_train_all_BRCA.pkl": {
+            "sha256": "f2069f1d2fe27d2ef7ee321c40e7fdfa76e781041d0dd8513b190636091f0fdb",
+            "status": "identical"
+          },
+          "rna_sur_valid_all_BRCA.pkl": {
+            "sha256": "e1a44e16650b89ea3cb9de5889ab210837c63870f55548b1caee908133472003",
+            "status": "identical"
+          },
+          "text_sur_test_all_BRCA.pkl": {
+            "content_sha256": "19c170403001894df1f06c8ced75b5a03f879177998bb44b72a2fa21915c5ac0",
+            "sha256": "36495824075a4c62d3a45a06148b1f8ed2e1d8b299b992b0ee63ad6f946373f8",
+            "status": "new"
+          },
+          "text_sur_train_all_BRCA.pkl": {
+            "content_sha256": "f56d2f3e61e2c3e175bf167460d27988d2595e5333ce821105a8a85b89673e42",
+            "sha256": "a79107a5304c9b59c7c5e44b3b763f9fa6e7889fda8e914d50f10a24ef7a7980",
+            "status": "new"
+          },
+          "text_sur_valid_all_BRCA.pkl": {
+            "content_sha256": "ee4da18a5d94b37b352f9b6e0fb3a91d43b79f22d9079318a47788d1a478536a",
+            "sha256": "11cf44005741b20a95c1c2b35893fd0927e0d3db475c5ae8c6e912c0f65b0aa6",
+            "status": "new"
+          }
+        },
+        "test_natural_missing": {
+          "rna": 1,
+          "text": 36
+        }
+      },
+      "LGG": {
+        "counts": {
+          "test": {
+            "img": 166,
+            "rna": 166,
+            "text": 163
+          },
+          "train": {
+            "img": 166,
+            "rna": 166,
+            "text": 162
+          },
+          "valid": {
+            "img": 83,
+            "rna": 83,
+            "text": 82
+          }
+        },
+        "files": {
+          "img_sur_test_all_LGG.pkl": {
+            "sha256": "88f2e45f0c37ec8e8a7d8b7d0e1d16da899ba514472b96c16638a46abfbbba53",
+            "status": "identical"
+          },
+          "img_sur_train_all_LGG.pkl": {
+            "sha256": "bfc67db1dec9b2fda96900fc9390eee1d6aaed1b83e077c90bd394d47f405d9d",
+            "status": "identical"
+          },
+          "img_sur_valid_all_LGG.pkl": {
+            "sha256": "9d0023ee78eedcedc0b63ad381e79cb820215294eaf7f5b9004b85f345aedd5a",
+            "status": "identical"
+          },
+          "rna_sur_test_all_LGG.pkl": {
+            "sha256": "36a90c1ba5c5edb43e589640ca3b9a6a39f30160915dbd2bcc0042a200b3af9a",
+            "status": "identical"
+          },
+          "rna_sur_train_all_LGG.pkl": {
+            "sha256": "b1bed37b702faa239645100e7afd604a31e5da9eca7c2630e2a0869f23013b90",
+            "status": "identical"
+          },
+          "rna_sur_valid_all_LGG.pkl": {
+            "sha256": "e25a3f445d29b3395ba8a1ff15d7908447aa85e305491eda55ec377ada0c74e2",
+            "status": "identical"
+          },
+          "text_sur_test_all_LGG.pkl": {
+            "content_sha256": "c0938b10e4f553743015735908dbf449c7ea9f3a83e25d55347acc62e4271317",
+            "sha256": "0bc54e707f79d43e2f87d47a4b162ad7d6f1f64dfc44fb5a9c8203acb5999557",
+            "status": "new"
+          },
+          "text_sur_train_all_LGG.pkl": {
+            "content_sha256": "ef2905c34205695f6f63d7e4c8a3492bd578ac64a17559bb31902ace8dd230d4",
+            "sha256": "048ac695fa56a3c93c0d3390c7346fd7d890bafa2491aa79a19ee363fb0dca25",
+            "status": "new"
+          },
+          "text_sur_valid_all_LGG.pkl": {
+            "content_sha256": "e59acc9071e345fed22fcdf5c67d366d5af3d7f0fb204fea400bc73800bffea7",
+            "sha256": "9fc95e3603c539fceb6f06321145512fd4024dc7c57163e19948b696a9fbbb8d",
+            "status": "new"
+          }
+        },
+        "test_natural_missing": {
+          "rna": 0,
+          "text": 3
+        }
+      },
+      "LUAD": {
+        "counts": {
+          "test": {
+            "img": 172,
+            "rna": 172,
+            "text": 167
+          },
+          "train": {
+            "img": 171,
+            "rna": 167,
+            "text": 165
+          },
+          "valid": {
+            "img": 84,
+            "rna": 84,
+            "text": 84
+          }
+        },
+        "files": {
+          "img_sur_test_all_LUAD.pkl": {
+            "sha256": "b3ec945beef6d354a5d806ce10e73a14736f89eb4cc185dde336b022b13d2284",
+            "status": "identical"
+          },
+          "img_sur_train_all_LUAD.pkl": {
+            "sha256": "5bfced0b5dc2aa7dbc94c4bff41476ee4e13156e8689a2ec1e726e488044a5a4",
+            "status": "identical"
+          },
+          "img_sur_valid_all_LUAD.pkl": {
+            "sha256": "0be21d143ff2aed9e697bb73403f6551fc3a3064465d9b9aef52d561827eaf5b",
+            "status": "identical"
+          },
+          "rna_sur_test_all_LUAD.pkl": {
+            "sha256": "3386bc438e057f4e99609039249e0e8aaa971177876b95d38ad29764e365aaaa",
+            "status": "identical"
+          },
+          "rna_sur_train_all_LUAD.pkl": {
+            "sha256": "3e89d496df6426667593b7c5448fef44754d08ca7437431acdeabf35cb88e7a7",
+            "status": "identical"
+          },
+          "rna_sur_valid_all_LUAD.pkl": {
+            "sha256": "f7ee81f244e80e588118d4e1c9418b8da99425f28659bdbbdb310ba7f2456deb",
+            "status": "identical"
+          },
+          "text_sur_test_all_LUAD.pkl": {
+            "content_sha256": "fd5897975c9bb0239aec86642cffdb4f6f0dfd9953ed6ec2cf0e5b575d9221db",
+            "sha256": "5beb8188aa8bf0cdecb1ec9cd7bd7f42bf83f29e03f1cb20ad8d3f3ee1e79fb9",
+            "status": "new"
+          },
+          "text_sur_train_all_LUAD.pkl": {
+            "content_sha256": "e6e66d022e109edac6d2b855ddde183433a48abde298ec7f33a2e316ced2df7f",
+            "sha256": "cc2969154f97dbdf287bd6d661e7a87329e8246a26c85edc362f6da04dfa075e",
+            "status": "new"
+          },
+          "text_sur_valid_all_LUAD.pkl": {
+            "content_sha256": "be5b3a2d41e1810e4422eb2517682c0fed5e8653b8d0dfd45af06642d807c9ab",
+            "sha256": "a1655caf6391e794645dad25e83d1f520a93d11d91fa92cce1060b61933e8092",
+            "status": "new"
+          }
+        },
+        "test_natural_missing": {
+          "rna": 0,
+          "text": 5
+        }
+      },
+      "UCEC": {
+        "counts": {
+          "test": {
+            "img": 198,
+            "rna": 197,
+            "text": 190
+          },
+          "train": {
+            "img": 197,
+            "rna": 195,
+            "text": 188
+          },
+          "valid": {
+            "img": 99,
+            "rna": 99,
+            "text": 92
+          }
+        },
+        "files": {
+          "img_sur_test_all_UCEC.pkl": {
+            "sha256": "0a8f33b8adc9326fd2910697241d4e886eeb5b5168418d623240dcd9fddc676d",
+            "status": "identical"
+          },
+          "img_sur_train_all_UCEC.pkl": {
+            "sha256": "e4ad6ea5e25639e73b8ffe41f5af5e260fb86278f4ca5100ce6823b76d0180ea",
+            "status": "identical"
+          },
+          "img_sur_valid_all_UCEC.pkl": {
+            "sha256": "1af0f2505997cc8175543f2fe88f6333d89ac8143fe6990dcb0f14ef74883409",
+            "status": "identical"
+          },
+          "rna_sur_test_all_UCEC.pkl": {
+            "sha256": "9f7d310bb45d22f1c4e0b2c38988d8a9947fbc53aacc6e586d376d4e96c7fd06",
+            "status": "identical"
+          },
+          "rna_sur_train_all_UCEC.pkl": {
+            "sha256": "8491ec5f483c3c44154eeb7050552698fdc216f446de3b8e61619f6bc38b84f1",
+            "status": "identical"
+          },
+          "rna_sur_valid_all_UCEC.pkl": {
+            "sha256": "a95591aba71e3a48caf7d35dd91640be9b55dca2c8cbd6e257ded3a6555e0bf0",
+            "status": "identical"
+          },
+          "text_sur_test_all_UCEC.pkl": {
+            "content_sha256": "727b6c2e07a01fd48f44d6901092c55e8dce7644c720dc64b9da89e6fdfe0967",
+            "sha256": "6be03414443aec16e74e8016eac8369f7178b3dd68a2b7580abb5b50aba8b7eb",
+            "status": "new"
+          },
+          "text_sur_train_all_UCEC.pkl": {
+            "content_sha256": "ceb8a1b3207211833bf76b1a0f7e948dabc427dd1061c426349ce31c088434be",
+            "sha256": "62b1c1b34b385c630d07875b28cac4d063824051596db1d5e403692f469c8114",
+            "status": "new"
+          },
+          "text_sur_valid_all_UCEC.pkl": {
+            "content_sha256": "64b0fb223e3df139f6c6d756f8eafae713f2ddfd36ac905bfa5ede22fe44920f",
+            "sha256": "47062a74c89f4d068fcd4b07388109a176f47e66c5eb8bcaacbd960190dc15d3",
+            "status": "new"
+          }
+        },
+        "test_natural_missing": {
+          "rna": 1,
+          "text": 8
+        }
+      }
+    },
+    "feature_manifest_sha256": "66eb66f88b01e908e7065d93e1b1fef645be1003874686336c3a20b54696c0ca",
+    "label_sha256": "35c2865914d1e32f077ab470d299fc712d4f5fb2e63059f6bf8a68694a347e2f",
+    "manifest_sha256": "c789eae9a5b1517d82cfa137a92dfa8cc7ffae58e5f300163b25729ffc5d8156",
+    "profile": "bcmbert200",
+    "text_cache": "new"
+  },
+  "assets_lock": {
+    "assets_lock_sha256": "7bd8530089f886f007ed4bb69569afea2bcebb91e3cb9a7537da3697b530600c",
+    "locked_at_utc": "2026-09-23T15:49:54.242971+00:00"
+  },
+  "assets_sha256": "12018c51679bd0170148ae416e2cd1a055919ac09d8023edc99720d6bf3987b2",
+  "cancers": [
+    "BLCA",
+    "BRCA",
+    "LGG",
+    "LUAD",
+    "UCEC"
+  ],
+  "checkpoints": {
+    "BLCA": {
+      "123": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T15:55:08.988967+00:00",
+        "run_record": "20260923T155508Z_6631662-e3477527",
+        "sha256": "9deda5b00e31b66d4eece0f15e40e2e46fc1dfd6453d18871a7a8ea5f84fdba9",
+        "state_sha256": "826c1e8e6fe651b13c2e0160e8415142c61300f2ef191fde8d976ae2874138ac",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "51678266bca440ce340c6775d8d3438f8f399bf484bb9a2bbc00ea87c7cbe02d",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      },
+      "132": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T15:58:36.983009+00:00",
+        "run_record": "20260923T155836Z_6631662-46ddf641",
+        "sha256": "a4fb69845945474bccf6923b702aafced73eba8c82da7c780c3aec33aceb77d3",
+        "state_sha256": "629f9c83c7ff5bf01acc87725f148b8a9791aa88a88632ecb89c4252360aa6fd",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "1cb9abafca90f1db0a867545bcd6bde408a2723bea8a997608d7703bf5676e4e",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      },
+      "213": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T16:01:06.689614+00:00",
+        "run_record": "20260923T160106Z_6631662-74ee5047",
+        "sha256": "b124ff6367e64a9abf8d1ca04faf5d639c4a4c1cbb32685f72ee13d2b5328030",
+        "state_sha256": "e0c605f13663edd4cc023ce675159ceb451726bbf606798a71cde1e0ac3df8ab",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "036822402d12afffaae7b96e4cdf6794beba586cedc717072d8815558a387736",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      },
+      "231": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T16:04:53.360660+00:00",
+        "run_record": "20260923T160453Z_6631662-a85bd409",
+        "sha256": "3bb14bf11c622fe02fb42cbd083b18e8e60a0f57f770501a502d118c23979ec8",
+        "state_sha256": "f696680b44e9445ab5706718efd9700330dc2e1c22598bac3d55bc2ebefea4bd",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "dd4ac667c9898125e8a7ecf565845ca28dc3ba26bc184ba8ab5f348cf003dbca",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      },
+      "321": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T16:07:33.070986+00:00",
+        "run_record": "20260923T160733Z_6631662-96ea2587",
+        "sha256": "2e4e5aa6dfbf1b697835076378c64360236a63b6df153f9431035c6552350e01",
+        "state_sha256": "eda5e48eb4aebe0c300ba73ba6c9c66214ad7337450c65a819510b8f3fc9fe53",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "489fab1d0fd4b45036a6598d961686d83a2496a3b084910202f1e66c81264765",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      }
+    },
+    "BRCA": {
+      "123": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T15:55:53.537761+00:00",
+        "run_record": "20260923T155553Z_6631662-082a76ac",
+        "sha256": "50533d75eabbfd70396e779bd80852798dc3c6f37b121bfc6bbf6326013e17df",
+        "state_sha256": "398a27b803a38bef7be1c70d1d600c521954c30387bbb21d1127dc69c00caea1",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "c22ef7f00a01d2b970e081806c0b7a4f36d9b06b90e6620e80e89cd32495e78d",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      },
+      "132": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T15:58:12.589494+00:00",
+        "run_record": "20260923T155812Z_6631662-f80e36f6",
+        "sha256": "2540cff6a9f23f37ed0bfcdf3a02877dad9f1c66bc33daab49d621ef53f11a06",
+        "state_sha256": "8c8a136f7b5c7fec396ed494a8fa7fdfe9d3cea7dc2d9c1767cc51385aa8f116",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "aceaa247e90e94ab069f4e2e22928da5986e44771bb04643dfad2915a609bc8c",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      },
+      "213": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T16:01:52.134008+00:00",
+        "run_record": "20260923T160152Z_6631662-68aa89a6",
+        "sha256": "2ec7c68879caf8ae0f9572722fd819cba071fd24d37df27cc87c116c081fd9b0",
+        "state_sha256": "f71038b98efbcb09a046736c3a33cf63d5906244cc482a7ccdfb66aa5ff3cb91",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "28fa3b8293aac021d8d1452269db3be4d57d19e50a56c0144419fe6990a71eb7",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      },
+      "231": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T16:04:23.060606+00:00",
+        "run_record": "20260923T160423Z_6631662-0c48a48d",
+        "sha256": "ffc13b67c5a8502fa40cae0c33671d7502bfabb624a23add1494369eae318dac",
+        "state_sha256": "b52118150cf23ec53b4ffecfd773cf7d46d1a2529aa55317cae0c134ec7a26bd",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "e17e69490a66fd12c65c729bda251e319ef223dfda8aab2149609b6b9d3af0f3",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      },
+      "321": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T16:08:24.927458+00:00",
+        "run_record": "20260923T160824Z_6631662-db73990a",
+        "sha256": "4f0e2a7f09fc8ffab50551f329d452a1e9aba9b0db13e995835124df2afae619",
+        "state_sha256": "56f918e5901a61c40c871d60b3eabb41b3f0e59ca4aa95c905f64f7c601c7310",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "ba8d65d5ebedbf6b9777dfefb11ae68da203a2e60044cd66eb28e1d24ec0bf11",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      }
+    },
+    "LGG": {
+      "123": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T15:55:03.574137+00:00",
+        "run_record": "20260923T155503Z_6631662-d12a6ed0",
+        "sha256": "c957d736231b87ab04f03af1911e1aeba5eb017490560bdd6234d29c024059e0",
+        "state_sha256": "6a1f736e3917b5a5393573d8c3a5876d2324c518d809be0366916347403376b2",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "c6aff8548d431d1f7e5d2920a9afdb49849f5fd23dd23a6cce4b90127595efc0",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      },
+      "132": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T15:57:06.941813+00:00",
+        "run_record": "20260923T155706Z_6631662-5d08d25d",
+        "sha256": "cce4bafbb53f2c011206bfd2ab78b228b09f2485970f5983b7ee58452b3f1880",
+        "state_sha256": "51ef94dd34ac209c3ef020137c04626d5d3fec54dddecd6cd96e0925d3601ee1",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "dbce50856a52210468e358468ed26a56838397a4815499cdeed6efbca3396a1c",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      },
+      "213": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T16:00:21.392575+00:00",
+        "run_record": "20260923T160021Z_6631662-4b6a8c19",
+        "sha256": "79ce3f57760f23dbc3614eeb59975b953fce59eb8c49fd83692a3c53b63bb3fb",
+        "state_sha256": "c508d4252ba7f8fd67808b814a2ef6e1a7a63f9009bd66a33223673a25c4a894",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "cd85884903f1e0badcb643684198217f02d4f5a2175a9152e6b836da5606eea0",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      },
+      "231": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T16:02:49.198686+00:00",
+        "run_record": "20260923T160249Z_6631662-6feec967",
+        "sha256": "3b23b35f9592a2f87b586c04964425fab48b77b717641ff271f726e95c69e545",
+        "state_sha256": "577ddd51d687bbbbc3ed1390aa027b26882f5ed0548a16bb0cc3184438b163cc",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "e88a3f90776aabe471a06f0365dcf0447d6aa097f429d12842c04b5f70c96ca2",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      },
+      "321": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T16:07:10.985687+00:00",
+        "run_record": "20260923T160710Z_6631662-83e12d08",
+        "sha256": "fd5c3e9573454cd7a16a9d342e76fad75089949058b3202ba29ba4e707da5774",
+        "state_sha256": "3a2d52de7653c87a533df192af3f1af61195d355a740acfd80e3513e2a907d69",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "ee72c2f1718e8a3597d35464d3d77f2e8e67c171fba3f103c5aa83bc61a1427e",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      }
+    },
+    "LUAD": {
+      "123": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T15:55:17.607190+00:00",
+        "run_record": "20260923T155517Z_6631662-f656182e",
+        "sha256": "33efe875e66ef4ea31d5c7a3dc393992e56498c257c9e301ec0de08d9fb1732c",
+        "state_sha256": "b3c0d4b449b1161752276179be5b7d894c8feb12e4b441d5548c9a1e431bafa3",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "af0df45d69f4e8d122f6eb6f4f3f089cdbc1ff54b003314b32a960680c7c6c79",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      },
+      "132": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T15:59:08.953443+00:00",
+        "run_record": "20260923T155908Z_6631662-2b128ef2",
+        "sha256": "fc7b6ab15b91604607c84b30e8e5e0ff805324cac941235408c4f29684ee0df4",
+        "state_sha256": "21140e9b05e2a0e40b1731f2c9ad49c61984ad1a1109a41bbcd4cd540fef16b0",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "16775a17052e88cf05dc33c505db8c7d07644c2ede09487ad74ecea5b894f9ad",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      },
+      "213": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T16:01:58.235878+00:00",
+        "run_record": "20260923T160158Z_6631662-402b1017",
+        "sha256": "04c755f11a71b09d66a6d27048f61fd642774a8ea49848cfc47410f9088ab537",
+        "state_sha256": "4f8f374f29a38f9924828f081224a2ea4620746f896a78bbdc777e7b14bab122",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "2ff0ec2f18f2560d76a747c40ad3a8d91b3a2eae19390a5386c91484bfb0df4b",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      },
+      "231": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T16:04:58.923111+00:00",
+        "run_record": "20260923T160458Z_6631662-4b4fb8b6",
+        "sha256": "fbe22bfc155caaf5f8d2a47d211a3957865b49094a8e447cb86c598c19289186",
+        "state_sha256": "3592475a858931c8b2cb80098f1fbdbf06faf16427984dd13c57d806eb6298e7",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "e5376705bb5ff7d5dc4e8228cfb5026318e4b079250328daf6b7a8f0f71d5d7d",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      },
+      "321": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T16:07:39.367290+00:00",
+        "run_record": "20260923T160739Z_6631662-c107d9fd",
+        "sha256": "4526cf4777fc3ae3abc481765c0007ecd551f5acf3de45a0ee5ffd4c55459e7b",
+        "state_sha256": "12b05612c50e7318e40ed78afdaad8d39ea92a0f48234c2177984712101924d1",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "0ea1d1b3add60adf25df1faba6d57ad9887f1709fcdd6c37b7db5683990dcb45",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      }
+    },
+    "UCEC": {
+      "123": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T15:57:25.995128+00:00",
+        "run_record": "20260923T155725Z_6631662-286ab029",
+        "sha256": "6ec20efde361f7496776868ed3308b35fe61c34dfe27902d604057b1bca639ab",
+        "state_sha256": "d30cc2ab37417bc687a7efb9e18ad0c1f3186415b4f511cfdcf63668b10453ff",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "83156e73714f02284735befa9e6a6b150c2b9ecc4a9b39b8c670cc9498319577",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      },
+      "132": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T15:59:42.719045+00:00",
+        "run_record": "20260923T155942Z_6631662-db62ea86",
+        "sha256": "b85cb5e5c684afadcef420c7843ffcb6bf1fef7038e962b4754dd6368a2e381b",
+        "state_sha256": "8a4ea541d19bdbb06dc418335d62f455173febe54e4e5b9d24e665e76310a323",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "1de1e2c39c17b530011d7aa33fc69d59a2f256ffd35276c26eaeb8b546d84899",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      },
+      "213": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T16:02:27.266284+00:00",
+        "run_record": "20260923T160227Z_6631662-7d19ba20",
+        "sha256": "479b5b9741d5cae24cb977f8f21f5e133ea4a6e259f199ad9eea80676c11fa41",
+        "state_sha256": "c87091744b54951831d05ac09ba8706c336f800216adf49d5854d192f5066eb3",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "b5ec3e75d961565c4af6244a988f3e442bf01631ad2200926d0376e3b375b846",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      },
+      "231": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T16:05:10.513880+00:00",
+        "run_record": "20260923T160510Z_6631662-be347355",
+        "sha256": "b4a239a72658ef2b64666ad7faa86d534b9eaba771616583408386dded6ac61c",
+        "state_sha256": "6de39bbc8c28c5088124ecac8b3299ee836fdf5616dace06d405ff4e4f6cfa5c",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "008e137e81a99d62ea857129b18b9cd5d5956b93c0e09f3cc3fc2a322d9e940a",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      },
+      "321": {
+        "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+        "recorded_at_utc": "2026-09-23T16:08:56.230624+00:00",
+        "run_record": "20260923T160856Z_6631662-cc420623",
+        "sha256": "cbb552826c35f68d1bc321d84daa4f9994fd6335e2e08947e96613bb55c46617",
+        "state_sha256": "d8ce33c966c429514d0f1e14586effda1008b10b0c35f093a40ff55172a758ad",
+        "strict_load": true,
+        "training": {
+          "resolved_config_sha256": "3c9d21205d3042f434e0d260c539f8da628f91157108ee313d88fbe4956007a0",
+          "text_path": "data/text_embeddings_bcmbert200",
+          "text_path_matches_run_root": true
+        }
+      }
+    }
+  },
+  "expected_commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+  "expected_commit_source": "stamp",
+  "frozen_combo_spec": {
+    "alpha": 1.0,
+    "candidate_id": "combo-l1-a1-w0p5",
+    "enabled_rules": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "inactive_parameters": [],
+    "lambda": 1.0,
+    "protocol": "combo",
+    "ucec_exception": true,
+    "w": 0.5
+  },
+  "git": {
+    "allow_dirty": false,
+    "branch": "train/i05-bcmbert200-20260924d",
+    "commit": "663166247783f5b8db9120cca1829cad5964fb1e",
+    "dirty": false,
+    "source": "stamp"
+  },
+  "grids": [
+    "none",
+    "rna_100",
+    "text_100",
+    "both_100"
+  ],
+  "legacy_overridden": false,
+  "model": {
+    "compensator": "none",
+    "dropout_rate": 0.1,
+    "hidden_size": 256,
+    "mlp_ratio": 4,
+    "modality_order": [
+      "img",
+      "text",
+      "rna"
+    ],
+    "n_backbone": 1,
+    "n_head": 4,
+    "network_type": "NPJC",
+    "pred_dim": 4
+  },
+  "numerics": {
+    "logit_atol": 1e-06,
+    "logit_rtol": 0,
+    "norm_epsilon": 1e-12,
+    "risk_clamp": 1e-06
+  },
+  "profile": "bcmbert200",
+  "protocol_id": "patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1-i05-bcmbert200-v1",
+  "run_root_layout": {
+    "cache_dir_external": true,
+    "feature_dir_external": true,
+    "frozen_worktree": true
+  },
+  "runtime": {
+    "batch_size": 383,
+    "cpu_threads": 4,
+    "device": "cuda",
+    "forward_dtype": "float32",
+    "gpu_id": null,
+    "non_blocking": true,
+    "num_workers": 0,
+    "persistent_workers": false,
+    "pin_memory": false,
+    "prefetch_factor": null,
+    "retrieval_backend": "gpu_cached"
+  },
+  "s0_force": {
+    "enabled": true,
+    "luad_route": {
+      "both_100": "m1",
+      "none_both_missing": "m1",
+      "none_rna_missing": "m1",
+      "none_text_only_or_complete": "upstream_combo",
+      "rna_100": "m1",
+      "text_100": "m0real"
+    }
+  },
+  "seeds": [
+    123,
+    132,
+    213,
+    231,
+    321
+  ],
+  "shapes": {
+    "img": [
+      128,
+      1536
+    ],
+    "rna": [
+      2048,
+      256
+    ],
+    "text": [
+      200,
+      768
+    ]
+  },
+  "source_hashes": {
+    "i05/config.yaml": "486395211f6c5585845a6f5e97d0708d4f6a3cbdf91d1ff96a0c612f11227dd4",
+    "i05/evaluate.py": "52d5b0644e44a734bf0058aa6b2c85a974caa4ffa245324d4fd22cefa3a260f9",
+    "i05/extract_text_features.py": "a4ecf8fa4d39194f011db6c912a08d78365ec99f8d2a286d7aa89b8fffc2a5fd",
+    "i05/gpu_policy.py": "523ba3daa23baefadf46b23d512510434f360170a60cfa1efcc07b43757f6587",
+    "i05/model.py": "aeb55c9707d1a4a5b41f63da67d83758119f0e764584b8de6acf15c3ec8216b4",
+    "repo/experiments/I01_patient_retrieval/config.yaml": "285ca9f918d4565cf2b1e58f321cc5430153371adf9e19f19bfa48ad8a2d4aa7",
+    "repo/experiments/I01_patient_retrieval/evaluate.py": "e92812ef5316b3d0d212deda0e37793e3de84dd9b44410b25ebe7caecb658b5a",
+    "repo/experiments/I01_patient_retrieval/model.py": "e4e08b0c9ee78da8b2a7c4d01250516693fc087bf567d18ef6a944b27cc10c13",
+    "repo/src/trimodalsurv/__init__.py": "8c95913a473560325f19d0104ca42f7741da1f8c451ab306ee6481268990c06b",
+    "repo/src/trimodalsurv/config.py": "8cd87cac935f29a973c9d45d1ddf22e55d4118f79de3cd57b369b25b0cb20dfd",
+    "repo/src/trimodalsurv/data/__init__.py": "f70a6308d65648e324242d2a06bf13e7d881dede01b527ac2b801968aa65d175",
+    "repo/src/trimodalsurv/data/tcga_dataset.py": "00c15fc2fad773902ff5d5675e28ea04ac632ebd6d6c432efb8a66fcac0968e1",
+    "repo/src/trimodalsurv/evaluation/__init__.py": "8c95913a473560325f19d0104ca42f7741da1f8c451ab306ee6481268990c06b",
+    "repo/src/trimodalsurv/evaluation/common.py": "179d878ef3be4639579a89b7d6b21d9908ebc7fb5d019500d45a85e94d982029",
+    "repo/src/trimodalsurv/evaluation/missing.py": "d91a20da4d19e94649f8a2b24b75e26a41cf99186602c2bc05e3bd770632b81e",
+    "repo/src/trimodalsurv/gitstamp.py": "7ac042277a0d870cabf4e0e52bfacad238175fbad770893671594d58fd4e6fb2",
+    "repo/src/trimodalsurv/models/__init__.py": "8c95913a473560325f19d0104ca42f7741da1f8c451ab306ee6481268990c06b",
+    "repo/src/trimodalsurv/models/compensator.py": "e72c853f5681b505465aaada0a482bb949deb970c74469020df5bc066bd04eee",
+    "repo/src/trimodalsurv/models/consistency.py": "41b6c85fc099058dfe29d7856fc5b776af87edb894d92fae1240495da1e0b0c7",
+    "repo/src/trimodalsurv/models/fusion.py": "26afa736990c06df1ea67353b1969903b87655f0037969292ff5b5910e5c30c1",
+    "repo/src/trimodalsurv/models/npjc.py": "f0c03c1516a3976ca71ac5f0b8a4b752f3f98a91f44e6abb7f0edcda399eac2f",
+    "repo/src/trimodalsurv/training/__init__.py": "bdbf43903f1dbf786bb13b5569424efb0ef60bc41269561d3116822c11517ad7",
+    "repo/src/trimodalsurv/training/common_tools.py": "09710d56cb1d3f7641d75bad677f4a659cd1c57ac6f01ceeb5d8311f233a64fc",
+    "repo/src/trimodalsurv/training/loss_func.py": "44e227eea9ad9f39f29437c24666e876565941556b1559a21bf732d64c1e0194",
+    "repo/src/trimodalsurv/training/model_util.py": "6846877585dfd7177131f6f3ef1b426872a46e680f562be6cffb7b9b90eeff17",
+    "repo/src/trimodalsurv/training/runtime.py": "6da361175789284835d8fb6bcd76f211d4c9e10a5f3f7d2b03c7ac201583a2ed",
+    "rules/01_text100_skip_compensate/config.yaml": "f74b2d5dfd4d8ba1ecb75b054c6d2e0a8a848dc95348c91037db0897b0ac525f",
+    "rules/01_text100_skip_compensate/model.py": "7cc7f22fa7a609b7777aa94cba25e482fd71d79aae2abc8c3853854da5e17217",
+    "rules/02_wsi_meanpool_key/config.yaml": "08b82243b931d967a54f206cf70ac29465b1f433b10508f5ce4bad574830034a",
+    "rules/02_wsi_meanpool_key/model.py": "2ba602b5204fc923769a83ce4748190552ad6f95541e79111f41a11d1c58e435",
+    "rules/03_shrinkage_lambda/config.yaml": "bb8ef837dced04a1d205dc74f23db93349b050eb90414e5e18e638ecbb2c8dcd",
+    "rules/03_shrinkage_lambda/model.py": "a0cc7c337f41c062168b407d74c7d692b49f90bc12ef8938fd609dd1e36e49f0",
+    "rules/04_wsi_rna_joint_sim/config.yaml": "6c527da8b03671775c310c76f52ec667db3253987b06a740e582a9cd6c90c5de",
+    "rules/04_wsi_rna_joint_sim/model.py": "70ee79ca14acfdaa9a5d316c79cdd02f4905d2072926dc7d242ff9934c89b113",
+    "rules/05_imputed_token_downweight/config.yaml": "9bc7e60594dbc32c2ad639ee1bf69e854f7108d47f42161e5c2122138c163650",
+    "rules/05_imputed_token_downweight/model.py": "48ba0f81673a631015d8ee722c47aaef46b9c4f7b3432801199817794e9cb446",
+    "rules/acceleration.py": "c9cd3013b69c9d060fb75095a164142317dd8c93aa1b8b8efe69b9fcd33b58e7",
+    "rules/inference.py": "b6581528aa0ba7aed718dbdd1f44b871a30c7de8839e949637c8cc4b849fcf99",
+    "rules/reporting.py": "e3778e226aae83bc1f94c7fa968bbc2816f09a2e45a03a8ff3d61d60c1b38ca6",
+    "rules/run.py": "3c6808fa453a40608b750665f9daa5bab2ad0edff1ef5fb9ee93d454d6290cb9",
+    "rules/runtime.py": "89ff2696657189792248a6bf9a2964ba091c1fa6e028d4e33843695db8d4dbf8",
+    "rules/selection.py": "9c6e241080a9a0c3f7ca46dd18269681c4ce27c04df593c9568ae8e53718fc40"
+  },
+  "source_hashes_sha256": "d65ba8d9abffbaacc8015360d8f8b7fee99b48745f3264e3005d032401f77b56",
+  "status": "READY"
+}

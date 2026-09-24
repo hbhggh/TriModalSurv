@@ -1,0 +1,31 @@
+{
+  "feature_content_hash_status": "未扫描特征内容；仅记录实际输入位置和标签指纹",
+  "inputs": [
+    {
+      "path": "~/i05_20260924b/inputs/TCGA_9523_ex12.csv",
+      "sha256": "35c2865914d1e32f077ab470d299fc712d4f5fb2e63059f6bf8a68694a347e2f"
+    },
+    {
+      "path": "~/i05_run_20260924d/experiments/I05_text_encoder_bcmbert/model_config.yml",
+      "sha256": "d67ae40b042917b965af1486be6db1da881af36c2fbe940058d09595a508cf77"
+    },
+    {
+      "path": "~/i05_run_20260924d/configs/gpu_train.yaml",
+      "sha256": "414adba7385a96ff56d38169455423870824c5a0e87577d1bf673acacbd07bb5"
+    }
+  ],
+  "modalities": {
+    "img": {
+      "feature_dim": 1536,
+      "path": "~/i05_run_20260924d/data/tcga-dataset_uni2"
+    },
+    "rna": {
+      "feature_dim": 256,
+      "path": "~/i05_run_20260924d/data/RNA_embedding_selfmade"
+    },
+    "text": {
+      "feature_dim": 768,
+      "path": "~/i05_mutable_20260924b/text_embeddings_bcmbert200"
+    }
+  }
+}
