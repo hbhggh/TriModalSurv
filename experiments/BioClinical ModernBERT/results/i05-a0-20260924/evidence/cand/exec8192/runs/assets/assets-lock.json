@@ -1,0 +1,70 @@
+{
+  "assets_lock_sha256": "b73d3ed13900eeab8bce872ea91575724a3311e54911efae99b0179da94d3e73",
+  "commit": "1cb6bfdce727e553712662a5a645375089cdfc64",
+  "locked_at_utc": "2026-09-24T09:52:22.216048+00:00",
+  "profile": "bcmbert8192",
+  "protocol_id": "patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1-i05-bcmbert8192-v1",
+  "view": {
+    "feature_manifest_sha256": "61bbd12f1a20da82a7c8e086c801e62b7bd781cb295fb607d9f64ba2ffa1fd6d",
+    "files": {
+      "BLCA": {
+        "img_sur_test_all_BLCA.pkl": "matches_legacy",
+        "img_sur_train_all_BLCA.pkl": "matches_legacy",
+        "img_sur_valid_all_BLCA.pkl": "matches_legacy",
+        "rna_sur_test_all_BLCA.pkl": "matches_legacy",
+        "rna_sur_train_all_BLCA.pkl": "matches_legacy",
+        "rna_sur_valid_all_BLCA.pkl": "matches_legacy",
+        "text_sur_test_all_BLCA.pkl": "ccdce186ecbfb38efc993eea061735cc411003d12fe42d80548f103ce826fefb",
+        "text_sur_train_all_BLCA.pkl": "653e84659b882c6c2e2566b64dce6b3c185bd5df9e0839edec4f65aa5221e3c1",
+        "text_sur_valid_all_BLCA.pkl": "65c68131e75491a2e053fcdf4fe804c97209acc04be6b892d7eb4c85d7fba9af"
+      },
+      "BRCA": {
+        "img_sur_test_all_BRCA.pkl": "matches_legacy",
+        "img_sur_train_all_BRCA.pkl": "matches_legacy",
+        "img_sur_valid_all_BRCA.pkl": "matches_legacy",
+        "rna_sur_test_all_BRCA.pkl": "matches_legacy",
+        "rna_sur_train_all_BRCA.pkl": "matches_legacy",
+        "rna_sur_valid_all_BRCA.pkl": "matches_legacy",
+        "text_sur_test_all_BRCA.pkl": "d0c335af5bb91751d26cc6227a8ca7b650bf1a19506208c59807f3077b4bb1ab",
+        "text_sur_train_all_BRCA.pkl": "b9b5026ab07c7f86c06ec63c8123c33a4b26327c26773037d49a1e0519766ea8",
+        "text_sur_valid_all_BRCA.pkl": "ad90c29e16900890798f8219fb2301b4a88822885932de76ff2ec61c2cdc5694"
+      },
+      "LGG": {
+        "img_sur_test_all_LGG.pkl": "matches_legacy",
+        "img_sur_train_all_LGG.pkl": "matches_legacy",
+        "img_sur_valid_all_LGG.pkl": "matches_legacy",
+        "rna_sur_test_all_LGG.pkl": "matches_legacy",
+        "rna_sur_train_all_LGG.pkl": "matches_legacy",
+        "rna_sur_valid_all_LGG.pkl": "matches_legacy",
+        "text_sur_test_all_LGG.pkl": "df2d0e8d0a93596bd2aada700b63a1c550fb75a6d87acb19eb522248f162720b",
+        "text_sur_train_all_LGG.pkl": "ed29bad90080e8e56810e0b346684bb088f8abd1da7ae2f0dc460fdbb85d4579",
+        "text_sur_valid_all_LGG.pkl": "c293aa2720791a04d784e1a0fad72b87266eec039078143c8ddc8a3c15892719"
+      },
+      "LUAD": {
+        "img_sur_test_all_LUAD.pkl": "matches_legacy",
+        "img_sur_train_all_LUAD.pkl": "matches_legacy",
+        "img_sur_valid_all_LUAD.pkl": "matches_legacy",
+        "rna_sur_test_all_LUAD.pkl": "matches_legacy",
+        "rna_sur_train_all_LUAD.pkl": "matches_legacy",
+        "rna_sur_valid_all_LUAD.pkl": "matches_legacy",
+        "text_sur_test_all_LUAD.pkl": "3ffdf20f303c1d35147e672720e835b9e9adcd4264b76b880732c7cd3eef346a",
+        "text_sur_train_all_LUAD.pkl": "9a86dd38d3e12ce38f35a8f896610d6f1e20fe57fb7a8d4eb5804a8930a2e616",
+        "text_sur_valid_all_LUAD.pkl": "66234cf8acfda2ca7a61698163d0b525f94e27a83a2a4c023431e5611600add1"
+      },
+      "UCEC": {
+        "img_sur_test_all_UCEC.pkl": "matches_legacy",
+        "img_sur_train_all_UCEC.pkl": "matches_legacy",
+        "img_sur_valid_all_UCEC.pkl": "matches_legacy",
+        "rna_sur_test_all_UCEC.pkl": "matches_legacy",
+        "rna_sur_train_all_UCEC.pkl": "matches_legacy",
+        "rna_sur_valid_all_UCEC.pkl": "matches_legacy",
+        "text_sur_test_all_UCEC.pkl": "8c10fe676a78f8fdc1f67162f1108c58dfc7626ae169c7bd286c535e8fd9cb0f",
+        "text_sur_train_all_UCEC.pkl": "cf51dbb6d279ea36fbc7be64c01f7c891a114e88257047a11fd8a04bda4474f9",
+        "text_sur_valid_all_UCEC.pkl": "3b2970b441a104b5a6f41c626e4b8ba84a8845cc2a207f132f4a1bf0c2fcca20"
+      }
+    },
+    "label_sha256": "35c2865914d1e32f077ab470d299fc712d4f5fb2e63059f6bf8a68694a347e2f",
+    "manifest_sha256": "c789eae9a5b1517d82cfa137a92dfa8cc7ffae58e5f300163b25729ffc5d8156",
+    "profile": "bcmbert8192"
+  }
+}

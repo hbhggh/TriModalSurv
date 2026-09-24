@@ -1,0 +1,357 @@
+{
+  "assets": {
+    "cancers": {
+      "BLCA": {
+        "counts": {
+          "test": {
+            "img": 138,
+            "rna": 138,
+            "text": 138
+          },
+          "train": {
+            "img": 136,
+            "rna": 134,
+            "text": 136
+          },
+          "valid": {
+            "img": 68,
+            "rna": 68,
+            "text": 68
+          }
+        },
+        "files": {
+          "img_sur_test_all_BLCA.pkl": {
+            "sha256": "99dc24ef3c1fc9218e53ffcc2716a50d04e5f14de722f7e8a40888c431fc0306",
+            "status": "identical"
+          },
+          "img_sur_train_all_BLCA.pkl": {
+            "sha256": "bbea24c789320132c96cbda6dae582e2c5db2a08a06189322e24f315af9573dc",
+            "status": "identical"
+          },
+          "img_sur_valid_all_BLCA.pkl": {
+            "sha256": "8bf588e26f484d3529d59ef77859ee1fda582d7c1e2909433874e9c8ce1de338",
+            "status": "identical"
+          },
+          "rna_sur_test_all_BLCA.pkl": {
+            "sha256": "0c2101468e915153e2c94d51e8e0be743f81fb1e080a4b7a621de530728b42fe",
+            "status": "identical"
+          },
+          "rna_sur_train_all_BLCA.pkl": {
+            "sha256": "5e54691b33d1c9cee2260ec51dee8e3858cfd1cf26f61baae8e7e5b3aa6e3690",
+            "status": "identical"
+          },
+          "rna_sur_valid_all_BLCA.pkl": {
+            "sha256": "5f1014cebc68b3e8017a81d8d5e328f3c72db3c155d17f591534af508591055a",
+            "status": "identical"
+          },
+          "text_sur_test_all_BLCA.pkl": {
+            "content_sha256": "ccdce186ecbfb38efc993eea061735cc411003d12fe42d80548f103ce826fefb",
+            "sha256": "9ebdc424a188464d49aa9221b0da843bdfc7bd7361918c09558c824d36b9e243",
+            "status": "new"
+          },
+          "text_sur_train_all_BLCA.pkl": {
+            "content_sha256": "653e84659b882c6c2e2566b64dce6b3c185bd5df9e0839edec4f65aa5221e3c1",
+            "sha256": "fb4c8a957eb3997733182e2437014d20f28c65e89833bd169eed2f7bac3882f9",
+            "status": "new"
+          },
+          "text_sur_valid_all_BLCA.pkl": {
+            "content_sha256": "65c68131e75491a2e053fcdf4fe804c97209acc04be6b892d7eb4c85d7fba9af",
+            "sha256": "bdd36a673e70a9bd124c951ecee91899371d9f20885906eba3281749a0412405",
+            "status": "new"
+          }
+        },
+        "test_natural_missing": {
+          "rna": 0,
+          "text": 0
+        }
+      },
+      "BRCA": {
+        "counts": {
+          "test": {
+            "img": 383,
+            "rna": 382,
+            "text": 347
+          },
+          "train": {
+            "img": 383,
+            "rna": 383,
+            "text": 352
+          },
+          "valid": {
+            "img": 192,
+            "rna": 191,
+            "text": 172
+          }
+        },
+        "files": {
+          "img_sur_test_all_BRCA.pkl": {
+            "sha256": "7029296f35b4b317d74bdea8e10c351a3c9c1efbfa0ef05d7b40d057d245064a",
+            "status": "identical"
+          },
+          "img_sur_train_all_BRCA.pkl": {
+            "sha256": "9fed35276097e7c78afa3ed3144cd59875ea8c6ade337a91ca739ee7b7e7ed84",
+            "status": "identical"
+          },
+          "img_sur_valid_all_BRCA.pkl": {
+            "sha256": "fdedbc48ef45d896583d6cdc2868cae31509e7bbad746036a6cd4b3519d7171c",
+            "status": "identical"
+          },
+          "rna_sur_test_all_BRCA.pkl": {
+            "sha256": "c7a3c85f02bf1e6334742548298d63c305920108d0a82265b7d93ed253dd10dd",
+            "status": "identical"
+          },
+          "rna_sur_train_all_BRCA.pkl": {
+            "sha256": "f2069f1d2fe27d2ef7ee321c40e7fdfa76e781041d0dd8513b190636091f0fdb",
+            "status": "identical"
+          },
+          "rna_sur_valid_all_BRCA.pkl": {
+            "sha256": "e1a44e16650b89ea3cb9de5889ab210837c63870f55548b1caee908133472003",
+            "status": "identical"
+          },
+          "text_sur_test_all_BRCA.pkl": {
+            "content_sha256": "d0c335af5bb91751d26cc6227a8ca7b650bf1a19506208c59807f3077b4bb1ab",
+            "sha256": "2881a4d810cfaa22aa9db852d6c9dd5c683a4eb83b5f306d49207f0518dbc632",
+            "status": "new"
+          },
+          "text_sur_train_all_BRCA.pkl": {
+            "content_sha256": "b9b5026ab07c7f86c06ec63c8123c33a4b26327c26773037d49a1e0519766ea8",
+            "sha256": "3388edfad13b63d3c682d8aaa7121bc74257ddefd32c37ffe6b0fcbbd3b2d0db",
+            "status": "new"
+          },
+          "text_sur_valid_all_BRCA.pkl": {
+            "content_sha256": "ad90c29e16900890798f8219fb2301b4a88822885932de76ff2ec61c2cdc5694",
+            "sha256": "6f02e5dd161bbfebe2df7bc4d2a773b81567bffe2f7bf85e4ae856949b665f80",
+            "status": "new"
+          }
+        },
+        "test_natural_missing": {
+          "rna": 1,
+          "text": 36
+        }
+      },
+      "LGG": {
+        "counts": {
+          "test": {
+            "img": 166,
+            "rna": 166,
+            "text": 163
+          },
+          "train": {
+            "img": 166,
+            "rna": 166,
+            "text": 162
+          },
+          "valid": {
+            "img": 83,
+            "rna": 83,
+            "text": 82
+          }
+        },
+        "files": {
+          "img_sur_test_all_LGG.pkl": {
+            "sha256": "88f2e45f0c37ec8e8a7d8b7d0e1d16da899ba514472b96c16638a46abfbbba53",
+            "status": "identical"
+          },
+          "img_sur_train_all_LGG.pkl": {
+            "sha256": "bfc67db1dec9b2fda96900fc9390eee1d6aaed1b83e077c90bd394d47f405d9d",
+            "status": "identical"
+          },
+          "img_sur_valid_all_LGG.pkl": {
+            "sha256": "9d0023ee78eedcedc0b63ad381e79cb820215294eaf7f5b9004b85f345aedd5a",
+            "status": "identical"
+          },
+          "rna_sur_test_all_LGG.pkl": {
+            "sha256": "36a90c1ba5c5edb43e589640ca3b9a6a39f30160915dbd2bcc0042a200b3af9a",
+            "status": "identical"
+          },
+          "rna_sur_train_all_LGG.pkl": {
+            "sha256": "b1bed37b702faa239645100e7afd604a31e5da9eca7c2630e2a0869f23013b90",
+            "status": "identical"
+          },
+          "rna_sur_valid_all_LGG.pkl": {
+            "sha256": "e25a3f445d29b3395ba8a1ff15d7908447aa85e305491eda55ec377ada0c74e2",
+            "status": "identical"
+          },
+          "text_sur_test_all_LGG.pkl": {
+            "content_sha256": "df2d0e8d0a93596bd2aada700b63a1c550fb75a6d87acb19eb522248f162720b",
+            "sha256": "2e3c28dc275db48069c7bdac0db9a62cddaa7f1bf6033ed0c2454ec96892eaad",
+            "status": "new"
+          },
+          "text_sur_train_all_LGG.pkl": {
+            "content_sha256": "ed29bad90080e8e56810e0b346684bb088f8abd1da7ae2f0dc460fdbb85d4579",
+            "sha256": "fa14c11ab1863ceeb06d54b37e8298a94531e6f1976d5a2f00dd347b5ff0a5f0",
+            "status": "new"
+          },
+          "text_sur_valid_all_LGG.pkl": {
+            "content_sha256": "c293aa2720791a04d784e1a0fad72b87266eec039078143c8ddc8a3c15892719",
+            "sha256": "885d9e4b77bab8dd9422cae5b20bfcf16d1fcbf5b8a88332ab6c5ebc69301707",
+            "status": "new"
+          }
+        },
+        "test_natural_missing": {
+          "rna": 0,
+          "text": 3
+        }
+      },
+      "LUAD": {
+        "counts": {
+          "test": {
+            "img": 172,
+            "rna": 172,
+            "text": 167
+          },
+          "train": {
+            "img": 171,
+            "rna": 167,
+            "text": 165
+          },
+          "valid": {
+            "img": 84,
+            "rna": 84,
+            "text": 84
+          }
+        },
+        "files": {
+          "img_sur_test_all_LUAD.pkl": {
+            "sha256": "b3ec945beef6d354a5d806ce10e73a14736f89eb4cc185dde336b022b13d2284",
+            "status": "identical"
+          },
+          "img_sur_train_all_LUAD.pkl": {
+            "sha256": "5bfced0b5dc2aa7dbc94c4bff41476ee4e13156e8689a2ec1e726e488044a5a4",
+            "status": "identical"
+          },
+          "img_sur_valid_all_LUAD.pkl": {
+            "sha256": "0be21d143ff2aed9e697bb73403f6551fc3a3064465d9b9aef52d561827eaf5b",
+            "status": "identical"
+          },
+          "rna_sur_test_all_LUAD.pkl": {
+            "sha256": "3386bc438e057f4e99609039249e0e8aaa971177876b95d38ad29764e365aaaa",
+            "status": "identical"
+          },
+          "rna_sur_train_all_LUAD.pkl": {
+            "sha256": "3e89d496df6426667593b7c5448fef44754d08ca7437431acdeabf35cb88e7a7",
+            "status": "identical"
+          },
+          "rna_sur_valid_all_LUAD.pkl": {
+            "sha256": "f7ee81f244e80e588118d4e1c9418b8da99425f28659bdbbdb310ba7f2456deb",
+            "status": "identical"
+          },
+          "text_sur_test_all_LUAD.pkl": {
+            "content_sha256": "3ffdf20f303c1d35147e672720e835b9e9adcd4264b76b880732c7cd3eef346a",
+            "sha256": "85d5b69435278c8dfa264a152d7c9c543b483d86cf6ceec0c70f8315658824b5",
+            "status": "new"
+          },
+          "text_sur_train_all_LUAD.pkl": {
+            "content_sha256": "9a86dd38d3e12ce38f35a8f896610d6f1e20fe57fb7a8d4eb5804a8930a2e616",
+            "sha256": "fe67a6a46f3cddf1dfb4b24c501cd6e4382de94700173534f4140e7398d2c556",
+            "status": "new"
+          },
+          "text_sur_valid_all_LUAD.pkl": {
+            "content_sha256": "66234cf8acfda2ca7a61698163d0b525f94e27a83a2a4c023431e5611600add1",
+            "sha256": "8c5d3076bf4fbcc655f25e4dbf6743816e66bbaf95d84d90dd80c6eebc9225c0",
+            "status": "new"
+          }
+        },
+        "test_natural_missing": {
+          "rna": 0,
+          "text": 5
+        }
+      },
+      "UCEC": {
+        "counts": {
+          "test": {
+            "img": 198,
+            "rna": 197,
+            "text": 190
+          },
+          "train": {
+            "img": 197,
+            "rna": 195,
+            "text": 188
+          },
+          "valid": {
+            "img": 99,
+            "rna": 99,
+            "text": 92
+          }
+        },
+        "files": {
+          "img_sur_test_all_UCEC.pkl": {
+            "sha256": "0a8f33b8adc9326fd2910697241d4e886eeb5b5168418d623240dcd9fddc676d",
+            "status": "identical"
+          },
+          "img_sur_train_all_UCEC.pkl": {
+            "sha256": "e4ad6ea5e25639e73b8ffe41f5af5e260fb86278f4ca5100ce6823b76d0180ea",
+            "status": "identical"
+          },
+          "img_sur_valid_all_UCEC.pkl": {
+            "sha256": "1af0f2505997cc8175543f2fe88f6333d89ac8143fe6990dcb0f14ef74883409",
+            "status": "identical"
+          },
+          "rna_sur_test_all_UCEC.pkl": {
+            "sha256": "9f7d310bb45d22f1c4e0b2c38988d8a9947fbc53aacc6e586d376d4e96c7fd06",
+            "status": "identical"
+          },
+          "rna_sur_train_all_UCEC.pkl": {
+            "sha256": "8491ec5f483c3c44154eeb7050552698fdc216f446de3b8e61619f6bc38b84f1",
+            "status": "identical"
+          },
+          "rna_sur_valid_all_UCEC.pkl": {
+            "sha256": "a95591aba71e3a48caf7d35dd91640be9b55dca2c8cbd6e257ded3a6555e0bf0",
+            "status": "identical"
+          },
+          "text_sur_test_all_UCEC.pkl": {
+            "content_sha256": "8c10fe676a78f8fdc1f67162f1108c58dfc7626ae169c7bd286c535e8fd9cb0f",
+            "sha256": "56baf87d6d496235e05a854c8c2bf21719f404abe157c075391434de0552ba25",
+            "status": "new"
+          },
+          "text_sur_train_all_UCEC.pkl": {
+            "content_sha256": "cf51dbb6d279ea36fbc7be64c01f7c891a114e88257047a11fd8a04bda4474f9",
+            "sha256": "1dc1f752dc4e4511ab9d3db38bf41caed51057249665c47d180fc060edc02e31",
+            "status": "new"
+          },
+          "text_sur_valid_all_UCEC.pkl": {
+            "content_sha256": "3b2970b441a104b5a6f41c626e4b8ba84a8845cc2a207f132f4a1bf0c2fcca20",
+            "sha256": "31d21df6903c59a90fe3c771a101362bd6ca4d1ebae769d3c8a41fd61f8a3b2a",
+            "status": "new"
+          }
+        },
+        "test_natural_missing": {
+          "rna": 1,
+          "text": 8
+        }
+      }
+    },
+    "feature_extractor_commit": "1cb6bfdce727e553712662a5a645375089cdfc64",
+    "feature_manifest_sha256": "61bbd12f1a20da82a7c8e086c801e62b7bd781cb295fb607d9f64ba2ffa1fd6d",
+    "label_sha256": "35c2865914d1e32f077ab470d299fc712d4f5fb2e63059f6bf8a68694a347e2f",
+    "manifest_sha256": "c789eae9a5b1517d82cfa137a92dfa8cc7ffae58e5f300163b25729ffc5d8156",
+    "profile": "bcmbert8192",
+    "text_cache": "new"
+  },
+  "assets_sha256": "84cf757d6642248ec04b132e41a457ad961366d558d3e70df68e227652cddb3c",
+  "cancers": [
+    "BLCA",
+    "BRCA",
+    "LGG",
+    "LUAD",
+    "UCEC"
+  ],
+  "git": {
+    "allow_dirty": false,
+    "branch": "train/i05-a0-20260924",
+    "commit": "3c46f379095d4e83e3414492e60162c15bd1ee19",
+    "dirty": false,
+    "source": "stamp"
+  },
+  "legacy_overridden": false,
+  "profile": "bcmbert8192",
+  "protocol_id": "patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1-i05-bcmbert8192-v1",
+  "run_root_layout": {
+    "cache_dir_external": true,
+    "feature_dir_external": true,
+    "frozen_worktree": true
+  },
+  "source_hashes_sha256": "5b16558e020cfab73cfda83f9422b6187002dd4a9ba06d36c001f62d1fce00e0",
+  "status": "ASSETS_VERIFIED"
+}

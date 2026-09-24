@@ -2,13 +2,14 @@
 
 # seed单位-实验结果
 
-> 数据来源：基线 sha256 `8604aae480e76a0b5f2117e5d625bbd84255b6ec21f775d1da1e1073e2260eb6`。
+> 数据来源：基线 sha256 `8604aae480e76a0b5f2117e5d625bbd84255b6ec21f775d1da1e1073e2260eb6`；新臂 sha256 `9edf3d37d4efb3897310401594043eadce3e46b7b82e54c75b9a69144afef369`；参考臂 bcmbert200 sha256 `66e3329ae4d3a5e665a7b7d5abaaa65140788d248c34c1811463151828ac31bf`。
 
 ## 口径与解释边界
 
 - **现有系统**：`experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/4.progress/runs/test/complete.json` 的 strategy0 行，即论文 Table 1 的 Proto.†（test 指纹 `a825b3cc4df41cf56afe228be531a4fc13f69c520bf35a2f2305101652387ec2`）。非 LUAD 为 2.progress 冻结组合，LUAD 为 S0-force 强制路由；该路由受已见 test 启发，存在 test 泄漏，属探索性结果。
-- **我们提出来的 Encoder（全文 ≤8192）**：新 encoder 成绩尚未产生，本文件是模板，新臂列统一写"未实验"。
+- **我们提出来的 Encoder（全文 ≤8192）**：I05 `bcmbert8192` 档案的 test 运行（指纹 `00cb562a2d25d70fbbeccc26c5dd7f9d6fff05ae26215b045d5f7bb74ac23599`）。
 - 本实验只换 Text：`NeuML/bioclinical-modernbert-base-embeddings`@`048ad449`，冻结，不截断（全文 ≤ 8192 token，逐份单样本、不补齐），有效 token 均值广播到 200 行（A0）；WSI（UNI2-h）与 RNA（自制 BulkRNABert）不变。25 个 ckpt 在现行代码上按原配方重训；原型检索参数（λ=1、α=1、w=0.5）与 LUAD 路由冻结不变。
+- **同代码对照（不进 Q）**：「轮 C：bcmbert200（同配方重训，前 200 token）」（指纹 `32c00422128dfc7d307a83c485da882081f17a2c1d3a67070a5f4333f0e732c6`）与本臂唯一差别是上下文长度（前 200 token vs 全文）；两臂 ckpt 均按同一配方重训，Δ 仍含重训方差。
 - `none` 保留天然缺失，不是完整数据。只有 `none` 进入 Q 判定：Δ_c > 0 的癌种数达到 4/5 为达标，平局不算胜；`rna_100`、`text_100`、`both_100` 只作附录。
 - 比较与标红按未舍入值；展示六位；Δ 先减后舍入；平局两臂同时标红。
 - 解释边界：Δ 同时包含 encoder 效应与重训方差；只换了 Text，结论不支持"每个模态的 encoder 都更好"；none 下完整患者不走检索，Proto.† 在这些患者上等于基础模型；零效应下至少 4/5 严格胜出的偶然概率约 18.8%。
@@ -19,127 +20,159 @@
 
 | 癌种 | 场景 | 我们提出来的 Encoder（全文 ≤8192） | 现有系统 Proto.† | 较优 | Δ（新−现有） |
 | --- | --- | --- | --- | --- | --- |
-| LGG | none | 未实验 | 0.808834 | — | 未实验 |
-| LGG | rna_100 | 未实验 | 0.801242 | — | 未实验 |
-| LGG | text_100 | 未实验 | 0.731194 | — | 未实验 |
-| LGG | both_100 | 未实验 | 0.677709 | — | 未实验 |
-| BRCA | none | 未实验 | 0.697059 | — | 未实验 |
-| BRCA | rna_100 | 未实验 | 0.691836 | — | 未实验 |
-| BRCA | text_100 | 未实验 | 0.650959 | — | 未实验 |
-| BRCA | both_100 | 未实验 | 0.636426 | — | 未实验 |
-| BLCA | none | 未实验 | 0.607391 | — | 未实验 |
-| BLCA | rna_100 | 未实验 | 0.607564 | — | 未实验 |
-| BLCA | text_100 | 未实验 | 0.581714 | — | 未实验 |
-| BLCA | both_100 | 未实验 | 0.581714 | — | 未实验 |
-| LUAD | none | 未实验 | 0.571429 | — | 未实验 |
-| LUAD | rna_100 | 未实验 | 0.573008 | — | 未实验 |
-| LUAD | text_100 | 未实验 | 0.596174 | — | 未实验 |
-| LUAD | both_100 | 未实验 | 0.589856 | — | 未实验 |
-| UCEC | none | 未实验 | 0.650122 | — | 未实验 |
-| UCEC | rna_100 | 未实验 | 0.646784 | — | 未实验 |
-| UCEC | text_100 | 未实验 | 0.614734 | — | 未实验 |
-| UCEC | both_100 | 未实验 | 0.614066 | — | 未实验 |
+| LGG | none | 0.716356 | <span style="color:#c62828"><strong>0.808834</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.092478 |
+| LGG | rna_100 | 0.702553 | <span style="color:#c62828"><strong>0.801242</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.098689 |
+| LGG | text_100 | 0.685300 | <span style="color:#c62828"><strong>0.731194</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.045894 |
+| LGG | both_100 | 0.622153 | <span style="color:#c62828"><strong>0.677709</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.055556 |
+| BRCA | none | 0.686613 | <span style="color:#c62828"><strong>0.697059</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.010446 |
+| BRCA | rna_100 | 0.678324 | <span style="color:#c62828"><strong>0.691836</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.013512 |
+| BRCA | text_100 | <span style="color:#c62828"><strong>0.683888</strong></span> | 0.650959 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.032928 |
+| BRCA | both_100 | <span style="color:#c62828"><strong>0.675713</strong></span> | 0.636426 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.039287 |
+| BLCA | none | <span style="color:#c62828"><strong>0.619882</strong></span> | 0.607391 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.012491 |
+| BLCA | rna_100 | <span style="color:#c62828"><strong>0.619362</strong></span> | 0.607564 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.011797 |
+| BLCA | text_100 | <span style="color:#c62828"><strong>0.601319</strong></span> | 0.581714 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.019604 |
+| BLCA | both_100 | <span style="color:#c62828"><strong>0.588307</strong></span> | 0.581714 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.006593 |
+| LUAD | none | <span style="color:#c62828"><strong>0.599684</strong></span> | 0.571429 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.028256 |
+| LUAD | rna_100 | <span style="color:#c62828"><strong>0.599509</strong></span> | 0.573008 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.026501 |
+| LUAD | text_100 | 0.589330 | <span style="color:#c62828"><strong>0.596174</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.006845 |
+| LUAD | both_100 | 0.580730 | <span style="color:#c62828"><strong>0.589856</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.009126 |
+| UCEC | none | 0.613176 | <span style="color:#c62828"><strong>0.650122</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.036946 |
+| UCEC | rna_100 | 0.604496 | <span style="color:#c62828"><strong>0.646784</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.042288 |
+| UCEC | text_100 | 0.561095 | <span style="color:#c62828"><strong>0.614734</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.053639 |
+| UCEC | both_100 | 0.559537 | <span style="color:#c62828"><strong>0.614066</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.054529 |
 
 ### Seed 132
 
 | 癌种 | 场景 | 我们提出来的 Encoder（全文 ≤8192） | 现有系统 Proto.† | 较优 | Δ（新−现有） |
 | --- | --- | --- | --- | --- | --- |
-| LGG | none | 未实验 | 0.783989 | — | 未实验 |
-| LGG | rna_100 | 未实验 | 0.767771 | — | 未实验 |
-| LGG | text_100 | 未实验 | 0.679779 | — | 未实验 |
-| LGG | both_100 | 未实验 | 0.635956 | — | 未实验 |
-| BRCA | none | 未实验 | 0.680368 | — | 未实验 |
-| BRCA | rna_100 | 未实验 | 0.676053 | — | 未实验 |
-| BRCA | text_100 | 未实验 | 0.661860 | — | 未实验 |
-| BRCA | both_100 | 未实验 | 0.636539 | — | 未实验 |
-| BLCA | none | 未实验 | 0.607564 | — | 未实验 |
-| BLCA | rna_100 | 未实验 | 0.607391 | — | 未实验 |
-| BLCA | text_100 | 未实验 | 0.584143 | — | 未实验 |
-| BLCA | both_100 | 未实验 | 0.574254 | — | 未实验 |
-| LUAD | none | 未实验 | 0.578624 | — | 未实验 |
-| LUAD | rna_100 | 未实验 | 0.577396 | — | 未实验 |
-| LUAD | text_100 | 未实验 | 0.594770 | — | 未实验 |
-| LUAD | both_100 | 未实验 | 0.586346 | — | 未实验 |
-| UCEC | none | 未实验 | 0.677053 | — | 未实验 |
-| UCEC | rna_100 | 未实验 | 0.676163 | — | 未实验 |
-| UCEC | text_100 | 未实验 | 0.622301 | — | 未实验 |
-| UCEC | both_100 | 未实验 | 0.623637 | — | 未实验 |
+| LGG | none | 0.731539 | <span style="color:#c62828"><strong>0.783989</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.052450 |
+| LGG | rna_100 | 0.717736 | <span style="color:#c62828"><strong>0.767771</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.050035 |
+| LGG | text_100 | <span style="color:#c62828"><strong>0.716011</strong></span> | 0.679779 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.036232 |
+| LGG | both_100 | <span style="color:#c62828"><strong>0.665286</strong></span> | 0.635956 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.029331 |
+| BRCA | none | 0.580674 | <span style="color:#c62828"><strong>0.680368</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.099693 |
+| BRCA | rna_100 | 0.550358 | <span style="color:#c62828"><strong>0.676053</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.125695 |
+| BRCA | text_100 | 0.549676 | <span style="color:#c62828"><strong>0.661860</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.112183 |
+| BRCA | both_100 | 0.472124 | <span style="color:#c62828"><strong>0.636539</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.164415 |
+| BLCA | none | 0.552221 | <span style="color:#c62828"><strong>0.607564</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.055344 |
+| BLCA | rna_100 | 0.539903 | <span style="color:#c62828"><strong>0.607391</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.067488 |
+| BLCA | text_100 | 0.529493 | <span style="color:#c62828"><strong>0.584143</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.054650 |
+| BLCA | both_100 | 0.548230 | <span style="color:#c62828"><strong>0.574254</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.026024 |
+| LUAD | none | <span style="color:#c62828"><strong>0.593191</strong></span> | 0.578624 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.014567 |
+| LUAD | rna_100 | <span style="color:#c62828"><strong>0.597052</strong></span> | 0.577396 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.019656 |
+| LUAD | text_100 | 0.591085 | <span style="color:#c62828"><strong>0.594770</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.003686 |
+| LUAD | both_100 | 0.575992 | <span style="color:#c62828"><strong>0.586346</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.010355 |
+| UCEC | none | <span style="color:#c62828"><strong>0.680169</strong></span> | 0.677053 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.003116 |
+| UCEC | rna_100 | <span style="color:#c62828"><strong>0.685066</strong></span> | 0.676163 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.008903 |
+| UCEC | text_100 | <span style="color:#c62828"><strong>0.659248</strong></span> | 0.622301 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.036946 |
+| UCEC | both_100 | <span style="color:#c62828"><strong>0.663254</strong></span> | 0.623637 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.039617 |
 
 ### Seed 213
 
 | 癌种 | 场景 | 我们提出来的 Encoder（全文 ≤8192） | 现有系统 Proto.† | 较优 | Δ（新−现有） |
 | --- | --- | --- | --- | --- | --- |
-| LGG | none | 未实验 | 0.807108 | — | 未实验 |
-| LGG | rna_100 | 未实验 | 0.805383 | — | 未实验 |
-| LGG | text_100 | 未实验 | 0.709800 | — | 未实验 |
-| LGG | both_100 | 未实验 | 0.691166 | — | 未实验 |
-| BRCA | none | 未实验 | 0.692971 | — | 未实验 |
-| BRCA | rna_100 | 未实验 | 0.692744 | — | 未实验 |
-| BRCA | text_100 | 未实验 | 0.656977 | — | 未实验 |
-| BRCA | both_100 | 未实验 | 0.661746 | — | 未实验 |
-| BLCA | none | 未实验 | 0.490978 | — | 未实验 |
-| BLCA | rna_100 | 未实验 | 0.485774 | — | 未实验 |
-| BLCA | text_100 | 未实验 | 0.525850 | — | 未实验 |
-| BLCA | both_100 | 未实验 | 0.479702 | — | 未实验 |
-| LUAD | none | 未实验 | 0.579326 | — | 未实验 |
-| LUAD | rna_100 | 未实验 | 0.580906 | — | 未实验 |
-| LUAD | text_100 | 未实验 | 0.592664 | — | 未实验 |
-| LUAD | both_100 | 未实验 | 0.589154 | — | 未实验 |
-| UCEC | none | 未实验 | 0.649232 | — | 未实验 |
-| UCEC | rna_100 | 未实验 | 0.650345 | — | 未实验 |
-| UCEC | text_100 | 未实验 | 0.616737 | — | 未实验 |
-| UCEC | both_100 | 未实验 | 0.611841 | — | 未实验 |
+| LGG | none | 0.745687 | <span style="color:#c62828"><strong>0.807108</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.061422 |
+| LGG | rna_100 | 0.734990 | <span style="color:#c62828"><strong>0.805383</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.070393 |
+| LGG | text_100 | 0.694962 | <span style="color:#c62828"><strong>0.709800</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.014838 |
+| LGG | both_100 | 0.655970 | <span style="color:#c62828"><strong>0.691166</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.035197 |
+| BRCA | none | 0.669354 | <span style="color:#c62828"><strong>0.692971</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.023618 |
+| BRCA | rna_100 | 0.667197 | <span style="color:#c62828"><strong>0.692744</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.025548 |
+| BRCA | text_100 | 0.651868 | <span style="color:#c62828"><strong>0.656977</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.005110 |
+| BRCA | both_100 | 0.581129 | <span style="color:#c62828"><strong>0.661746</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.080618 |
+| BLCA | none | <span style="color:#c62828"><strong>0.601492</strong></span> | 0.490978 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.110514 |
+| BLCA | rna_100 | <span style="color:#c62828"><strong>0.601145</strong></span> | 0.485774 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.115371 |
+| BLCA | text_100 | <span style="color:#c62828"><strong>0.583276</strong></span> | 0.525850 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.057425 |
+| BLCA | both_100 | <span style="color:#c62828"><strong>0.574948</strong></span> | 0.479702 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.095246 |
+| LUAD | none | <span style="color:#c62828"><strong>0.606529</strong></span> | 0.579326 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.027203 |
+| LUAD | rna_100 | <span style="color:#c62828"><strong>0.609512</strong></span> | 0.580906 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.028607 |
+| LUAD | text_100 | 0.590207 | <span style="color:#c62828"><strong>0.592664</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.002457 |
+| LUAD | both_100 | 0.578273 | <span style="color:#c62828"><strong>0.589154</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.010881 |
+| UCEC | none | 0.626753 | <span style="color:#c62828"><strong>0.649232</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.022479 |
+| UCEC | rna_100 | 0.622524 | <span style="color:#c62828"><strong>0.650345</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.027821 |
+| UCEC | text_100 | 0.588248 | <span style="color:#c62828"><strong>0.616737</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.028489 |
+| UCEC | both_100 | 0.594258 | <span style="color:#c62828"><strong>0.611841</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.017583 |
 
 ### Seed 231
 
 | 癌种 | 场景 | 我们提出来的 Encoder（全文 ≤8192） | 现有系统 Proto.† | 较优 | Δ（新−现有） |
 | --- | --- | --- | --- | --- | --- |
-| LGG | none | 未实验 | 0.793996 | — | 未实验 |
-| LGG | rna_100 | 未实验 | 0.775707 | — | 未实验 |
-| LGG | text_100 | 未实验 | 0.719462 | — | 未实验 |
-| LGG | both_100 | 未实验 | 0.675293 | — | 未实验 |
-| BRCA | none | 未实验 | 0.681049 | — | 未实验 |
-| BRCA | rna_100 | 未实验 | 0.676394 | — | 未实验 |
-| BRCA | text_100 | 未实验 | 0.671625 | — | 未实验 |
-| BRCA | both_100 | 未实验 | 0.643693 | — | 未实验 |
-| BLCA | none | 未实验 | 0.614677 | — | 未实验 |
-| BLCA | rna_100 | 未实验 | 0.615892 | — | 未实验 |
-| BLCA | text_100 | 未实验 | 0.585704 | — | 未实验 |
-| BLCA | both_100 | 未实验 | 0.580500 | — | 未实验 |
-| LUAD | none | 未实验 | 0.584591 | — | 未实验 |
-| LUAD | rna_100 | 未实验 | 0.578624 | — | 未实验 |
-| LUAD | text_100 | 未实验 | 0.602492 | — | 未实验 |
-| LUAD | both_100 | 未实验 | 0.588452 | — | 未实验 |
-| UCEC | none | 未实验 | 0.638994 | — | 未实验 |
-| UCEC | rna_100 | 未实验 | 0.643668 | — | 未实验 |
-| UCEC | text_100 | 未实验 | 0.608947 | — | 未实验 |
-| UCEC | both_100 | 未实验 | 0.610505 | — | 未实验 |
+| LGG | none | 0.692892 | <span style="color:#c62828"><strong>0.793996</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.101104 |
+| LGG | rna_100 | 0.671153 | <span style="color:#c62828"><strong>0.775707</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.104555 |
+| LGG | text_100 | 0.643202 | <span style="color:#c62828"><strong>0.719462</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.076259 |
+| LGG | both_100 | 0.561767 | <span style="color:#c62828"><strong>0.675293</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.113527 |
+| BRCA | none | 0.666742 | <span style="color:#c62828"><strong>0.681049</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.014307 |
+| BRCA | rna_100 | 0.660952 | <span style="color:#c62828"><strong>0.676394</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.015442 |
+| BRCA | text_100 | 0.611900 | <span style="color:#c62828"><strong>0.671625</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.059725 |
+| BRCA | both_100 | 0.577722 | <span style="color:#c62828"><strong>0.643693</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.065970 |
+| BLCA | none | 0.596981 | <span style="color:#c62828"><strong>0.614677</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.017696 |
+| BLCA | rna_100 | 0.601145 | <span style="color:#c62828"><strong>0.615892</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.014747 |
+| BLCA | text_100 | 0.584143 | <span style="color:#c62828"><strong>0.585704</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.001561 |
+| BLCA | both_100 | 0.575468 | <span style="color:#c62828"><strong>0.580500</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.005031 |
+| LUAD | none | <span style="color:#c62828"><strong>0.587926</strong></span> | 0.584591 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.003335 |
+| LUAD | rna_100 | <span style="color:#c62828"><strong>0.585469</strong></span> | 0.578624 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.006845 |
+| LUAD | text_100 | 0.577922 | <span style="color:#c62828"><strong>0.602492</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.024570 |
+| LUAD | both_100 | 0.555985 | <span style="color:#c62828"><strong>0.588452</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.032468 |
+| UCEC | none | <span style="color:#c62828"><strong>0.651903</strong></span> | 0.638994 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.012909 |
+| UCEC | rna_100 | <span style="color:#c62828"><strong>0.657245</strong></span> | 0.643668 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.013577 |
+| UCEC | text_100 | <span style="color:#c62828"><strong>0.642778</strong></span> | 0.608947 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.033830 |
+| UCEC | both_100 | <span style="color:#c62828"><strong>0.645894</strong></span> | 0.610505 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.035388 |
 
 ### Seed 321
 
 | 癌种 | 场景 | 我们提出来的 Encoder（全文 ≤8192） | 现有系统 Proto.† | 较优 | Δ（新−现有） |
 | --- | --- | --- | --- | --- | --- |
-| LGG | none | 未实验 | 0.794686 | — | 未实验 |
-| LGG | rna_100 | 未实验 | 0.782954 | — | 未实验 |
-| LGG | text_100 | 未实验 | 0.689096 | — | 未实验 |
-| LGG | both_100 | 未实验 | 0.646308 | — | 未实验 |
-| BRCA | none | 未实验 | 0.689111 | — | 未实验 |
-| BRCA | rna_100 | 未实验 | 0.691495 | — | 未实验 |
-| BRCA | text_100 | 未实验 | 0.633587 | — | 未实验 |
-| BRCA | both_100 | 未实验 | 0.622914 | — | 未实验 |
-| BLCA | none | 未实验 | 0.629251 | — | 未实验 |
-| BLCA | rna_100 | 未实验 | 0.624219 | — | 未实验 |
-| BLCA | text_100 | 未实验 | 0.602533 | — | 未实验 |
-| BLCA | both_100 | 未实验 | 0.592817 | — | 未实验 |
-| LUAD | none | 未实验 | 0.598456 | — | 未实验 |
-| LUAD | rna_100 | 未实验 | 0.591260 | — | 未实验 |
-| LUAD | text_100 | 未实验 | 0.597052 | — | 未实验 |
-| LUAD | both_100 | 未实验 | 0.590207 | — | 未实验 |
-| UCEC | none | 未实验 | 0.639439 | — | 未实验 |
-| UCEC | rna_100 | 未实验 | 0.640107 | — | 未实验 |
-| UCEC | text_100 | 未实验 | 0.586023 | — | 未实验 |
-| UCEC | both_100 | 未实验 | 0.586690 | — | 未实验 |
+| LGG | none | 0.707384 | <span style="color:#c62828"><strong>0.794686</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.087302 |
+| LGG | rna_100 | 0.697032 | <span style="color:#c62828"><strong>0.782954</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.085921 |
+| LGG | text_100 | 0.675293 | <span style="color:#c62828"><strong>0.689096</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.013803 |
+| LGG | both_100 | 0.634921 | <span style="color:#c62828"><strong>0.646308</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.011387 |
+| BRCA | none | 0.667991 | <span style="color:#c62828"><strong>0.689111</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.021120 |
+| BRCA | rna_100 | 0.662655 | <span style="color:#c62828"><strong>0.691495</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.028841 |
+| BRCA | text_100 | <span style="color:#c62828"><strong>0.661519</strong></span> | 0.633587 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.027932 |
+| BRCA | both_100 | 0.612694 | <span style="color:#c62828"><strong>0.622914</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.010219 |
+| BLCA | none | 0.609820 | <span style="color:#c62828"><strong>0.629251</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.019431 |
+| BLCA | rna_100 | 0.607911 | <span style="color:#c62828"><strong>0.624219</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.016308 |
+| BLCA | text_100 | 0.591083 | <span style="color:#c62828"><strong>0.602533</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.011450 |
+| BLCA | both_100 | 0.574427 | <span style="color:#c62828"><strong>0.592817</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.018390 |
+| LUAD | none | 0.595999 | <span style="color:#c62828"><strong>0.598456</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.002457 |
+| LUAD | rna_100 | 0.590207 | <span style="color:#c62828"><strong>0.591260</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.001053 |
+| LUAD | text_100 | 0.584767 | <span style="color:#c62828"><strong>0.597052</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.012285 |
+| LUAD | both_100 | 0.571955 | <span style="color:#c62828"><strong>0.590207</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.018252 |
+| UCEC | none | 0.611841 | <span style="color:#c62828"><strong>0.639439</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.027598 |
+| UCEC | rna_100 | 0.610283 | <span style="color:#c62828"><strong>0.640107</strong></span> | <span style="color:#c62828"><strong>现有系统 Proto.†</strong></span> | -0.029824 |
+| UCEC | text_100 | <span style="color:#c62828"><strong>0.592922</strong></span> | 0.586023 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.006900 |
+| UCEC | both_100 | <span style="color:#c62828"><strong>0.597151</strong></span> | 0.586690 | <span style="color:#c62828"><strong>我们提出来的 Encoder（全文 ≤8192）</strong></span> | +0.010461 |
 
 ## seed结论
 
-未实验：新 encoder 成绩尚未产生，无法判定效果最好的 seed。
+none（Q 口径）：我们提出来的 Encoder（全文 ≤8192）五癌平均 C-index 最高的 seed：`213`。
+none（Q 口径）：相对现有系统五癌平均 Δ 最大的 seed：`213`。二者不混称，且不替代五 seed 结论。
+四场景（附录，不进 Q）：平均 C-index 最高的 seed：`123`；平均 Δ 最大的 seed：`213`。
+
+## 同代码对照（none，逐 seed，不进 Q）
+
+| Seed | 癌种 | 我们提出来的 Encoder（全文 ≤8192） | bcmbert200 | Δ（本臂 − bcmbert200） |
+| --- | --- | --- | --- | --- |
+| 123 | LGG | 0.716356 | 0.749482 | -0.033126 |
+| 123 | BRCA | 0.686613 | 0.665493 | +0.021120 |
+| 123 | BLCA | 0.619882 | 0.597328 | +0.022554 |
+| 123 | LUAD | 0.599684 | 0.587750 | +0.011934 |
+| 123 | UCEC | 0.613176 | 0.653684 | -0.040507 |
+| 132 | LGG | 0.731539 | 0.698068 | +0.033471 |
+| 132 | BRCA | 0.580674 | 0.615760 | -0.035086 |
+| 132 | BLCA | 0.552221 | 0.582061 | -0.029840 |
+| 132 | LUAD | 0.593191 | 0.584767 | +0.008424 |
+| 132 | UCEC | 0.680169 | 0.654351 | +0.025818 |
+| 213 | LGG | 0.745687 | 0.797101 | -0.051415 |
+| 213 | BRCA | 0.669354 | 0.638356 | +0.030998 |
+| 213 | BLCA | 0.601492 | 0.602186 | -0.000694 |
+| 213 | LUAD | 0.606529 | 0.615830 | -0.009302 |
+| 213 | UCEC | 0.626753 | 0.584910 | +0.041843 |
+| 231 | LGG | 0.692892 | 0.749482 | -0.056591 |
+| 231 | BRCA | 0.666742 | 0.676280 | -0.009538 |
+| 231 | BLCA | 0.596981 | 0.592124 | +0.004858 |
+| 231 | LUAD | 0.587926 | 0.598982 | -0.011057 |
+| 231 | UCEC | 0.651903 | 0.654574 | -0.002671 |
+| 321 | LGG | 0.707384 | 0.726363 | -0.018979 |
+| 321 | BRCA | 0.667991 | 0.678211 | -0.010219 |
+| 321 | BLCA | 0.609820 | 0.600625 | +0.009195 |
+| 321 | LUAD | 0.595999 | 0.587048 | +0.008951 |
+| 321 | UCEC | 0.611841 | 0.625862 | -0.014022 |

@@ -199,6 +199,10 @@
 | I05-10 | 用裸管道 git archive/tar 经 ssh 同步代码，连接中断时远端只解出部分文件且命令不报错。 | 同步一律打包、算校验和、传输后远端校验再解压，并逐文件比对。 | 研究计划书-BioClinical ModernBERT.md（Post-Mortem 11） |
 | I05-11 | jobrun.sh 的 `$cmd >> log` 对 `a && b` 只重定向最后一条，前面命令失败时日志为空；tako 只有 conda 环境目录、没有 conda 本体。 | 交给 jobrun 的复合命令整体包成 `{ ...; } 2>&1`；新主机建环境前先确认 conda 本体。 | 同上（Post-Mortem 12） |
 | I05-12 | 对含未跟踪文件的目录执行 `git add -A <目录>`，把含本机绝对路径的 Codex 审查输出一并提交进公开仓库。 | 提交前只 add 明确列出的文件；对暂存区做路径扫描（`git diff --cached \| grep "^+" \| grep -E "/home/\|/Users/"`），非零即中止提交。 | I05 账本迁移提交（amend 修正） |
+| I05-13 | 可变缓存目录命名为 `tmp_sur_cache_8192`，运行根里的 `tmp_sur_cache` 软链解析后 basename 不是 `tmp_sur_cache`，`train_launcher --_prewarm-cancer` 拒绝（TCGASurDataset 固定使用 tmp_sur_cache）。 | 按档案隔离缓存时用父目录区分（`<可变资产根>/<档案>/tmp_sur_cache`），缓存目录本身的 basename 必须是 `tmp_sur_cache`。 | I05 第二轮 A0 候选冒烟（2026-09-24） |
+| I05-14 | 交给 jobrun 的复合命令写成 `{ …; exit 1; }`，`exit` 直接结束 jobrun 的包装 shell，不写 done/fail flag，running.flag 残留，等待循环永远等下去。 | 交给 jobrun 的复合命令一律用 `( … )` 子 shell 包裹；任务结束判据同时看 flag 与进程是否存活。 | I05 第二轮 A0 候选冒烟（2026-09-24） |
+| I05-15 | 与历史 text 缓存逐人比对的身份门只在传了可选参数 `--legacy-cache-dir` 时执行；运行根旧特征目录、manifest、特征与缓存同步等人数换名即可绕过（Codex 复审 round2 high）。 | 身份、划分与泄漏类核对必须无条件执行；参照值（患者集合摘要、模型文件哈希）固定进受审配置，不依赖运行时参数或运行根里可被同步替换的文件。 | I05 第二轮 A0 Codex 复审（2026-09-24） |
+| I05-16 | 对照臂 legacytext-rerun 按“重训会有方差”设计，正式训练后才发现现行代码训练完全确定性，25 个 ckpt 与历史 E0 逐字节相同，preflight 按“仍是历史权重”门拒绝，整臂作废。 | 设计“同代码重训”对照臂前，先用 1 个 cancer/seed 冒烟比对 ckpt 与历史哈希；训练确定时，重训臂等于历史结果，不必再跑。 | I05 第二轮 A0 正式训练（2026-09-24） |
 
 ## Git 工作流脚本补充（2026-09-23）
 

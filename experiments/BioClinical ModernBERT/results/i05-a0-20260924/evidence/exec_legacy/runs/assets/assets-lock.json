@@ -1,0 +1,70 @@
+{
+  "assets_lock_sha256": "2b953b35cb6de23b053bdc5adbf9bb3d44ee0cfc5b66f613577a5e3c10950a1c",
+  "commit": "3c46f379095d4e83e3414492e60162c15bd1ee19",
+  "locked_at_utc": "2026-09-24T09:58:46.470669+00:00",
+  "profile": "legacytext-rerun",
+  "protocol_id": "patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1-i05-legacytext-rerun-v1",
+  "view": {
+    "feature_manifest_sha256": null,
+    "files": {
+      "BLCA": {
+        "img_sur_test_all_BLCA.pkl": "matches_legacy",
+        "img_sur_train_all_BLCA.pkl": "matches_legacy",
+        "img_sur_valid_all_BLCA.pkl": "matches_legacy",
+        "rna_sur_test_all_BLCA.pkl": "matches_legacy",
+        "rna_sur_train_all_BLCA.pkl": "matches_legacy",
+        "rna_sur_valid_all_BLCA.pkl": "matches_legacy",
+        "text_sur_test_all_BLCA.pkl": "matches_legacy",
+        "text_sur_train_all_BLCA.pkl": "matches_legacy",
+        "text_sur_valid_all_BLCA.pkl": "matches_legacy"
+      },
+      "BRCA": {
+        "img_sur_test_all_BRCA.pkl": "matches_legacy",
+        "img_sur_train_all_BRCA.pkl": "matches_legacy",
+        "img_sur_valid_all_BRCA.pkl": "matches_legacy",
+        "rna_sur_test_all_BRCA.pkl": "matches_legacy",
+        "rna_sur_train_all_BRCA.pkl": "matches_legacy",
+        "rna_sur_valid_all_BRCA.pkl": "matches_legacy",
+        "text_sur_test_all_BRCA.pkl": "matches_legacy",
+        "text_sur_train_all_BRCA.pkl": "matches_legacy",
+        "text_sur_valid_all_BRCA.pkl": "matches_legacy"
+      },
+      "LGG": {
+        "img_sur_test_all_LGG.pkl": "matches_legacy",
+        "img_sur_train_all_LGG.pkl": "matches_legacy",
+        "img_sur_valid_all_LGG.pkl": "matches_legacy",
+        "rna_sur_test_all_LGG.pkl": "matches_legacy",
+        "rna_sur_train_all_LGG.pkl": "matches_legacy",
+        "rna_sur_valid_all_LGG.pkl": "matches_legacy",
+        "text_sur_test_all_LGG.pkl": "matches_legacy",
+        "text_sur_train_all_LGG.pkl": "matches_legacy",
+        "text_sur_valid_all_LGG.pkl": "matches_legacy"
+      },
+      "LUAD": {
+        "img_sur_test_all_LUAD.pkl": "matches_legacy",
+        "img_sur_train_all_LUAD.pkl": "matches_legacy",
+        "img_sur_valid_all_LUAD.pkl": "matches_legacy",
+        "rna_sur_test_all_LUAD.pkl": "matches_legacy",
+        "rna_sur_train_all_LUAD.pkl": "matches_legacy",
+        "rna_sur_valid_all_LUAD.pkl": "matches_legacy",
+        "text_sur_test_all_LUAD.pkl": "matches_legacy",
+        "text_sur_train_all_LUAD.pkl": "matches_legacy",
+        "text_sur_valid_all_LUAD.pkl": "matches_legacy"
+      },
+      "UCEC": {
+        "img_sur_test_all_UCEC.pkl": "matches_legacy",
+        "img_sur_train_all_UCEC.pkl": "matches_legacy",
+        "img_sur_valid_all_UCEC.pkl": "matches_legacy",
+        "rna_sur_test_all_UCEC.pkl": "matches_legacy",
+        "rna_sur_train_all_UCEC.pkl": "matches_legacy",
+        "rna_sur_valid_all_UCEC.pkl": "matches_legacy",
+        "text_sur_test_all_UCEC.pkl": "matches_legacy",
+        "text_sur_train_all_UCEC.pkl": "matches_legacy",
+        "text_sur_valid_all_UCEC.pkl": "matches_legacy"
+      }
+    },
+    "label_sha256": "35c2865914d1e32f077ab470d299fc712d4f5fb2e63059f6bf8a68694a347e2f",
+    "manifest_sha256": "c789eae9a5b1517d82cfa137a92dfa8cc7ffae58e5f300163b25729ffc5d8156",
+    "profile": "legacytext-rerun"
+  }
+}

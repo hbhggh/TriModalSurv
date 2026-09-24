@@ -1,0 +1,303 @@
+{
+  "checkpoints": [],
+  "git": {
+    "allow_dirty": false,
+    "branch": "train/i05-a0-20260924",
+    "commit": "3c46f379095d4e83e3414492e60162c15bd1ee19",
+    "dirty": false,
+    "dirty_files": [],
+    "external": [],
+    "source": "stamp",
+    "stamp_generated_at_utc": "2026-09-24T09:55:55.536766+00:00"
+  },
+  "gpu_config": {
+    "allow_low_gpu_util": true,
+    "batch_size": 32,
+    "batch_size_source": "cli",
+    "concurrent_runs": 1,
+    "gpu_util_min_percent": 50,
+    "gpu_util_target_percent": 80,
+    "gpu_util_warmup_sec": 120,
+    "gradient_accumulation_steps": 1,
+    "low_gpu_util_reason": "NPJ small compute graph: measured active-util median 11-15%, peak 31% across bs 32-256 on V100; wall time increases with larger bs (probe 2026-09-02, collab/20260902-NPJ-GPU合同/notes.md)",
+    "non_blocking": true,
+    "num_workers": 4,
+    "persistent_workers": true,
+    "pin_memory": true,
+    "prefetch_factor": 4
+  },
+  "historical_training": {
+    "mixed_precision": "bf16",
+    "optimizer": "Adam",
+    "status": "本次实际运行配置",
+    "weight_decay": 1
+  },
+  "inputs": [
+    {
+      "path": "~/i05_a0_inputs/TCGA_9523_ex12.csv",
+      "sha256": "35c2865914d1e32f077ab470d299fc712d4f5fb2e63059f6bf8a68694a347e2f"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I05_text_encoder_bcmbert/model_config_bcmbert8192.yml",
+      "sha256": "cde7cfe2e0ebffd63b92557cd721f2b891d6bd2ee9697411d8a5be1a60247eb3"
+    },
+    {
+      "path": "~/i05_a0_run8192/configs/gpu_train.yaml",
+      "sha256": "414adba7385a96ff56d38169455423870824c5a0e87577d1bf673acacbd07bb5"
+    }
+  ],
+  "model": {
+    "compensator": "none",
+    "dropout_rate": 0.1,
+    "hidden_size": 256,
+    "mlp_ratio": 4,
+    "modality_order": [
+      "img",
+      "text",
+      "rna"
+    ],
+    "n_backbone": 1,
+    "n_head": 4,
+    "network_type": "NPJC",
+    "pred_dim": 4
+  },
+  "model_input_dimensions": {
+    "img": 1536,
+    "rna": 256,
+    "text": 768
+  },
+  "model_parameter_schema_sha256": "4164f2ab200a0c22ffbd083fd0d115332c367581307faec51735937bceab60c2",
+  "runtime": {
+    "allow_dirty": false,
+    "batch_size": 32,
+    "bin_mode": "author",
+    "cancer_type": "None",
+    "cancer_types": "BRCA",
+    "compensator": "none",
+    "config": null,
+    "consistency_lambda": 0.1,
+    "cpt_name": "tcga_uni2",
+    "dry_run": false,
+    "epochs": 50,
+    "finetune_head_only": false,
+    "fusion_type": "gate",
+    "gpu_config": "~/i05_a0_run8192/configs/gpu_train.yaml",
+    "hidden_size": 256,
+    "lr": 0.0001,
+    "modality_dropout": 0.0,
+    "model_config": "~/i05_a0_run8192/experiments/I05_text_encoder_bcmbert/model_config_bcmbert8192.yml",
+    "n_image_tokens": 128,
+    "network_type": "NPJC",
+    "note": "",
+    "num_workers": 4,
+    "preset": null,
+    "pretrain_path": "",
+    "proto_per_bin": null,
+    "report_label_path": "~/i05_a0_inputs/TCGA_9523_ex12.csv",
+    "result_path": "~/i05_a0_out/train8192/out",
+    "run_record_root": null,
+    "seed": 231,
+    "simulate_missing_modality": "",
+    "task_type": "surv",
+    "train": true
+  },
+  "schema_version": 1,
+  "source_fingerprints": [
+    {
+      "path": "~/i05_a0_run8192/configs/gpu_train.yaml",
+      "sha256": "414adba7385a96ff56d38169455423870824c5a0e87577d1bf673acacbd07bb5"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I01_patient_retrieval/__init__.py",
+      "sha256": "8c95913a473560325f19d0104ca42f7741da1f8c451ab306ee6481268990c06b"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I01_patient_retrieval/evaluate.py",
+      "sha256": "e92812ef5316b3d0d212deda0e37793e3de84dd9b44410b25ebe7caecb658b5a"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I01_patient_retrieval/model.py",
+      "sha256": "e4e08b0c9ee78da8b2a7c4d01250516693fc087bf567d18ef6a944b27cc10c13"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I01_patient_retrieval/summarize.py",
+      "sha256": "a01ae92cf4d1a9cbd152ff4adf8aa81e4b8f646b6f8677c16699e9fba8b43e0a"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I02_population_prototypes/__init__.py",
+      "sha256": "bd1278846058f2c8b33942fd59cc4f914dac12a1dab2a76974661257ddcf0772"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I02_population_prototypes/evaluate.py",
+      "sha256": "1b3a543fd0d029cfe2611686d1ef3534180955b855d6f8764176c2b2336be5c2"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I02_population_prototypes/model.py",
+      "sha256": "f0dc091eba63d5427c6c971f687200af8df1cf1069744d6ce7b347fd06319943"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I02_population_prototypes/runtime.py",
+      "sha256": "08940dcdc6f964b36139a18d355e4779cbb7e5062704d1024b9b82cb5c2f1f96"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I02_population_prototypes/train.py",
+      "sha256": "17f7bab34a532c14b913ca3a1cb0e5f8c00cfd3b34231470fac763eedf2f4e0c"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I03_npj_d_dm_e1/__init__.py",
+      "sha256": "bd1278846058f2c8b33942fd59cc4f914dac12a1dab2a76974661257ddcf0772"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I03_npj_d_dm_e1/evaluate.py",
+      "sha256": "f678e81c9aea3c85dcce6a816df31ee73a2f73528fa2994ea7fd974343214733"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I03_npj_d_dm_e1/model.py",
+      "sha256": "4878fde6bbf222af8587588976cbf1a5ab035dd336fa9c50d7a8b1eb2e4bbc30"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I03_npj_d_dm_e1/train.py",
+      "sha256": "099dfe2ad7e2129813bef9dfae97e45e75883a74b681619655a327a5421f9bb9"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I04_cap4_multi_prototypes/__init__.py",
+      "sha256": "bd1278846058f2c8b33942fd59cc4f914dac12a1dab2a76974661257ddcf0772"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I04_cap4_multi_prototypes/evaluate.py",
+      "sha256": "957e1e018e58a7ef2cc52ea75c8aa609bac7ec525d3f75ffb63af11ff425d7a1"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I04_cap4_multi_prototypes/model.py",
+      "sha256": "eb1526572a918a5b7468ce9b414c962f76bb1a28e48605aa54497aca3023bedd"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I04_cap4_multi_prototypes/runtime.py",
+      "sha256": "03f8854c15b775345f9dd1e52e33aafb8e205f1f2bbc13201e73411c72e8a43e"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I04_cap4_multi_prototypes/train.py",
+      "sha256": "fb491e9d3f085b6a97092104bbe47f65b15c101f79f4b745524cf62dd2a97ae8"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I05_text_encoder_bcmbert/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I05_text_encoder_bcmbert/evaluate.py",
+      "sha256": "b5feec68fe7beeec951013482c54ca49d70a5b97e5bb3e62d60e0d44d4c8cc55"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I05_text_encoder_bcmbert/extract_text_features.py",
+      "sha256": "fdc5cfc116563eb9c3bc00f9da62e163f98c757e5f5003dc601fac75779775b9"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I05_text_encoder_bcmbert/gpu_policy.py",
+      "sha256": "523ba3daa23baefadf46b23d512510434f360170a60cfa1efcc07b43757f6587"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I05_text_encoder_bcmbert/model.py",
+      "sha256": "3e243d343d6771062a631125e6ef5b53673841c3d5aed67a7acc2140b32f72f9"
+    },
+    {
+      "path": "~/i05_a0_run8192/experiments/I05_text_encoder_bcmbert/model_config_bcmbert8192.yml",
+      "sha256": "cde7cfe2e0ebffd63b92557cd721f2b891d6bd2ee9697411d8a5be1a60247eb3"
+    },
+    {
+      "path": "~/i05_a0_run8192/scripts/eval_missing.py",
+      "sha256": "8fdc483461b19db3759ec5b5d2afe87e882ba369580a8df5c7881e1938838380"
+    },
+    {
+      "path": "~/i05_a0_run8192/scripts/gen_missing_manifest.py",
+      "sha256": "dcc404ce3843261af5a68b686fdb0578e858cac2ab5789325897e3bb60b27984"
+    },
+    {
+      "path": "~/i05_a0_run8192/scripts/git_stamp.py",
+      "sha256": "97f3a7bc2fa24f0de06771bd9157d29175419ff3f5bcdb4b1e49c6f38a8f1f08"
+    },
+    {
+      "path": "~/i05_a0_run8192/scripts/gpu_util_gate.py",
+      "sha256": "a9082e37eab204f525a00d94ca1d341a27ddd4473639ebf1d20c366ae840ad33"
+    },
+    {
+      "path": "~/i05_a0_run8192/scripts/main_survival.py",
+      "sha256": "68c7893451f336648e6d4e25d70cd5e0ee3b902655adab9ed92921b36e139004"
+    },
+    {
+      "path": "~/i05_a0_run8192/scripts/train_launcher.py",
+      "sha256": "3cb7b8ac0218502dba1dfb77b77aebbe33801c8cdd7aabb3383471278ce6f0fd"
+    },
+    {
+      "path": "~/i05_a0_run8192/src/trimodalsurv/__init__.py",
+      "sha256": "8c95913a473560325f19d0104ca42f7741da1f8c451ab306ee6481268990c06b"
+    },
+    {
+      "path": "~/i05_a0_run8192/src/trimodalsurv/config.py",
+      "sha256": "8cd87cac935f29a973c9d45d1ddf22e55d4118f79de3cd57b369b25b0cb20dfd"
+    },
+    {
+      "path": "~/i05_a0_run8192/src/trimodalsurv/data/__init__.py",
+      "sha256": "f70a6308d65648e324242d2a06bf13e7d881dede01b527ac2b801968aa65d175"
+    },
+    {
+      "path": "~/i05_a0_run8192/src/trimodalsurv/data/tcga_dataset.py",
+      "sha256": "00c15fc2fad773902ff5d5675e28ea04ac632ebd6d6c432efb8a66fcac0968e1"
+    },
+    {
+      "path": "~/i05_a0_run8192/src/trimodalsurv/evaluation/__init__.py",
+      "sha256": "8c95913a473560325f19d0104ca42f7741da1f8c451ab306ee6481268990c06b"
+    },
+    {
+      "path": "~/i05_a0_run8192/src/trimodalsurv/evaluation/common.py",
+      "sha256": "179d878ef3be4639579a89b7d6b21d9908ebc7fb5d019500d45a85e94d982029"
+    },
+    {
+      "path": "~/i05_a0_run8192/src/trimodalsurv/evaluation/missing.py",
+      "sha256": "d91a20da4d19e94649f8a2b24b75e26a41cf99186602c2bc05e3bd770632b81e"
+    },
+    {
+      "path": "~/i05_a0_run8192/src/trimodalsurv/gitstamp.py",
+      "sha256": "7ac042277a0d870cabf4e0e52bfacad238175fbad770893671594d58fd4e6fb2"
+    },
+    {
+      "path": "~/i05_a0_run8192/src/trimodalsurv/models/__init__.py",
+      "sha256": "8c95913a473560325f19d0104ca42f7741da1f8c451ab306ee6481268990c06b"
+    },
+    {
+      "path": "~/i05_a0_run8192/src/trimodalsurv/models/compensator.py",
+      "sha256": "e72c853f5681b505465aaada0a482bb949deb970c74469020df5bc066bd04eee"
+    },
+    {
+      "path": "~/i05_a0_run8192/src/trimodalsurv/models/consistency.py",
+      "sha256": "41b6c85fc099058dfe29d7856fc5b776af87edb894d92fae1240495da1e0b0c7"
+    },
+    {
+      "path": "~/i05_a0_run8192/src/trimodalsurv/models/fusion.py",
+      "sha256": "26afa736990c06df1ea67353b1969903b87655f0037969292ff5b5910e5c30c1"
+    },
+    {
+      "path": "~/i05_a0_run8192/src/trimodalsurv/models/npjc.py",
+      "sha256": "f0c03c1516a3976ca71ac5f0b8a4b752f3f98a91f44e6abb7f0edcda399eac2f"
+    },
+    {
+      "path": "~/i05_a0_run8192/src/trimodalsurv/training/__init__.py",
+      "sha256": "bdbf43903f1dbf786bb13b5569424efb0ef60bc41269561d3116822c11517ad7"
+    },
+    {
+      "path": "~/i05_a0_run8192/src/trimodalsurv/training/common_tools.py",
+      "sha256": "09710d56cb1d3f7641d75bad677f4a659cd1c57ac6f01ceeb5d8311f233a64fc"
+    },
+    {
+      "path": "~/i05_a0_run8192/src/trimodalsurv/training/loss_func.py",
+      "sha256": "44e227eea9ad9f39f29437c24666e876565941556b1559a21bf732d64c1e0194"
+    },
+    {
+      "path": "~/i05_a0_run8192/src/trimodalsurv/training/model_util.py",
+      "sha256": "6846877585dfd7177131f6f3ef1b426872a46e680f562be6cffb7b9b90eeff17"
+    },
+    {
+      "path": "~/i05_a0_run8192/src/trimodalsurv/training/runtime.py",
+      "sha256": "6da361175789284835d8fb6bcd76f211d4c9e10a5f3f7d2b03c7ac201583a2ed"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+ "commit": "1cb6bfdce727e553712662a5a645375089cdfc64",
+ "decision": "PASS",
+ "note": "Codex 首审（候选 3d818dc）3 条 high 已在 c14b42c 修复；复审 round2（审 c14b42c）仍有 1 条 high（历史 Text 患者集合核对为可选门），由用户裁决按推荐修法在 1cb6bfd 修复后放行，未再复审。decision=PASS 为用户签署的放行结论，并非 Codex 复审结论。审查原文与逐条处理见 experiments/I05_text_encoder_bcmbert/reviews/20260924-a0-fullctx/。",
+ "protocol_id": "patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1-i05-bcmbert8192-v1",
+ "reviewer": "Codex",
+ "signed_by": "user",
+ "signed_in": "对话内 AskUserQuestion 签署（2026-09-24）",
+ "source_hashes_sha256": "5b16558e020cfab73cfda83f9422b6187002dd4a9ba06d36c001f62d1fce00e0"
+}

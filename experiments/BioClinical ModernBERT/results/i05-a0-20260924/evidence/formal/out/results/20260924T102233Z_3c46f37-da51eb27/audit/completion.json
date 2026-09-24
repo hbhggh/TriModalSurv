@@ -1,0 +1,35 @@
+{
+  "artifacts": [
+    {
+      "copy": {
+        "path": "~/i05_a0_out/train8192/out/results/20260924T102233Z_3c46f37-da51eb27/raw/00-test_pred_and_label_tcga_uni2_img_1536text_768rna_256_NPJC_BRCA_surv.csv",
+        "sha256": "52d7c9edcc0566152cb339a04e272bf1d8fb7d1cbe65a35de9cc83ba24714c89"
+      },
+      "source": {
+        "path": "~/i05_a0_out/train8192/out/321/test_pred_and_label_tcga_uni2_img_1536text_768rna_256_NPJC_BRCA_surv.csv",
+        "sha256": "52d7c9edcc0566152cb339a04e272bf1d8fb7d1cbe65a35de9cc83ba24714c89"
+      }
+    },
+    {
+      "copy": {
+        "path": "~/i05_a0_out/train8192/out/results/20260924T102233Z_3c46f37-da51eb27/raw/01-tcga_uni2_img_1536text_768rna_256_NPJC_BRCA_surv_results.json",
+        "sha256": "06808d1092aa920b0a1bdebb8d2313ca56651530824da6d1934044456f32ffce"
+      },
+      "source": {
+        "path": "~/i05_a0_out/train8192/out/321/tcga_uni2_img_1536text_768rna_256_NPJC_BRCA_surv_results.json",
+        "sha256": "06808d1092aa920b0a1bdebb8d2313ca56651530824da6d1934044456f32ffce"
+      }
+    }
+  ],
+  "checkpoint": {
+    "path": "~/i05_a0_out/train8192/out/321/tcga_uni2_img_1536text_768rna_256_NPJC_BRCA_surv.pth",
+    "sha256": "f1f18eebe1271055f38f0cb64c4ab4cc18fdf6f5fb15c93dda0c7829d2d21111"
+  },
+  "finished_at_utc": "2026-09-24T10:24:13.548012+00:00",
+  "metrics": {
+    "BRCA_c-index": 0.6795730668786193,
+    "c-index": 0.6795730668786193,
+    "loss": 0.3944646442929904
+  },
+  "status": "complete"
+}

@@ -39,7 +39,7 @@ ID 固定，不因改名或排序变化而重编号；后续从 `I05` 继续追�
 | [I02](#i02) | E1-M³Surv 人群级配对原型 | NPJ-C                   | 候选方案；未核实独立实现       | 未登记有效实验批次；25 seed 为后续目标          | 锁定聚类空间、配对方式、原型数和更新规则               |
 | [I03](#i03) | NPJ-D／Dm／旧 E1 对照     | NPJ-D 与 NPJ-C          | 历史实现已归档                 | 五癌各 25 seed 已收官，报告 r6                  | 保留历史结果，供后续匹配对照使用                       |
 | [I04](#i04) | CAP4 × L：时间箱内多原型 | **NPJ-C（用户已确定）** | 底座变更已定；实现与配置待迁移 | NPJ-C 尚无实验结果；已有冒烟仅属于旧 NPJ-D 版本 | 将 CAPL 接入 NPJ-C，明确新版本的同底座对照；未授权全量 |
-| [I05](#i05) | Text encoder 换成 BioClinical ModernBERT 嵌入版（消融实验二） | NPJ-C + 原型检索方法（S0-force） | **第二轮 A0 开发中**：档案 bcmbert8192（全文 ≤8192）+ 对照臂 legacytext-rerun | 轮 C **negative**：none 严格胜 2/5（BLCA、LUAD）；`i05-bcmbert200-20260924d` | dev 候选 → Codex 审查 → 候选冒烟 → squash → freeze → 正式实验 |
+| [I05](#i05) | Text encoder 换成 BioClinical ModernBERT 嵌入版（消融实验二） | NPJ-C + 原型检索方法（S0-force） | **第二轮 A0 完成，待用户裁决**：bcmbert8192（全文 ≤8192）negative；legacytext-rerun 与历史 E0 逐字节相同（重训方差 0） | A0 **negative**：none 严格胜 2/5（BLCA、LUAD）；`i05-a0-20260924`（S = `3c46f37`）。轮 C 同为 2/5 | 节点二 Codex 结果审查 → 用户裁决（收官 / A1 / B） |
 
 阶段使用明确文字：方案讨论／开发中／待互审／冒烟中／冒烟结束／待正式授权／正式运行中／已收官／暂停／舍弃。没有运行核验时不要填写“运行中”。
 
@@ -508,7 +508,8 @@ print("来源文件数：" + str(counts))
 - **当前实验阶段／最近批次 ID／结果入口**：Phase 5 完成；`i05-bcmbert200-20260924d`（冻结 commit `6631662`）；结果账本 [experiments/BioClinical ModernBERT/results/index.md](experiments/BioClinical%20ModernBERT/results/index.md)；结果表已回传 `manuscript/消融实验/2.innovation-secode-part- Encoder/4.BioClinical ModernBERT-程序性知识/`。**溯源说明（用户裁决 2026-09-24）**：用户选择把 main 上 I05 的全部提交压成一行（接受溯源失效）。训练与推理所用的冻结 commit `6631662` 因此不再是 main 的祖先，按 AGENTS.md「Git 工作流」第 9 条，本 run 结果的 commit 溯源失效，仅作 negative 记录，不进论文；中间冻结点 a/b/c 的 tag 已删除；`run/i05-bcmbert200-20260924d` 于 2026-09-24 按用户裁决重建并指向 `6631662`，可 `git show 6631662:<路径>` 读回当时源码。
 - **结果结论与解释边界**：**negative**。none 下五 seed 平均 B 口径 C-index，新 encoder 相对 Table 1 None/Proto.† 严格胜 2/5（BLCA +0.004892、LUAD +0.012390），LGG −0.053623、BRCA −0.033292、UCEC −0.016292，Q（≥ 4/5）未达标。回放 IDENTICAL，推理链路与 Table 1 一致；Δ 同时包含 encoder 效应与重训方差（未加跑旧 Text 同代码重训臂，无法拆分）；方案 C 只编码前 200 token（86% 截断）。按 AGENTS.md 结果差不 revert，代码留在树里。
 - **下一项待处理事项／用户裁决记录**：**第二轮 A0**（用户 2026-09-24 裁决）：I05 续做，新增档案 `bcmbert8192`（同一权重，全文 ≤8192 token 不截断，masked mean 广播回 200 行）与对照臂 `legacytext-rerun`（原有 Text 在现行代码重训，拆分重训方差）；Q 只对 Table 1，另报两组同代码 Δ。轮 C 按 negative 收官，代码保留在仓库（AGENTS.md「结果差不 revert」）。节点二 Codex 结果审查两轮：首轮缺原始证据、复审缺 ckpt 本体哈希，均已补齐（见结果索引）。若日后再做，可另立新 Q：加跑旧 Text 同代码重训臂以拆分重训方差，或去掉 200 token 截断。服务器临时目录已于 2026-09-24 按用户指示清理（tako 7 个、landau 5 个及 jobrun 登记）；证据原件只保留 tako `~/i05_out_20260924d/`（25 个只读 ckpt、逐患者预测、签署记录、训练记录）。文档见 `manuscript/消融实验/2.innovation-secode-part- Encoder/4.BioClinical ModernBERT-程序性知识/`。
-- **最近更新时间／证据**：2026-09-24；上机阶段全部完成，证据见 results 目录；执行中的修复见研究计划书 Post-Mortem 8–12。
+- **第二轮 A0 结果（`i05-a0-20260924`，冻结 commit `3c46f37`，在 main 上）**：**negative**。全文 ≤8192 token（0 截断）下 none 五 seed 平均 B 口径 C-index 相对 Table 1 严格胜 2/5（BLCA +0.006107、LUAD +0.014180），LGG −0.078951、BRCA −0.033837、UCEC −0.014200；相对轮 C bcmbert200 严格胜 3/5，但 BRCA/BLCA/LUAD/UCEC 差值都在 ±0.0021 以内，LGG 再降 0.025。**新发现**：legacytext-rerun 的 25 个重训 ckpt 与历史 E0 逐字节相同，现行代码训练完全确定性、重训方差为 0；因此轮 C 与 A0 相对 Table 1 的 Δ 都是纯 Text 管线效应，此前“Δ 混有重训方差”的解释边界可以撤下。用户裁决该臂记为发现、不再评测。两路独立重算逐位一致，25 个 ckpt 原件现场哈希一致。解释边界：证据不支持“200-token 截断是主因”（解除截断后 4 个癌种几乎不变、LGG 更差）；NeuML 嵌入微调只见过摘要级长度，长报告均值池化在其分布之外。
+- **最近更新时间／证据**：2026-09-24；第二轮证据见 `experiments/BioClinical ModernBERT/results/i05-a0-20260924/` 与结果索引；轮 C 见 `i05-bcmbert200-20260924d`；执行中的修复见两轮研究计划书 Post-Mortem。
 
 ## 7. 开发过程记录（追加，不覆盖历史）
 
@@ -532,6 +533,7 @@ print("来源文件数：" + str(counts))
 | 2026-09-24                 | I05      | 上机执行／结果     | Phase 0–5 全部完成：方案 C 提特征（tako）、冒烟、回放 IDENTICAL、25 个正式训练、test 300 行、渲染 | none 严格胜 2/5（BLCA、LUAD），Q 未达标 → negative；`i05-bcmbert200-20260924d`，冻结 commit `6631662` | 待 Codex 结果审查与用户裁决 |
 | 2026-09-24                 | I05      | 节点二审查／用户裁决 | Codex 结果审查两轮（缺原始证据；缺 ckpt 本体哈希）均已补齐：两路重算 300 行 C-index 逐值相同，25 个 ckpt 原件现场哈希一致 | 用户裁决按 negative 收官，代码保留 | I05 收官 |
 | 2026-09-24                 | I05      | 第二轮立项／开发   | 用户采纳 A0（解除 200-token 截断，全文 ≤8192）并加跑 legacytext-rerun；规则固化「互审后先候选冒烟再 squash」；重建 `run/i05-bcmbert200-20260924d` | 2506 份报告 NeuML token 最长 6822、无一超过 8192；dev 上 A0 代码与测试完成，CI 343 通过 | 待 Codex 审查与候选冒烟 |
+| 2026-09-24                 | I05      | 第二轮上机／结果   | Codex 首审 3 high 修复、复审 1 high 按用户裁决修复不再审；候选冒烟（H `1cb6bfd`）通过、回放 IDENTICAL；squash S `3c46f37`、freeze `run/i05-a0-20260924`；25+25 正式训练；bcmbert8192 test 300 行 | A0 none 严格胜 2/5，Q 未达标 → negative；legacytext-rerun 25/25 ckpt 与历史 E0 逐字节相同（用户裁决记为发现、不评测） | 待节点二 Codex 结果审查与用户裁决 |
 | 2026-09-23～24             | 全项目   | 工具修复／工作方式更新 | 修复 Codex 审查报的 `gitflow.sh cleanup` 冻结身份核对（HEAD 严格等于 `run/<id>` tag）、`ci.sh` 参数先于副作用、`gitflow.sh` 帮助路径，及审查未报的 bash 3.2 多字节变量名崩溃；AGENTS.md「Git 工作流」第 10 条对齐新口径；用户裁决 Codex 审核由 Claude 自动发起（新增 `scripts/codex_review.sh`），2026-09-24 补充复审规则（首审无核心逻辑问题放行，有则复审一次） | 自动审查闭环首次实际运行：首审 needs-attention 3 项 high（采纳 2 项并修复）→ 复审 needs-attention 3 项 high（均为首审修复的补漏，已修复补测）；`tests/test_workflow_scripts.py` 31 条通过；CI 失败集合与改前逐 ID 相同；审查与逐条处理见 `docs/reviews/20260923-auto-review-loop/`，修复记录 `docs/workflow/git-workflow-fix-20260923.md` | 复审仍有核心逻辑问题 → 按规则停下，放行与否待用户裁决；拷回主仓库前勿对 `run/i05-bcmbert200-20260924` 执行 cleanup（主目录的 gitflow.sh 仍是首轮版本） |
 
 Bug 详情仍按项目格式记入所属战役的 `notes.md`，Prevention Rule 回到唯一坑台账；本表只放摘要和链接，不另建重复问题台账。

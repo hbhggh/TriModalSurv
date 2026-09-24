@@ -1,0 +1,35 @@
+{
+  "artifacts": [
+    {
+      "copy": {
+        "path": "~/i05_a0_out/trainlegacy/out/results/20260924T101258Z_3c46f37-fd7889ff/raw/00-test_pred_and_label_tcga_uni2_img_1536text_768rna_256_NPJC_LUAD_surv.csv",
+        "sha256": "b1e83d5f61a65a8c9a16e4d55020bb3dd39b58652b46699e048559ef8a94919e"
+      },
+      "source": {
+        "path": "~/i05_a0_out/trainlegacy/out/213/test_pred_and_label_tcga_uni2_img_1536text_768rna_256_NPJC_LUAD_surv.csv",
+        "sha256": "b1e83d5f61a65a8c9a16e4d55020bb3dd39b58652b46699e048559ef8a94919e"
+      }
+    },
+    {
+      "copy": {
+        "path": "~/i05_a0_out/trainlegacy/out/results/20260924T101258Z_3c46f37-fd7889ff/raw/01-tcga_uni2_img_1536text_768rna_256_NPJC_LUAD_surv_results.json",
+        "sha256": "b55a0df3780163e86bfd5789ae65d80113db832e485209681f148a4d1a60262e"
+      },
+      "source": {
+        "path": "~/i05_a0_out/trainlegacy/out/213/tcga_uni2_img_1536text_768rna_256_NPJC_LUAD_surv_results.json",
+        "sha256": "b55a0df3780163e86bfd5789ae65d80113db832e485209681f148a4d1a60262e"
+      }
+    }
+  ],
+  "checkpoint": {
+    "path": "~/i05_a0_out/trainlegacy/out/213/tcga_uni2_img_1536text_768rna_256_NPJC_LUAD_surv.pth",
+    "sha256": "5f8b4cef7a89d1907d9cdc85bb33a2bd54b988dc83557bd3754b6c798c8a3627"
+  },
+  "finished_at_utc": "2026-09-24T10:13:56.389966+00:00",
+  "metrics": {
+    "LUAD_c-index": 0.5795015795015795,
+    "c-index": 0.5795015795015795,
+    "loss": 0.6755855083465576
+  },
+  "status": "complete"
+}

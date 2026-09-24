@@ -215,10 +215,17 @@ def test_render_bcmbert8192_template_without_results(config, baseline):
 A0_DOC_DIR = REPO_ROOT / 'manuscript/消融实验/2.innovation-secode-part- Encoder/5.如何修补BioClinical-ModernBERT.md'
 
 
+A0_LEDGER_TEST = (REPO_ROOT / 'experiments/BioClinical ModernBERT/results/i05-a0-20260924/evidence'
+                  / 'formal_eval/runs/test/complete.json')
+
+
 def test_a0_documents_are_script_output(config, baseline):
-    """第 5 号目录（A0）的三份结果文件必须是脚本的 bcmbert8192 输出（结果产出前为模板）。"""
+    """第 5 号目录（A0）与账本的三份结果文件必须等于脚本从账本原始 JSON 的 bcmbert8192 渲染（参考臂：轮 C bcmbert200）。"""
     values, meta = baseline
-    rendered = render.render_all(config, values, None, meta, None, profile='bcmbert8192')
+    new, new_meta = render.load_new(A0_LEDGER_TEST, config, 'bcmbert8192')
+    references = {'bcmbert200': render.load_reference(LEDGER_200, config, 'bcmbert200')}
+    rendered = render.render_all(config, values, new, meta, new_meta, profile='bcmbert8192', references=references)
     for name, text in rendered.items():
         assert (A0_DOC_DIR / name).read_text(encoding='utf-8') == text, f'{name} 与脚本输出不一致'
+        assert (A0_LEDGER_TEST.parents[4] / name).read_text(encoding='utf-8') == text, f'账本 {name} 与脚本输出不一致'
 
