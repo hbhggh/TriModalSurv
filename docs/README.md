@@ -7,7 +7,7 @@
 | 路径 | 用途 |
 |---|---|
 | [project-structure.md](project-structure.md) | 整个项目的目录结构与分类边界 |
-| [engineering/](engineering/) | 工程纪律与唯一[坑台账](engineering/pitfalls.md) |
+| [engineering/](engineering/) | 工程纪律与唯一[坑台账](engineering/pitfalls.md)；[landau 目录整理与路径映射](engineering/landau-path-map.md)（2026-09-24） |
 | [metrics/](metrics/) | 指标、风险计算口径等说明 |
 | [research-ideas/](research-ideas/) | 尚未落地的研究构想 |
 | [workflow/](workflow/) | 编辑器、文档编辑与知识整理方法 |
