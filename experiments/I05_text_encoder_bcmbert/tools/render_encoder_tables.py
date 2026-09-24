@@ -158,6 +158,20 @@ ENCODING_NOTES = {
 }
 
 
+# 重训方差口径（节点二 Codex 结果审查，2026-09-24）：bcmbert200 的文字保持轮 C 原样；
+# bcmbert8192 依据 legacytext-rerun 25/25 ckpt 与历史 E0 逐字节相同，只限定为"冻结环境下未观察到重跑漂移"。
+RETRAIN_NOTES = {
+    'bcmbert200': 'Δ 仍含重训方差。',
+    'bcmbert8192': '冻结环境下 legacytext-rerun 的 25 个重训 ckpt 与历史 E0 逐字节相同，未观察到重跑漂移。',
+}
+BOUNDARY_NOTES = {
+    'bcmbert200': 'Δ 同时包含 encoder 效应与重训方差；',
+    'bcmbert8192': ('冻结环境下 legacytext-rerun 25/25 重训 ckpt 与历史 E0 逐字节相同，未观察到重跑漂移，'
+                    '因此 Δ 可视为配对的单一 Text 管线变更；这不是"训练在任意环境下完全确定"的证明，'
+                    '且基线复用、LUAD 路由受已见 test 启发，Δ 仍属探索性结果；'),
+}
+
+
 def disclosure(config, base_meta, new_meta, *, profile='bcmbert200', label=NEW_LABEL, references=None) -> list:
     encoder = config['text_encoders'][profile]
     lines = ['## 口径与解释边界', '']
@@ -174,11 +188,11 @@ def disclosure(config, base_meta, new_meta, *, profile='bcmbert200', label=NEW_L
                  '在现行代码上按原配方重训；原型检索参数（λ=1、α=1、w=0.5）与 LUAD 路由冻结不变。')
     for ref_profile, (_, ref_meta) in (references or {}).items():
         lines.append(f"- **同代码对照（不进 Q）**：「{REFERENCE_LABELS[ref_profile]}」（指纹 `{ref_meta['run_fingerprint']}`）"
-                     f'与本臂{REFERENCE_DIFFERENCE[ref_profile]}；两臂 ckpt 均按同一配方重训，Δ 仍含重训方差。')
+                     f'与本臂{REFERENCE_DIFFERENCE[ref_profile]}；两臂 ckpt 均按同一配方重训，{RETRAIN_NOTES[profile]}')
     lines.append('- `none` 保留天然缺失，不是完整数据。只有 `none` 进入 Q 判定：Δ_c > 0 的癌种数达到 4/5 为达标，'
                  '平局不算胜；`rna_100`、`text_100`、`both_100` 只作附录。')
     lines.append('- 比较与标红按未舍入值；展示六位；Δ 先减后舍入；平局两臂同时标红。')
-    lines.append(f'- 解释边界：Δ 同时包含 encoder 效应与重训方差；只换了 Text，结论不支持"每个模态的 encoder 都更好"；'
+    lines.append(f'- 解释边界：{BOUNDARY_NOTES[profile]}只换了 Text，结论不支持"每个模态的 encoder 都更好"；'
                  f'none 下完整患者不走检索，Proto.† 在这些患者上等于基础模型；零效应下至少 4/5 严格胜出的偶然概率约 '
                  f'{chance_at_least(4) * 100:.1f}%。')
     lines.append('')

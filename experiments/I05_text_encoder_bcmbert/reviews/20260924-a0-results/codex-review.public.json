@@ -1,0 +1,91 @@
+{
+  "review": "Adversarial Review",
+  "target": {
+    "mode": "branch",
+    "label": "branch diff against 3c46f379095d4e83e3414492e60162c15bd1ee19",
+    "baseRef": "3c46f379095d4e83e3414492e60162c15bd1ee19",
+    "explicit": true
+  },
+  "threadId": "01a0d307-da67-7202-89e0-6e371b69641e",
+  "context": {
+    "repoRoot": "<仓库根>",
+    "branch": "dev",
+    "summary": "Reviewing branch dev against 3c46f379095d4e83e3414492e60162c15bd1ee19 from merge-base 3c46f379095d4e83e3414492e60162c15bd1ee19."
+  },
+  "codex": {
+    "status": 0,
+    "stderr": "",
+    "stdout": "{\"verdict\":\"needs-attention\",\"summary\":\"数值、Q=2/5、commit/tag、H→S tree 换绑、25 个 git.json、门记录哈希和脱敏证据 manifest 均可核；但核心解释口径自相矛盾，暂不应入账定稿。\",\"findings\":[{\"severity\":\"medium\",\"title\":\"同一结果被同时解释为“含重训方差”和“纯 Text 管线效应”\",\"body\":\"本结果表第 12、15 行明确称 A0−bcmbert200 及总体 Δ 仍含重训方差；但 STATUS.md:511 和研究计划书第 154、168 行又依据 legacytext-rerun 的 25/25 checkpoint 相同，宣称训练完全确定、重训方差为 0，并把轮 C/A0 相对 Table 1 的 Δ 定性为纯 Text 管线效应。两种解释不能同时成立。checkpoint 逐字节相同只直接证明冻结环境下这 25 个 legacy 配对重跑未观察到漂移；结合报告第 9 行已披露的 test 启发路由，也不能无边界升级为一般性的“完全确定”或确认性因果结论。当前矛盾会让论文引用同一数字时得到相反的混杂判断。\",\"file\":\"experiments/BioClinical ModernBERT/results/i05-a0-20260924/癌症为单位.md\",\"line_start\":9,\"line_end\":15,\"confidence\":0.99,\"recommendation\":\"统一所有结果副本与 STATUS/计划书：限定为“冻结环境下 legacytext-rerun 25/25 未观察到重跑漂移”；A0 对比属于配对、单管线变更但仍是复用且受 test 启发路由影响的探索性结果。修改渲染器后重新生成三份账本表和论文目录副本，并让一致性测试覆盖这段解释文字。\"}],\"next_steps\":[\"修正解释边界并重新生成结果表；无需重训或扩大实验。\"]}",
+    "reasoning": [
+      "**Reviewing code inspection requirements**",
+      "**Reviewing full requirements carefully**",
+      "**Managing large document retrieval**",
+      "**Inspecting key files and git status**",
+      "**Checking branch inconsistencies**",
+      "**Analyzing retraining variance claims**",
+      "**Verifying model evaluation claims**",
+      "**Determining data validation approach**",
+      "**Verifying file hashes**",
+      "**Investigating candidate duplication**",
+      "**Analyzing local verification challenges**",
+      "**Comparing legacy and checkpoint lists**",
+      "**Analyzing deterministic training claims**",
+      "**Evaluating training data and variance claims**",
+      "**Analyzing test set leakage and bias**",
+      "**Verifying test data and checkpoint consistency**",
+      "**Handling sandbox write limitations**",
+      "**Identifying provenance inconsistency**",
+      "**Analyzing evidence paths and test discrepancies**",
+      "**Evaluating determinism claims and data provenance**",
+      "**Identifying documentation contradictions**",
+      "**Analyzing inconsistency in causal claims**",
+      "**Assessing test leakage and determinism**"
+    ]
+  },
+  "result": {
+    "verdict": "needs-attention",
+    "summary": "数值、Q=2/5、commit/tag、H→S tree 换绑、25 个 git.json、门记录哈希和脱敏证据 manifest 均可核；但核心解释口径自相矛盾，暂不应入账定稿。",
+    "findings": [
+      {
+        "severity": "medium",
+        "title": "同一结果被同时解释为“含重训方差”和“纯 Text 管线效应”",
+        "body": "本结果表第 12、15 行明确称 A0−bcmbert200 及总体 Δ 仍含重训方差；但 STATUS.md:511 和研究计划书第 154、168 行又依据 legacytext-rerun 的 25/25 checkpoint 相同，宣称训练完全确定、重训方差为 0，并把轮 C/A0 相对 Table 1 的 Δ 定性为纯 Text 管线效应。两种解释不能同时成立。checkpoint 逐字节相同只直接证明冻结环境下这 25 个 legacy 配对重跑未观察到漂移；结合报告第 9 行已披露的 test 启发路由，也不能无边界升级为一般性的“完全确定”或确认性因果结论。当前矛盾会让论文引用同一数字时得到相反的混杂判断。",
+        "file": "experiments/BioClinical ModernBERT/results/i05-a0-20260924/癌症为单位.md",
+        "line_start": 9,
+        "line_end": 15,
+        "confidence": 0.99,
+        "recommendation": "统一所有结果副本与 STATUS/计划书：限定为“冻结环境下 legacytext-rerun 25/25 未观察到重跑漂移”；A0 对比属于配对、单管线变更但仍是复用且受 test 启发路由影响的探索性结果。修改渲染器后重新生成三份账本表和论文目录副本，并让一致性测试覆盖这段解释文字。"
+      }
+    ],
+    "next_steps": [
+      "修正解释边界并重新生成结果表；无需重训或扩大实验。"
+    ]
+  },
+  "rawOutput": "{\"verdict\":\"needs-attention\",\"summary\":\"数值、Q=2/5、commit/tag、H→S tree 换绑、25 个 git.json、门记录哈希和脱敏证据 manifest 均可核；但核心解释口径自相矛盾，暂不应入账定稿。\",\"findings\":[{\"severity\":\"medium\",\"title\":\"同一结果被同时解释为“含重训方差”和“纯 Text 管线效应”\",\"body\":\"本结果表第 12、15 行明确称 A0−bcmbert200 及总体 Δ 仍含重训方差；但 STATUS.md:511 和研究计划书第 154、168 行又依据 legacytext-rerun 的 25/25 checkpoint 相同，宣称训练完全确定、重训方差为 0，并把轮 C/A0 相对 Table 1 的 Δ 定性为纯 Text 管线效应。两种解释不能同时成立。checkpoint 逐字节相同只直接证明冻结环境下这 25 个 legacy 配对重跑未观察到漂移；结合报告第 9 行已披露的 test 启发路由，也不能无边界升级为一般性的“完全确定”或确认性因果结论。当前矛盾会让论文引用同一数字时得到相反的混杂判断。\",\"file\":\"experiments/BioClinical ModernBERT/results/i05-a0-20260924/癌症为单位.md\",\"line_start\":9,\"line_end\":15,\"confidence\":0.99,\"recommendation\":\"统一所有结果副本与 STATUS/计划书：限定为“冻结环境下 legacytext-rerun 25/25 未观察到重跑漂移”；A0 对比属于配对、单管线变更但仍是复用且受 test 启发路由影响的探索性结果。修改渲染器后重新生成三份账本表和论文目录副本，并让一致性测试覆盖这段解释文字。\"}],\"next_steps\":[\"修正解释边界并重新生成结果表；无需重训或扩大实验。\"]}",
+  "parseError": null,
+  "reasoningSummary": [
+    "**Reviewing code inspection requirements**",
+    "**Reviewing full requirements carefully**",
+    "**Managing large document retrieval**",
+    "**Inspecting key files and git status**",
+    "**Checking branch inconsistencies**",
+    "**Analyzing retraining variance claims**",
+    "**Verifying model evaluation claims**",
+    "**Determining data validation approach**",
+    "**Verifying file hashes**",
+    "**Investigating candidate duplication**",
+    "**Analyzing local verification challenges**",
+    "**Comparing legacy and checkpoint lists**",
+    "**Analyzing deterministic training claims**",
+    "**Evaluating training data and variance claims**",
+    "**Analyzing test set leakage and bias**",
+    "**Verifying test data and checkpoint consistency**",
+    "**Handling sandbox write limitations**",
+    "**Identifying provenance inconsistency**",
+    "**Analyzing evidence paths and test discrepancies**",
+    "**Evaluating determinism claims and data provenance**",
+    "**Identifying documentation contradictions**",
+    "**Analyzing inconsistency in causal claims**",
+    "**Assessing test leakage and determinism**"
+  ]
+}

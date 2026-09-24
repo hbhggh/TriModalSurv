@@ -228,4 +228,7 @@ def test_a0_documents_are_script_output(config, baseline):
     for name, text in rendered.items():
         assert (A0_DOC_DIR / name).read_text(encoding='utf-8') == text, f'{name} 与脚本输出不一致'
         assert (A0_LEDGER_TEST.parents[4] / name).read_text(encoding='utf-8') == text, f'账本 {name} 与脚本输出不一致'
+    # 节点二审查：A0 只能说“冻结环境下未观察到重跑漂移”，不得再写“仍含重训方差”，也不得声称训练完全确定
+    for name in ('癌症为单位.md', 'seed单位-实验结果.md'):
+        assert '未观察到重跑漂移' in rendered[name] and '重训方差' not in rendered[name]
 

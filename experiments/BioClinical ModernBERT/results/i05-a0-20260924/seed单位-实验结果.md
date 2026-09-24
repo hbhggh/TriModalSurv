@@ -9,10 +9,10 @@
 - **现有系统**：`experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/4.progress/runs/test/complete.json` 的 strategy0 行，即论文 Table 1 的 Proto.†（test 指纹 `a825b3cc4df41cf56afe228be531a4fc13f69c520bf35a2f2305101652387ec2`）。非 LUAD 为 2.progress 冻结组合，LUAD 为 S0-force 强制路由；该路由受已见 test 启发，存在 test 泄漏，属探索性结果。
 - **我们提出来的 Encoder（全文 ≤8192）**：I05 `bcmbert8192` 档案的 test 运行（指纹 `00cb562a2d25d70fbbeccc26c5dd7f9d6fff05ae26215b045d5f7bb74ac23599`）。
 - 本实验只换 Text：`NeuML/bioclinical-modernbert-base-embeddings`@`048ad449`，冻结，不截断（全文 ≤ 8192 token，逐份单样本、不补齐），有效 token 均值广播到 200 行（A0）；WSI（UNI2-h）与 RNA（自制 BulkRNABert）不变。25 个 ckpt 在现行代码上按原配方重训；原型检索参数（λ=1、α=1、w=0.5）与 LUAD 路由冻结不变。
-- **同代码对照（不进 Q）**：「轮 C：bcmbert200（同配方重训，前 200 token）」（指纹 `32c00422128dfc7d307a83c485da882081f17a2c1d3a67070a5f4333f0e732c6`）与本臂唯一差别是上下文长度（前 200 token vs 全文）；两臂 ckpt 均按同一配方重训，Δ 仍含重训方差。
+- **同代码对照（不进 Q）**：「轮 C：bcmbert200（同配方重训，前 200 token）」（指纹 `32c00422128dfc7d307a83c485da882081f17a2c1d3a67070a5f4333f0e732c6`）与本臂唯一差别是上下文长度（前 200 token vs 全文）；两臂 ckpt 均按同一配方重训，冻结环境下 legacytext-rerun 的 25 个重训 ckpt 与历史 E0 逐字节相同，未观察到重跑漂移。
 - `none` 保留天然缺失，不是完整数据。只有 `none` 进入 Q 判定：Δ_c > 0 的癌种数达到 4/5 为达标，平局不算胜；`rna_100`、`text_100`、`both_100` 只作附录。
 - 比较与标红按未舍入值；展示六位；Δ 先减后舍入；平局两臂同时标红。
-- 解释边界：Δ 同时包含 encoder 效应与重训方差；只换了 Text，结论不支持"每个模态的 encoder 都更好"；none 下完整患者不走检索，Proto.† 在这些患者上等于基础模型；零效应下至少 4/5 严格胜出的偶然概率约 18.8%。
+- 解释边界：冻结环境下 legacytext-rerun 25/25 重训 ckpt 与历史 E0 逐字节相同，未观察到重跑漂移，因此 Δ 可视为配对的单一 Text 管线变更；这不是"训练在任意环境下完全确定"的证明，且基线复用、LUAD 路由受已见 test 启发，Δ 仍属探索性结果；只换了 Text，结论不支持"每个模态的 encoder 都更好"；none 下完整患者不走检索，Proto.† 在这些患者上等于基础模型；零效应下至少 4/5 严格胜出的偶然概率约 18.8%。
 
 ## 按 seed 展开
 

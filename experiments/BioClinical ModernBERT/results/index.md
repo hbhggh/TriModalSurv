@@ -10,7 +10,7 @@
 |---|---|---|---|---|
 | [`i05-bcmbert200-20260924d`](i05-bcmbert200-20260924d/encoder-table.md) | test（Phase 4）| bcmbert200 | **negative**（Q 未达标；用户 2026-09-24 裁决收官） | none 下严格胜 **2/5**（BLCA +0.004892、LUAD +0.012390）；LGG −0.053623、BRCA −0.033292、UCEC −0.016292。冻结 commit `6631662`（tag `run/i05-bcmbert200-20260924d`），训练与推理均在 tako |
 | [`i05-a0-20260924`](i05-a0-20260924/encoder-table.md) | test（第二轮 A0）| bcmbert8192 | **negative**（Q 未达标；待用户裁决） | none 下严格胜 **2/5**（BLCA +0.006107、LUAD +0.014180）；LGG −0.078951、BRCA −0.033837、UCEC −0.014200。相对轮 C bcmbert200 严格胜 3/5（信息性）。冻结 commit `3c46f37`（tag `run/i05-a0-20260924`，在 main 上），训练与推理均在 tako |
-| `i05-a0-20260924`（同一 run，对照臂） | 第二轮 | legacytext-rerun | **未评测**（用户裁决记为发现） | 25 个重训 ckpt 与历史 E0 **逐字节相同**（25/25 sha256 相等，`i05-a0-20260924/checkpoint-sha256-legacytext-rerun.txt`）：现行代码训练完全确定性，重训方差为 0；加上回放 IDENTICAL，此臂 test 结果必然等于 Table 1。preflight 按“仍是历史 E0 权重”门拒绝（设计行为） |
+| `i05-a0-20260924`（同一 run，对照臂） | 第二轮 | legacytext-rerun | **未评测**（用户裁决记为发现） | 25 个重训 ckpt 与历史 E0 **逐字节相同**（25/25 sha256 相等，`i05-a0-20260924/checkpoint-sha256-legacytext-rerun.txt`）：冻结环境下未观察到重跑漂移；加上回放 IDENTICAL，此臂 test 结果必然等于 Table 1（节点二审查：不推广为“训练在任意环境下完全确定”）。preflight 按“仍是历史 E0 权重”门拒绝（设计行为） |
 
 结果要进论文，必须满足：`git.json` 与账本里的 commit 在 main 上、`dirty=0`、有对应的 `run/<run_id>` tag（AGENTS.md「Git 工作流」第 9 条）。本 run 满足：25 个训练记录 commit = `663166247783`、dirty=false，tag `run/i05-bcmbert200-20260924d` 存在。
 
