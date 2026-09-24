@@ -1,4 +1,4 @@
-# I02_population_prototypes
+# I02_population_prototypes（k=8）
 
 编码后 WSI 聚类，配对 RNA/Text 簇均值，仅验证/推理补偿。训练后每轮全 train 建库，严格早停并重载最佳模型和库。
 
