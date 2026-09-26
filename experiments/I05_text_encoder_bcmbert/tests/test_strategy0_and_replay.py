@@ -142,11 +142,14 @@ def test_test_gates(tmp_path):
     def good_approval():
         return {'authority': 'user', 'decision': 'APPROVE_FORMAL_TEST', 'stage': 'test', 'protocol_id': protocol,
                 'source_hashes_sha256': digest, 'commit': commit,
-                'review_record_sha256': evaluate.sha256_file(review), 'approved_at': '2026-09-24T10:00:00+08:00'}
+                'review_record_sha256': evaluate.sha256_file(review), 'checkpoints_sha256': 'k' * 64,
+                'assets_lock_sha256': 'l' * 64, 'runtime_sha256': 'r' * 64,
+                'approved_at': '2026-09-24T10:00:00+08:00'}
 
     approval.write_text(json.dumps(good_approval()))
     kwargs = dict(replay_record=replay, review_record=review, approval_record=approval, source_digest=digest,
-                  protocol_id=protocol, commit=commit)
+                  protocol_id=protocol, commit=commit, checkpoints_digest='k' * 64, assets_lock_sha256='l' * 64,
+                  runtime_sha256='r' * 64)
     assert set(evaluate.check_test_gates(**kwargs)) == {'replay_record_sha256', 'review_record_sha256',
                                                         'rebind_record_sha256', 'user_approval_sha256'}
     for field, value in (('reviewer', 'Claude'), ('decision', 'CONCERNS'), ('source_hashes_sha256', 'b' * 64),
@@ -162,7 +165,9 @@ def test_test_gates(tmp_path):
     # 结构化授权：任一字段不属于本轮（含旧审查记录的哈希、缺审批时间）都拒绝。
     for field, value in (('authority', 'claude'), ('decision', 'APPROVE'), ('stage', 'smoke'),
                          ('protocol_id', 'other'), ('source_hashes_sha256', 'b' * 64), ('commit', 'd' * 40),
-                         ('review_record_sha256', '0' * 64), ('approved_at', '  ')):
+                         ('review_record_sha256', '0' * 64), ('approved_at', '  '),
+                         ('checkpoints_sha256', 'm' * 64), ('assets_lock_sha256', 'n' * 64),
+                         ('runtime_sha256', 's' * 64)):
         approval.write_text(json.dumps({**good_approval(), field: value}))
         with pytest.raises(ValueError, match='用户授权记录'):
             evaluate.check_test_gates(**kwargs)
@@ -171,6 +176,10 @@ def test_test_gates(tmp_path):
         evaluate.check_test_gates(**kwargs)
     approval.write_text(json.dumps(good_approval()))
     assert evaluate.check_test_gates(**kwargs)
+    for other in ({'checkpoints_digest': 'm' * 64}, {'assets_lock_sha256': None},  # 另一套 ckpt 复用旧授权
+                  {'runtime_sha256': 's' * 64}):                                    # 换一套 runtime 复用旧授权
+        with pytest.raises(ValueError, match='用户授权记录'):
+            evaluate.check_test_gates(**{**kwargs, **other})
     with pytest.raises(ValueError):
         evaluate.check_test_gates(**{**kwargs, 'review_record': None})
     rebind = tmp_path / 'rebind.json'
@@ -195,11 +204,12 @@ def test_test_gates_review_on_candidate_needs_tree_rebind(tmp_path):
     def good_approval():
         return {'authority': 'user', 'decision': 'APPROVE_FORMAL_TEST', 'stage': 'test', 'protocol_id': protocol,
                 'source_hashes_sha256': digest, 'commit': frozen, 'review_record_sha256': evaluate.sha256_file(review),
-                'rebind_record_sha256': evaluate.sha256_file(rebind), 'approved_at': '2026-09-24T10:00:00+08:00'}
+                'rebind_record_sha256': evaluate.sha256_file(rebind), 'checkpoints_sha256': 'k' * 64,
+                'assets_lock_sha256': None, 'approved_at': '2026-09-24T10:00:00+08:00'}
 
     approval.write_text(json.dumps(good_approval()))
     kwargs = dict(replay_record=replay, review_record=review, approval_record=approval, source_digest=digest,
-                  protocol_id=protocol, commit=frozen)
+                  protocol_id=protocol, commit=frozen, checkpoints_digest='k' * 64)
     gates = evaluate.check_test_gates(**kwargs, rebind_record=rebind)
     assert gates['rebind_record_sha256'] == evaluate.sha256_file(rebind)
     with pytest.raises(ValueError, match='review-rebind-record'):  # H≠S 而没有换绑记录
@@ -271,6 +281,10 @@ def test_argument_rules(config):
                  ['--profile', 'bcmbert200', '--stage', 'preflight']):
         with pytest.raises(ValueError):
             evaluate._validate_args(parse(argv + base), config)
+    for flag, value in (('--retrieval-backend', 'reference'), ('--batch-size', '8'), ('--cpu-threads', '2')):
+        with pytest.raises(ValueError, match='runtime 覆盖'):  # round2 R1：test 只用锁定 runtime
+            evaluate._validate_args(parse(['--profile', 'a1struct', '--stage', 'test', '--checkpoint-root', '/c',
+                                           '--gpu-id', '0', flag, value] + base), config)
     cancers, seeds = evaluate._validate_args(parse(['--profile', 'bcmbert200', '--stage', 'smoke', '--checkpoint-root',
                                                     '/c', '--cancers', 'LUAD', '--seeds', '123', '--gpu-id', '0']
                                                    + base), config)

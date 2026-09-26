@@ -1,0 +1,11 @@
+# I06 冒烟清单（NeuML + LLM 摘要（A1-Z））：1 个 run，只判通/不崩（坑 V21），结果不进正式表。
+# 必须使用与正式训练不同的 --result-path 与 --state-file；冒烟通过即停（AGENTS.md 停机门）。
+runs:
+  - name: e0_a1summ_smoke_BLCA_s123
+    arm: e0_a1summ_smoke
+    network_type: NPJC
+    compensator: none
+    cancer: BLCA
+    seed: 123
+    bin_mode: author
+    extra_args: --skip_test

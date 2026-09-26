@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "experiment": "I06_llm_condensation",
+  "plan": "manuscript/消融实验/2.innovation-secode-part- Encoder/6.LLM浓缩-A1/研究计划书-A1-LLM浓缩.md",
+  "cancers": ["BLCA", "BRCA", "LGG", "LUAD", "UCEC"],
+  "display_cancer_order": ["BRCA", "UCEC", "LUAD", "BLCA", "LGG"],
+  "splits": ["train", "valid", "test"],
+  "seeds": [123, 132, 213, 231, 321],
+  "grids": ["none", "rna_100", "text_100", "both_100"],
+  "arms": ["struct", "summary"],
+  "candidates": {
+    "A1-S": {"encoder": "neuml", "arm": "struct", "profile": "a1struct"},
+    "A1-Z": {"encoder": "neuml", "arm": "summary", "profile": "a1summ"},
+    "A2-S": {"encoder": "qwen3", "arm": "struct", "profile": "a2struct"},
+    "A2-Z": {"encoder": "qwen3", "arm": "summary", "profile": "a2summ"}
+  },
+  "candidate_tie_order": ["A1-S", "A1-Z", "A2-S", "A2-Z"],
+  "b1_feature_manifest": {
+    "path": "experiments/BioClinical ModernBERT/results/i05-bcmbert200-20260924d/evidence/feature-manifest.json",
+    "sha256": "ce0a979d2bf610bbc032ff74bc64e7efd20bb24aaab0e7e5b61440437eb9ccc6"
+  },
+  "labels": {
+    "file_name": "TCGA_9523_ex12.csv",
+    "sha256": "35c2865914d1e32f077ab470d299fc712d4f5fb2e63059f6bf8a68694a347e2f",
+    "text_column": "text"
+  },
+  "export_columns": ["patient_id", "cancer", "split", "text", "text_sha256"],
+  "llm": {
+    "provider": "anthropic",
+    "model": "claude-opus-5-5",
+    "fallback_model": null,
+    "effort": "high",
+    "max_output_tokens": 16000,
+    "max_regenerations": 2,
+    "refusal_retries": 1,
+    "fallbacks_enabled": false
+  },
+  "length": {"max_neuml_tokens": 8192, "length_retries": 3, "pilot_summary_words": 120},
+  "fallback_cap": 0.02,
+  "pilot": {"split": "train", "per_cancer": 10, "seed": 20260926},
+  "verify": {
+    "audit_per_arm": 40, "human_check_negatives": 10,
+    "audit_seed": 20260926,
+    "prognostic_terms": ["favorable", "favourable", "unfavorable", "poor prognosis", "good prognosis",
+                         "prognosis", "aggressive", "high risk", "high-risk", "low risk", "low-risk",
+                         "survival", "life expectancy", "curable", "incurable"]
+  },
+  "prompts": {
+    "system": "prompts/system.txt",
+    "struct_user": "prompts/struct_user.txt",
+    "summary_user": "prompts/summary_user.txt",
+    "length_retry": "prompts/length_retry.txt"
+  },
+  "table1_proto": {
+    "source": "manuscript/bmc_initial_draft/main.tex tab:prototype-compensation 的 Proto. 列（test，五 seed 均值）；Overall = 四场景等权平均",
+    "overall": {"BRCA": 0.667270, "UCEC": 0.630369, "LUAD": 0.587039, "BLCA": 0.578982, "LGG": 0.738872}
+  }
+}

@@ -61,12 +61,67 @@ class EncoderSpec:
 LOCKED_SPECS = {
     'bcmbert200': EncoderSpec(),
     'bcmbert8192': EncoderSpec(max_length=8192, padding='longest', truncation=False),
+    # I06 A1（用户裁决 2026-09-26，v3.12 解开 200 上限）：规格与 bcmbert8192（B2）逐项相同——全长不截断、逐份单样本，
+    # 只把文本来源换成 LLM 浓缩后冻结的文本；A1 与 B2 的唯一差别是文本内容
+    'a1struct': EncoderSpec(max_length=8192, padding='longest', truncation=False),
+    'a1summ': EncoderSpec(max_length=8192, padding='longest', truncation=False),
 }
-LOCKED_BATCH_SIZE = {'bcmbert200': 16, 'bcmbert8192': 1}
+LOCKED_BATCH_SIZE = {'bcmbert200': 16, 'bcmbert8192': 1, 'a1struct': 1, 'a1summ': 1,
+                     'a2struct': 1, 'a2summ': 1}
+
+# I06 A2（用户裁决 2026-09-26）：冻结的 Qwen3-Embedding-0.6B。官方模型卡（2026-09-26 核对）：
+# 默认 1024 维、支持 32–1024 自定义维度（MRL），last-token 池化，Apache 2.0，需 transformers ≥ 4.51。
+QWEN_MODEL_ID = 'Qwen/Qwen3-Embedding-0.6B'
+QWEN_REVISION = '97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3'
+QWEN_MIN_TRANSFORMERS = (4, 51, 0)
+QWEN_PAD_ROWS = 'last_token_mrl_l2_broadcast'
 
 
-def spec_from_config(config: dict, profile: str) -> EncoderSpec:
+@dataclass(frozen=True)
+class QwenSpec:
+    """Qwen 编码的全部可变项：逐份单样本（不补齐、不截断），取最后一个 token，截前 output_dim 维后 L2 归一化。"""
+
+    model_id: str = QWEN_MODEL_ID
+    revision: str = QWEN_REVISION
+    max_length: int = 512
+    hidden_size: int = 1024
+    output_dim: int = HIDDEN_SIZE
+    attn_implementation: str = ATTN_IMPLEMENTATION
+    padding: str = 'none'
+    truncation: bool = False
+    pooling: str = 'last_token'
+    normalize: bool = True
+
+    def as_dict(self) -> dict:
+        return asdict(self)
+
+
+LOCKED_QWEN_SPECS = {'a2struct': QwenSpec(max_length=8192), 'a2summ': QwenSpec(max_length=8192)}  # v3.12：全长不截断
+ALL_PROFILES = tuple(LOCKED_SPECS) + tuple(LOCKED_QWEN_SPECS)
+
+
+def _qwen_spec_from_config(config: dict, profile: str) -> QwenSpec:
+    section = config['text_encoders'][profile]
+    spec = QwenSpec(model_id=section['model_id'], revision=section['revision'], max_length=int(section['max_length']),
+                    hidden_size=int(section['hidden_size']), output_dim=int(section['output_dim']),
+                    attn_implementation=section['attn_implementation'], padding=section['padding'],
+                    truncation=bool(section['truncation']), pooling=section['pooling'],
+                    normalize=bool(section['normalize']))
+    if spec != LOCKED_QWEN_SPECS[profile]:
+        raise ValueError(f'config.text_encoders.{profile} 与 model.py 锁定值不一致: {spec} != {LOCKED_QWEN_SPECS[profile]}')
+    if section.get('pad_rows') != QWEN_PAD_ROWS:
+        raise ValueError(f'{profile} 的 pad_rows 必须是 {QWEN_PAD_ROWS!r}')
+    if int(section.get('batch_size', -1)) != LOCKED_BATCH_SIZE[profile]:
+        raise ValueError(f'{profile} 的 batch_size 必须是 {LOCKED_BATCH_SIZE[profile]}')
+    if list(config['shapes']['text']) != [SLOT_ROWS, spec.output_dim]:
+        raise ValueError(f"config.shapes.text {config['shapes']['text']} 与槽位 [{SLOT_ROWS}, {spec.output_dim}] 不符")
+    return spec
+
+
+def spec_from_config(config: dict, profile: str):
     """从 I05 config 读取某个档案的编码器设置，并要求与本模块的锁表逐项相同。"""
+    if profile in LOCKED_QWEN_SPECS:
+        return _qwen_spec_from_config(config, profile)
     if profile not in LOCKED_SPECS:
         raise ValueError(f'未知的特征档案 {profile!r}；可选 {sorted(LOCKED_SPECS)}')
     section = config['text_encoders'][profile]
@@ -227,6 +282,101 @@ def load_backend(spec: EncoderSpec = EncoderSpec(), *, device: str = 'cpu', cach
     return tokenizer, model, snapshot
 
 
+def last_token_mrl_l2(hidden, *, output_dim: int) -> np.ndarray:
+    """单样本（不补齐）的 last-token 池化：取最后一个 token 的隐状态，截前 output_dim 维（MRL），L2 归一化。"""
+    h = np.asarray(hidden)
+    if h.ndim != 3 or h.shape[0] != 1:
+        raise ValueError(f'last-token 池化只接受单样本 hidden [1, L, H]，实际 {h.shape}')
+    if h.shape[2] < output_dim:
+        raise ValueError(f'hidden 维度 {h.shape[2]} < output_dim {output_dim}')
+    vector = h[0, -1, :output_dim].astype(np.float64)
+    norm = float(np.linalg.norm(vector))
+    if not np.isfinite(norm) or norm == 0.0:
+        raise ValueError('last-token 向量范数为 0 或非有限')
+    return (vector / norm).astype(np.float32)
+
+
+class QwenTextEncoder:
+    """冻结 Qwen3-Embedding：逐份单样本编码（无补齐、不截断），last-token → 截 768 维 → L2 归一化 → 广播 200 行。"""
+
+    def __init__(self, tokenizer, model, *, spec: QwenSpec = QwenSpec(), device: str = 'cpu', rows: int = SLOT_ROWS):
+        self.tokenizer, self.model, self.spec = tokenizer, model, spec
+        self.device, self.rows = device, int(rows)
+        if hasattr(self.model, 'eval'):
+            self.model.eval()
+
+    def token_lengths(self, texts: Sequence[str]) -> list[int]:
+        return [len(self.tokenizer([text], truncation=False, padding=False)['input_ids'][0]) for text in texts]
+
+    def encode_with_counts(self, texts: Sequence[str]) -> tuple[list[np.ndarray], list[int]]:
+        import torch
+
+        results, counts = [], []
+        for index, text in enumerate(texts):
+            if not isinstance(text, str) or not text.strip():
+                raise ValueError('报告文本必须是非空字符串')
+            encoded = self.tokenizer([text], truncation=False, padding=False, return_tensors='pt')
+            ids, mask = encoded['input_ids'], encoded['attention_mask']
+            if ids.ndim != 2 or ids.shape[0] != 1 or not bool(mask.all()):
+                raise ValueError('Qwen 编码必须是单样本且无补齐')
+            if ids.shape[1] > self.spec.max_length:
+                raise ValueError(f'文本长 {ids.shape[1]} token，超过上限 {self.spec.max_length}，拒绝截断')
+            with torch.inference_mode():
+                output = self.model(input_ids=ids.to(self.device), attention_mask=mask.to(self.device))
+            hidden = output.last_hidden_state if hasattr(output, 'last_hidden_state') else output[0]
+            hidden = hidden.detach().to('cpu', dtype=torch.float32).numpy()
+            if hidden.shape != (1, ids.shape[1], self.spec.hidden_size):
+                raise ValueError(f'last_hidden_state 形状 {hidden.shape} 不符')
+            vector = last_token_mrl_l2(hidden, output_dim=self.spec.output_dim)
+            feature = np.ascontiguousarray(np.repeat(vector[None, :], self.rows, axis=0))
+            check_feature(feature, context=f'item{index}', rows=self.rows, hidden_size=self.spec.output_dim)
+            results.append(feature)
+            counts.append(int(ids.shape[1]))
+        return results, counts
+
+    def encode(self, texts: Sequence[str]) -> list[np.ndarray]:
+        return self.encode_with_counts(texts)[0]
+
+
+def load_qwen_backend(spec: QwenSpec = QwenSpec(), *, device: str = 'cpu', cache_dir: str | None = None,
+                      local_files_only: bool = False):
+    """按锁定的 revision 读取 Qwen3-Embedding 快照，返回 (tokenizer, model, snapshot_dir)；FP32 推理、冻结参数。"""
+    import torch
+    import transformers
+    from huggingface_hub import snapshot_download
+
+    version = tuple(int(''.join(ch for ch in piece if ch.isdigit()) or 0)
+                    for piece in (transformers.__version__.split('.') + ['0', '0'])[:3])
+    if version < QWEN_MIN_TRANSFORMERS:
+        raise RuntimeError(f'transformers {transformers.__version__} 低于 Qwen3 要求的 4.51.0（需单独环境）')
+    snapshot = Path(snapshot_download(repo_id=spec.model_id, revision=spec.revision, cache_dir=cache_dir,
+                                      local_files_only=local_files_only))
+    if snapshot.name != spec.revision:
+        raise RuntimeError(f'下载到的快照 {snapshot.name} 不是锁定的 revision {spec.revision}')
+    tokenizer = transformers.AutoTokenizer.from_pretrained(str(snapshot))
+    model = transformers.AutoModel.from_pretrained(str(snapshot), torch_dtype=torch.float32,
+                                                   attn_implementation=spec.attn_implementation)
+    if int(model.config.hidden_size) != spec.hidden_size:
+        raise RuntimeError(f'hidden_size {model.config.hidden_size} != {spec.hidden_size}')
+    model.to(device)
+    model.eval()
+    for parameter in model.parameters():
+        parameter.requires_grad_(False)
+    return tokenizer, model, snapshot
+
+
+def build_encoder(profile: str, spec, tokenizer, model, *, device: str, batch_size: int):
+    """按档案类型构造编码器：NeuML 档案用 FrozenTextEncoder，Qwen 档案用 QwenTextEncoder。"""
+    if profile in LOCKED_QWEN_SPECS:
+        return QwenTextEncoder(tokenizer, model, spec=spec, device=device, rows=SLOT_ROWS)
+    return FrozenTextEncoder(tokenizer, model, spec=spec, device=device, batch_size=batch_size, rows=SLOT_ROWS)
+
+
+def output_dim(spec) -> int:
+    return spec.output_dim if isinstance(spec, QwenSpec) else spec.hidden_size
+
+
 __all__ = ['MODEL_ID', 'REVISION', 'BASE_MODEL_ID', 'MAX_LENGTH', 'SLOT_ROWS', 'HIDDEN_SIZE', 'EncoderSpec',
            'LOCKED_SPECS', 'LOCKED_BATCH_SIZE', 'spec_from_config', 'masked_mean_broadcast', 'check_feature', 'transformers_version_ok',
-           'FrozenTextEncoder', 'load_backend']
+           'FrozenTextEncoder', 'load_backend', 'QwenSpec', 'LOCKED_QWEN_SPECS', 'ALL_PROFILES', 'QwenTextEncoder',
+           'load_qwen_backend', 'last_token_mrl_l2', 'build_encoder', 'output_dim']

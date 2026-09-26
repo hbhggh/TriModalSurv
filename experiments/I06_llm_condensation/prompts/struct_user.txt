@@ -1,0 +1,6 @@
+Cancer type: {cancer_name}.
+Fill every field of the JSON schema from the pathology report below. For each field, write the value as stated in the report. If the report does not mention a field, write "not mentioned". For marker/result lists, return an empty list when nothing is reported.
+
+<report>
+{report}
+</report>

@@ -1,0 +1,95 @@
+{
+  "review": "Adversarial Review",
+  "target": {
+    "mode": "branch",
+    "label": "branch diff against main",
+    "baseRef": "main",
+    "explicit": true
+  },
+  "threadId": "01a0dc40-5653-71a1-837f-1526a065bc62",
+  "context": {
+    "repoRoot": "<仓库根>",
+    "branch": "dev",
+    "summary": "Reviewing branch dev against main from merge-base 20bbe6a7637dea87a75a12bc5ede47f5b5e34ca3."
+  },
+  "codex": {
+    "status": 0,
+    "stderr": "",
+    "stdout": "{\"verdict\":\"needs-attention\",\"summary\":\"不应放行。skip_test 与未知状态修复有效，但正式 test 授权和质量报告绑定仍可被真实工作流绕过。\",\"findings\":[{\"severity\":\"high\",\"title\":\"同一授权仍可运行多套正式 test campaign\",\"body\":\"授权只绑定源码、协议、commit、checkpoint 集合和资产锁，没有绑定实际评测 runtime，也没有跨 execution_root 的消费记录。正式 test 仍允许通过 CLI 改写 --retrieval-backend、--batch-size、--cpu-threads 和 GPU；因此同一授权可在多个输出目录运行不同 campaign，再选择性报告结果。“同一 ckpt+源码结果确定”不足以成立，因为 runtime 并不相同。现有测试只覆盖 checkpoint/assets 摘要不匹配，没有覆盖授权复用或 runtime 改写。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":950,\"line_end\":955,\"confidence\":0.97,\"recommendation\":\"把实际 ucfg.runtime 的规范化摘要纳入授权，并在仓库外固定位置建立以 approval SHA256 为键的原子单次消费记录；正式 test 禁止未获授权的 runtime CLI 覆盖，并补充跨 execution_root 重放及 runtime 改写拒绝测试。\"},{\"severity\":\"high\",\"title\":\"质量报告仍可把旧抽查结论重新绑定到新记录\",\"body\":\"score()直接从 flags 复制新的 records_sha256，却只核对抽查表的 arm 和 patient_id，不核对表内 source_text、condensed_text、flags 是否等于该摘要对应记录。现实路径是记录重新生成但患者集合不变，重新运行 flag 后继续使用旧抽查表；score 会给旧人工判定贴上新 records_sha256，freeze 的绑定检查随后全部通过，未审阅的新文本可被正式冻结。新增 stale 测试只在 score 后修改记录，未覆盖这一绕过。\",\"file\":\"experiments/I06_llm_condensation/verify.py\",\"line_start\":134,\"line_end\":149,\"confidence\":0.99,\"recommendation\":\"score 时加载 records 与原始 texts，逐行重建并核对 patient_id、cancer、arm、flags、source_text、condensed_text；或让 write_sheet 输出不可编辑列摘要并在 score 中验证。质量报告还应绑定抽查表内容哈希，并增加“新 flags + 同患者旧 sheet”必须拒绝的测试。\"}],\"next_steps\":[\"修复以上两处核心门禁后再复审一次；当前候选 ab17658 不应进入下一 Gate。\"]}",
+    "reasoning": [
+      "**Clarifying review approach**",
+      "**Reading skill files thoroughly**",
+      "**Noticing truncated output**",
+      "**Ensuring complete data reading**",
+      "**Reviewing recent commit changes**",
+      "**Reviewing report integrity risks**",
+      "**Reviewing authorization and training checks**",
+      "**Extracting functions exactly**",
+      "**Analyzing test checkpoint issues**",
+      "**Identifying potential data integrity risks**",
+      "**Analyzing report validation challenges**",
+      "**Evaluating asset lock naming**",
+      "**Assessing test environment constraints**",
+      "**Evaluating runtime variability and authorization scope**",
+      "**Analyzing determinism and checkpoint execution**",
+      "**Examining runtime variability in testing**",
+      "**Assessing test runtime overrides**",
+      "**Analyzing test authorization scope**",
+      "**Evaluating campaign authorization risks**",
+      "**Analyzing authorization and approval nuances**"
+    ]
+  },
+  "result": {
+    "verdict": "needs-attention",
+    "summary": "不应放行。skip_test 与未知状态修复有效，但正式 test 授权和质量报告绑定仍可被真实工作流绕过。",
+    "findings": [
+      {
+        "severity": "high",
+        "title": "同一授权仍可运行多套正式 test campaign",
+        "body": "授权只绑定源码、协议、commit、checkpoint 集合和资产锁，没有绑定实际评测 runtime，也没有跨 execution_root 的消费记录。正式 test 仍允许通过 CLI 改写 --retrieval-backend、--batch-size、--cpu-threads 和 GPU；因此同一授权可在多个输出目录运行不同 campaign，再选择性报告结果。“同一 ckpt+源码结果确定”不足以成立，因为 runtime 并不相同。现有测试只覆盖 checkpoint/assets 摘要不匹配，没有覆盖授权复用或 runtime 改写。",
+        "file": "experiments/I05_text_encoder_bcmbert/evaluate.py",
+        "line_start": 950,
+        "line_end": 955,
+        "confidence": 0.97,
+        "recommendation": "把实际 ucfg.runtime 的规范化摘要纳入授权，并在仓库外固定位置建立以 approval SHA256 为键的原子单次消费记录；正式 test 禁止未获授权的 runtime CLI 覆盖，并补充跨 execution_root 重放及 runtime 改写拒绝测试。"
+      },
+      {
+        "severity": "high",
+        "title": "质量报告仍可把旧抽查结论重新绑定到新记录",
+        "body": "score()直接从 flags 复制新的 records_sha256，却只核对抽查表的 arm 和 patient_id，不核对表内 source_text、condensed_text、flags 是否等于该摘要对应记录。现实路径是记录重新生成但患者集合不变，重新运行 flag 后继续使用旧抽查表；score 会给旧人工判定贴上新 records_sha256，freeze 的绑定检查随后全部通过，未审阅的新文本可被正式冻结。新增 stale 测试只在 score 后修改记录，未覆盖这一绕过。",
+        "file": "experiments/I06_llm_condensation/verify.py",
+        "line_start": 134,
+        "line_end": 149,
+        "confidence": 0.99,
+        "recommendation": "score 时加载 records 与原始 texts，逐行重建并核对 patient_id、cancer、arm、flags、source_text、condensed_text；或让 write_sheet 输出不可编辑列摘要并在 score 中验证。质量报告还应绑定抽查表内容哈希，并增加“新 flags + 同患者旧 sheet”必须拒绝的测试。"
+      }
+    ],
+    "next_steps": [
+      "修复以上两处核心门禁后再复审一次；当前候选 ab17658 不应进入下一 Gate。"
+    ]
+  },
+  "rawOutput": "{\"verdict\":\"needs-attention\",\"summary\":\"不应放行。skip_test 与未知状态修复有效，但正式 test 授权和质量报告绑定仍可被真实工作流绕过。\",\"findings\":[{\"severity\":\"high\",\"title\":\"同一授权仍可运行多套正式 test campaign\",\"body\":\"授权只绑定源码、协议、commit、checkpoint 集合和资产锁，没有绑定实际评测 runtime，也没有跨 execution_root 的消费记录。正式 test 仍允许通过 CLI 改写 --retrieval-backend、--batch-size、--cpu-threads 和 GPU；因此同一授权可在多个输出目录运行不同 campaign，再选择性报告结果。“同一 ckpt+源码结果确定”不足以成立，因为 runtime 并不相同。现有测试只覆盖 checkpoint/assets 摘要不匹配，没有覆盖授权复用或 runtime 改写。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":950,\"line_end\":955,\"confidence\":0.97,\"recommendation\":\"把实际 ucfg.runtime 的规范化摘要纳入授权，并在仓库外固定位置建立以 approval SHA256 为键的原子单次消费记录；正式 test 禁止未获授权的 runtime CLI 覆盖，并补充跨 execution_root 重放及 runtime 改写拒绝测试。\"},{\"severity\":\"high\",\"title\":\"质量报告仍可把旧抽查结论重新绑定到新记录\",\"body\":\"score()直接从 flags 复制新的 records_sha256，却只核对抽查表的 arm 和 patient_id，不核对表内 source_text、condensed_text、flags 是否等于该摘要对应记录。现实路径是记录重新生成但患者集合不变，重新运行 flag 后继续使用旧抽查表；score 会给旧人工判定贴上新 records_sha256，freeze 的绑定检查随后全部通过，未审阅的新文本可被正式冻结。新增 stale 测试只在 score 后修改记录，未覆盖这一绕过。\",\"file\":\"experiments/I06_llm_condensation/verify.py\",\"line_start\":134,\"line_end\":149,\"confidence\":0.99,\"recommendation\":\"score 时加载 records 与原始 texts，逐行重建并核对 patient_id、cancer、arm、flags、source_text、condensed_text；或让 write_sheet 输出不可编辑列摘要并在 score 中验证。质量报告还应绑定抽查表内容哈希，并增加“新 flags + 同患者旧 sheet”必须拒绝的测试。\"}],\"next_steps\":[\"修复以上两处核心门禁后再复审一次；当前候选 ab17658 不应进入下一 Gate。\"]}",
+  "parseError": null,
+  "reasoningSummary": [
+    "**Clarifying review approach**",
+    "**Reading skill files thoroughly**",
+    "**Noticing truncated output**",
+    "**Ensuring complete data reading**",
+    "**Reviewing recent commit changes**",
+    "**Reviewing report integrity risks**",
+    "**Reviewing authorization and training checks**",
+    "**Extracting functions exactly**",
+    "**Analyzing test checkpoint issues**",
+    "**Identifying potential data integrity risks**",
+    "**Analyzing report validation challenges**",
+    "**Evaluating asset lock naming**",
+    "**Assessing test environment constraints**",
+    "**Evaluating runtime variability and authorization scope**",
+    "**Analyzing determinism and checkpoint execution**",
+    "**Examining runtime variability in testing**",
+    "**Assessing test runtime overrides**",
+    "**Analyzing test authorization scope**",
+    "**Evaluating campaign authorization risks**",
+    "**Analyzing authorization and approval nuances**"
+  ]
+}

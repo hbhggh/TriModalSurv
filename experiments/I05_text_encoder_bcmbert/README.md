@@ -107,6 +107,7 @@ test 需要三份记录，都是 JSON：
   ```
 
 - `--review-rebind-record`（第二轮起，Codex 首审 finding 1）：审查发生在候选 H、正式运行在 squash 后的 S 时，审查记录的 `commit` 写 H，另用 `tools/rebind_review.py build --review-record <审查记录> --commit <S> --out <换绑记录>` 在有 `.git` 的机器上生成换绑记录（git 重算 tree(H) == tree(S) 且 S 在 main 上才写出；`verify` 子命令可复核）。此时用户授权记录还要加一个键 `"rebind_record_sha256": "<换绑记录的 sha256>"`；审查记录直接绑定 S 时不给换绑记录，授权也不写这个键。
+- 用户授权记录还要写 `"checkpoints_sha256"` 与 `"assets_lock_sha256"`，取 preflight 打印的值（I06 节点一 finding 1）：授权只对这一套 ckpt 有效，换一套 ckpt 必须重新授权；没有资产锁的档案写 `null`。另写 `"runtime_sha256"`（round2 R1）：取**不带** `--retrieval-backend` / `--batch-size` / `--cpu-threads` 的 preflight 打印值；正式 test 不接受这三个覆盖参数。
 
 **Phase 5 渲染**：`tools/render_encoder_tables.py --new <输出根>/runs/test/complete.json --out-dir "experiments/BioClinical ModernBERT/results/<run_id>/"`；按用户裁决同时渲染到 `manuscript/消融实验/2.innovation-secode-part- Encoder/4.BioClinical ModernBERT-程序性知识/`。
 

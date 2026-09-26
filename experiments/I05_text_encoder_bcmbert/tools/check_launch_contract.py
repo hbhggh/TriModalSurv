@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """发车契约核对（坑 D16）：I05 清单与既有 e0 臂的 launcher dry-run 命令逐参对比。
 
-只允许 ``--model_config`` 与 ``--result_path`` 两项取值不同；其余参数（lr、epochs、batch、hidden、
+只允许 ``--model_config`` 与 ``--result_path`` 两项取值不同（I06 清单另须恰好带一次 ``--require-flag`` 指定的开关，
+如 ``--skip_test``，比对前先去掉；任何清单都不得出现 ``--eval_grids``）；其余参数（lr、epochs、batch、hidden、
 bin_mode、网络、补偿、标签、GPU 配置、seed、癌种）必须逐字相同。dry-run 零副作用：不预热、不写状态、不起进程。
 """
 from __future__ import annotations
@@ -50,7 +51,7 @@ def _value(command, flag):
     return command[command.index(flag) + 1] if flag in command else None
 
 
-def compare(i05_runs, e0_runs) -> dict:
+def compare(i05_runs, e0_runs, required_flags=()) -> dict:
     by_i05 = {(run['cancer'], run['seed']): run for run in i05_runs}
     by_e0 = {(run['cancer'], run['seed']): run for run in e0_runs}
     expected = {(cancer, seed) for cancer in CANCERS for seed in SEEDS}
@@ -61,7 +62,14 @@ def compare(i05_runs, e0_runs) -> dict:
         problems.append('e0 对照不是恰好 5 癌 × 5 seed')
     differences = {}
     for key in sorted(expected & set(by_i05) & set(by_e0)):
-        new, old = by_i05[key]['command'], by_e0[key]['command']
+        new, old = list(by_i05[key]['command']), by_e0[key]['command']
+        if any(item.split('=', 1)[0] == '--eval_grids' for item in new):
+            problems.append(f'{key}: 训练命令不得带 --eval_grids（完成即评测会提前产出 test 结果）')
+        for flag in required_flags:
+            if new.count(flag) != 1:
+                problems.append(f'{key}: 必须恰好带一次 {flag}，实际 {new.count(flag)} 次')
+            else:
+                new.remove(flag)
         if len(new) != len(old):
             problems.append(f'{key}: 命令长度不同')
             continue
@@ -82,7 +90,8 @@ def compare(i05_runs, e0_runs) -> dict:
     if not (seed_major and first_block_distinct):
         problems.append('I05 清单不是 seed 主序')
     return {'ok': not problems, 'problems': problems, 'n_i05': len(i05_runs), 'n_e0': len(e0_runs),
-            'allowed_differences': list(ALLOWED), 'observed_differences': differences,
+            'allowed_differences': list(ALLOWED), 'required_flags': list(required_flags),
+            'observed_differences': differences,
             'seed_major_order': seed_major}
 
 
@@ -91,6 +100,8 @@ def main(argv=None) -> int:
     parser.add_argument('--python', default=sys.executable)
     parser.add_argument('--plan', type=Path, default=EXPERIMENT_DIR / 'train_plan.yaml')
     parser.add_argument('--model-config', type=Path, default=EXPERIMENT_DIR / 'model_config.yml')
+    parser.add_argument('--require-flag', action='append', default=[], dest='required_flags',
+                        help='清单每条命令都必须恰好带一次的开关（I06 清单：--skip_test）；可重复')
     parser.add_argument('--out', type=Path, help='把对比报告写成 JSON')
     args = parser.parse_args(argv)
     with tempfile.TemporaryDirectory(prefix='i05-dryrun-') as directory:
@@ -98,7 +109,7 @@ def main(argv=None) -> int:
         i05 = dry_run(args.python, ['--plan', str(args.plan), '--model-config', str(args.model_config)], scratch, 'i05')
         e0 = dry_run(args.python, ['--arms', 'e0', '--cancers', ','.join(CANCERS),
                                    '--seeds', ','.join(map(str, SEEDS))], scratch, 'e0')
-        report = compare(i05, e0)
+        report = compare(i05, e0, tuple(args.required_flags))
     text = json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True)
     if args.out:
         args.out.write_text(text + '\n', encoding='utf-8')

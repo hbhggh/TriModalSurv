@@ -42,7 +42,8 @@ from experiments.I05_text_encoder_bcmbert.extract_text_features import (  # noqa
 
 DEFAULT_CONFIG = EXPERIMENT_DIR / 'config.yaml'
 STAGES = ('assets', 'preflight', 'smoke', 'replay', 'test')
-PROFILES = ('bcmbert200', 'bcmbert8192', 'legacy-replay', 'legacytext-rerun')
+PROFILES = ('bcmbert200', 'bcmbert8192', 'legacy-replay', 'legacytext-rerun',
+            'a1struct', 'a1summ', 'a2struct', 'a2summ')  # 后四个为 I06（LLM 浓缩）档案
 MODALITIES = ('img', 'text', 'rna')
 SPLITS = ('train', 'valid', 'test')
 REPORTED_PROTOCOLS = ('strategy0', 'm1', 'm0real')
@@ -292,8 +293,16 @@ def check_profile_contract(config, repo_root=REPO_ROOT) -> None:
     if set(contract['model_config']) != new_ckpt or set(contract['text_path']) != new_ckpt:
         raise ValueError(f'training_contract 的 model_config / text_path 必须恰为新训练档案 {sorted(new_ckpt)}')
     for name, section in sorted(encoders.items()):
-        if set(section.get('model_files_sha256') or {}) != set(extractor.MODEL_FILES):
+        locked = set(section.get('model_files_sha256') or {})
+        if name in encoder_model.LOCKED_QWEN_SPECS:
+            # Qwen 档案按 revision 锁定；权重与分词器两个 LFS 文件另按 sha256 锁定，其余文件只在 manifest 记录
+            if not {'model.safetensors', 'tokenizer.json'} <= locked <= set(extractor.QWEN_MODEL_FILES):
+                raise ValueError(f'{name}: model_files_sha256 必须至少锁定 model.safetensors 与 tokenizer.json')
+        elif locked != set(extractor.MODEL_FILES):
             raise ValueError(f'{name}: model_files_sha256 必须恰好固定 {len(extractor.MODEL_FILES)} 个模型文件的哈希')
+        source = section.get('text_source', 'labels')
+        if source != 'labels' and source not in ('frozen:struct', 'frozen:summary'):
+            raise ValueError(f'{name}: 未知的 text_source {source!r}')
     feature_dirs = [encoders[name]['feature_dir'] for name in sorted(encoders)]
     if len(set(feature_dirs)) != len(feature_dirs):
         raise ValueError('不同档案的 feature_dir 必须互不相同（缓存键不含特征路径，混用会静默命中，坑 D2）')
@@ -343,8 +352,19 @@ def _feature_manifest(config, run_root, profile, spec_check=True):
             raise ValueError('新特征 manifest 的提取器源码与当前代码不同（旧版或改过的提取器），拒绝')
         if (source.get('git') or {}).get('dirty') is not False:
             raise ValueError('新特征 manifest 的提取器不是干净源码身份（dirty 或无 commit），拒绝')
-        if manifest.get('model_files') != section['model_files_sha256']:
+        if profile in encoder_model.LOCKED_QWEN_SPECS:
+            recorded_files = manifest.get('model_files') or {}
+            if not recorded_files or any(recorded_files.get(name) != digest
+                                         for name, digest in section['model_files_sha256'].items()):
+                raise ValueError('新特征 manifest 的模型文件哈希与 config 锁定值不同，拒绝')
+        elif manifest.get('model_files') != section['model_files_sha256']:
             raise ValueError('新特征 manifest 的模型文件哈希与 config 锁定值不同，拒绝')
+        source = section.get('text_source', 'labels')
+        recorded = manifest.get('text_source') or {'kind': 'labels'}
+        if source == 'labels' and recorded.get('kind') != 'labels':
+            raise ValueError(f'{profile} 的文本应来自标签 CSV，manifest 记录的却是 {recorded}')
+        if source != 'labels' and (recorded.get('kind'), recorded.get('arm')) != ('frozen', source.split(':', 1)[1]):
+            raise ValueError(f'{profile} 的文本应来自冻结的 {source} 文本，manifest 记录的是 {recorded}')
     return feature_dir, manifest, sha256_file(manifest_path)
 
 
@@ -590,7 +610,9 @@ def check_training_record(run_dir, config, legacy, *, profile, cancer, seed, run
     contract = config['training_contract']
     resolved = read_json(Path(run_dir) / 'resolved_config.yaml')
     runtime = resolved.get('runtime', {})
-    expected = {**contract['runtime'], 'seed': seed, 'cancer_types': cancer}
+    # I06 档案另要求 skip_test=true（Codex 节点一 finding 2）：用实际记录证明训练时没有在 test 上预测
+    expected = {**contract['runtime'], **contract.get('runtime_by_profile', {}).get(profile, {}),
+                'seed': seed, 'cancer_types': cancer}
     mismatched = sorted(key for key, value in expected.items() if runtime.get(key) != value)
     if mismatched:
         raise ValueError(f'{cancer}/{seed}: 训练参数与获审配方不符: {mismatched}')
@@ -898,11 +920,20 @@ def check_review_rebind(rebind_record, *, review_record, review_commit, commit) 
     return sha256_file(rebind_record)
 
 
+def runtime_digest(ucfg) -> str:
+    """评测 runtime 的规范化摘要（不含阶段名与物理卡号）；正式 test 授权绑定它。"""
+    return digest_json({key: value for key, value in ucfg['runtime'].items() if key not in ('stage', 'gpu_id')})
+
+
 def check_test_gates(*, replay_record, review_record, approval_record, source_digest, protocol_id, commit,
+                     checkpoints_digest=None, assets_lock_sha256=None, runtime_sha256=None,
                      rebind_record=None) -> dict:
     """test 阶段必须同时具备：同源码的回放 PASS、Codex 审查 PASS、用户授权。审查记录不由 Claude 代写。
 
-    审查记录的 commit 可以是候选 H（审查先于 squash），此时必须附 H→S 换绑记录，且用户授权记录要引用它。"""
+    审查记录的 commit 可以是候选 H（审查先于 squash），此时必须附 H→S 换绑记录，且用户授权记录要引用它。
+    用户授权还绑定本轮 ckpt 集合摘要与资产锁（Codex I06 节点一 finding 1）：换一套 ckpt 必须重新授权；
+    runtime 也写进授权且 test 禁止 CLI 覆盖（round2 R1），ckpt、源码、runtime 全部锁定后重跑 test 结果相同，
+    不产生择优空间。"""
     if not (replay_record and review_record and approval_record):
         raise ValueError('test 需要 --replay-record、--review-record、--user-approval-record 三份记录')
     replay = read_json(replay_record)
@@ -925,7 +956,9 @@ def check_test_gates(*, replay_record, review_record, approval_record, source_di
     approval = read_json(approval_record)
     expected = {'authority': 'user', 'decision': 'APPROVE_FORMAL_TEST', 'stage': 'test', 'protocol_id': protocol_id,
                 'source_hashes_sha256': source_digest, 'commit': commit,
-                'review_record_sha256': sha256_file(review_record), 'rebind_record_sha256': rebind_sha}
+                'review_record_sha256': sha256_file(review_record), 'rebind_record_sha256': rebind_sha,
+                'checkpoints_sha256': checkpoints_digest, 'assets_lock_sha256': assets_lock_sha256,
+                'runtime_sha256': runtime_sha256}
     mismatched = sorted(key for key, value in expected.items() if approval.get(key) != value)
     if mismatched or not str(approval.get('approved_at', '')).strip():
         raise ValueError(f'用户授权记录不属于本轮正式评测: {mismatched or ["approved_at"]}')
@@ -976,6 +1009,11 @@ def _validate_args(args, config):
         raise ValueError('replay 必须显式给出 --replay-tier')
     if full and (args.cancers or args.seeds):
         raise ValueError('replay/test 必须完整五癌五 seed，不得取子集')
+    overrides = [flag for flag, value in (('--retrieval-backend', args.retrieval_backend),
+                                          ('--batch-size', args.batch_size), ('--cpu-threads', args.cpu_threads))
+                 if value is not None]
+    if args.stage == 'test' and overrides:  # Codex I06 节点一 round2 R1：一份授权只对应一套锁定 runtime
+        raise ValueError(f'正式 test 不接受 runtime 覆盖参数（只用 config 锁定值）: {overrides}')
     if args.stage == 'assets' and args.seeds:
         raise ValueError('assets 不涉及 seed')
     if full and (args.legacy_preflight or args.legacy_valid_source):
@@ -1101,14 +1139,19 @@ def main(argv=None) -> int:
     if args.stage == 'preflight':
         reserve_json(stage_dir / 'preflight.json', {**base, 'status': status('READY'), 'assets': assets,
                                                     'source_hashes': source_hashes})
-        print(json.dumps({'stage': 'preflight', 'status': status('READY'), 'source_hashes_sha256': source_digest},
+        print(json.dumps({'stage': 'preflight', 'status': status('READY'), 'source_hashes_sha256': source_digest,
+                          'checkpoints_sha256': digest_json(checkpoints),
+                          'assets_lock_sha256': assets_lock and assets_lock['assets_lock_sha256'],
+                          'runtime_sha256': runtime_digest(ucfg)},
                          ensure_ascii=False))
         return 0
     gates = None
     if args.stage == 'test':
         gates = check_test_gates(replay_record=args.replay_record, review_record=args.review_record,
                                  approval_record=args.user_approval_record, source_digest=source_digest,
-                                 protocol_id=protocol_id, commit=commit, rebind_record=args.review_rebind_record)
+                                 protocol_id=protocol_id, commit=commit, checkpoints_digest=digest_json(checkpoints),
+                                 assets_lock_sha256=assets_lock and assets_lock['assets_lock_sha256'],
+                                 runtime_sha256=runtime_digest(ucfg), rebind_record=args.review_rebind_record)
     compute_metric = args.stage != 'smoke'
     if device == 'cuda':
         # I05 的选卡规则（空闲卡优先，其次利用率 < 70% 的在用卡）取代上游只认空闲卡的门禁。

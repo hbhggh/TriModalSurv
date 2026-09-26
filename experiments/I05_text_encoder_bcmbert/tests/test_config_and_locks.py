@@ -167,7 +167,10 @@ def test_seeds_locked_by_user(config, launcher, tmp_path):
 
 def test_profiles_and_protocol_ids(config):
     assert set(config['profiles']) == set(evaluate.PROFILES)
-    assert len(set(config['protocol_ids'].values())) == 4
+    assert len(set(config['protocol_ids'].values())) == 8
+    for profile in ('a1struct', 'a1summ', 'a2struct', 'a2summ'):  # I06 档案
+        assert config['profiles'][profile] == {'text_cache': 'new', 'checkpoints': 'new'}
+        assert config['protocol_ids'][profile].endswith(f'i06-{profile}-v1')
     assert config['profiles']['bcmbert200'] == {'text_cache': 'new', 'checkpoints': 'new'}
     assert config['profiles']['bcmbert8192'] == {'text_cache': 'new', 'checkpoints': 'new'}
     assert config['profiles']['legacy-replay'] == {'text_cache': 'legacy', 'checkpoints': 'legacy'}

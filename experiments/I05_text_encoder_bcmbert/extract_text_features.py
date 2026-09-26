@@ -43,6 +43,10 @@ DEFAULT_CONFIG = EXPERIMENT_DIR / 'config.yaml'
 SOURCE_FILES = ('extract_text_features.py', 'model.py', 'gpu_policy.py', 'config.yaml')
 MODEL_FILES = ('config.json', 'model.safetensors', 'tokenizer.json', 'tokenizer_config.json',
                'special_tokens_map.json', 'modules.json', 'sentence_bert_config.json', '1_Pooling/config.json')
+# Qwen3-Embedding 快照里逐个记录哈希的文件；其中 config.text_encoders.<a2 档案>.model_files_sha256 锁定的子集必须相符
+QWEN_MODEL_FILES = ('config.json', 'model.safetensors', 'tokenizer.json', 'tokenizer_config.json', 'vocab.json',
+                    'merges.txt', 'modules.json', '1_Pooling/config.json', 'config_sentence_transformers.json',
+                    'generation_config.json')
 
 
 def sha256_file(path) -> str:
@@ -356,6 +360,43 @@ def cmd_audit(args, *, tokenizer=None) -> dict:
     return report
 
 
+def frozen_text_source(args, text_source: str, targets, records) -> tuple:
+    """I06 档案的文本来源：LLM 浓缩后冻结的文本清单（经 I06 freeze.read_frozen 读取并核对哈希）。
+
+    患者集合门（无条件）：清单里属于本次癌种的患者必须与「标签 ∩ 旧 Text 特征」的目标患者逐人相同，
+    癌种与 split 与冻结标签一致。返回 ({patient_id: 文本}, 写进 manifest 的来源记录)。
+    """
+    kind, _, arm = text_source.partition(':')
+    if kind != 'frozen' or arm not in ('struct', 'summary'):
+        raise ValueError(f'未知的文本来源 {text_source!r}')
+    if not args.frozen_texts or not args.frozen_sha256:
+        raise ValueError('该档案的文本来自冻结的浓缩文本，必须给出 --frozen-texts 与 --frozen-sha256')
+    from experiments.I06_llm_condensation.freeze import read_frozen  # 延迟导入，避免与 I06 循环导入
+    frozen = read_frozen(args.frozen_texts, expected_sha256=args.frozen_sha256)
+    cancers = set(args.cancers)
+    in_scope = {pid for pid, row in frozen.items() if row['cancer'] in cancers}
+    if in_scope != set(targets):
+        extra, missing = sorted(in_scope - set(targets)), sorted(set(targets) - in_scope)
+        raise ValueError(f'冻结文本的患者集合与「标签 ∩ 旧 Text 特征」不同：多 {extra[:5]}，少 {missing[:5]}')
+    for pid in targets:
+        if (frozen[pid]['cancer'], frozen[pid]['split']) != (records[pid]['cancer'], records[pid]['split']):
+            raise ValueError(f'{pid}: 冻结文本的癌种或 split 与标签不符')
+    statuses = Counter(frozen[pid]['status'] for pid in targets)
+    return ({pid: frozen[pid]['text'] for pid in targets},
+            {'kind': 'frozen', 'arm': arm, 'file': Path(args.frozen_texts).name, 'sha256': args.frozen_sha256,
+             'statuses': dict(sorted(statuses.items()))})
+
+
+def check_model_files(profile, model_files: dict, locked: dict) -> None:
+    """NeuML 档案：快照里的模型文件哈希必须与 config 逐个相同（全集）；Qwen 档案：锁定子集必须相符，其余只记录。"""
+    if profile in encoder_model.LOCKED_QWEN_SPECS:
+        mismatched = sorted(name for name, digest in locked.items() if model_files.get(name) != digest)
+        if mismatched:
+            raise ValueError(f'下载到的 Qwen 模型文件与 config 锁定的 sha256 不同: {mismatched}，拒绝提取')
+    elif model_files != locked:
+        raise ValueError('下载到的模型文件与 config 锁定的 sha256 不同，拒绝提取')
+
+
 def resolve_batch_size(cli, locked: int) -> int:
     """批大小由档案锁定；CLI 给了不同的值就拒绝，而不是覆盖（它决定补齐组成与浮点复现）。"""
     if cli is not None and int(cli) != int(locked):
@@ -377,6 +418,15 @@ def cmd_extract(args, *, backend=None) -> dict:
     plan = plan_targets(records, refs)
     if plan['missing_text']:
         raise ValueError(f"{len(plan['missing_text'])} 名旧特征患者缺报告原文，拒绝提取: {plan['missing_text'][:10]}")
+    text_source = section.get('text_source', 'labels')
+    source_record = {'kind': 'labels', 'column': args.text_column}
+    if text_source != 'labels':
+        texts_by_pid, source_record = frozen_text_source(args, text_source, plan['targets'], records)
+        records = {pid: ({**record, 'text': texts_by_pid[pid]} if pid in texts_by_pid else record)
+                   for pid, record in records.items()}
+    elif args.frozen_texts or args.frozen_sha256:
+        raise ValueError(f'{args.profile} 的文本来自标签 CSV，不接受 --frozen-texts / --frozen-sha256')
+    qwen = args.profile in encoder_model.LOCKED_QWEN_SPECS
     targets = _limit_targets(plan['targets'], records, args.limit)
     if not targets:
         raise ValueError('没有可提取的目标患者')
@@ -385,22 +435,21 @@ def cmd_extract(args, *, backend=None) -> dict:
         # 用户锁定：真实提取必须在 GPU 上跑，并按「空闲卡优先、其次利用率 < 70%」复核卡号。
         gpu_policy.require_gpu(args.device)
         device_record = gpu_policy.gate(args.gpu_id, config['gpu_policy'])
-        tokenizer, model, snapshot = encoder_model.load_backend(spec, device=args.device,
-                                                                cache_dir=args.hf_cache_dir,
-                                                                local_files_only=args.local_files_only)
+        loader = encoder_model.load_qwen_backend if qwen else encoder_model.load_backend
+        tokenizer, model, snapshot = loader(spec, device=args.device, cache_dir=args.hf_cache_dir,
+                                            local_files_only=args.local_files_only)
     else:
         tokenizer, model, snapshot = backend
     model_files = {}
     if snapshot is not None:
-        for name in MODEL_FILES:
+        for name in (QWEN_MODEL_FILES if qwen else MODEL_FILES):
             candidate = Path(snapshot) / name
             if candidate.is_file():
                 model_files[name] = sha256_file(candidate)
-        # 先于任何编码：锁定 revision 下的模型文件必须逐个等于 config 固定的哈希（Codex 首审 finding 2）
-        if model_files != section['model_files_sha256']:
-            raise ValueError('下载到的模型文件与 config 锁定的 sha256 不同，拒绝提取')
-    encoder = encoder_model.FrozenTextEncoder(tokenizer, model, spec=spec, device=args.device,
-                                              batch_size=batch_size, rows=encoder_model.SLOT_ROWS)
+        # 先于任何编码：锁定 revision 下的模型文件必须等于 config 固定的哈希（Codex 首审 finding 2）
+        check_model_files(args.profile, model_files, section['model_files_sha256'])
+    encoder = encoder_model.build_encoder(args.profile, spec, tokenizer, model, device=args.device,
+                                          batch_size=batch_size)
     targets = sorted(targets, key=lambda pid: (records[pid]['cancer'], pid))
     texts = [records[pid]['text'] for pid in targets]
     lengths = encoder.token_lengths(texts)
@@ -412,7 +461,7 @@ def cmd_extract(args, *, backend=None) -> dict:
         features, valid_counts = encoder.encode_with_counts(texts[start:start + chunk])
         for offset, (pid, array, count) in enumerate(zip(batch_ids, features, valid_counts)):
             encoder_model.check_feature(array, context=pid, rows=encoder_model.SLOT_ROWS,
-                                        hidden_size=spec.hidden_size)
+                                        hidden_size=encoder_model.output_dim(spec))
             path = out_dir / f'{pid}.pkl'
             digest = write_pickle_exclusive(path, array)
             reloaded = load_feature(path)
@@ -442,6 +491,7 @@ def cmd_extract(args, *, backend=None) -> dict:
         'pickle_protocol': PICKLE_PROTOCOL,
         'labels': {'path': Path(args.labels).as_posix(), 'sha256': sha256_file(args.labels),
                    'text_column': args.text_column},
+        'text_source': source_record,
         'reference_dir': {'path': reference_dir.as_posix(), 'n_files': len(refs),
                           'listing_sha256': hashlib.sha256('\n'.join(refs).encode()).hexdigest()},
         'not_generated_text_without_reference': len(plan['text_without_reference']),
@@ -465,7 +515,8 @@ def build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest='command', required=True)
     for name in ('audit', 'extract'):
         item = sub.add_parser(name)
-        item.add_argument('--profile', choices=tuple(encoder_model.LOCKED_SPECS),
+        item.add_argument('--profile', choices=(encoder_model.ALL_PROFILES if name == 'extract'
+                                                else tuple(encoder_model.LOCKED_SPECS)),
                           required=(name == 'extract'), default=None if name == 'extract' else 'bcmbert200',
                           help='特征档案（config.text_encoders）；extract 必须显式给出')
         item.add_argument('--labels', type=Path, required=True, help='标签 CSV（默认运行口径 data/TCGA_9523_ex12.csv）')
@@ -484,6 +535,8 @@ def build_parser() -> argparse.ArgumentParser:
     extract.add_argument('--gpu-id', type=int, help='物理卡号，先用 tools/gpu_survey.py 选卡')
     extract.add_argument('--batch-size', type=int, default=None, help='由档案锁定；给出不同值即拒绝')
     extract.add_argument('--limit', type=int, help='冒烟：每癌只取前 N 人，manifest 标 partial')
+    extract.add_argument('--frozen-texts', type=Path, help='I06 档案必填：freeze.py 产出的冻结文本清单')
+    extract.add_argument('--frozen-sha256', help='I06 档案必填：冻结文本清单的 sha256（取自 freeze manifest）')
     extract.add_argument('--hf-cache-dir')
     extract.add_argument('--local-files-only', action='store_true')
     return parser

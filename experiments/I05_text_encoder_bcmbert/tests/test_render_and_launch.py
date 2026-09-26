@@ -232,3 +232,34 @@ def test_a0_documents_are_script_output(config, baseline):
     for name in ('癌症为单位.md', 'seed单位-实验结果.md'):
         assert '未观察到重跑漂移' in rendered[name] and '重训方差' not in rendered[name]
 
+
+
+@pytest.mark.parametrize('profile', ['a1struct', 'a1summ', 'a2struct', 'a2summ'])
+def test_i06_launch_contract_requires_skip_test(profile):
+    """I06 四个档案：与 e0 只差 --model_config / --result_path，且每条命令恰好带一次 --skip_test（研究计划书 4.8）。"""
+    completed = subprocess.run([sys.executable, str(EXPERIMENT_DIR / 'tools' / 'check_launch_contract.py'),
+                                '--python', sys.executable, '--plan', str(EXPERIMENT_DIR / f'train_plan_{profile}.yaml'),
+                                '--model-config', str(EXPERIMENT_DIR / f'model_config_{profile}.yml'),
+                                '--require-flag=--skip_test'], cwd=REPO_ROOT, capture_output=True, text=True)
+    assert completed.returncode == 0, completed.stdout + completed.stderr
+    report = json.loads(completed.stdout)
+    assert report['ok'] and report['n_i05'] == 25 and report['required_flags'] == ['--skip_test']
+    assert {tuple(v) for v in report['observed_differences'].values()} == {('--model_config', '--result_path')}
+    smoke = (EXPERIMENT_DIR / f'train_plan_smoke_{profile}.yaml').read_text(encoding='utf-8')
+    assert 'cancer: BLCA' in smoke and 'seed: 123' in smoke and 'extra_args: --skip_test' in smoke
+
+
+def test_launch_contract_compare_rejects_missing_duplicate_flag_and_eval_grids():
+    from experiments.I05_text_encoder_bcmbert.tools import check_launch_contract as contract
+    base = ['python', 'main.py', '--network_type', 'NPJC', '--compensator', 'none', '--hidden_size', '256',
+            '--lr', '0.0001', '--epochs', '50', '--batch_size', '32', '--bin_mode', 'author']
+
+    def runs(extra, root):
+        order = [(s, c) for s in contract.SEEDS for c in ('LGG', 'BRCA', 'BLCA', 'LUAD', 'UCEC')]
+        return [{'name': f'{c}{s}', 'arm': 'x', 'cancer': c, 'seed': s, 'checkpoint': f'/{root}/{s}/m.pth',
+                 'command': base + list(extra)} for s, c in order]
+
+    old = runs([], 'e0')
+    assert contract.compare(runs(['--skip_test'], 'new'), old, ('--skip_test',))['ok']
+    for extra in ([], ['--skip_test', '--skip_test'], ['--skip_test', '--eval_grids', 'none']):
+        assert not contract.compare(runs(extra, 'new'), old, ('--skip_test',))['ok'], extra

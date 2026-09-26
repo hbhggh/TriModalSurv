@@ -1,0 +1,6 @@
+Cancer type: {cancer_name}.
+Write one compact factual paragraph of about {target_words} words that condenses the diagnostic findings of the pathology report below. Omit anything the report does not state.
+
+<report>
+{report}
+</report>

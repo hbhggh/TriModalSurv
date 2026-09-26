@@ -1,0 +1,128 @@
+{
+  "review": "Adversarial Review",
+  "target": {
+    "mode": "branch",
+    "label": "branch diff against main",
+    "baseRef": "main",
+    "explicit": true
+  },
+  "threadId": "01a0dc38-bb5f-7211-9860-27f75d912726",
+  "context": {
+    "repoRoot": "<仓库根>",
+    "branch": "dev",
+    "summary": "Reviewing branch dev against main from merge-base 20bbe6a7637dea87a75a12bc5ede47f5b5e34ca3."
+  },
+  "codex": {
+    "status": 0,
+    "stderr": "",
+    "stdout": "{\"verdict\":\"needs-attention\",\"summary\":\"不应发布：正式 test 门可被复用，训练记录未强制证明跳过 test，冻结门也接受未绑定的质量证据。\",\"findings\":[{\"severity\":\"high\",\"title\":\"正式 test 授权未绑定 checkpoint 集合且可重复使用\",\"body\":\"授权只绑定 protocol_id、源码摘要和 commit，没有绑定本轮 25 个 checkpoint 哈希、assets lock 或唯一评测 ID。同一 commit 下可重训多套 checkpoint，并在不同 execution_root 复用同一授权多次运行 test，随后选择有利结果；目录内的 reserve_json 无法阻止跨目录重复评测。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":945,\"line_end\":953,\"confidence\":0.98,\"recommendation\":\"在授权记录中绑定 assets_lock_sha256、按癌种/seed 排序的 checkpoint 哈希摘要和唯一 evaluation_id；通过单一账本原子消费 evaluation_id，拒绝第二次 test。\"},{\"severity\":\"high\",\"title\":\"正式评测门不验证训练时实际启用了 --skip_test\",\"body\":\"check_training_record 只比较 training_contract.runtime 中列出的字段，而该合同没有 skip_test。静态清单测试只能证明仓库 YAML 当前带该参数，不能证明生成 checkpoint 的真实运行带了它；未跳过 test、已产出 test 指标的训练记录仍会通过正式评测门。\",\"file\":\"experiments/I05_text_encoder_bcmbert/config.yaml\",\"line_start\":257,\"line_end\":261,\"confidence\":0.99,\"recommendation\":\"把 skip_test=true 加入 I06 档案的实际训练合同，并让 check_training_record 明确拒绝 resolved runtime 中缺失或为 false 的值；增加用真实 completion/resolved_config 构造的反例测试。\"},{\"severity\":\"high\",\"title\":\"冻结门接受未绑定的质量报告和未知失败状态\",\"body\":\"check_arm 对质量证据只检查 arm 与 obvious_failure，没有绑定 records/texts 的哈希、40 人抽查集合、checked 数或核验配置；测试甚至用仅含这几个字段的伪 quality 直接冻结。同时 status 没有枚举校验，拼错或未知状态不会计入 capped_fraction。旧质量报告或损坏记录因此可绕过自动核验、抽查和 2% 上限后进入正式特征。\",\"file\":\"experiments/I06_llm_condensation/freeze.py\",\"line_start\":30,\"line_end\":56,\"confidence\":0.99,\"recommendation\":\"冻结时重新校验完整记录 schema 与允许的 status 枚举；质量报告必须绑定 texts、records、flags、audit sheet 和配置哈希，并强制 audited=40、checked 数及确定性抽样患者集合一致。\"}],\"next_steps\":[\"修复以上三处并补负例测试后再复审。\",\"当前只读环境无可用临时目录，pytest 未能启动；需在可写测试环境重跑目标测试与 scripts/ci.sh。\"]}",
+    "reasoning": [
+      "**Preparing for code inspection**",
+      "**Reviewing documentation and code references**",
+      "**Inspecting memory and code relevance**",
+      "**Inspecting test set usage**",
+      "**Noticing output truncation**",
+      "**Analyzing potential failure modes**",
+      "**Reviewing data integrity safeguards**",
+      "**Extracting missing lines**",
+      "**Analyzing Qwen model embedding and tokenizer details**",
+      "**Reviewing test skipping and artifact creation**",
+      "**Examining test evaluation process**",
+      "**Inspecting load_new function**",
+      "**Checking training record for skip_test**",
+      "**Analyzing test evaluation and source integrity**",
+      "**Evaluating potential test data leakage**",
+      "**Reviewing read_labels function**",
+      "**Analyzing code and plan mismatches**",
+      "**Examining precision in comparisons**",
+      "**Analyzing model config tampering risks**",
+      "**Examining revision and quality verification gaps**",
+      "**Analyzing failure and model consistency issues**",
+      "**Examining fallback model version inconsistencies** I'm considering how model versions can drift across retries because only the final successful model is checked for consistency, ignoring earlier attempts. This could lead to mismatches affecting output integrity. I want to verify this with targeted tests but recognize test execution may be tricky in read-only or sandboxed environments.",
+      "**Assessing bug context**",
+      "**Running environment directly**",
+      "**Analyzing test limitations due to read-only environment**",
+      "**Testing quality validation gaps**",
+      "**Reviewing input provenance and test enforcement** I'm looking into how input provenance is handled, noting that hashes aren’t fully locked down and that tests can run multiple times without strict enforcement, which might allow repeated evaluations despite intended single-use claims. I want to understand the implications of this on trust and validation.",
+      "**Analyzing test approval reuse**",
+      "**Identifying test approval vulnerabilities**",
+      "**Reviewing test coverage and contract details**",
+      "**Clarifying test execution and reporting**"
+    ]
+  },
+  "result": {
+    "verdict": "needs-attention",
+    "summary": "不应发布：正式 test 门可被复用，训练记录未强制证明跳过 test，冻结门也接受未绑定的质量证据。",
+    "findings": [
+      {
+        "severity": "high",
+        "title": "正式 test 授权未绑定 checkpoint 集合且可重复使用",
+        "body": "授权只绑定 protocol_id、源码摘要和 commit，没有绑定本轮 25 个 checkpoint 哈希、assets lock 或唯一评测 ID。同一 commit 下可重训多套 checkpoint，并在不同 execution_root 复用同一授权多次运行 test，随后选择有利结果；目录内的 reserve_json 无法阻止跨目录重复评测。",
+        "file": "experiments/I05_text_encoder_bcmbert/evaluate.py",
+        "line_start": 945,
+        "line_end": 953,
+        "confidence": 0.98,
+        "recommendation": "在授权记录中绑定 assets_lock_sha256、按癌种/seed 排序的 checkpoint 哈希摘要和唯一 evaluation_id；通过单一账本原子消费 evaluation_id，拒绝第二次 test。"
+      },
+      {
+        "severity": "high",
+        "title": "正式评测门不验证训练时实际启用了 --skip_test",
+        "body": "check_training_record 只比较 training_contract.runtime 中列出的字段，而该合同没有 skip_test。静态清单测试只能证明仓库 YAML 当前带该参数，不能证明生成 checkpoint 的真实运行带了它；未跳过 test、已产出 test 指标的训练记录仍会通过正式评测门。",
+        "file": "experiments/I05_text_encoder_bcmbert/config.yaml",
+        "line_start": 257,
+        "line_end": 261,
+        "confidence": 0.99,
+        "recommendation": "把 skip_test=true 加入 I06 档案的实际训练合同，并让 check_training_record 明确拒绝 resolved runtime 中缺失或为 false 的值；增加用真实 completion/resolved_config 构造的反例测试。"
+      },
+      {
+        "severity": "high",
+        "title": "冻结门接受未绑定的质量报告和未知失败状态",
+        "body": "check_arm 对质量证据只检查 arm 与 obvious_failure，没有绑定 records/texts 的哈希、40 人抽查集合、checked 数或核验配置；测试甚至用仅含这几个字段的伪 quality 直接冻结。同时 status 没有枚举校验，拼错或未知状态不会计入 capped_fraction。旧质量报告或损坏记录因此可绕过自动核验、抽查和 2% 上限后进入正式特征。",
+        "file": "experiments/I06_llm_condensation/freeze.py",
+        "line_start": 30,
+        "line_end": 56,
+        "confidence": 0.99,
+        "recommendation": "冻结时重新校验完整记录 schema 与允许的 status 枚举；质量报告必须绑定 texts、records、flags、audit sheet 和配置哈希，并强制 audited=40、checked 数及确定性抽样患者集合一致。"
+      }
+    ],
+    "next_steps": [
+      "修复以上三处并补负例测试后再复审。",
+      "当前只读环境无可用临时目录，pytest 未能启动；需在可写测试环境重跑目标测试与 scripts/ci.sh。"
+    ]
+  },
+  "rawOutput": "{\"verdict\":\"needs-attention\",\"summary\":\"不应发布：正式 test 门可被复用，训练记录未强制证明跳过 test，冻结门也接受未绑定的质量证据。\",\"findings\":[{\"severity\":\"high\",\"title\":\"正式 test 授权未绑定 checkpoint 集合且可重复使用\",\"body\":\"授权只绑定 protocol_id、源码摘要和 commit，没有绑定本轮 25 个 checkpoint 哈希、assets lock 或唯一评测 ID。同一 commit 下可重训多套 checkpoint，并在不同 execution_root 复用同一授权多次运行 test，随后选择有利结果；目录内的 reserve_json 无法阻止跨目录重复评测。\",\"file\":\"experiments/I05_text_encoder_bcmbert/evaluate.py\",\"line_start\":945,\"line_end\":953,\"confidence\":0.98,\"recommendation\":\"在授权记录中绑定 assets_lock_sha256、按癌种/seed 排序的 checkpoint 哈希摘要和唯一 evaluation_id；通过单一账本原子消费 evaluation_id，拒绝第二次 test。\"},{\"severity\":\"high\",\"title\":\"正式评测门不验证训练时实际启用了 --skip_test\",\"body\":\"check_training_record 只比较 training_contract.runtime 中列出的字段，而该合同没有 skip_test。静态清单测试只能证明仓库 YAML 当前带该参数，不能证明生成 checkpoint 的真实运行带了它；未跳过 test、已产出 test 指标的训练记录仍会通过正式评测门。\",\"file\":\"experiments/I05_text_encoder_bcmbert/config.yaml\",\"line_start\":257,\"line_end\":261,\"confidence\":0.99,\"recommendation\":\"把 skip_test=true 加入 I06 档案的实际训练合同，并让 check_training_record 明确拒绝 resolved runtime 中缺失或为 false 的值；增加用真实 completion/resolved_config 构造的反例测试。\"},{\"severity\":\"high\",\"title\":\"冻结门接受未绑定的质量报告和未知失败状态\",\"body\":\"check_arm 对质量证据只检查 arm 与 obvious_failure，没有绑定 records/texts 的哈希、40 人抽查集合、checked 数或核验配置；测试甚至用仅含这几个字段的伪 quality 直接冻结。同时 status 没有枚举校验，拼错或未知状态不会计入 capped_fraction。旧质量报告或损坏记录因此可绕过自动核验、抽查和 2% 上限后进入正式特征。\",\"file\":\"experiments/I06_llm_condensation/freeze.py\",\"line_start\":30,\"line_end\":56,\"confidence\":0.99,\"recommendation\":\"冻结时重新校验完整记录 schema 与允许的 status 枚举；质量报告必须绑定 texts、records、flags、audit sheet 和配置哈希，并强制 audited=40、checked 数及确定性抽样患者集合一致。\"}],\"next_steps\":[\"修复以上三处并补负例测试后再复审。\",\"当前只读环境无可用临时目录，pytest 未能启动；需在可写测试环境重跑目标测试与 scripts/ci.sh。\"]}",
+  "parseError": null,
+  "reasoningSummary": [
+    "**Preparing for code inspection**",
+    "**Reviewing documentation and code references**",
+    "**Inspecting memory and code relevance**",
+    "**Inspecting test set usage**",
+    "**Noticing output truncation**",
+    "**Analyzing potential failure modes**",
+    "**Reviewing data integrity safeguards**",
+    "**Extracting missing lines**",
+    "**Analyzing Qwen model embedding and tokenizer details**",
+    "**Reviewing test skipping and artifact creation**",
+    "**Examining test evaluation process**",
+    "**Inspecting load_new function**",
+    "**Checking training record for skip_test**",
+    "**Analyzing test evaluation and source integrity**",
+    "**Evaluating potential test data leakage**",
+    "**Reviewing read_labels function**",
+    "**Analyzing code and plan mismatches**",
+    "**Examining precision in comparisons**",
+    "**Analyzing model config tampering risks**",
+    "**Examining revision and quality verification gaps**",
+    "**Analyzing failure and model consistency issues**",
+    "**Examining fallback model version inconsistencies** I'm considering how model versions can drift across retries because only the final successful model is checked for consistency, ignoring earlier attempts. This could lead to mismatches affecting output integrity. I want to verify this with targeted tests but recognize test execution may be tricky in read-only or sandboxed environments.",
+    "**Assessing bug context**",
+    "**Running environment directly**",
+    "**Analyzing test limitations due to read-only environment**",
+    "**Testing quality validation gaps**",
+    "**Reviewing input provenance and test enforcement** I'm looking into how input provenance is handled, noting that hashes aren’t fully locked down and that tests can run multiple times without strict enforcement, which might allow repeated evaluations despite intended single-use claims. I want to understand the implications of this on trust and validation.",
+    "**Analyzing test approval reuse**",
+    "**Identifying test approval vulnerabilities**",
+    "**Reviewing test coverage and contract details**",
+    "**Clarifying test execution and reporting**"
+  ]
+}

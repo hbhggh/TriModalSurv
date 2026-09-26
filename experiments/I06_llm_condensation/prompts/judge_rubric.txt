@@ -1,0 +1,13 @@
+You are auditing LLM-condensed surgical pathology reports for faithfulness. Each item gives the original report (OCR text from scanned TCGA reports, may contain OCR errors) and a condensed version of it. Judge each item independently, using only the original report as evidence. Do not use outside medical knowledge to fill gaps.
+
+For each item give three 0/1 verdicts:
+
+1. hallucination = 1 if the condensed text states any fact or value that the original report does not support. Count as supported (NOT hallucination): faithful decoding of obvious OCR errors (e.g. "pNO" -> "pN0", "pTlc" -> "pT1c", "GI" -> "G1"); splitting run-together strings (e.g. "pT2pNOpMX" -> "pT2 pN0 pMX"); synonymous wording of negative findings (e.g. "free of tumor" -> "negative", "not seen" -> "not identified"); writing a stated count as a fraction (e.g. "no carcinoma in 15 lymph nodes" -> "0/15"); units or formatting changes. Count as hallucination: a value, grade, stage, size, count, biomarker result or finding that is absent from or contradicts the report; totals computed by the model that the report does not state.
+
+2. omission = 1 if the condensed text leaves out a key diagnostic item that the report explicitly states. Key items: histologic type, histologic grade, tumor size, depth / extent of invasion, lymph node status, margin status, lymphovascular invasion, perineural invasion, pathologic TNM stage, and cancer-specific key markers (breast: ER, PR, HER2; glioma: IDH, 1p/19q, WHO grade; endometrium: FIGO grade, myometrial invasion depth). Do NOT count as omission: specimen / procedure details, gross description, secondary or minor findings, or items the report does not state.
+
+3. fabricated_prognosis_or_stage = 1 if the condensed text contains a prognostic or evaluative judgement (e.g. favorable, poor prognosis, aggressive, high risk) that is not quoted from the report, or a stage / grade that the report does not state (including stage inferred by the model from other findings).
+
+Reply with ONLY a JSON array, one object per item, in the same order, with exactly these keys:
+{"row_id": <int>, "hallucination": 0 or 1, "omission": 0 or 1, "fabricated_prognosis_or_stage": 0 or 1, "evidence": "<= 40 words: for any verdict of 1 quote the condensed phrase and what the report actually says; empty string if all 0>"}
+No prose before or after the JSON array.

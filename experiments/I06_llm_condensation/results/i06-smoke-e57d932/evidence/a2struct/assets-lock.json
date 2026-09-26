@@ -1,0 +1,70 @@
+{
+  "assets_lock_sha256": "ea594ba0242ced3eedd3e369aa0293b8806c5eb5bd634138eafe7fec4154d851",
+  "commit": "e57d932b0411812e03d59338547f45b6183b3322",
+  "locked_at_utc": "2026-09-26T10:25:49.292122+00:00",
+  "profile": "a2struct",
+  "protocol_id": "patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1-i06-a2struct-v1",
+  "view": {
+    "feature_manifest_sha256": "30a6cf9227b2cd36a6e8c27d1acec1ff0f47555e84eaf4dab31ab001ad3674d4",
+    "files": {
+      "BLCA": {
+        "img_sur_test_all_BLCA.pkl": "matches_legacy",
+        "img_sur_train_all_BLCA.pkl": "matches_legacy",
+        "img_sur_valid_all_BLCA.pkl": "matches_legacy",
+        "rna_sur_test_all_BLCA.pkl": "matches_legacy",
+        "rna_sur_train_all_BLCA.pkl": "matches_legacy",
+        "rna_sur_valid_all_BLCA.pkl": "matches_legacy",
+        "text_sur_test_all_BLCA.pkl": "828808bf9cb04c58e60b47eb2d25753261110a68ee974ec8e5bbbd29452ead99",
+        "text_sur_train_all_BLCA.pkl": "8aade415f249b6bb9697a53daf5f3f707fa6118e068239895a9ffe60f222e044",
+        "text_sur_valid_all_BLCA.pkl": "749ed31ec94b2538c70cdb38d81163f3443a51d5092b976d12f94247b200df7f"
+      },
+      "BRCA": {
+        "img_sur_test_all_BRCA.pkl": "matches_legacy",
+        "img_sur_train_all_BRCA.pkl": "matches_legacy",
+        "img_sur_valid_all_BRCA.pkl": "matches_legacy",
+        "rna_sur_test_all_BRCA.pkl": "matches_legacy",
+        "rna_sur_train_all_BRCA.pkl": "matches_legacy",
+        "rna_sur_valid_all_BRCA.pkl": "matches_legacy",
+        "text_sur_test_all_BRCA.pkl": "86aba7f9a4939c1335bb2fceaa7ec62641af5ad5e45bedfb343d860d5ce1d272",
+        "text_sur_train_all_BRCA.pkl": "71dcc7ac1b370916e455a18c168c1bd27ca62c1e0f3c7c115680bc837dc48bd0",
+        "text_sur_valid_all_BRCA.pkl": "406d4fd1e69b02fa4da5004bb6a7efa1a3dee4183c94bd104b58caa87cb8abe9"
+      },
+      "LGG": {
+        "img_sur_test_all_LGG.pkl": "matches_legacy",
+        "img_sur_train_all_LGG.pkl": "matches_legacy",
+        "img_sur_valid_all_LGG.pkl": "matches_legacy",
+        "rna_sur_test_all_LGG.pkl": "matches_legacy",
+        "rna_sur_train_all_LGG.pkl": "matches_legacy",
+        "rna_sur_valid_all_LGG.pkl": "matches_legacy",
+        "text_sur_test_all_LGG.pkl": "3dd7ca3ff435a60cf22f06faaaa582cfa2225d36ea40347b722bf47e6ffbbda0",
+        "text_sur_train_all_LGG.pkl": "7a6173720bc1dd1aa020f9fc9b5a4a7ea0ba8f87118fbcfe8c70962ebdfdeceb",
+        "text_sur_valid_all_LGG.pkl": "cf1d6748addc2e79a991cb0b1ec2265f01f5affe717ac216401133d2c074e6a3"
+      },
+      "LUAD": {
+        "img_sur_test_all_LUAD.pkl": "matches_legacy",
+        "img_sur_train_all_LUAD.pkl": "matches_legacy",
+        "img_sur_valid_all_LUAD.pkl": "matches_legacy",
+        "rna_sur_test_all_LUAD.pkl": "matches_legacy",
+        "rna_sur_train_all_LUAD.pkl": "matches_legacy",
+        "rna_sur_valid_all_LUAD.pkl": "matches_legacy",
+        "text_sur_test_all_LUAD.pkl": "dab6d30ab7d75f747bae422f055e2671dee450ac83cc4eaeb0ecb2670efbab08",
+        "text_sur_train_all_LUAD.pkl": "311710ef02259401a8c1da254722c07f43c957827902ffd1a11d71ac02bbe5ce",
+        "text_sur_valid_all_LUAD.pkl": "f65cbe42d3b65d2372c7bee9b197586d062ad3e87632312ece9d1c9472655d89"
+      },
+      "UCEC": {
+        "img_sur_test_all_UCEC.pkl": "matches_legacy",
+        "img_sur_train_all_UCEC.pkl": "matches_legacy",
+        "img_sur_valid_all_UCEC.pkl": "matches_legacy",
+        "rna_sur_test_all_UCEC.pkl": "matches_legacy",
+        "rna_sur_train_all_UCEC.pkl": "matches_legacy",
+        "rna_sur_valid_all_UCEC.pkl": "matches_legacy",
+        "text_sur_test_all_UCEC.pkl": "82f8bb3d78dab0fb40d4039f81d1f233e6b758b5668e0e6b715987cc16c4ea3e",
+        "text_sur_train_all_UCEC.pkl": "79951f830dfdcca03eaa30c99cc35febae1c28721cf07821a9e78290dbc5ebea",
+        "text_sur_valid_all_UCEC.pkl": "f701dd341cf93a29549f5844f7c28020e4893fc8ffec0f451475030e04b11862"
+      }
+    },
+    "label_sha256": "35c2865914d1e32f077ab470d299fc712d4f5fb2e63059f6bf8a68694a347e2f",
+    "manifest_sha256": "c789eae9a5b1517d82cfa137a92dfa8cc7ffae58e5f300163b25729ffc5d8156",
+    "profile": "a2struct"
+  }
+}

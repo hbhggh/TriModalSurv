@@ -183,3 +183,40 @@ def test_real_main_rejects_existing_artifact_before_data(tmp_path, main_fixture,
             runtime.main(args)
     assert not (tmp_path / 'records').exists()
     assert path.is_dir() if kind == 'plots' else path.read_text() == 'preserved'
+
+
+def test_skip_test_trains_and_saves_checkpoint_without_any_test_output(tmp_path, main_fixture):
+    """I06：--skip_test 时训练与按 valid 存 ckpt 照常，test 预测一次都不调用，不写任何 test 产物。"""
+    args_factory, config_factory, _ = main_fixture
+    args = runtime.parsing_args([*_argv_of(args_factory()), '--skip_test'])
+    assert args.skip_test is True and args_factory().skip_test is False
+    dataset = TensorDataset(torch.zeros(2, 1))
+
+    def no_test(*_, **__):
+        raise AssertionError('skip_test 时不得在 test 上预测')
+
+    with patch.object(runtime, 'get_dataset_tcga_sur', return_value=(dataset, dataset, dataset)), \
+         patch.object(runtime, 'finetune_epoch', lambda *a, **k: {'loss': 0.4, 'c-index': 0.6, 'metric': 0.6}), \
+         patch.object(runtime, 'prediction', no_test):
+        runtime.main(args)
+    config = config_factory(args.model_config)
+    dumper = runtime.ModelDumper(args.result_path, args.seed, args.cpt_name, config.obj.modality, args, config)
+    paths = training_artifact_paths(dumper.task_path_str)
+    assert Path(dumper.model_path).is_file()
+    assert not paths['predictions'].exists() and not paths['metrics'].exists()
+    (completion_path,) = (tmp_path / 'records').glob('*/audit/completion.json')
+    completion = json.loads(completion_path.read_text())
+    assert completion['status'] == 'complete' and completion['artifacts'] == []
+    assert completion['metrics'] == {'test_skipped': 1.0}
+    assert completion['checkpoint']['sha256'] == _sha(dumper.model_path)
+
+
+def _argv_of(args):
+    """把夹具的 Namespace 还原成命令行（只取夹具设置过的项）。"""
+    keys = ('network_type', 'compensator', 'bin_mode', 'hidden_size', 'epochs', 'batch_size', 'num_workers',
+            'cancer_types', 'seed', 'cpt_name', 'report_label_path', 'model_config', 'gpu_config', 'result_path',
+            'run_record_root')
+    argv = []
+    for key in keys:
+        argv += [f'--{key}', str(getattr(args, key))]
+    return argv

@@ -68,6 +68,8 @@ def parsing_args(argv=None):
     parser.add_argument('--model_config', type=str, default=str(Path(__file__).resolve().parents[3] / 'configs/models/surv_multimodal_mainmoe_uni2.yml'))
     parser.add_argument('--cancer_type', type=str, default='None')
     parser.add_argument('--train', default=True, type=str2bool)
+    parser.add_argument('--skip_test', action='store_true',
+                        help='训练结束后不在 test 上预测、不打印、不写 test 产物（I06：正式 test 只由评测器在终点跑一次）')
     parser.add_argument('--task_type', type=str, default='surv')  # 
     parser.add_argument('--network_type', type=str, default="DEMainModalityMILMoE")  # 
     parser.add_argument('--hidden_size', type=int, default=256)  # 
@@ -941,6 +943,12 @@ def main(args, *, model_factory=None, lifecycle=None):
             plot_metrics(train_losses, val_losses, val_metrics, save_dir=str(artifacts['plots']))
 
     # ========== 测试 ==========
+    if getattr(args, 'skip_test', False):
+        # 不加载 test 预测、不打印任何 test 指标；ckpt 已按 valid 选出并保存，运行记录照常收尾
+        if accelerator.is_main_process:
+            finalize_run_record(run_record, checkpoint_path=model_dumper.model_path, artifacts=[],
+                                metrics={'test_skipped': 1})
+        return
     model.load_state_dict(torch.load(model_dumper.model_path, weights_only=True))
     test_metric, test_pred_info = prediction(
         model,
