@@ -1,0 +1,183 @@
+{
+ "flagged_patients": [
+  {
+   "arm": "struct",
+   "cancer": "UCEC",
+   "patient_id": "TCGA-EC-A24G",
+   "split": "train",
+   "status": "fallback_empty"
+  }
+ ],
+ "freeze_manifest_sha256": "f4e0b13ae92f11665856d9db171b455d8d8360cad143d4d0a78e11f16bdecaf9",
+ "frozen_texts": {
+  "struct": {
+   "n_flagged": 1,
+   "path": "frozen-struct.jsonl",
+   "sha256": "95402d09081166e50912d4f00e63d3dd907e4eef826daa711777d21bcc9f7d48"
+  },
+  "summary": {
+   "n_flagged": 0,
+   "path": "frozen-summary.jsonl",
+   "sha256": "7282a0ffb45a8beaa599ffac1e8184446703dc66fa1b1e4e08ef4fb73adb61d0"
+  }
+ },
+ "identical_to_main": true,
+ "k_after_exclusion": {
+  "A1-S": 2,
+  "A1-Z": 3,
+  "A2-S": 1,
+  "A2-Z": 1
+ },
+ "k_main": {
+  "A1-S": 2,
+  "A1-Z": 3,
+  "A2-S": 1,
+  "A2-Z": 1
+ },
+ "profiles": {
+  "a1struct": {
+   "arm": "struct",
+   "candidate": "A1-S",
+   "complete_sha256": "4e4a875020e6963624941107b3aaa5cb819adfbec1f471a9da7af3d5e81a0cb9",
+   "max_abs_diff": 0.0,
+   "per_cancer": {
+    "BLCA": {
+     "excluded": [],
+     "n_excluded": 0,
+     "n_test": 138
+    },
+    "BRCA": {
+     "excluded": [],
+     "n_excluded": 0,
+     "n_test": 383
+    },
+    "LGG": {
+     "excluded": [],
+     "n_excluded": 0,
+     "n_test": 166
+    },
+    "LUAD": {
+     "excluded": [],
+     "n_excluded": 0,
+     "n_test": 172
+    },
+    "UCEC": {
+     "excluded": [],
+     "n_excluded": 0,
+     "n_test": 198
+    }
+   },
+   "rows": 300,
+   "rows_changed": 0
+  },
+  "a1summ": {
+   "arm": "summary",
+   "candidate": "A1-Z",
+   "complete_sha256": "1b70b3bc5f40e222ffecce8f7d8801cb7ad6ca4595977870905a375d529b5bd5",
+   "max_abs_diff": 0.0,
+   "per_cancer": {
+    "BLCA": {
+     "excluded": [],
+     "n_excluded": 0,
+     "n_test": 138
+    },
+    "BRCA": {
+     "excluded": [],
+     "n_excluded": 0,
+     "n_test": 383
+    },
+    "LGG": {
+     "excluded": [],
+     "n_excluded": 0,
+     "n_test": 166
+    },
+    "LUAD": {
+     "excluded": [],
+     "n_excluded": 0,
+     "n_test": 172
+    },
+    "UCEC": {
+     "excluded": [],
+     "n_excluded": 0,
+     "n_test": 198
+    }
+   },
+   "rows": 300,
+   "rows_changed": 0
+  },
+  "a2struct": {
+   "arm": "struct",
+   "candidate": "A2-S",
+   "complete_sha256": "4fb94874d29d8075032eacf2b696ca461d7a0ec6a897504e35e96d48ee8acdd5",
+   "max_abs_diff": 0.0,
+   "per_cancer": {
+    "BLCA": {
+     "excluded": [],
+     "n_excluded": 0,
+     "n_test": 138
+    },
+    "BRCA": {
+     "excluded": [],
+     "n_excluded": 0,
+     "n_test": 383
+    },
+    "LGG": {
+     "excluded": [],
+     "n_excluded": 0,
+     "n_test": 166
+    },
+    "LUAD": {
+     "excluded": [],
+     "n_excluded": 0,
+     "n_test": 172
+    },
+    "UCEC": {
+     "excluded": [],
+     "n_excluded": 0,
+     "n_test": 198
+    }
+   },
+   "rows": 300,
+   "rows_changed": 0
+  },
+  "a2summ": {
+   "arm": "summary",
+   "candidate": "A2-Z",
+   "complete_sha256": "20fb53bd5a7706a03b37a2e806ea5fd23da1b419745fa09ba7b66d7caa9127f3",
+   "max_abs_diff": 0.0,
+   "per_cancer": {
+    "BLCA": {
+     "excluded": [],
+     "n_excluded": 0,
+     "n_test": 138
+    },
+    "BRCA": {
+     "excluded": [],
+     "n_excluded": 0,
+     "n_test": 383
+    },
+    "LGG": {
+     "excluded": [],
+     "n_excluded": 0,
+     "n_test": 166
+    },
+    "LUAD": {
+     "excluded": [],
+     "n_excluded": 0,
+     "n_test": 172
+    },
+    "UCEC": {
+     "excluded": [],
+     "n_excluded": 0,
+     "n_test": 198
+    }
+   },
+   "rows": 300,
+   "rows_changed": 0
+  }
+ },
+ "rule": "剔除冻结文本 status ∈ fallback_refusal/fallback_failure/fallback_empty/truncated 的患者（按候选所用臂），逐行重算 test C-index，再按 Overall 口径重做判定（研究计划书 4.9，只报告）",
+ "test_patients_excluded": 0,
+ "winner_after_exclusion": "A1-Z",
+ "winner_main": "A1-Z"
+}

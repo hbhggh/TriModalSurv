@@ -1,0 +1,328 @@
+{
+  "checkpoints": [],
+  "git": {
+    "allow_dirty": false,
+    "branch": "train/i06-a1a2-20260926",
+    "commit": "c5aa9ea2f62ba82fb625b00fdab05c67dde7f835",
+    "dirty": false,
+    "dirty_files": [],
+    "external": [],
+    "source": "stamp",
+    "stamp_generated_at_utc": "2026-09-26T10:50:38.275788+00:00"
+  },
+  "gpu_config": {
+    "allow_low_gpu_util": true,
+    "batch_size": 32,
+    "batch_size_source": "cli",
+    "concurrent_runs": 1,
+    "gpu_util_min_percent": 50,
+    "gpu_util_target_percent": 80,
+    "gpu_util_warmup_sec": 120,
+    "gradient_accumulation_steps": 1,
+    "low_gpu_util_reason": "NPJ small compute graph: measured active-util median 11-15%, peak 31% across bs 32-256 on V100; wall time increases with larger bs (probe 2026-09-02, collab/20260902-NPJ-GPU合同/notes.md)",
+    "non_blocking": true,
+    "num_workers": 4,
+    "persistent_workers": true,
+    "pin_memory": true,
+    "prefetch_factor": 4
+  },
+  "historical_training": {
+    "mixed_precision": "bf16",
+    "optimizer": "Adam",
+    "status": "本次实际运行配置",
+    "weight_decay": 1
+  },
+  "inputs": [
+    {
+      "path": "~/NPJ/data/TCGA_9523_ex12.csv",
+      "sha256": "35c2865914d1e32f077ab470d299fc712d4f5fb2e63059f6bf8a68694a347e2f"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I05_text_encoder_bcmbert/model_config_a2summ.yml",
+      "sha256": "1b74973c0db65ac03d594d1a356ea1143ad84f68b4abb716d0fb01724d4af3c0"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/configs/gpu_train.yaml",
+      "sha256": "414adba7385a96ff56d38169455423870824c5a0e87577d1bf673acacbd07bb5"
+    }
+  ],
+  "model": {
+    "compensator": "none",
+    "dropout_rate": 0.1,
+    "hidden_size": 256,
+    "mlp_ratio": 4,
+    "modality_order": [
+      "img",
+      "text",
+      "rna"
+    ],
+    "n_backbone": 1,
+    "n_head": 4,
+    "network_type": "NPJC",
+    "pred_dim": 4
+  },
+  "model_input_dimensions": {
+    "img": 1536,
+    "rna": 256,
+    "text": 768
+  },
+  "model_parameter_schema_sha256": "6af3837c221376f1d53be86c033ba587634c9577349f59d5576f88ef790af710",
+  "runtime": {
+    "allow_dirty": false,
+    "batch_size": 32,
+    "bin_mode": "author",
+    "cancer_type": "None",
+    "cancer_types": "LUAD",
+    "compensator": "none",
+    "config": null,
+    "consistency_lambda": 0.1,
+    "cpt_name": "tcga_uni2",
+    "dry_run": false,
+    "epochs": 50,
+    "finetune_head_only": false,
+    "fusion_type": "gate",
+    "gpu_config": "~/i06_formal_c5aa9ea/run_a2summ/configs/gpu_train.yaml",
+    "hidden_size": 256,
+    "lr": 0.0001,
+    "modality_dropout": 0.0,
+    "model_config": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I05_text_encoder_bcmbert/model_config_a2summ.yml",
+    "n_image_tokens": 128,
+    "network_type": "NPJC",
+    "note": "",
+    "num_workers": 4,
+    "preset": null,
+    "pretrain_path": "",
+    "proto_per_bin": null,
+    "report_label_path": "~/NPJ/data/TCGA_9523_ex12.csv",
+    "result_path": "~/i06_formal_c5aa9ea/out/a2summ/out",
+    "run_record_root": null,
+    "seed": 132,
+    "simulate_missing_modality": "",
+    "skip_test": true,
+    "task_type": "surv",
+    "train": true
+  },
+  "schema_version": 1,
+  "source_fingerprints": [
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/configs/gpu_train.yaml",
+      "sha256": "414adba7385a96ff56d38169455423870824c5a0e87577d1bf673acacbd07bb5"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I01_patient_retrieval/__init__.py",
+      "sha256": "8c95913a473560325f19d0104ca42f7741da1f8c451ab306ee6481268990c06b"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I01_patient_retrieval/evaluate.py",
+      "sha256": "e92812ef5316b3d0d212deda0e37793e3de84dd9b44410b25ebe7caecb658b5a"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I01_patient_retrieval/model.py",
+      "sha256": "e4e08b0c9ee78da8b2a7c4d01250516693fc087bf567d18ef6a944b27cc10c13"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I01_patient_retrieval/summarize.py",
+      "sha256": "a01ae92cf4d1a9cbd152ff4adf8aa81e4b8f646b6f8677c16699e9fba8b43e0a"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I02_population_prototypes/__init__.py",
+      "sha256": "bd1278846058f2c8b33942fd59cc4f914dac12a1dab2a76974661257ddcf0772"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I02_population_prototypes/evaluate.py",
+      "sha256": "1b3a543fd0d029cfe2611686d1ef3534180955b855d6f8764176c2b2336be5c2"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I02_population_prototypes/model.py",
+      "sha256": "f0dc091eba63d5427c6c971f687200af8df1cf1069744d6ce7b347fd06319943"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I02_population_prototypes/runtime.py",
+      "sha256": "08940dcdc6f964b36139a18d355e4779cbb7e5062704d1024b9b82cb5c2f1f96"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I02_population_prototypes/train.py",
+      "sha256": "17f7bab34a532c14b913ca3a1cb0e5f8c00cfd3b34231470fac763eedf2f4e0c"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I03_npj_d_dm_e1/__init__.py",
+      "sha256": "bd1278846058f2c8b33942fd59cc4f914dac12a1dab2a76974661257ddcf0772"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I03_npj_d_dm_e1/evaluate.py",
+      "sha256": "f678e81c9aea3c85dcce6a816df31ee73a2f73528fa2994ea7fd974343214733"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I03_npj_d_dm_e1/model.py",
+      "sha256": "4878fde6bbf222af8587588976cbf1a5ab035dd336fa9c50d7a8b1eb2e4bbc30"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I03_npj_d_dm_e1/train.py",
+      "sha256": "099dfe2ad7e2129813bef9dfae97e45e75883a74b681619655a327a5421f9bb9"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I04_cap4_multi_prototypes/__init__.py",
+      "sha256": "bd1278846058f2c8b33942fd59cc4f914dac12a1dab2a76974661257ddcf0772"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I04_cap4_multi_prototypes/evaluate.py",
+      "sha256": "957e1e018e58a7ef2cc52ea75c8aa609bac7ec525d3f75ffb63af11ff425d7a1"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I04_cap4_multi_prototypes/model.py",
+      "sha256": "eb1526572a918a5b7468ce9b414c962f76bb1a28e48605aa54497aca3023bedd"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I04_cap4_multi_prototypes/runtime.py",
+      "sha256": "03f8854c15b775345f9dd1e52e33aafb8e205f1f2bbc13201e73411c72e8a43e"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I04_cap4_multi_prototypes/train.py",
+      "sha256": "fb491e9d3f085b6a97092104bbe47f65b15c101f79f4b745524cf62dd2a97ae8"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I05_text_encoder_bcmbert/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I05_text_encoder_bcmbert/evaluate.py",
+      "sha256": "070087a518247312dc67a098628e2c480202a96179f996745c3b6fd9a104a11b"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I05_text_encoder_bcmbert/extract_text_features.py",
+      "sha256": "9585f792d7d26b102a27809e65d1a422d964b07dd607688cab4392dbc4dc7d32"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I05_text_encoder_bcmbert/gpu_policy.py",
+      "sha256": "523ba3daa23baefadf46b23d512510434f360170a60cfa1efcc07b43757f6587"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I05_text_encoder_bcmbert/model.py",
+      "sha256": "0908c8664c29f2a67147eed87a9970677b3fba8f3824103dd263b9cbe56cee3f"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I05_text_encoder_bcmbert/model_config_a2summ.yml",
+      "sha256": "1b74973c0db65ac03d594d1a356ea1143ad84f68b4abb716d0fb01724d4af3c0"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I06_llm_condensation/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I06_llm_condensation/condense.py",
+      "sha256": "148cc1a9f49b2e5a48c7415795d3f6a054f4085d8f55a9ac96dceb66559d7f37"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I06_llm_condensation/export_texts.py",
+      "sha256": "7f53e2f2cf24958487a643618a3b9e7814b00603342b46cd5e277afe57530496"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I06_llm_condensation/freeze.py",
+      "sha256": "17a7a80c6afb9d2acfd5b98eeec46c5aade32704773584957f9373f11dd70df7"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I06_llm_condensation/model.py",
+      "sha256": "01fc3ee973cf026c0237afab7dd73d83b11a33a37c5416e90bcd8a626507130a"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I06_llm_condensation/verify.py",
+      "sha256": "3bacecddec4d672c9b95f6b77a13469f9975b4c452e4016cda4178865907a9cb"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/scripts/eval_missing.py",
+      "sha256": "8fdc483461b19db3759ec5b5d2afe87e882ba369580a8df5c7881e1938838380"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/scripts/gen_missing_manifest.py",
+      "sha256": "dcc404ce3843261af5a68b686fdb0578e858cac2ab5789325897e3bb60b27984"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/scripts/git_stamp.py",
+      "sha256": "97f3a7bc2fa24f0de06771bd9157d29175419ff3f5bcdb4b1e49c6f38a8f1f08"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/scripts/gpu_util_gate.py",
+      "sha256": "a9082e37eab204f525a00d94ca1d341a27ddd4473639ebf1d20c366ae840ad33"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/scripts/main_survival.py",
+      "sha256": "68c7893451f336648e6d4e25d70cd5e0ee3b902655adab9ed92921b36e139004"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/scripts/train_launcher.py",
+      "sha256": "3cb7b8ac0218502dba1dfb77b77aebbe33801c8cdd7aabb3383471278ce6f0fd"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/src/trimodalsurv/__init__.py",
+      "sha256": "8c95913a473560325f19d0104ca42f7741da1f8c451ab306ee6481268990c06b"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/src/trimodalsurv/config.py",
+      "sha256": "8cd87cac935f29a973c9d45d1ddf22e55d4118f79de3cd57b369b25b0cb20dfd"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/src/trimodalsurv/data/__init__.py",
+      "sha256": "f70a6308d65648e324242d2a06bf13e7d881dede01b527ac2b801968aa65d175"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/src/trimodalsurv/data/tcga_dataset.py",
+      "sha256": "00c15fc2fad773902ff5d5675e28ea04ac632ebd6d6c432efb8a66fcac0968e1"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/src/trimodalsurv/evaluation/__init__.py",
+      "sha256": "8c95913a473560325f19d0104ca42f7741da1f8c451ab306ee6481268990c06b"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/src/trimodalsurv/evaluation/common.py",
+      "sha256": "179d878ef3be4639579a89b7d6b21d9908ebc7fb5d019500d45a85e94d982029"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/src/trimodalsurv/evaluation/missing.py",
+      "sha256": "d91a20da4d19e94649f8a2b24b75e26a41cf99186602c2bc05e3bd770632b81e"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/src/trimodalsurv/gitstamp.py",
+      "sha256": "7ac042277a0d870cabf4e0e52bfacad238175fbad770893671594d58fd4e6fb2"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/src/trimodalsurv/models/__init__.py",
+      "sha256": "8c95913a473560325f19d0104ca42f7741da1f8c451ab306ee6481268990c06b"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/src/trimodalsurv/models/compensator.py",
+      "sha256": "e72c853f5681b505465aaada0a482bb949deb970c74469020df5bc066bd04eee"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/src/trimodalsurv/models/consistency.py",
+      "sha256": "41b6c85fc099058dfe29d7856fc5b776af87edb894d92fae1240495da1e0b0c7"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/src/trimodalsurv/models/fusion.py",
+      "sha256": "26afa736990c06df1ea67353b1969903b87655f0037969292ff5b5910e5c30c1"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/src/trimodalsurv/models/npjc.py",
+      "sha256": "f0c03c1516a3976ca71ac5f0b8a4b752f3f98a91f44e6abb7f0edcda399eac2f"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/src/trimodalsurv/training/__init__.py",
+      "sha256": "bdbf43903f1dbf786bb13b5569424efb0ef60bc41269561d3116822c11517ad7"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/src/trimodalsurv/training/common_tools.py",
+      "sha256": "09710d56cb1d3f7641d75bad677f4a659cd1c57ac6f01ceeb5d8311f233a64fc"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/src/trimodalsurv/training/loss_func.py",
+      "sha256": "44e227eea9ad9f39f29437c24666e876565941556b1559a21bf732d64c1e0194"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/src/trimodalsurv/training/model_util.py",
+      "sha256": "6846877585dfd7177131f6f3ef1b426872a46e680f562be6cffb7b9b90eeff17"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/src/trimodalsurv/training/runtime.py",
+      "sha256": "1d56f89df31513d1441dc571516cc251761319d9f7c355fda1886f80d1563622"
+    }
+  ]
+}

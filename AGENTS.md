@@ -22,6 +22,15 @@ Claude Code 与 Codex/Codex Companion 都必须遵守本文件。冲突时以本
 - 任何一方执行完，必须由另一方 review。禁止同一方执行完直接宣布通过。
 - 当前指定（用户裁决 2026-09-23，用户另行指定前有效）：**代码开发由 Claude Code（Claude Opus 5.5）执行，不由 Codex 执行**；Claude 同时任指挥官。Codex 只负责审核，不参与任何代码生成：实验开始前审核生成的研究计划书（含代码 diff，按 CLAUDE.md 节点一全清单），实验结束后审核实验结果与结论（节点二）。这是本节"由用户按任务指定"规则下的当前指定，不改变互审与启动授权规则；在此指定下，本文件其他条目中关于 Codex 执行派单的要求暂不适用。Codex 审核由 Claude 自动发起、自动接收并处理，不再中断工作流等用户手动发起（用户裁决 2026-09-23，见「互审 · 自动审查闭环」）。
 
+## 研究目标（用户裁决 2026-09-29，强约束）
+
+**目标期刊：只投 SCI 三区。** 这是优先级最高的强约束，与其他约束冲突时以此为准。
+
+- 选题、判据、实验规模都按三区方法论文的门槛校准，不按顶会标准。
+- 三区门槛：一句话说得清的真实场景；现有基线在这个场景下确实变差；改造对准变差的原因；与 2–3 个相关方法公平对比，并做消融。
+- 不放松的底线：公平检验、防 test 泄漏、如实报告。三区门槛不等于可以削弱基线。
+- 细化的判据与候选记录见 `manuscript/消融实验/2.innovation-secode-part- Encoder/3.报告表示/1.约束清单-报告表示.md`。
+
 ## 停机门
 
 - 冒烟通过后必须停。
@@ -100,7 +109,7 @@ Claude 担任执行方时，写完代码到交付用户之间是一条不中断�
 
 1. `main` 的语义 = 一个创新一个 commit，且每个正式实验的 commit 都在 `main` 上。禁止在主目录直接改代码。
 2. 创新靠目录与文件名隔离（`experiments/<ID>/`、config 选择），不靠分支；多个创新共用 `dev`。
-3. 开发只在 dev worktree：小步 commit，前缀带实验 ID（`feat(I05): ...`）；每步跑 `scripts/ci.sh`，红灯不 commit。
+3. 开发只在 dev worktree：小步 commit，前缀带实验 ID（`feat(I05): ...`）；每步跑 `scripts/ci.sh`，红灯不 commit。CI 解释器固定为 `protomasksurv-exp1` 环境，调用时显式传入：`PYTHON_BIN=<protomasksurv-exp1 环境>/bin/python scripts/ci.sh`（`candidate` 同样在前面加这个变量）；默认的 `python3` 没有 torch / pytest，会有 4 个导入错误，那不是代码问题（2026-09-28 实测）。
 4. 候选 H = `scripts/gitflow.sh candidate` 通过（CI 退出码 0 + 工作树干净）。通过后才进入互审。
 5. 冒烟（用户裁决 2026-09-24）：互审通过后，从 H 的干净快照上机冒烟（`git archive H` 打包、校验和传输，`GIT_STAMP.json` 的 commit = H 随代码同步）；冒烟通过才进入 squash，不过则回 dev 修复、重新 candidate。冒烟产物只判通/不崩，不进账本主表。涉及正式实验的创新必须经过这一步；只靠测试验收的改动（修 bug、重构、文档）可跳过。
 6. 冒烟通过后在主目录 `scripts/gitflow.sh squash "feat(I05): ..."`：`main` 得 S，脚本校验 tree(S) = tree(H) 并把 `dev` 归位到 S。`dev` 领先 `main` 超过正在做的一个创新即违规。
@@ -111,3 +120,13 @@ Claude 担任执行方时，写完代码到交付用户之间是一条不中断�
 11. 收尾 `scripts/gitflow.sh cleanup <run_id>`：先核对 `run/<run_id>` tag 存在、run worktree HEAD 严格等于该 tag 的提交（只核对"仍在 `main` 上"不够）、仍检出 `train/<run_id>`（detached 模式须仍为 detached）、该提交仍在 `main` 上且树干净（被 `.gitignore` 隐藏的文件也算，只放行 `GIT_STAMP.json` 与字节码缓存），再删 worktree 与 `train/<run_id>` 分支；tag 保留。核对失败说明实验期间源码被切换或有 commit 混入，该 run 结果 invalid；保留现场，不得 `-D` / `--force` 强删。结果回传到主目录 `experiments/<ID>/results/<run_id>/`，永远不放进 run worktree。
 12. `main` 只经 squash 前进；禁止 rebase / force-push `main`；squash 后 `git push origin main`。
 13. 与 STATUS.md 第 1 节「全量运行时从确定 commit 建临时 worktree」一致：那个「确定 commit」现在就是 `main` HEAD = S。
+
+
+## AI研究接力记录（强约束）
+
+- 涉及创新点的讨论、检索、计划、评测或接续前，必须先读 `/Users/wuhao/.ai-research-handoff/使用协议.md`，再查项目根的 `AI研究接力索引.md`；跨项目定位查 `/Users/wuhao/.ai-research-handoff/创新点索引.md`。按用户明确的项目和创新点匹配，含糊或多条匹配先问，不默认使用某个创新点。
+- 一个创新点一套主记录，跨聊天/AI共用；跨项目复用 `/Users/wuhao/.ai-research-handoff/模板/` 的空模板，不复制其他创新点的证据。当前项目入口：`/Users/wuhao/Desktop/TriModalSurv/AI研究接力索引.md`。
+- 先读实例 README、`当前进度与待解问题.md`、`当前任务约定.md`，再按需读 `论文与证据.md`、`讨论结论与决策.md`、`实验与结果.md`、`论文表达素材.md`。四份 S-state、论文表达素材与 T/P/B/Q/A 任务约定各司其职，README 不算 S-state。
+- 新证据、用户决定/纠正、结果或交接时，主动更新有变化的文件；写前刷新，写后读回。事实、推断、用户决定分开，附日期与来源，不把旧聊天当核实证据。
+- 并发按协议指定单写入者；其他 AI 写独立待合并记录。无法访问文件时明确“未读取/未同步”，交付待合并内容；云端不能仅凭本机路径访问。
+- 接力记录只保存状态，不改变本文件 T/B/P/A/Q 热路径、角色、互审及下载/训练授权；规则冲突以本项目现行规则为准。协议正文只在全局协议维护，不在 CLAUDE.md 重抄。

@@ -49,3 +49,9 @@
 ## 历史项目上下文
 
 - 三方对比战役（MCAT / PORPOISE / NPJ 骨架，5 癌种 4:2:4，5 seeds 逐值呈现），历史执行细节见 `archive/legacy_collab/root-20260916-080006/20260827-三方对比战役/plan.md` 与 `~/.claude/plans/twinkling-greeting-kahan.md`；当前任务范围与启动权限以用户本次明确授权为准。
+
+
+## AI研究接力入口
+
+本文件已通过首行 `@AGENTS.md` 引入公共纪律。涉及创新点工作时，必须执行 AGENTS.md 的“AI研究接力记录（强约束）”，不另设一套规则。
+项目索引：`/Users/wuhao/Desktop/TriModalSurv/AI研究接力索引.md`；全局协议：`/Users/wuhao/.ai-research-handoff/使用协议.md`。接力回写不替代本文件的节点一/节点二互审。

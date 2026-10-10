@@ -1,0 +1,112 @@
+{
+  "review": "Adversarial Review",
+  "target": {
+    "mode": "branch",
+    "label": "branch diff against 3722af1",
+    "baseRef": "3722af1",
+    "explicit": true
+  },
+  "threadId": "01a0de14-5e44-7d52-83fa-b55804f7e161",
+  "context": {
+    "repoRoot": "<仓库根>",
+    "branch": "dev",
+    "summary": "Reviewing branch dev against 3722af1 from merge-base 3722af1ac3ccc89af4c1d6755e15e2e5788916f8."
+  },
+  "codex": {
+    "status": 0,
+    "stderr": "",
+    "stdout": "{\"verdict\":\"needs-attention\",\"summary\":\"不应放行：研究计划书的现行约束仍保留首审指出的错误归因；敏感性关键编排也缺少端到端测试。\",\"findings\":[{\"severity\":\"high\",\"title\":\"现行约束仍把 A1−B1 写成单变量差\",\"body\":\"第 0 节是当前约束清单，却仍声明“A1 − B1 为同一 encoder 下浓缩的单变量差”，并继续锁定“浓缩文本 ≤200 NeuML token”。这与 v3.12 后 A1−B2 主对照、8192 全长编码直接冲突，也反驳了 v3.15 所称旧措辞已同步改正。后续复用计划书时会重新引入错误因果归因和实验规格。\",\"file\":\"manuscript/消融实验/2.innovation-secode-part- Encoder/6.LLM浓缩-A1/研究计划书-A1-LLM浓缩.md\",\"line_start\":40,\"line_end\":40,\"confidence\":1,\"recommendation\":\"将该约束清单更新为 A1−B2 主对照、A1−B1 辅助以及不设长度上限；增加回归检查，扫描研究计划书、结果文档、消融表和 index，拒绝旧单变量措辞及 ≤200 的现行约束。\"},{\"severity\":\"medium\",\"title\":\"敏感性测试未覆盖实际 run 编排和最终判定\",\"body\":\"新增测试只分别验证 flagged_patients 与单行 recompute，没有调用 run()。因此“候选按各自 arm 选择剔除集”、四档案汇总、剔除后 k/胜者重算及最终 JSON 字段均可出错而测试仍通过；本次真实数据又恰好 test 剔除 0 人，生产证据没有实际触发这些分支。\",\"file\":\"experiments/I06_llm_condensation/tests/test_sensitivity.py\",\"line_start\":19,\"line_end\":54,\"confidence\":0.96,\"recommendation\":\"增加 run() 级测试：构造 struct 与 summary 不同的 test 标记患者，覆盖四候选 arm/profile 映射，并断言逐候选剔除名单、变化后的 C-index、k、winner 和 identical_to_main。\"}],\"next_steps\":[\"修正研究计划书第 0 节旧约束。\",\"补充 sensitivity.run() 端到端回归后再复审。\"]}",
+    "reasoning": [
+      "**Preparing to inspect skills and constraints**",
+      "**Preparing to analyze pitfalls and repository changes**",
+      "**Inspecting file changes and diffs**",
+      "**Investigating sensitivity data consistency**",
+      "**Filtering and summarizing large JSON**",
+      "**Reviewing plan line inconsistencies**",
+      "**Identifying outdated and inconsistent code sections**",
+      "**Examining prediction file handling**",
+      "**Verifying sensitivity manifest details**",
+      "**Verifying manifest bindings**",
+      "**Analyzing manifest and test constraints**",
+      "**Comparing render outputs with committed data**",
+      "**Reviewing test coverage limitations**",
+      "**Identifying integration test gaps**",
+      "**Reviewing docstring accuracy and environment**",
+      "**Checking conda environments**",
+      "**Considering pytest environment constraints**",
+      "**Searching for frozen files**",
+      "**Evaluating frozen files availability**",
+      "**Searching for frozen files outside repo**",
+      "**Rerunning with external path**",
+      "**Assessing test environment constraints**",
+      "**Analyzing inconsistencies in research plan**",
+      "**Evaluating gaps in test coverage**",
+      "**Checking edge cases for concordance calculation**",
+      "**Reconciling JSON format with memory citations**",
+      "**Assessing test coverage limitations**",
+      "**Ensuring valid JSON response**"
+    ]
+  },
+  "result": {
+    "verdict": "needs-attention",
+    "summary": "不应放行：研究计划书的现行约束仍保留首审指出的错误归因；敏感性关键编排也缺少端到端测试。",
+    "findings": [
+      {
+        "severity": "high",
+        "title": "现行约束仍把 A1−B1 写成单变量差",
+        "body": "第 0 节是当前约束清单，却仍声明“A1 − B1 为同一 encoder 下浓缩的单变量差”，并继续锁定“浓缩文本 ≤200 NeuML token”。这与 v3.12 后 A1−B2 主对照、8192 全长编码直接冲突，也反驳了 v3.15 所称旧措辞已同步改正。后续复用计划书时会重新引入错误因果归因和实验规格。",
+        "file": "manuscript/消融实验/2.innovation-secode-part- Encoder/6.LLM浓缩-A1/研究计划书-A1-LLM浓缩.md",
+        "line_start": 40,
+        "line_end": 40,
+        "confidence": 1,
+        "recommendation": "将该约束清单更新为 A1−B2 主对照、A1−B1 辅助以及不设长度上限；增加回归检查，扫描研究计划书、结果文档、消融表和 index，拒绝旧单变量措辞及 ≤200 的现行约束。"
+      },
+      {
+        "severity": "medium",
+        "title": "敏感性测试未覆盖实际 run 编排和最终判定",
+        "body": "新增测试只分别验证 flagged_patients 与单行 recompute，没有调用 run()。因此“候选按各自 arm 选择剔除集”、四档案汇总、剔除后 k/胜者重算及最终 JSON 字段均可出错而测试仍通过；本次真实数据又恰好 test 剔除 0 人，生产证据没有实际触发这些分支。",
+        "file": "experiments/I06_llm_condensation/tests/test_sensitivity.py",
+        "line_start": 19,
+        "line_end": 54,
+        "confidence": 0.96,
+        "recommendation": "增加 run() 级测试：构造 struct 与 summary 不同的 test 标记患者，覆盖四候选 arm/profile 映射，并断言逐候选剔除名单、变化后的 C-index、k、winner 和 identical_to_main。"
+      }
+    ],
+    "next_steps": [
+      "修正研究计划书第 0 节旧约束。",
+      "补充 sensitivity.run() 端到端回归后再复审。"
+    ]
+  },
+  "rawOutput": "{\"verdict\":\"needs-attention\",\"summary\":\"不应放行：研究计划书的现行约束仍保留首审指出的错误归因；敏感性关键编排也缺少端到端测试。\",\"findings\":[{\"severity\":\"high\",\"title\":\"现行约束仍把 A1−B1 写成单变量差\",\"body\":\"第 0 节是当前约束清单，却仍声明“A1 − B1 为同一 encoder 下浓缩的单变量差”，并继续锁定“浓缩文本 ≤200 NeuML token”。这与 v3.12 后 A1−B2 主对照、8192 全长编码直接冲突，也反驳了 v3.15 所称旧措辞已同步改正。后续复用计划书时会重新引入错误因果归因和实验规格。\",\"file\":\"manuscript/消融实验/2.innovation-secode-part- Encoder/6.LLM浓缩-A1/研究计划书-A1-LLM浓缩.md\",\"line_start\":40,\"line_end\":40,\"confidence\":1,\"recommendation\":\"将该约束清单更新为 A1−B2 主对照、A1−B1 辅助以及不设长度上限；增加回归检查，扫描研究计划书、结果文档、消融表和 index，拒绝旧单变量措辞及 ≤200 的现行约束。\"},{\"severity\":\"medium\",\"title\":\"敏感性测试未覆盖实际 run 编排和最终判定\",\"body\":\"新增测试只分别验证 flagged_patients 与单行 recompute，没有调用 run()。因此“候选按各自 arm 选择剔除集”、四档案汇总、剔除后 k/胜者重算及最终 JSON 字段均可出错而测试仍通过；本次真实数据又恰好 test 剔除 0 人，生产证据没有实际触发这些分支。\",\"file\":\"experiments/I06_llm_condensation/tests/test_sensitivity.py\",\"line_start\":19,\"line_end\":54,\"confidence\":0.96,\"recommendation\":\"增加 run() 级测试：构造 struct 与 summary 不同的 test 标记患者，覆盖四候选 arm/profile 映射，并断言逐候选剔除名单、变化后的 C-index、k、winner 和 identical_to_main。\"}],\"next_steps\":[\"修正研究计划书第 0 节旧约束。\",\"补充 sensitivity.run() 端到端回归后再复审。\"]}",
+  "parseError": null,
+  "reasoningSummary": [
+    "**Preparing to inspect skills and constraints**",
+    "**Preparing to analyze pitfalls and repository changes**",
+    "**Inspecting file changes and diffs**",
+    "**Investigating sensitivity data consistency**",
+    "**Filtering and summarizing large JSON**",
+    "**Reviewing plan line inconsistencies**",
+    "**Identifying outdated and inconsistent code sections**",
+    "**Examining prediction file handling**",
+    "**Verifying sensitivity manifest details**",
+    "**Verifying manifest bindings**",
+    "**Analyzing manifest and test constraints**",
+    "**Comparing render outputs with committed data**",
+    "**Reviewing test coverage limitations**",
+    "**Identifying integration test gaps**",
+    "**Reviewing docstring accuracy and environment**",
+    "**Checking conda environments**",
+    "**Considering pytest environment constraints**",
+    "**Searching for frozen files**",
+    "**Evaluating frozen files availability**",
+    "**Searching for frozen files outside repo**",
+    "**Rerunning with external path**",
+    "**Assessing test environment constraints**",
+    "**Analyzing inconsistencies in research plan**",
+    "**Evaluating gaps in test coverage**",
+    "**Checking edge cases for concordance calculation**",
+    "**Reconciling JSON format with memory citations**",
+    "**Assessing test coverage limitations**",
+    "**Ensuring valid JSON response**"
+  ]
+}

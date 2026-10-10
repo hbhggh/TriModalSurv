@@ -1,0 +1,40 @@
+{
+ "checkpoint_check": "listed_hashes_only",
+ "checkpoint_list_matches_files": null,
+ "checkpoint_mismatch": [],
+ "label_mismatch": [],
+ "max_abs_diff_numpy": 0.0,
+ "max_abs_diff_sksurv": 0.0,
+ "mismatch_numpy": [],
+ "mismatch_sksurv": [],
+ "n_checkpoints": 25,
+ "n_rows": 300,
+ "ok": true,
+ "q": {
+  "baseline_mean": {
+   "BLCA": 0.5899722414989592,
+   "BRCA": 0.6881117293062337,
+   "LGG": 0.7977225672877848,
+   "LUAD": 0.5824850824850825,
+   "UCEC": 0.6509681727131094
+  },
+  "delta": {
+   "BLCA": -0.01013185287994467,
+   "BRCA": -0.05236743499489038,
+   "LGG": -0.07294685990338179,
+   "LUAD": 0.022674622674622613,
+   "UCEC": -0.06734920988203885
+  },
+  "met": false,
+  "new_mean": {
+   "BLCA": 0.5798403886190145,
+   "BRCA": 0.6357442943113433,
+   "LGG": 0.724775707384403,
+   "LUAD": 0.6051597051597051,
+   "UCEC": 0.5836189628310705
+  },
+  "strict_wins": 1
+ },
+ "sksurv_available": true,
+ "status": "COMPLETED"
+}

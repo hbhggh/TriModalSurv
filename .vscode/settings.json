@@ -1,15 +1,10 @@
 {
-  "better-todo-tree.regex.regex": "(^|//|#|<!--|;|/\\*|^[ \\t]*(?:#{1,6}[ \\t]+)?(?:[-*+]|\\d+.))\\s*(?=\\[[xX]\\]|\\[ \\]|[A-Za-z0-9_])($TAGS)(?![A-Za-z0-9_])",
-  "better-todo-tree.general.tags": [
-    "BUG",
-    "HACK",
-    "FIXME",
-    "TODO",
-    "XXX",
-    "[ ]",
-    "[x]",
-    "[X]"
-  ],
+  // Better Todo Tree（2026-09-26）：标签列表只在用户级 settings.json（general.tags 是窗口级，写在这里不生效，已删）。
+  // 本仓库既有 Markdown 又有代码，用户级 regexCaseSensitive=false 之后，旧的宽松正则把 "# Bug Post-Mortem" 标题算成 bug（116 条假命中）、
+  // 把 shell 的 trap 命令算成 trap。插件的 ripgrep 扫盘不认 [python] 语言覆盖（实测无效），所以只能一条正则兼顾：
+  // "#" 后允许空格的只限代码注释常用的 todo / fixme / hack / xxx（"# TODO: ..." 照收），其余标签（bug、re 系列、final、???、trap、inno）必须 # 紧贴，
+  // 与用户级正则一致；不再允许行首裸写标签；去掉了 ";" 前缀（本仓库没有分号注释的语言，它只会把 Python 里 "x; final" 算成标签）。改标签集合时，这里括号里的四个名字要跟着看一眼。
+  "better-todo-tree.regex.regex": "(#(?=[A-Za-z?])|#[ \\t]+(?=(?:todo|fixme|hack|xxx)(?![A-Za-z0-9_]|[-.][A-Za-z0-9]))|(?://|<!--|/\\*)[ \\t]*(?=(?:todo|fixme|hack|xxx|bug)(?![A-Za-z0-9_]|[-.][A-Za-z0-9]))|^[ \\t]*(?:#{1,6}[ \\t]+)?(?:[-*+]|\\d+\\.)[ \\t]+(?=\\[))\\s*(?=\\[[xX]\\]|\\[ \\]|[A-Za-z0-9_?])($TAGS)(?![A-Za-z0-9_]|[-.][A-Za-z0-9])",
   "better-todo-tree.tree.disableCompactFolders": true,
   "better-todo-tree.tree.showCountsInTree": true,
   "search.exclude": {

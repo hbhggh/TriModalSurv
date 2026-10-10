@@ -36,6 +36,15 @@ DEFAULT_CONTROLS = {
 LABELS = {'T1': '作者特征（Table 1 Proto.）', 'B1': 'B1 NeuML 原文前 200', 'B2': 'B2 NeuML 全文',
           'A1-S': 'A1-S NeuML 结构化', 'A1-Z': 'A1-Z NeuML 摘要', 'A2-S': 'A2-S Qwen 结构化', 'A2-Z': 'A2-Z Qwen 摘要'}
 GRID_LABELS = {'none': 'None', 'rna_100': 'RNA masked', 'text_100': 'Text masked', 'both_100': 'Both masked'}
+# 研究计划书 4.9：LUAD 的推理路由受已见 test 启发，属探索性。机械门照计五癌，同时给出不计 LUAD 的确认性口径
+EXPLORATORY = ('LUAD',)
+ATTRIBUTION = ('- 归因：A1 与 B2 编码规格逐项相同（NeuML，max_length 8192、不截断），只差文本来源（浓缩 vs 原文全文），'
+               'A1 − B2 是单变量差，为主对照（研究计划书 v3.12 起）；B1 为原文前 200 token，A1 − B1 同时改变文本内容与长度，'
+               '只作辅助比较；A2（Qwen）没有同 encoder 的原文对照，只作系统级比较。')
+
+
+def cancer_label(cancer: str) -> str:
+    return f'{cancer}（探索性）' if cancer in EXPLORATORY else cancer
 
 
 # ----------------------------------------------------------------------------- 读取
@@ -84,7 +93,8 @@ def check_table1_overall(base: dict, config: dict, i06_config: dict) -> None:
 
 
 def decide(candidates: dict, base: dict, config: dict, tie_order) -> dict:
-    """candidates: {候选名: strategy0 值}。返回逐候选的 Overall、Δ、胜癌、none 口径胜癌，以及胜者与是否达标。"""
+    """candidates: {候选名: strategy0 值}。返回逐候选的 Overall、Δ、胜癌（另计不含探索性癌种的 k_confirm）、
+    none 口径胜癌，以及胜者与是否达标（机械门照计五癌）。"""
     result = {}
     for name, values in candidates.items():
         per_cancer = {}
@@ -95,6 +105,7 @@ def decide(candidates: dict, base: dict, config: dict, tie_order) -> dict:
                                   'none_delta': none - base_none, 'none_win': none > base_none}
         result[name] = {'per_cancer': per_cancer,
                         'k': sum(v['win'] for v in per_cancer.values()),
+                        'k_confirm': sum(v['win'] for c, v in per_cancer.items() if c not in EXPLORATORY),
                         'k_none': sum(v['none_win'] for v in per_cancer.values()),
                         'mean_delta': i05r.mean(v['delta'] for v in per_cancer.values())}
     order = {name: index for index, name in enumerate(tie_order)}
@@ -128,6 +139,7 @@ def render_result(config, i06_config, base, runs, decision, retrieval, metas) ->
     cols = ['T1', 'B1', 'B2', *i06_config['candidate_tie_order']]
     values = {'T1': base, **{k: runs[k]['strategy0'] for k in cols[1:]}}
     winner = decision['winner']
+    n_confirm = sum(c not in EXPLORATORY for c in config['cancers'])
     lines = [MARKER, '', '# 6.LLM浓缩-A1：癌症为单位', '']
     lines.append('> 数据来源（sha256）：' + '；'.join(f'{k} `{metas[k]["sha256"]}`' for k in sorted(metas)) + '。')
     lines += ['', '## 口径', '',
@@ -136,26 +148,43 @@ def render_result(config, i06_config, base, runs, decision, retrieval, metas) ->
               '- 判定：候选的 Overall 与 Table 1 Proto. 列的 Overall 逐癌比较，未舍入严格 > 记胜、相等不算胜；'
               '四个候选中任一候选胜 ≥4/5 即达标。胜者 = 胜癌数最多者，相同比五癌平均 Overall Δ，仍相同按 '
               + '、'.join(i06_config['candidate_tie_order']) + ' 的顺序。',
-              '- 归因：A1 − B1 为同一冻结 encoder（NeuML）下浓缩的单变量差；A2（Qwen）没有同 encoder 的原文对照，只作系统级比较。',
+              ATTRIBUTION,
+              f'- {"、".join(EXPLORATORY)} 的推理路由受已见 test 启发（研究计划书 4.9），其各列数字属探索性：主判定按预先定义'
+              f'照计五癌（机械门），同时给出不计 {"、".join(EXPLORATORY)} 的确认性口径（k/{n_confirm}）。',
               f'- 零效应下单个候选至少 4/5 严格胜出的偶然概率约 {i05r.chance_at_least(4):.1%}；四个候选全部报告。', '']
     lines += ['## 五癌 Overall 汇总（主判定）', '']
     rows = []
     for cancer in cancers:
         cells = _bold_max({c: overall(values[c], cancer, config) for c in cols})
-        rows.append([cancer, *[cells[c] for c in cols]])
+        rows.append([cancer_label(cancer), *[cells[c] for c in cols]])
     lines += i05r.table(['癌种', *[LABELS[c] for c in cols]], rows) + ['']
     rows = []
     for name in i06_config['candidate_tie_order']:
         item = decision['candidates'][name]
-        wins = [c for c in cancers if item['per_cancer'][c]['win']]
-        rows.append([LABELS[name], f"{item['k']}/5", i05r.fmt_delta(item['mean_delta']), '、'.join(wins) or '—',
-                     f"{item['k_none']}/5", '是' if name == winner else ''])
-    lines += i05r.table(['候选', 'Overall 严格胜', '五癌平均 Overall Δ', '胜的癌种', 'None 行严格胜（参考）', '胜者'], rows)
-    lines += ['', f"**胜者：{LABELS[winner]}，Overall 严格胜 {decision['candidates'][winner]['k']}/5，"
+        wins = [cancer_label(c) for c in cancers if item['per_cancer'][c]['win']]
+        rows.append([LABELS[name], f"{item['k']}/5", f"{item['k_confirm']}/{n_confirm}", i05r.fmt_delta(item['mean_delta']),
+                     '、'.join(wins) or '—', f"{item['k_none']}/5", '是' if name == winner else ''])
+    lines += i05r.table(['候选', 'Overall 严格胜', f'不计 {"、".join(EXPLORATORY)}（确认性）', '五癌平均 Overall Δ',
+                         '胜的癌种', 'None 行严格胜（参考）', '胜者'], rows)
+    lines += ['', f"**胜者：{LABELS[winner]}，Overall 严格胜 {decision['candidates'][winner]['k']}/5"
+                  f"（不计探索性的 {'、'.join(EXPLORATORY)}：{decision['candidates'][winner]['k_confirm']}/{n_confirm}），"
                   f"{'达标' if decision['reached'] else '未达标'}（目标 ≥4/5）。**", '']
+    neuml = [n for n in i06_config['candidate_tie_order'] if i06_config['candidates'][n]['encoder'] == 'neuml']
+    lines += ['## 同 encoder 归因（NeuML：A1 − B2 为主对照，A1 − B1 为辅助）', '',
+              '逐癌 Overall 差；A1 − B2 只差文本来源（浓缩 vs 原文全文），A1 − B1 同时改变文本内容与长度。'
+              '只报为正的癌种数，不做显著性检验。', '']
+    rows = []
+    for control, tag in (('B2', '主对照'), ('B1', '辅助')):
+        for name in neuml:
+            deltas = {c: overall(values[name], c, config) - overall(values[control], c, config) for c in cancers}
+            rows.append([f'{name} − {control}（{tag}）', *[i05r.fmt_delta(deltas[c]) for c in cancers],
+                         f'{sum(d > 0 for d in deltas.values())}/5'])
+    lines += i05r.table(['比较', *[cancer_label(c) for c in cancers], '为正的癌种'], rows) + ['']
     lines += ['## 按癌种展开', '']
     for cancer in cancers:
-        lines += [f'### {cancer}', '']
+        lines += [f'### {cancer_label(cancer)}', '']
+        if cancer in EXPLORATORY:
+            lines += ['推理路由受已见 test 启发（研究计划书 4.9），本节数字属探索性。', '']
         rows = []
         for seed in config['seeds']:
             for grid in config['grids']:
@@ -179,20 +208,24 @@ def render_result(config, i06_config, base, runs, decision, retrieval, metas) ->
     rows = []
     for cancer in cancers:
         item = retrieval[cancer]
-        rows.append([cancer, *[i05r.fmt_delta(item['per_grid'][g]) for g in config['grids']],
+        rows.append([cancer_label(cancer), *[i05r.fmt_delta(item['per_grid'][g]) for g in config['grids']],
                      i05r.fmt_delta(item['average']), f"{item['k_positive_seeds']}/5"])
     lines += i05r.table(['癌种', *[GRID_LABELS[g] for g in config['grids']], '四场景平均', '四场景平均增益为正的 seed'], rows)
     top = max(retrieval[c]['average'] for c in cancers)
-    best = [c for c in cancers if retrieval[c]['average'] == top]
+    best = [cancer_label(c) for c in cancers if retrieval[c]['average'] == top]
     lines += ['', f"检索效果最好（四场景平均增益最大）的癌种：{'、'.join(best)}（{i05r.fmt_delta(top)}）。"
                   'None 下完整患者不走检索，只有天然缺失者走检索，会拉低平均。', '']
     lines += ['## 癌种结论', '']
     item = decision['candidates'][winner]
+    same_encoder = i06_config['candidates'][winner]['encoder'] == 'neuml'
     for cancer in cancers:
         pc = item['per_cancer'][cancer]
-        b1 = overall(values['B1'], cancer, config)
-        lines.append(f"- {cancer}：胜者 Overall {i05r.fmt(pc['overall'])}，对 Table 1 {i05r.fmt_delta(pc['delta'])}"
-                     f"（{'胜' if pc['win'] else '负'}）；对 B1 {i05r.fmt_delta(pc['overall'] - b1)}。")
+        d1 = i05r.fmt_delta(pc['overall'] - overall(values['B1'], cancer, config))
+        d2 = i05r.fmt_delta(pc['overall'] - overall(values['B2'], cancer, config))
+        refs = (f'对 B2 {d2}（主对照）；对 B1 {d1}（辅助）' if same_encoder
+                else f'对 B2 {d2}、对 B1 {d1}（不同 encoder，只作系统级参考）')
+        lines.append(f"- {cancer_label(cancer)}：胜者 Overall {i05r.fmt(pc['overall'])}，对 Table 1 {i05r.fmt_delta(pc['delta'])}"
+                     f"（{'胜' if pc['win'] else '负'}）；{refs}。")
     return '\n'.join(lines) + '\n'
 
 
@@ -200,12 +233,13 @@ def render_ablation(config, i06_config, base, runs) -> str:
     """Text 表征消融（版式照论文 Table 1，只列 Proto.）：NeuML 一张、Qwen 一张。"""
     cancers = i06_config['display_cancer_order']
     lines = [MARKER, '', '# Text 表征消融（只列 Proto. = strategy0）', '',
-             '行 = 四场景 + Overall；每癌每行未舍入最高值加粗、并列都加粗。归因看 NeuML 表中 A1 − B1（同一 encoder 的单变量差）；'
-             'Qwen 表没有同 encoder 原文对照，只作系统级比较。', '']
+             '行 = 四场景 + Overall；每癌每行未舍入最高值加粗、并列都加粗。归因看 NeuML 表中 A1 − B2（同 encoder、同 8192 '
+             '编码规格，只换文本来源；主对照）；A1 − B1 同时改变文本内容与长度，只作辅助比较。Qwen 表没有同 encoder 原文对照，'
+             f'只作系统级比较。{"、".join(EXPLORATORY)} 的推理路由受已见 test 启发，属探索性。', '']
     for title, cols in (('NeuML（BioClinical ModernBERT 嵌入版）', ['T1', 'B1', 'B2', 'A1-S', 'A1-Z']),
                         ('Qwen3-Embedding-0.6B', ['T1', 'A2-S', 'A2-Z'])):
         values = {'T1': base, **{k: runs[k]['strategy0'] for k in cols if k != 'T1'}}
-        header = ['场景'] + [f'{cancer} · {LABELS[c]}' for cancer in cancers for c in cols]
+        header = ['场景'] + [f'{cancer_label(cancer)} · {LABELS[c]}' for cancer in cancers for c in cols]
         rows = []
         for grid in [*config['grids'][1:], config['grids'][0]]:
             row = [GRID_LABELS[grid]]

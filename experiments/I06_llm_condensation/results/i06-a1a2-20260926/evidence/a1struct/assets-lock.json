@@ -1,0 +1,70 @@
+{
+  "assets_lock_sha256": "d131c3dde48033055acb3b42a238a8ed84df443f006e41b7c30dbd1da35f6909",
+  "commit": "c5aa9ea2f62ba82fb625b00fdab05c67dde7f835",
+  "locked_at_utc": "2026-09-26T10:53:49.993685+00:00",
+  "profile": "a1struct",
+  "protocol_id": "patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1-i06-a1struct-v1",
+  "view": {
+    "feature_manifest_sha256": "d80cacffab89701547c9d2d1245662ae6a8d58fbc85aa8e8182ed69264eec932",
+    "files": {
+      "BLCA": {
+        "img_sur_test_all_BLCA.pkl": "matches_legacy",
+        "img_sur_train_all_BLCA.pkl": "matches_legacy",
+        "img_sur_valid_all_BLCA.pkl": "matches_legacy",
+        "rna_sur_test_all_BLCA.pkl": "matches_legacy",
+        "rna_sur_train_all_BLCA.pkl": "matches_legacy",
+        "rna_sur_valid_all_BLCA.pkl": "matches_legacy",
+        "text_sur_test_all_BLCA.pkl": "10e137134aa8ff67cde4a0fc0824fa974b502c7cb2efba5f536aa13f4572cbe3",
+        "text_sur_train_all_BLCA.pkl": "b7209ca29353d19c31df8824353ecba23514d81ae926660228d6e9205296ca93",
+        "text_sur_valid_all_BLCA.pkl": "8451aa781c69ade379d46d2e0c2dbc45cff7a0042c79b28e42481181ba4d5c2a"
+      },
+      "BRCA": {
+        "img_sur_test_all_BRCA.pkl": "matches_legacy",
+        "img_sur_train_all_BRCA.pkl": "matches_legacy",
+        "img_sur_valid_all_BRCA.pkl": "matches_legacy",
+        "rna_sur_test_all_BRCA.pkl": "matches_legacy",
+        "rna_sur_train_all_BRCA.pkl": "matches_legacy",
+        "rna_sur_valid_all_BRCA.pkl": "matches_legacy",
+        "text_sur_test_all_BRCA.pkl": "b86411ab53134c48d348c38b191bea20985ec0aa5d27a614acf4d204fb52609c",
+        "text_sur_train_all_BRCA.pkl": "59ffda96c30a0520f59bc967f324f29803799641fe927b75f4857b8da393a853",
+        "text_sur_valid_all_BRCA.pkl": "6d09d1821abeb9a6c8ac8c290c9d1aab7cb22fcb73ace9af4a19003b0aedde47"
+      },
+      "LGG": {
+        "img_sur_test_all_LGG.pkl": "matches_legacy",
+        "img_sur_train_all_LGG.pkl": "matches_legacy",
+        "img_sur_valid_all_LGG.pkl": "matches_legacy",
+        "rna_sur_test_all_LGG.pkl": "matches_legacy",
+        "rna_sur_train_all_LGG.pkl": "matches_legacy",
+        "rna_sur_valid_all_LGG.pkl": "matches_legacy",
+        "text_sur_test_all_LGG.pkl": "45dd035598273da6cb38ded21dec6286a4a200270c53f0ea8a5f268fa5d9d1e7",
+        "text_sur_train_all_LGG.pkl": "b011e6e642ea77540789c34e1848132b13b433e9d5e7d16994090da7c55dd6f1",
+        "text_sur_valid_all_LGG.pkl": "071fdd5ea63d19c599710ec6317a74e7abb61aeee96dc1b15d9d8d9296b0cd3f"
+      },
+      "LUAD": {
+        "img_sur_test_all_LUAD.pkl": "matches_legacy",
+        "img_sur_train_all_LUAD.pkl": "matches_legacy",
+        "img_sur_valid_all_LUAD.pkl": "matches_legacy",
+        "rna_sur_test_all_LUAD.pkl": "matches_legacy",
+        "rna_sur_train_all_LUAD.pkl": "matches_legacy",
+        "rna_sur_valid_all_LUAD.pkl": "matches_legacy",
+        "text_sur_test_all_LUAD.pkl": "045a96d6d85b674e1a6f280a50398212a672d19e7e92fb318a69e393af3b9aab",
+        "text_sur_train_all_LUAD.pkl": "560b1831c9f10641da6d425d2fa5221cee17c58e84ea6a23198ba77431477259",
+        "text_sur_valid_all_LUAD.pkl": "06e1a7830df75c7ab63708d0fab3f8f27d97e9a529c1ef91a2b38cd7966ef8a6"
+      },
+      "UCEC": {
+        "img_sur_test_all_UCEC.pkl": "matches_legacy",
+        "img_sur_train_all_UCEC.pkl": "matches_legacy",
+        "img_sur_valid_all_UCEC.pkl": "matches_legacy",
+        "rna_sur_test_all_UCEC.pkl": "matches_legacy",
+        "rna_sur_train_all_UCEC.pkl": "matches_legacy",
+        "rna_sur_valid_all_UCEC.pkl": "matches_legacy",
+        "text_sur_test_all_UCEC.pkl": "09b9112206e03366a88f7d84a91177ce877b87ef157a1e0f70db4f91090d4c00",
+        "text_sur_train_all_UCEC.pkl": "2f891bddac56b8e92d9f1a6492c3fbddb955840926b5fca87e090707333d5d3e",
+        "text_sur_valid_all_UCEC.pkl": "49d3d67bbdd85158df025da20a69916c7818e7a694d0bc7ac744a3cbbd964f0c"
+      }
+    },
+    "label_sha256": "35c2865914d1e32f077ab470d299fc712d4f5fb2e63059f6bf8a68694a347e2f",
+    "manifest_sha256": "c789eae9a5b1517d82cfa137a92dfa8cc7ffae58e5f300163b25729ffc5d8156",
+    "profile": "a1struct"
+  }
+}

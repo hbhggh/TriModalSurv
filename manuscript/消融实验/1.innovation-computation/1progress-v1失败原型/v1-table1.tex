@@ -1,0 +1,68 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[landscape,margin=15mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs}
+\usepackage{caption}
+\captionsetup{skip=6pt}
+\pagestyle{empty}
+\begin{document}
+% 由 build_v1_tables.py --latex 从 75 个原始 JSON 生成；版式仿 main.tex Table 1（tab:prototype-compensation）。
+% main.tex 中为 sidewaystable；此处用横向页面 + table 等价渲染。
+\begin{table}[htbp]
+\centering
+\caption{Comparison of three compensation strategies across five cancers
+under four modality-availability settings for the v1 prototype retrieval
+(protocol \texttt{patient-fixed-padmask-v2}). Entries are test C-indices
+averaged over five seeds; \emph{Overall} is the equally weighted mean of the
+four settings of a cohort. Proto.\,v1 denotes the unconditional Top-1 patient
+retrieval of v1.}
+\label{tab:prototype-compensation-v1}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}l*{15}{c}@{}}
+\toprule
+ & \multicolumn{3}{c}{BRCA} & \multicolumn{3}{c}{UCEC}
+ & \multicolumn{3}{c}{LUAD} & \multicolumn{3}{c}{BLCA}
+ & \multicolumn{3}{c}{LGG} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+\cmidrule(lr){11-13}\cmidrule(lr){14-16}
+Scenario
+ & No comp. & Mean & Proto.\,v1
+ & No comp. & Mean & Proto.\,v1
+ & No comp. & Mean & Proto.\,v1
+ & No comp. & Mean & Proto.\,v1
+ & No comp. & Mean & Proto.\,v1 \\
+\midrule
+RNA masked & 0.683842 & 0.684751 & \textbf{0.685886} & 0.647229 & \textbf{0.655464} & 0.650612 & 0.580660 & 0.580239 & \textbf{0.581011} & \textbf{0.593546} & 0.589105 & 0.589938 & 0.767219 & \textbf{0.790959} & 0.782195 \\
+Text masked & \textbf{0.655002} & 0.619121 & 0.628545 & 0.589272 & 0.577743 & \textbf{0.597596} & \textbf{0.596630} & 0.595156 & 0.576027 & \textbf{0.575989} & 0.574913 & 0.550069 & \textbf{0.705866} & 0.664113 & 0.651553 \\
+Both masked & 0.596026 & 0.614750 & \textbf{0.624276} & 0.576319 & 0.575072 & \textbf{0.596751} & 0.585469 & \textbf{0.588803} & 0.573535 & 0.574046 & \textbf{0.574774} & 0.553088 & 0.576190 & \textbf{0.635266} & 0.630159 \\
+None & \textbf{0.691359} & 0.686068 & 0.687930 & 0.651502 & \textbf{0.656888} & 0.650879 & 0.582064 & \textbf{0.583819} & 0.583257 & \textbf{0.589972} & \textbf{0.589972} & \textbf{0.589972} & 0.796825 & \textbf{0.799517} & 0.795997 \\
+\midrule
+Overall & 0.656557 & 0.651172 & \textbf{0.656659} & 0.616081 & 0.616292 & \textbf{0.623959} & 0.586206 & \textbf{0.587004} & 0.578457 & \textbf{0.583388} & 0.582191 & 0.570767 & 0.711525 & \textbf{0.722464} & 0.714976 \\
+\bottomrule
+\end{tabular*}
+\par\smallskip
+\begin{minipage}{\linewidth}
+\scriptsize
+Scenarios: RNA masked, Text masked and Both masked remove the RNA profile,
+the pathology report or both for all test patients (\texttt{rna\_100},
+\texttt{text\_100}, \texttt{both\_100}); None (\texttt{none}) adds no
+artificial mask but retains naturally occurring missingness and is therefore
+not a complete-data condition. Overall is an average and not a fifth
+experimental scenario. Strategies: No comp., no compensation (m0real), missing
+modalities are masked; Mean, mean imputation (m1), a missing modality is
+replaced by the element-wise training mean of the same cohort; Proto.\,v1, the
+v1 retrieval (\texttt{retrieval}): the training patient with the highest cosine
+similarity between row-order-flattened, centred WSI features over commonly
+valid rows is selected (Top-1), and its raw RNA/Text features replace the
+missing ones with full validity weight, without routing, shrinkage or
+down-weighting. Bold marks the highest unrounded value among the three
+strategies within a cohort and row; ties are all bold. The three strategies use
+the same 25 frozen networks; no model was retrained and no statistical test was
+performed. Macro-average over five cohorts, five seeds and four settings:
+Proto.\,v1 0.628964, Mean 0.631825, No comp.\ 0.630751; Proto.\,v1 was higher than both
+references in 2 of five cohorts (BRCA and UCEC).
+\end{minipage}
+\end{table}
+\end{document}

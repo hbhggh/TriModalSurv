@@ -8,6 +8,7 @@
 |---|---|
 | [bmc_initial_draft/](bmc_initial_draft/) | BMC 初稿的 LaTeX、参考文献与当前编译产物 |
 | [references/](references/) | 论文参考材料 |
+| [实验库/](实验库/README.md) | 做过的实验的仓库：失败实验按类别归档，写论文时作对照 |
 
 ## 阅读与编辑
 

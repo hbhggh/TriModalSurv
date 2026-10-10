@@ -1,0 +1,118 @@
+{
+  "review": "Adversarial Review",
+  "target": {
+    "mode": "branch",
+    "label": "branch diff against 20bbe6a",
+    "baseRef": "20bbe6a",
+    "explicit": true
+  },
+  "threadId": "01a0ddc8-bf23-71f3-a9d0-537c6d6784bd",
+  "context": {
+    "repoRoot": "<仓库根>",
+    "branch": "dev",
+    "summary": "Reviewing branch dev against 20bbe6a from merge-base 20bbe6a7637dea87a75a12bc5ede47f5b5e34ca3."
+  },
+  "codex": {
+    "status": 0,
+    "stderr": "",
+    "stdout": "{\"verdict\":\"needs-attention\",\"summary\":\"不应放行：续跑状态仍可静默分叉，冻结质量链可被绕过，且训练阶段实际提前加载 test 数据。\",\"findings\":[{\"severity\":\"high\",\"title\":\"续跑只核对 custom_id，未绑定请求内容\",\"body\":\"恢复批次时仅比较返回结果与当前请求的 custom_id 集合。custom_id 只含臂、patient_id 和轮次；若原文、prompt、target_words、模型配置或请求 schema 改变但患者集合不变，旧批次仍会被接受。随后记录写入当前 input_text_sha256，造成旧输出被错误声明为由当前输入生成，状态分叉不会被发现。\",\"file\":\"experiments/I06_llm_condensation/condense.py\",\"line_start\":116,\"line_end\":149,\"confidence\":0.99,\"recommendation\":\"提交批次时持久化每个 custom_id 的规范化请求摘要及全批摘要；续跑前逐项比较模型、prompt、schema、原文和参数摘要，任何差异立即拒绝。记录中保存并冻结该请求摘要。\"},{\"severity\":\"high\",\"title\":\"特征提取可绕过 freeze 与质量门\",\"body\":\"提取器接受调用方同时提供冻结 JSONL 和它自己的 sha256，只验证文件与这个自报哈希一致、患者集合和 split 正确。它不要求 freeze-manifest，也不核对质量报告、LLM 配置或该臂在 manifest 中登记的文件哈希。测试甚至直接构造任意 frozen JSONL 后成功提取。下游评测又只检查 text_source 的 kind/arm，因此未经 freeze.py 和人工质量门的文本仍可进入正式特征、资产锁、训练和 test 门。当前留档文件虽人工比对一致，但代码门本身没有保证这一事实。\",\"file\":\"experiments/I05_text_encoder_bcmbert/extract_text_features.py\",\"line_start\":363,\"line_end\":387,\"confidence\":0.98,\"recommendation\":\"改为必须输入并校验受审 freeze-manifest；由 manifest 取得对应 arm 的文件名与 sha256，核对 manifest 自身锁定哈希、质量状态、prompt/模型配置和原始文本摘要。将 freeze-manifest 哈希写入 feature manifest，并在 evaluate.py、assets-lock 与授权门中逐级绑定。\"},{\"severity\":\"medium\",\"title\":\"skip_test 仍在训练前加载并准备 test 数据\",\"body\":\"训练入口无条件调用 get_dataset_tcga_sur，而该函数会实例化 test dataset；初始化过程读取 test 标签和三模态特征，并可能生成/重写 test 缓存。之后还创建 test DataLoader 并交给 Accelerator.prepare。skip_test 仅阻止末尾 prediction，不能支持“test 门前未触碰 test”的口径；现有测试也只断言 prediction 未调用。虽然未见 test 指标进入优化，但盲测边界和缓存隔离已经被破坏。\",\"file\":\"src/trimodalsurv/training/runtime.py\",\"line_start\":778,\"line_end\":792,\"confidence\":0.97,\"recommendation\":\"让数据工厂支持明确的 include_test=false；skip_test 训练只构建 train/valid，不创建或 prepare test loader，也不读取或写 test 缓存。补回归测试，令任何 test dataset 构造、文件访问或缓存写入都直接失败。\"}],\"next_steps\":[\"先修复两个 high，并补状态分叉与伪冻结文件负例。\",\"明确协议是否要求 test 完全未触碰；若要求，现有 100 个训练 run 的合规性需重新裁决。\"]}",
+    "reasoning": [
+      "**Clarifying review approach**",
+      "**Continuing code inspection**",
+      "**Checking code diffs for reference**",
+      "**Preparing targeted file read**",
+      "**Analyzing test data access risks**",
+      "**Examining test dataset handling**",
+      "**Reviewing duplicate handling and client validation**",
+      "**Analyzing quality gate vulnerabilities**",
+      "**Assessing test gate authorization and data access**",
+      "**Analyzing potential data leakage and token length issues**",
+      "**Reviewing tokenizer max length enforcement**",
+      "**Reviewing model config and tests**",
+      "**Analyzing test dataset handling**",
+      "**Examining frozen manifest bypass risks**",
+      "**Analyzing model file integrity risks**",
+      "**Reviewing tokenizer configuration impact**",
+      "**Analyzing formal training script usage**",
+      "**Checking feature manifest details**",
+      "**Analyzing model config and frozen files**",
+      "**Reviewing test dataset loading and code references**",
+      "**Analyzing test bypass and provenance flaw**",
+      "**Mapping resume and freeze vulnerabilities**",
+      "**Merging findings on quality and freeze chain**",
+      "**Noticing JSON bug constraint**",
+      "**Assessing code impact and test coverage**",
+      "**Confirming output format**"
+    ]
+  },
+  "result": {
+    "verdict": "needs-attention",
+    "summary": "不应放行：续跑状态仍可静默分叉，冻结质量链可被绕过，且训练阶段实际提前加载 test 数据。",
+    "findings": [
+      {
+        "severity": "high",
+        "title": "续跑只核对 custom_id，未绑定请求内容",
+        "body": "恢复批次时仅比较返回结果与当前请求的 custom_id 集合。custom_id 只含臂、patient_id 和轮次；若原文、prompt、target_words、模型配置或请求 schema 改变但患者集合不变，旧批次仍会被接受。随后记录写入当前 input_text_sha256，造成旧输出被错误声明为由当前输入生成，状态分叉不会被发现。",
+        "file": "experiments/I06_llm_condensation/condense.py",
+        "line_start": 116,
+        "line_end": 149,
+        "confidence": 0.99,
+        "recommendation": "提交批次时持久化每个 custom_id 的规范化请求摘要及全批摘要；续跑前逐项比较模型、prompt、schema、原文和参数摘要，任何差异立即拒绝。记录中保存并冻结该请求摘要。"
+      },
+      {
+        "severity": "high",
+        "title": "特征提取可绕过 freeze 与质量门",
+        "body": "提取器接受调用方同时提供冻结 JSONL 和它自己的 sha256，只验证文件与这个自报哈希一致、患者集合和 split 正确。它不要求 freeze-manifest，也不核对质量报告、LLM 配置或该臂在 manifest 中登记的文件哈希。测试甚至直接构造任意 frozen JSONL 后成功提取。下游评测又只检查 text_source 的 kind/arm，因此未经 freeze.py 和人工质量门的文本仍可进入正式特征、资产锁、训练和 test 门。当前留档文件虽人工比对一致，但代码门本身没有保证这一事实。",
+        "file": "experiments/I05_text_encoder_bcmbert/extract_text_features.py",
+        "line_start": 363,
+        "line_end": 387,
+        "confidence": 0.98,
+        "recommendation": "改为必须输入并校验受审 freeze-manifest；由 manifest 取得对应 arm 的文件名与 sha256，核对 manifest 自身锁定哈希、质量状态、prompt/模型配置和原始文本摘要。将 freeze-manifest 哈希写入 feature manifest，并在 evaluate.py、assets-lock 与授权门中逐级绑定。"
+      },
+      {
+        "severity": "medium",
+        "title": "skip_test 仍在训练前加载并准备 test 数据",
+        "body": "训练入口无条件调用 get_dataset_tcga_sur，而该函数会实例化 test dataset；初始化过程读取 test 标签和三模态特征，并可能生成/重写 test 缓存。之后还创建 test DataLoader 并交给 Accelerator.prepare。skip_test 仅阻止末尾 prediction，不能支持“test 门前未触碰 test”的口径；现有测试也只断言 prediction 未调用。虽然未见 test 指标进入优化，但盲测边界和缓存隔离已经被破坏。",
+        "file": "src/trimodalsurv/training/runtime.py",
+        "line_start": 778,
+        "line_end": 792,
+        "confidence": 0.97,
+        "recommendation": "让数据工厂支持明确的 include_test=false；skip_test 训练只构建 train/valid，不创建或 prepare test loader，也不读取或写 test 缓存。补回归测试，令任何 test dataset 构造、文件访问或缓存写入都直接失败。"
+      }
+    ],
+    "next_steps": [
+      "先修复两个 high，并补状态分叉与伪冻结文件负例。",
+      "明确协议是否要求 test 完全未触碰；若要求，现有 100 个训练 run 的合规性需重新裁决。"
+    ]
+  },
+  "rawOutput": "{\"verdict\":\"needs-attention\",\"summary\":\"不应放行：续跑状态仍可静默分叉，冻结质量链可被绕过，且训练阶段实际提前加载 test 数据。\",\"findings\":[{\"severity\":\"high\",\"title\":\"续跑只核对 custom_id，未绑定请求内容\",\"body\":\"恢复批次时仅比较返回结果与当前请求的 custom_id 集合。custom_id 只含臂、patient_id 和轮次；若原文、prompt、target_words、模型配置或请求 schema 改变但患者集合不变，旧批次仍会被接受。随后记录写入当前 input_text_sha256，造成旧输出被错误声明为由当前输入生成，状态分叉不会被发现。\",\"file\":\"experiments/I06_llm_condensation/condense.py\",\"line_start\":116,\"line_end\":149,\"confidence\":0.99,\"recommendation\":\"提交批次时持久化每个 custom_id 的规范化请求摘要及全批摘要；续跑前逐项比较模型、prompt、schema、原文和参数摘要，任何差异立即拒绝。记录中保存并冻结该请求摘要。\"},{\"severity\":\"high\",\"title\":\"特征提取可绕过 freeze 与质量门\",\"body\":\"提取器接受调用方同时提供冻结 JSONL 和它自己的 sha256，只验证文件与这个自报哈希一致、患者集合和 split 正确。它不要求 freeze-manifest，也不核对质量报告、LLM 配置或该臂在 manifest 中登记的文件哈希。测试甚至直接构造任意 frozen JSONL 后成功提取。下游评测又只检查 text_source 的 kind/arm，因此未经 freeze.py 和人工质量门的文本仍可进入正式特征、资产锁、训练和 test 门。当前留档文件虽人工比对一致，但代码门本身没有保证这一事实。\",\"file\":\"experiments/I05_text_encoder_bcmbert/extract_text_features.py\",\"line_start\":363,\"line_end\":387,\"confidence\":0.98,\"recommendation\":\"改为必须输入并校验受审 freeze-manifest；由 manifest 取得对应 arm 的文件名与 sha256，核对 manifest 自身锁定哈希、质量状态、prompt/模型配置和原始文本摘要。将 freeze-manifest 哈希写入 feature manifest，并在 evaluate.py、assets-lock 与授权门中逐级绑定。\"},{\"severity\":\"medium\",\"title\":\"skip_test 仍在训练前加载并准备 test 数据\",\"body\":\"训练入口无条件调用 get_dataset_tcga_sur，而该函数会实例化 test dataset；初始化过程读取 test 标签和三模态特征，并可能生成/重写 test 缓存。之后还创建 test DataLoader 并交给 Accelerator.prepare。skip_test 仅阻止末尾 prediction，不能支持“test 门前未触碰 test”的口径；现有测试也只断言 prediction 未调用。虽然未见 test 指标进入优化，但盲测边界和缓存隔离已经被破坏。\",\"file\":\"src/trimodalsurv/training/runtime.py\",\"line_start\":778,\"line_end\":792,\"confidence\":0.97,\"recommendation\":\"让数据工厂支持明确的 include_test=false；skip_test 训练只构建 train/valid，不创建或 prepare test loader，也不读取或写 test 缓存。补回归测试，令任何 test dataset 构造、文件访问或缓存写入都直接失败。\"}],\"next_steps\":[\"先修复两个 high，并补状态分叉与伪冻结文件负例。\",\"明确协议是否要求 test 完全未触碰；若要求，现有 100 个训练 run 的合规性需重新裁决。\"]}",
+  "parseError": null,
+  "reasoningSummary": [
+    "**Clarifying review approach**",
+    "**Continuing code inspection**",
+    "**Checking code diffs for reference**",
+    "**Preparing targeted file read**",
+    "**Analyzing test data access risks**",
+    "**Examining test dataset handling**",
+    "**Reviewing duplicate handling and client validation**",
+    "**Analyzing quality gate vulnerabilities**",
+    "**Assessing test gate authorization and data access**",
+    "**Analyzing potential data leakage and token length issues**",
+    "**Reviewing tokenizer max length enforcement**",
+    "**Reviewing model config and tests**",
+    "**Analyzing test dataset handling**",
+    "**Examining frozen manifest bypass risks**",
+    "**Analyzing model file integrity risks**",
+    "**Reviewing tokenizer configuration impact**",
+    "**Analyzing formal training script usage**",
+    "**Checking feature manifest details**",
+    "**Analyzing model config and frozen files**",
+    "**Reviewing test dataset loading and code references**",
+    "**Analyzing test bypass and provenance flaw**",
+    "**Mapping resume and freeze vulnerabilities**",
+    "**Merging findings on quality and freeze chain**",
+    "**Noticing JSON bug constraint**",
+    "**Assessing code impact and test coverage**",
+    "**Confirming output format**"
+  ]
+}

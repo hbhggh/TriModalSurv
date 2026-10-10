@@ -1,0 +1,31 @@
+{
+  "feature_content_hash_status": "未扫描特征内容；仅记录实际输入位置和标签指纹",
+  "inputs": [
+    {
+      "path": "~/NPJ/data/TCGA_9523_ex12.csv",
+      "sha256": "35c2865914d1e32f077ab470d299fc712d4f5fb2e63059f6bf8a68694a347e2f"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/experiments/I05_text_encoder_bcmbert/model_config_a2summ.yml",
+      "sha256": "1b74973c0db65ac03d594d1a356ea1143ad84f68b4abb716d0fb01724d4af3c0"
+    },
+    {
+      "path": "~/i06_formal_c5aa9ea/run_a2summ/configs/gpu_train.yaml",
+      "sha256": "414adba7385a96ff56d38169455423870824c5a0e87577d1bf673acacbd07bb5"
+    }
+  ],
+  "modalities": {
+    "img": {
+      "feature_dim": 1536,
+      "path": "~/NPJ/data/tcga-dataset_uni2"
+    },
+    "rna": {
+      "feature_dim": 256,
+      "path": "~/NPJ/data/RNA_embedding_selfmade"
+    },
+    "text": {
+      "feature_dim": 768,
+      "path": "~/i06_smoke_e57d932/mutable/a2summ/text_embeddings_a2summ"
+    }
+  }
+}

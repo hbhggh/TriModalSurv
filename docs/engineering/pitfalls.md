@@ -45,6 +45,7 @@
 | C13 | companion 后台作业 worker 死亡后 job json 仍 `running`，`status` 照报 running/editing 且 Elapsed 递增；`--resume-last` 被以"still running"拒绝。 | 存活判定=job json 的 pid 存活 + 日志 mtime 15 min 内；死作业先 `cancel` 清状态再续接，不信 status 字段。                                                            | collab/20260902-A测缺失补偿/notes.md                                                      |
 | C14 | 用户指令与论文主贡献或既有证据冲突时未先提异议直接执行，导致 batch 测速空转、主贡献由"原型补偿"改向"拆伪门控"、A/B 口径三改返工。                | 可能偏离主贡献或与既有证据相悖的指令，先给一句预测/反对（含代价估计）再执行；主贡献改向必须显式征求用户裁决。                                                       | collab/20260902-A测缺失补偿/notes.md                                                      |
 | C15 | 单个 `apply_patch` 对同一路径同时发 Delete 与 Add 两个互斥操作，补丁被编辑器整体拒绝。                                                           | 完整替换已有文件只用一个 Update 操作；新增文件另起独立补丁。                                                                                                        | collab/20260902-A测缺失补偿/notes_eps_codex.md                                            |
+| C16 | companion 只保留最近几个作业记录；收集结果的后台脚本随会话结束被停，16 块 Codex 评审的结果随作业记录一起被清理，只能重交；另有 1 块卡在 starting 阶段 10 分钟无进展。 | Codex 结果的收集脚本一律 nohup 脱离会话运行，每块一完成立即落盘；作业超过 5 分钟仍停在 starting 且日志不再增长，就 cancel 后只重交该块。 | I06 浓缩文本 Codex 只读评审（2026-09-26） |
 
 ## 沙箱与权限
 
@@ -219,3 +220,42 @@
 | G4 | Claude 会话被放在隔离 worktree，而任务目标是主检出里的未跟踪文件；做完调研与 RED 才被 harness hook 拒绝写主检出，只能中途改为「worktree 开发 + 用户拷回」。 | 开工第一步比较会话目录与用户指定仓库；目标文件只在主检出（未跟踪或有他方未提交改动）时，先问用户执行位置，拷回按文件指纹核对，追加型文件只追加不覆盖。 | docs/workflow/git-workflow-fix-20260923.md；本会话 2026-09-23 |
 | G5 | `git status --porcelain` 看不见被 `.gitignore` 隐藏的文件，而 `git worktree remove` 会连同被忽略的 checkpoint / 日志一起删除；只看 porcelain 的「干净」门放行了不可逆删除。 | 删除目录前用 `git ls-files --others --ignored --exclude-standard` 逐个枚举被忽略的**文件**（`status --ignored` 会把整个目录折叠成一行，首轮修复因此漏掉 `__pycache__/best.pth`），白名单按「路径 + 扩展名」精确匹配，其余拒绝并保留现场。 | docs/reviews/20260923-auto-review-loop/（首审 finding 1、复审 round2 finding 1 与 claude-response.md）；回归 tests/test_workflow_scripts.py |
 | G6 | 外部工具输出先定名为正式结果再校验：坏输出占住正式文件名、堵死重试，含 parseError 或缺字段的输出仍以 0 退出，固定临时名还会截断上次失败现场。 | 外部输出一律写唯一临时文件，按工具自带 schema 完整校验（必需字段、枚举、类型、范围、每个子项结构，不能只挑几个字段）通过后，用硬链接原子发布（目标已存在即失败，不做「先查后 mv」）；失败以非零退出并保留原始输出。 | 同上（首审 finding 2、复审 finding 2、3） |
+
+## A1 计划书补充（2026-09-24）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| E34 | zsh 对未加引号的 `--include=*.py` 做文件名展开，无匹配即中止该条命令，grep 没执行，而紧跟的"无输出=否定结论"提示照常打印。 | zsh 下含 `*`、`?` 的参数一律加引号；"无输出 = 否定结论"必须同时检查退出码（grep 1 = 无匹配，2 = 出错）。 | manuscript/消融实验/2.innovation-secode-part- Encoder/6.LLM浓缩-A1/研究计划书-A1-LLM浓缩.md（Post-Mortem 1） |
+| V30 | 用 `lstrip("./")` 去 tar 成员名前缀，按字符集剥离把点文件前导 `.` 也剥掉，源码比对报出虚假的"只在一侧"。 | 去多字符前缀用 `removeprefix`；比对出现"只在一侧"先核对路径规范化再下结论。 | 同上（Post-Mortem 2） |
+| V31 | 计划承诺"某阶段不跑 test"，只按评测器有门推理，没追到训练入口 `runtime.py` 训练后会无条件在 test 上预测、打印并落盘。 | 计划中任何"某阶段不产生 X"的保证，先读实际入口找出所有能产生 X 的路径，再写成可测的门或测试。 | 同上（Post-Mortem 3；decision-reviewer C1） |
+| V32 | 门阈值排在探针之后计算，且"g ≤ 0 时再交用户定阈值"，等于看过被判对象的结果再定规则。 | 能早算的阈值在被判对象任何结果出现前冻结；需人裁量的分支在相关结果出现前预注册成公式。 | 同上（Post-Mortem 4；decision-reviewer C2） |
+
+## 2.5 节公式瘦身补充（2026-09-25）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| E35 | Read 工具渲染 PDF 页面依赖 poppler 的 pdftoppm，本机未安装时直接报错，目视验收容易被跳过。 | PDF 目视验收用 MacTeX 自带 `/usr/local/bin/gs -sDEVICE=png16m -dFirstPage/-dLastPage` 渲染 PNG 再读图；缺工具不构成跳过验收的理由。 | docs/reviews/20260925-proto-formula-slim/claude-response.md（Post-Mortem 1） |
+| E36 | 批量改名脚本读 `git grep -l` 的输出，中文路径被 core.quotepath 转义成八进制，脚本中途 FileNotFoundError；正则开头的 `\b` 在下划线后不成立，`text_embeddings_a1struct200` 这类写法全部漏改。 | 读 git 路径输出一律 `git -c core.quotepath=off` 或 `-z`；标识符替换用 `(?<![A-Za-z0-9])` 而非 `\b`；改完用同一模式再 grep 一遍确认零残留。 | I06 v3.12 档案改名（2026-09-26） |
+| E37 | 本机收集脚本在 `$(...)` 里写 `case $f in *x*) …`，macOS 自带 bash 3.2 把分支的 `)` 当成命令替换结束，语法错误；外层有 `\|\| true` 吞掉错误，脚本带着只拷了一半的 raw/ 继续往下跑，直到后面的 shasum 失败才停。 | 本机脚本不在 `$(...)` 里写 `case`（改显式语句或 `(pattern)` 前括号写法）；写完先 `bash -n` 并用一个档案试跑；`\|\| true` 只加在已知无害的命令上。另：zsh 不对未加引号的变量分词，多参数用数组或直接写出。 | I06 终点 test 结果收集（2026-09-26） |
+| V33 | TeX 日志按 79 字符折行，`grep -c 'Citation .* undefined'` 这类同行多锚点正则会漏计被拆行的警告（12 条只计到 7 条），险些误判引用发生变化。 | 统计 TeX 日志警告用前缀单锚点（如 `natbib Warning: Citation`）计数，并按 key 与页码逐条列出核对。 | 同上（Post-Mortem 2） |
+| V34 | 改写被编辑器重排过的 Markdown（表格补齐空格）时用裸 `str.replace(..., 1)`，锚点未命中也不报错，修订记录两行静默漏写。 | 改写用户会用编辑器打开的文档，每处替换都断言命中次数为 1，未命中即中止且不写文件；锚点优先用标题等行首前缀，避开表格行内容。 | manuscript/消融实验/2.innovation-secode-part- Encoder/6.LLM浓缩-A1/研究计划书-A1-LLM浓缩.md（Post-Mortem 5） |
+| V35 | 正式 test 的用户授权只绑定源码、协议和 commit，没有绑定 ckpt 集合；同一 commit 下重训一套 ckpt 可以复用旧授权再跑 test，产生择优空间。 | test 授权必须绑定本轮 ckpt 集合摘要与资产锁（preflight 打印，用户写进授权）；换一套 ckpt 必须重新授权；评测 runtime 同样写进授权，正式 test 禁止用 CLI 覆盖 runtime（round2 R1）。 | experiments/I06_llm_condensation/reviews/20260926-a1-node1/claude-response.md（Codex 节点一 finding 1） |
+| V36 | 「训练不看 test」只靠发车清单 YAML 带 `--skip_test` 加静态测试证明，评测门不核对实际 run 记录，真实运行漏带参数时不会被发现。 | 训练期约束（如 skip_test）要写进评测门的训练合同，并按实际 run 的 resolved_config 核对；只核对清单不算证明。 | experiments/I06_llm_condensation/reviews/20260926-a1-node1/claude-response.md（Codex 节点一 finding 2） |
+| V37 | 冻结门只看质量报告里的 arm 和 obvious_failure，没有绑定被检的记录与抽查集合；旧报告或伪造报告可以放行；拼错的状态也不会计入退回上限。 | 质量或审查报告必须绑定被检对象的内容摘要与抽样集合，消费方重算后核对；状态字段按枚举校验，未知值直接拒绝；人工抽查表逐行带生成时的记录摘要，打分时核对，防止旧表套到重新生成的记录上（round2 R2）。 | experiments/I06_llm_condensation/reviews/20260926-a1-node1/claude-response.md（Codex 节点一 finding 3） |
+| V38 | LLM 输出的源文本核验按字面匹配，碰上 OCR 错字（pNO / pTlc）、分开写的分期（pT: 2a）、英文数字和百分号前空格，试点误报率高达 44–52%，5% 的失败线形同虚设。 | 自动核验规则和失败线必须先在真实试点输出上逐条核对误报，归一化只修正「同一事实的不同写法」，不放过原文没有的值（如加总出来的总数）。 | experiments/I06_llm_condensation/verify.py；研究计划书 v3.8（2026-09-26 试点） |
+| V39 | 为满足编码器长度上限，对 LLM 输出按 token 硬截断，切点落在数值中间（「FIGO IIIC」→「FIGO II」），产生原文没有的错值，自动核验按字面找不到它反而漏报。 | 截断生成文本一律退回到最后一个完整句子 / 字段边界（数字里的小数点不算边界），宁可整句丢失也不留半截值；截断规则要有「不产生新值」的测试。 | experiments/I06_llm_condensation/condense.py `truncate_clean`；Codex 抽查 TCGA-BG-A0M6（2026-09-26） |
+| V40 | LLM 浓缩的长度上限（≤200 token）在测量模型自然输出长度之前就定了，试点每癌 10 份又低估了长报告癌种；全量才发现 69% 被迫重写压缩、17% 截断。 | 定长度上限前先让模型在不提长度的 prompt 下跑一轮，测自然长度分布（分癌种）；上限若只为匹配槽位形状而非对照设计，先确认编码侧是否真的需要它。 | 研究计划书-A1-LLM浓缩.md v3.12（2026-09-26） |
+| V41 | 冒烟训练与回放门同时发车，回放指定了在用的 0 号卡，而 1 号卡当时还空着；选卡规则要求空闲卡优先，回放直接被拒（RuntimeError：本机有空闲卡）。 | 同机多个 GPU 任务按「空闲卡优先」规则规划：后发任务排在前一个任务之后、接在同一张卡上（jobrun 等待前一任务的 done.flag），不要指定在用卡抢跑。 | I06 候选冒烟（landau，2026-09-26） |
+| V42 | 计划书 v3.12 把 A1 的主对照从 B1 改为 B2（同 8192 规格、只差文本来源），但结果渲染脚本的口径文字和计划书 5 处旧段落（含第 0 节约束清单）仍写“A1 − B1 为单变量差”；新脚本也漏了 I05 脚本已有的 LUAD 探索性披露。终点结果文档因此把混杂比较写成因果证据，节点二审查才拦下；首审修复时按整句检索，又漏了措辞不同的第 0 节，复审才发现。 | 计划书修订改动对照或判定口径时，同一次提交内按关键词（如“单变量”“≤200”）而非整句检索旧说法（计划书、渲染脚本、结果索引），逐条人工判定并改正；结果渲染脚本的口径段落（主对照名、探索性披露）用测试钉住，从旧脚本迁移时逐条对照旧脚本的披露项。 | I06 节点二审查（`experiments/I06_llm_condensation/reviews/20260926-a1-results/`，2026-09-26） |
+
+## 画布写入补充（2026-09-29）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| E38 | 目标 `.excalidraw.svg` 正在 VS Code Excalidraw 插件（pomdtr 3.9.3，无外部修改监听）里打开，写入并当场核对一致后，编辑器里过期的空白文档在同一分钟内被存回磁盘，覆盖了写入内容。 | 写入由自定义编辑器打开的文件前，先确认标签页已关闭（或请用户关闭）；写入后隔一段时间再核对一次大小与内容，不能只在写入瞬间核对。 | `manuscript/消融实验/2.innovation-secode-part- Encoder/2.检索增强提示/index.excalidraw.svg`（本会话 2026-09-29 18:10） |
+
+## idea spark 补充（2026-10-09 入账）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| E39 | 给 idea spark 写中文查询时 DOI 链接后紧跟全角标点（，）），DOI 正则只认半角结束符，11 条锚点 DOI 吞进后续中文、无法解析；补登记时 `add_user_ref --id` 传裸 DOI 又被存成 title 类型。 | 中文查询里的链接后一律接空格或半角标点；登记 DOI 一律带 `https://doi.org/` 前缀；Phase 0 跑完立即检查 user_refs.json 有无含非 ASCII 的 DOI。 | `manuscript/消融实验/3.LLM-缺失模态/AI研究接力记录/附件/历史归档.md` 第二节 Bug Post-Mortem（2026-10-02） |

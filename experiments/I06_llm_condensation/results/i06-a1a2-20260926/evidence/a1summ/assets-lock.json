@@ -1,0 +1,70 @@
+{
+  "assets_lock_sha256": "5b16a9daafeb91cff7169a042c1846e9208b4c83d7bcb153958a285093dc88a1",
+  "commit": "c5aa9ea2f62ba82fb625b00fdab05c67dde7f835",
+  "locked_at_utc": "2026-09-26T10:54:25.161355+00:00",
+  "profile": "a1summ",
+  "protocol_id": "patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1-i06-a1summ-v1",
+  "view": {
+    "feature_manifest_sha256": "903192a1386a4ea308032a302c41cdc0359f761aadaa06f8c66644c62886cd11",
+    "files": {
+      "BLCA": {
+        "img_sur_test_all_BLCA.pkl": "matches_legacy",
+        "img_sur_train_all_BLCA.pkl": "matches_legacy",
+        "img_sur_valid_all_BLCA.pkl": "matches_legacy",
+        "rna_sur_test_all_BLCA.pkl": "matches_legacy",
+        "rna_sur_train_all_BLCA.pkl": "matches_legacy",
+        "rna_sur_valid_all_BLCA.pkl": "matches_legacy",
+        "text_sur_test_all_BLCA.pkl": "491c6bd6d3fe790dcc8a570391d93d51362bf1a1fdb11dd821ecbca1c93877b8",
+        "text_sur_train_all_BLCA.pkl": "fb77ac1cecdddb40138316efff936733ed78a3747bd39f67d326bce05f18d418",
+        "text_sur_valid_all_BLCA.pkl": "a7c369a9a95084b0ff440fcd65d70565a9080a6c0bf662da9db2582bddf0f324"
+      },
+      "BRCA": {
+        "img_sur_test_all_BRCA.pkl": "matches_legacy",
+        "img_sur_train_all_BRCA.pkl": "matches_legacy",
+        "img_sur_valid_all_BRCA.pkl": "matches_legacy",
+        "rna_sur_test_all_BRCA.pkl": "matches_legacy",
+        "rna_sur_train_all_BRCA.pkl": "matches_legacy",
+        "rna_sur_valid_all_BRCA.pkl": "matches_legacy",
+        "text_sur_test_all_BRCA.pkl": "8214b7cf87b7ceeae32b09956a895c72ae6273453ada81fff946a08c0556063a",
+        "text_sur_train_all_BRCA.pkl": "ad5823cee5066bf434dabccf5e95ae8acd408fd475e90ba46f18a9d66566182f",
+        "text_sur_valid_all_BRCA.pkl": "cd9ff2fd8d31486815e7db895a8e01f63d296a640b9134896116347794924f88"
+      },
+      "LGG": {
+        "img_sur_test_all_LGG.pkl": "matches_legacy",
+        "img_sur_train_all_LGG.pkl": "matches_legacy",
+        "img_sur_valid_all_LGG.pkl": "matches_legacy",
+        "rna_sur_test_all_LGG.pkl": "matches_legacy",
+        "rna_sur_train_all_LGG.pkl": "matches_legacy",
+        "rna_sur_valid_all_LGG.pkl": "matches_legacy",
+        "text_sur_test_all_LGG.pkl": "a3caf65fe1cf36d58d1db63f43d787575b6815f2ea669daff09b2564a83f389f",
+        "text_sur_train_all_LGG.pkl": "c3b3da4155bdb298861884bf47e9e2719984af1ca82563ae2866f2d9069c5ce5",
+        "text_sur_valid_all_LGG.pkl": "56d39248066fd489ca40fd580b070adc8037bd4aad90f2b0604421a4644e1014"
+      },
+      "LUAD": {
+        "img_sur_test_all_LUAD.pkl": "matches_legacy",
+        "img_sur_train_all_LUAD.pkl": "matches_legacy",
+        "img_sur_valid_all_LUAD.pkl": "matches_legacy",
+        "rna_sur_test_all_LUAD.pkl": "matches_legacy",
+        "rna_sur_train_all_LUAD.pkl": "matches_legacy",
+        "rna_sur_valid_all_LUAD.pkl": "matches_legacy",
+        "text_sur_test_all_LUAD.pkl": "d7f1c75423f7c3ba2f7437f4d49b2c626783d9e9a644f155eebda05df077c466",
+        "text_sur_train_all_LUAD.pkl": "9098532682e9e971644c714fcd4ffc1b028619d26c2da3c5ca4e39a97e8d6c96",
+        "text_sur_valid_all_LUAD.pkl": "759de37fdd265cba1c4b786b8c8beef04dc5ca531cdd83bf8d24f1e23487ddf6"
+      },
+      "UCEC": {
+        "img_sur_test_all_UCEC.pkl": "matches_legacy",
+        "img_sur_train_all_UCEC.pkl": "matches_legacy",
+        "img_sur_valid_all_UCEC.pkl": "matches_legacy",
+        "rna_sur_test_all_UCEC.pkl": "matches_legacy",
+        "rna_sur_train_all_UCEC.pkl": "matches_legacy",
+        "rna_sur_valid_all_UCEC.pkl": "matches_legacy",
+        "text_sur_test_all_UCEC.pkl": "27c0f1a2501512b43dc7d475ed74cb498d18d8b9ef687d04f262b67eb790dbb8",
+        "text_sur_train_all_UCEC.pkl": "1f163feb9ffbbfc1580416645f96b61790705fb83393884aae287a7ed3704e32",
+        "text_sur_valid_all_UCEC.pkl": "6d4a3d18152151f12f6c5b63e5c01c0796659e7b45a65ac0182c56a5e6050209"
+      }
+    },
+    "label_sha256": "35c2865914d1e32f077ab470d299fc712d4f5fb2e63059f6bf8a68694a347e2f",
+    "manifest_sha256": "c789eae9a5b1517d82cfa137a92dfa8cc7ffae58e5f300163b25729ffc5d8156",
+    "profile": "a1summ"
+  }
+}

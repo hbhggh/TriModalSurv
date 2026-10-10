@@ -87,7 +87,7 @@ def test_incomplete_or_duplicate_rows_rejected(config):
         render.strategy0_values({'rows': broken}, config, label='t')
 
 
-DOC_DIR = REPO_ROOT / 'manuscript/消融实验/2.innovation-secode-part- Encoder/4.BioClinical ModernBERT-程序性知识'
+DOC_DIR = REPO_ROOT / 'manuscript/消融实验/2.innovation-secode-part- Encoder/1.prototype_learning/4.BioClinical ModernBERT-程序性知识'
 LEDGER_TEST = (REPO_ROOT / 'experiments/BioClinical ModernBERT/results/i05-bcmbert200-20260924d/evidence'
                / 'formal_eval/runs/test/complete.json')
 
@@ -212,7 +212,7 @@ def test_render_bcmbert8192_template_without_results(config, baseline):
     assert '不截断（全文 ≤ 8192 token' in documents['癌症为单位.md']
 
 
-A0_DOC_DIR = REPO_ROOT / 'manuscript/消融实验/2.innovation-secode-part- Encoder/5.如何修补BioClinical-ModernBERT.md'
+A0_DOC_DIR = REPO_ROOT / 'manuscript/消融实验/2.innovation-secode-part- Encoder/1.prototype_learning/5.如何修补BioClinical-ModernBERT.md'
 
 
 A0_LEDGER_TEST = (REPO_ROOT / 'experiments/BioClinical ModernBERT/results/i05-a0-20260924/evidence'

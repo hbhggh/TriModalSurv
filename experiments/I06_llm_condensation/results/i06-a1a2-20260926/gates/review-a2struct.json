@@ -1,0 +1,10 @@
+{
+ "commit": "c5aa9ea2f62ba82fb625b00fdab05c67dde7f835",
+ "decision": "PASS",
+ "note": "Codex test 门前审查（experiments/I06_llm_condensation/reviews/20260926-a1-pretest/，审 20bbe6a..dev，含 S）结论 needs-attention：2 条 high（续跑只核对 custom_id；提取器不强制 freeze manifest）与 1 条 medium（skip_test 训练仍加载 test 数据集）。执行方核实三条均为代码门不够严、本次 S 数据链未受影响：回放请求与原请求逐字相同（3e4346f..S 的 prompt / model.py / config.llm / 原文清单未变）；四个特征 manifest 的冻结文件哈希等于 freeze manifest；训练未在 test 上预测、test 缓存内容经资产锁核对未变，且与基线、B1、B2 同训练路径。decision=PASS 为用户签署的放行结论，并非 Codex 复审结论；两条 high 的代码加固在 dev 修复并复审，不影响本次结果。",
+ "protocol_id": "patient-fixed-padmask-v2-infer-rules1to5-v1-luad-m1-force-v1-i06-a2struct-v1",
+ "reviewer": "Codex",
+ "signed_by": "user",
+ "signed_in": "对话内 AskUserQuestion：先选『先让 Codex 只读审 S，再签（推荐）』，审查后选『凭证据放行，先跑 test（推荐）』",
+ "source_hashes_sha256": "7017bd2196ff37d6b617d22a7d36f8af3339cf33e788dff66441d8435f501149"
+}

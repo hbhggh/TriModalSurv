@@ -31,6 +31,9 @@ def test_winner_rule_counts_wins_first_then_mean_delta_then_order():
                          I06['candidate_tie_order'])
     assert decision['winner'] == 'A1-Z' and decision['reached'] is True
     assert decision['candidates']['A2-S']['k'] == 0  # 相等不算胜
+    # 确认性口径不计探索性的 LUAD：four_small 胜 BLCA/BRCA/LGG/LUAD → 3；three_big 胜 BLCA/BRCA/LGG → 3
+    assert rr.EXPLORATORY == ('LUAD',)
+    assert decision['candidates']['A1-Z']['k_confirm'] == 3 and decision['candidates']['A1-S']['k_confirm'] == 3
     same = rr.decide({'A1-S': tie, 'A1-Z': tie, 'A2-S': tie, 'A2-Z': tie}, base, I05, I06['candidate_tie_order'])
     assert same['winner'] == 'A1-S' and same['reached'] is False
 
@@ -64,11 +67,20 @@ def test_render_all_end_to_end_is_deterministic(tmp_path):
     assert decision['winner'] == 'A1-Z' and decision['candidates']['A1-Z']['k'] == 5
     assert decision['candidates']['A1-S']['k'] == 3  # 与 B1 相同：Overall 胜 BLCA、LUAD、UCEC
     text = first[rr.RESULT_NAME]
-    assert '胜者：A1-Z NeuML 摘要，Overall 严格胜 5/5，达标' in text
+    assert '胜者：A1-Z NeuML 摘要，Overall 严格胜 5/5（不计探索性的 LUAD：4/4），达标' in text
     for cancer in I05['cancers']:
         assert f'### {cancer}' in text
+    assert '### LUAD（探索性）' in text and '| LUAD（探索性） |' in text
     assert text.count('| **Overall** |') == 5 and '检索效果最好' in text
-    assert first[rr.ABLATION_NAME].count('| Overall |') == 2
+    # 归因：v3.12 起 A1 − B2 为主对照（同 encoder、同 8192 规格），A1 − B1 只作辅助；不得再称 A1 − B1 为单变量差
+    assert rr.ATTRIBUTION in text and 'A1 − B1 为同一冻结 encoder' not in text
+    rows = {line.split(' | ')[0].lstrip('| '): line for line in text.splitlines() if ' − B' in line and line.startswith('| A1')}
+    assert rows['A1-Z − B1（辅助）'].endswith('| 5/5 |')   # A1-Z = B1 + 0.04
+    assert rows['A1-S − B1（辅助）'].endswith('| 0/5 |')   # A1-S = B1：差恰为 0，不算为正
+    assert set(rows) == {'A1-S − B2（主对照）', 'A1-Z − B2（主对照）', 'A1-S − B1（辅助）', 'A1-Z − B1（辅助）'}
+    assert '对 B2 ' in text and '（主对照）；对 B1 ' in text
+    ablation = first[rr.ABLATION_NAME]
+    assert ablation.count('| Overall |') == 2 and 'A1 − B2（同 encoder' in ablation and 'LUAD（探索性） ·' in ablation
 
 
 def test_render_rejects_wrong_profile_for_candidate(tmp_path):
