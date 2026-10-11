@@ -266,3 +266,6 @@
 | --- | --- | --- | --- |
 | G7 | 把主目录未提交改动用 `git apply -3` 搬到 dev 后按组提交，`-3` 会把改动直接写进暂存区，第一个 `git commit` 把所有组一起提交，后续分组提交落空。 | `git apply -3` 之后先 `git reset`（只清暂存区）再按组 `git add` 明确路径，每次提交前打印 `git diff --cached --name-only` 核对。 | 本会话 2026-10-10 I06 squash 收尾 |
 | E40 | zsh 下用 `${PIPESTATUS[0]}` 取管道退出码得到空值，`tar -t` 又把中文路径显示成八进制转义；据此做的"成功/同名"判断都不可信。 | zsh 用 `$pipestatus`，或者不用管道、直接判断退出码；对中文路径的存在性检查用 NUL 分隔的原始清单（`git ls-files -z`），不用 `tar -t` 的显示结果；最后再逐文件 `cmp` 核对。 | 本会话 2026-10-10 I06 squash 收尾 |
+| C17 | 在 Claude 会话里跑 `scripts/codex_review.sh`：Codex 只读沙箱下 xcrun 版 `/usr/bin/git` 写不了缓存而失败；修好后又因会话沙箱读不到 Codex 配置报 "failed to load configuration: Operation not permitted"。 | Codex 审查由用户在自己的终端运行，命令前置 `PATH="/Library/Developer/CommandLineTools/usr/bin:$PATH"`；Claude 只给出完整命令并处理落盘结果。 | 本会话 2026-10-10 I07 节点一 |
+| E41 | macOS 上 `tar -rf` 追加文件会带上扩展属性，Linux 解包多出 `._<文件名>`（AppleDouble），远端文件数比清单多 1 个。 | 在 macOS 上打包传服务器前 `export COPYFILE_DISABLE=1`；远端核对除了 `sha256sum -c` 还要比对文件数。 | 本会话 2026-10-11 I07 冒烟部署 |
+| V43 | 授权摘要只绑定 ckpt 时，授权后改 run.json（config、best_epoch）仍能通过评估；资产先整体校验、后按路径重读，中间有替换窗口。 | 测试授权同时绑定 best.pt 与 run.json 的哈希，评估入口核对 config 哈希；数据文件只读一次字节、按 manifest 核对后从同一份字节解析。 | I07 节点一第 3 轮审查（reviews/20261010-node1-terminal/round3） |

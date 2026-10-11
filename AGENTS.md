@@ -105,7 +105,7 @@ Claude 担任执行方时，写完代码到交付用户之间是一条不中断�
 
 完整说明与迁移模板见 `docs/workflow/git-workflow.md`；命令封装在 `scripts/gitflow.sh` 与 `scripts/ci.sh`。
 
-布局：主目录 `TriModalSurv/` 只检出 `main`；`dev` 是唯一长期开发分支，检出在 `TriModalSurv.worktrees/dev/`；每个正式实验从 `main` 建一个 run worktree `TriModalSurv.worktrees/run-<run_id>/`，检出一次性分支 `train/<run_id>`（HEAD = `main`）。Codex 自己的 `~/.codex/worktrees/` 是它的临时工作区，不在本规则内，也不得作为正式实验源码来源。
+布局：主目录 `TriModalSurv/` 只检出 `main`；`dev` 是唯一长期开发分支，检出在 `TriModalSurv.worktrees/dev/`；每个正式实验从 `main` 建一个 run worktree `TriModalSurv.worktrees/run-<run_id>/`，检出一次性分支 `train/<run_id>`（HEAD = `main`）。应用为会话自动建的 worktree（Codex 的 `~/.codex/worktrees/`，Claude 桌面应用的 `.claude/worktrees/<名字>/` 及其 `claude/*` 分支）是临时工作区，不在本规则内：只用于讨论、检索和只读操作，不在其中改仓库文件或 commit，也不得作为正式实验源码来源；需要改代码或文档时，改动一律落在 `dev` worktree（用户裁决 2026-10-11）。
 
 1. `main` 的语义 = 一个创新一个 commit，且每个正式实验的 commit 都在 `main` 上。禁止在主目录直接改代码。
 2. 创新靠目录与文件名隔离（`experiments/<ID>/`、config 选择），不靠分支；多个创新共用 `dev`。

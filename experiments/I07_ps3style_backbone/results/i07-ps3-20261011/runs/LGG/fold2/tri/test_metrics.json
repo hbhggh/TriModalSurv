@@ -1,0 +1,15 @@
+{
+  "cancer": "LGG",
+  "fold": 2,
+  "arm": "tri",
+  "best_epoch": 2,
+  "c_index": {
+    "full": 0.8132611637347767,
+    "only_rna__zero": 0.86468200270636,
+    "only_rna__train_mean": 0.86468200270636,
+    "only_wsi__zero": 0.7713125845737483,
+    "only_wsi__train_mean": 0.7713125845737483,
+    "only_text__zero": 0.5548037889039242,
+    "only_text__train_mean": 0.5548037889039242
+  }
+}

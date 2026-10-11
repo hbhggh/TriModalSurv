@@ -1,0 +1,15 @@
+{
+  "cancer": "LUAD",
+  "fold": 1,
+  "arm": "tri",
+  "best_epoch": 3,
+  "c_index": {
+    "full": 0.680327868852459,
+    "only_rna__zero": 0.6535022354694486,
+    "only_rna__train_mean": 0.6535022354694486,
+    "only_wsi__zero": 0.646795827123696,
+    "only_wsi__train_mean": 0.646795827123696,
+    "only_text__zero": 0.6758569299552906,
+    "only_text__train_mean": 0.6758569299552906
+  }
+}

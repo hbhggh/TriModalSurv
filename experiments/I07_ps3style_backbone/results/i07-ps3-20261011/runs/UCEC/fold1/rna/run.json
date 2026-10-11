@@ -1,0 +1,36 @@
+{
+  "cancer": "UCEC",
+  "fold": 1,
+  "arm": "rna",
+  "config": {
+    "d": 256,
+    "lr": 0.0001,
+    "weight_decay": 1e-05,
+    "batch_size": 64,
+    "epochs": 50,
+    "dropout": 0.25,
+    "seed": 2026
+  },
+  "config_sha256": "8f3b25aa9ed3cc4ef1be75d120136e3a7c73c1c62411ed1fa0c14f2bda4ea648",
+  "device": "cuda",
+  "n": {
+    "train": 326,
+    "val": 47
+  },
+  "git": {
+    "commit": "3d01b19f44b76f0500a57278b5944406b9ae93d9",
+    "dirty": false,
+    "source": "stamp"
+  },
+  "assets": "/home/wuhao/NPJ/i07_assets/v1",
+  "assets_fp": {
+    "cohort": "289f374698c1a850488414e9e5449870595ab8894065ef99c5b308b082d613d6",
+    "splits": "f6e3e4b0747e49dd0ff4fc95e903fcff03e4b5c84a2d33ac251a6be7f58a960f",
+    "wsi_tokens": "7b19edc44b621d4624173bc9d9d86d56dbc7ca3f1c6d515fae22b8bab5b3e59c",
+    "rna": "aa233e63dbceaab56032d8810d8b1418463e6fefcfdf54793dc5259269b08ab4",
+    "text": "de8ef94c2a1c160a786db4be6f6ae97775c4fa88a4b2e712cc053551e8799259"
+  },
+  "seconds": 12.5,
+  "best_epoch": 2,
+  "best_val_loss": 3.1688525676727295
+}

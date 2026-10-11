@@ -1,0 +1,58 @@
+{
+  "review": "Adversarial Review",
+  "target": {
+    "mode": "branch",
+    "label": "branch diff against main",
+    "baseRef": "main",
+    "explicit": true
+  },
+  "threadId": "01a129ae-d542-7191-93b3-3b3e8e2f2943",
+  "context": {
+    "repoRoot": "<仓库根>",
+    "branch": "dev",
+    "summary": "Reviewing branch dev against main from merge-base 3d01b19f44b76f0500a57278b5944406b9ae93d9."
+  },
+  "codex": {
+    "status": 0,
+    "stderr": "",
+    "stdout": "{\"verdict\":\"needs-attention\",\"summary\":\"不应放行：最终 results_digest 仍未绑定唯一入库的逐病人预测文件，首审 high 未完全修复。\",\"findings\":[{\"severity\":\"high\",\"title\":\"results_digest 未绑定 preds_test_all.csv\",\"body\":\"results_digest 只哈希授权摘要、commit 和 output_manifest；manifest 又只包含未入库的 preds_test.npz 与 test_metrics.json。入库且用于独立复算的 preds_test_all.csv 哈希仅写入 verify_report.json，而 verify_report 本身不在 results_digest 中。因此修改 CSV 及其报告哈希不会改变公布的 results_digest，无法用该摘要证明入库预测就是核对通过的输出。\",\"file\":\"experiments/I07_ps3style_backbone/verify_outputs.py\",\"line_start\":121,\"line_end\":126,\"confidence\":0.99,\"recommendation\":\"先生成 CSV，随后把 preds_test_all.csv 的 SHA-256（以及固定版本的验证协议标识）直接纳入 results_digest；提供校验入口，从入库 CSV 重算全部 C-index、填充极差和最终摘要，并增加篡改 CSV 必须失败的端到端测试。\"}],\"next_steps\":[\"修正摘要链后重新生成 verify_report.json 和 results_digest。\",\"复审仅核对新摘要能否检测 preds_test_all.csv 的任意改动。\"]}",
+    "reasoning": [
+      "**Preparing code inspection**",
+      "**Inspecting commit details**",
+      "**Analyzing potential data binding issues**",
+      "**Examining asset binding and digest integrity**",
+      "**Assessing output binding and recomputation support** I’m analyzing how outputs are bound, especially focusing on missing hashes for NPZ files and the lack of an independent verifier for CSV recomputation. I notice risks around NaN handling in metrics and that run.json isn’t included in the final output manifest despite being committed, raising concerns about provenance and verification completeness. However, an authorization digest seems to bind many run.json versions, indicating a partial proof chain, though verification scripts don't fully recalculate or validate everything independently.",
+      "**Analyzing output integrity risks**"
+    ]
+  },
+  "result": {
+    "verdict": "needs-attention",
+    "summary": "不应放行：最终 results_digest 仍未绑定唯一入库的逐病人预测文件，首审 high 未完全修复。",
+    "findings": [
+      {
+        "severity": "high",
+        "title": "results_digest 未绑定 preds_test_all.csv",
+        "body": "results_digest 只哈希授权摘要、commit 和 output_manifest；manifest 又只包含未入库的 preds_test.npz 与 test_metrics.json。入库且用于独立复算的 preds_test_all.csv 哈希仅写入 verify_report.json，而 verify_report 本身不在 results_digest 中。因此修改 CSV 及其报告哈希不会改变公布的 results_digest，无法用该摘要证明入库预测就是核对通过的输出。",
+        "file": "experiments/I07_ps3style_backbone/verify_outputs.py",
+        "line_start": 121,
+        "line_end": 126,
+        "confidence": 0.99,
+        "recommendation": "先生成 CSV，随后把 preds_test_all.csv 的 SHA-256（以及固定版本的验证协议标识）直接纳入 results_digest；提供校验入口，从入库 CSV 重算全部 C-index、填充极差和最终摘要，并增加篡改 CSV 必须失败的端到端测试。"
+      }
+    ],
+    "next_steps": [
+      "修正摘要链后重新生成 verify_report.json 和 results_digest。",
+      "复审仅核对新摘要能否检测 preds_test_all.csv 的任意改动。"
+    ]
+  },
+  "rawOutput": "{\"verdict\":\"needs-attention\",\"summary\":\"不应放行：最终 results_digest 仍未绑定唯一入库的逐病人预测文件，首审 high 未完全修复。\",\"findings\":[{\"severity\":\"high\",\"title\":\"results_digest 未绑定 preds_test_all.csv\",\"body\":\"results_digest 只哈希授权摘要、commit 和 output_manifest；manifest 又只包含未入库的 preds_test.npz 与 test_metrics.json。入库且用于独立复算的 preds_test_all.csv 哈希仅写入 verify_report.json，而 verify_report 本身不在 results_digest 中。因此修改 CSV 及其报告哈希不会改变公布的 results_digest，无法用该摘要证明入库预测就是核对通过的输出。\",\"file\":\"experiments/I07_ps3style_backbone/verify_outputs.py\",\"line_start\":121,\"line_end\":126,\"confidence\":0.99,\"recommendation\":\"先生成 CSV，随后把 preds_test_all.csv 的 SHA-256（以及固定版本的验证协议标识）直接纳入 results_digest；提供校验入口，从入库 CSV 重算全部 C-index、填充极差和最终摘要，并增加篡改 CSV 必须失败的端到端测试。\"}],\"next_steps\":[\"修正摘要链后重新生成 verify_report.json 和 results_digest。\",\"复审仅核对新摘要能否检测 preds_test_all.csv 的任意改动。\"]}",
+  "parseError": null,
+  "reasoningSummary": [
+    "**Preparing code inspection**",
+    "**Inspecting commit details**",
+    "**Analyzing potential data binding issues**",
+    "**Examining asset binding and digest integrity**",
+    "**Assessing output binding and recomputation support** I’m analyzing how outputs are bound, especially focusing on missing hashes for NPZ files and the lack of an independent verifier for CSV recomputation. I notice risks around NaN handling in metrics and that run.json isn’t included in the final output manifest despite being committed, raising concerns about provenance and verification completeness. However, an authorization digest seems to bind many run.json versions, indicating a partial proof chain, though verification scripts don't fully recalculate or validate everything independently.",
+    "**Analyzing output integrity risks**"
+  ]
+}

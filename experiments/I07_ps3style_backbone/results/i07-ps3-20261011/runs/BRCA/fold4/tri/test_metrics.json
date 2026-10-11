@@ -1,0 +1,15 @@
+{
+  "cancer": "BRCA",
+  "fold": 4,
+  "arm": "tri",
+  "best_epoch": 2,
+  "c_index": {
+    "full": 0.7150451887293993,
+    "only_rna__zero": 0.5528973950026581,
+    "only_rna__train_mean": 0.5528973950026581,
+    "only_wsi__zero": 0.6916533758639022,
+    "only_wsi__train_mean": 0.6916533758639022,
+    "only_text__zero": 0.7687400318979266,
+    "only_text__train_mean": 0.7687400318979266
+  }
+}

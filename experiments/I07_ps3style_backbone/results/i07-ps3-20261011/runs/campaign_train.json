@@ -1,0 +1,732 @@
+{
+  "runs": {
+    "BLCA/0/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:02:46+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:03:02+00:00"
+    },
+    "BLCA/0/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:02:46+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:02:58+00:00"
+    },
+    "BLCA/0/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:02:46+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:03:04+00:00"
+    },
+    "BLCA/0/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:02:46+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:02:56+00:00"
+    },
+    "BLCA/1/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:02:56+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:03:14+00:00"
+    },
+    "BLCA/1/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:02:58+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:03:08+00:00"
+    },
+    "BLCA/1/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:03:02+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:03:18+00:00"
+    },
+    "BLCA/1/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:03:04+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:03:16+00:00"
+    },
+    "BLCA/2/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:03:08+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:03:24+00:00"
+    },
+    "BLCA/2/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:03:14+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:03:22+00:00"
+    },
+    "BLCA/2/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:03:16+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:03:34+00:00"
+    },
+    "BLCA/2/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:03:18+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:03:28+00:00"
+    },
+    "BLCA/3/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:03:22+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:03:36+00:00"
+    },
+    "BLCA/3/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:03:24+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:03:34+00:00"
+    },
+    "BLCA/3/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:03:28+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:03:42+00:00"
+    },
+    "BLCA/3/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:03:34+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:03:42+00:00"
+    },
+    "BLCA/4/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:03:34+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:03:48+00:00"
+    },
+    "BLCA/4/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:03:36+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:03:44+00:00"
+    },
+    "BLCA/4/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:03:42+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:03:56+00:00"
+    },
+    "BLCA/4/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:03:42+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:03:52+00:00"
+    },
+    "BRCA/0/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:03:44+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:04:12+00:00"
+    },
+    "BRCA/0/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:03:48+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:04:02+00:00"
+    },
+    "BRCA/0/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:03:52+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:04:20+00:00"
+    },
+    "BRCA/0/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:03:56+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:04:08+00:00"
+    },
+    "BRCA/1/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:04:02+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:04:32+00:00"
+    },
+    "BRCA/1/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:04:08+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:04:24+00:00"
+    },
+    "BRCA/1/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:04:12+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:04:40+00:00"
+    },
+    "BRCA/1/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:04:20+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:04:32+00:00"
+    },
+    "BRCA/2/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:04:24+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:04:54+00:00"
+    },
+    "BRCA/2/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:04:32+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:04:48+00:00"
+    },
+    "BRCA/2/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:04:32+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:05:02+00:00"
+    },
+    "BRCA/2/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:04:40+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:04:54+00:00"
+    },
+    "BRCA/3/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:04:48+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:05:18+00:00"
+    },
+    "BRCA/3/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:04:54+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:05:10+00:00"
+    },
+    "BRCA/3/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:04:54+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:05:24+00:00"
+    },
+    "BRCA/3/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:05:02+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:05:16+00:00"
+    },
+    "BRCA/4/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:05:10+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:05:38+00:00"
+    },
+    "BRCA/4/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:05:16+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:05:30+00:00"
+    },
+    "BRCA/4/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:05:18+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:05:46+00:00"
+    },
+    "BRCA/4/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:05:24+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:05:36+00:00"
+    },
+    "LUAD/0/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:05:30+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:05:46+00:00"
+    },
+    "LUAD/0/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:05:36+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:05:46+00:00"
+    },
+    "LUAD/0/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:05:38+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:05:54+00:00"
+    },
+    "LUAD/0/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:05:46+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:05:56+00:00"
+    },
+    "LUAD/1/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:05:46+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:06:04+00:00"
+    },
+    "LUAD/1/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:05:46+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:05:56+00:00"
+    },
+    "LUAD/1/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:05:54+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:06:10+00:00"
+    },
+    "LUAD/1/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:05:56+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:06:06+00:00"
+    },
+    "LUAD/2/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:05:56+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:06:14+00:00"
+    },
+    "LUAD/2/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:06:04+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:06:14+00:00"
+    },
+    "LUAD/2/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:06:06+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:06:22+00:00"
+    },
+    "LUAD/2/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:06:10+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:06:20+00:00"
+    },
+    "LUAD/3/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:06:14+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:06:32+00:00"
+    },
+    "LUAD/3/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:06:14+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:06:24+00:00"
+    },
+    "LUAD/3/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:06:20+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:06:36+00:00"
+    },
+    "LUAD/3/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:06:22+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:06:32+00:00"
+    },
+    "LUAD/4/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:06:24+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:06:40+00:00"
+    },
+    "LUAD/4/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:06:32+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:06:42+00:00"
+    },
+    "LUAD/4/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:06:32+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:06:48+00:00"
+    },
+    "LUAD/4/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:06:36+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:06:44+00:00"
+    },
+    "LGG/0/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:06:40+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:06:56+00:00"
+    },
+    "LGG/0/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:06:42+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:06:52+00:00"
+    },
+    "LGG/0/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:06:44+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:07:02+00:00"
+    },
+    "LGG/0/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:06:48+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:06:56+00:00"
+    },
+    "LGG/1/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:06:52+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:07:10+00:00"
+    },
+    "LGG/1/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:06:56+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:07:06+00:00"
+    },
+    "LGG/1/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:06:56+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:07:12+00:00"
+    },
+    "LGG/1/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:07:02+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:07:10+00:00"
+    },
+    "LGG/2/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:07:06+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:07:22+00:00"
+    },
+    "LGG/2/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:07:10+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:07:20+00:00"
+    },
+    "LGG/2/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:07:10+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:07:26+00:00"
+    },
+    "LGG/2/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:07:12+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:07:22+00:00"
+    },
+    "LGG/3/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:07:20+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:07:36+00:00"
+    },
+    "LGG/3/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:07:22+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:07:32+00:00"
+    },
+    "LGG/3/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:07:22+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:07:38+00:00"
+    },
+    "LGG/3/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:07:26+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:07:36+00:00"
+    },
+    "LGG/4/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:07:32+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:07:50+00:00"
+    },
+    "LGG/4/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:07:36+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:07:46+00:00"
+    },
+    "LGG/4/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:07:36+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:07:52+00:00"
+    },
+    "LGG/4/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:07:38+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:07:48+00:00"
+    },
+    "UCEC/0/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:07:46+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:08:04+00:00"
+    },
+    "UCEC/0/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:07:48+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:07:58+00:00"
+    },
+    "UCEC/0/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:07:50+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:08:10+00:00"
+    },
+    "UCEC/0/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:07:52+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:08:04+00:00"
+    },
+    "UCEC/1/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:07:58+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:08:16+00:00"
+    },
+    "UCEC/1/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:08:04+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:08:14+00:00"
+    },
+    "UCEC/1/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:08:04+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:08:22+00:00"
+    },
+    "UCEC/1/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:08:10+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:08:20+00:00"
+    },
+    "UCEC/2/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:08:14+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:08:32+00:00"
+    },
+    "UCEC/2/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:08:16+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:08:26+00:00"
+    },
+    "UCEC/2/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:08:20+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:08:40+00:00"
+    },
+    "UCEC/2/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:08:22+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:08:34+00:00"
+    },
+    "UCEC/3/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:08:26+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:08:44+00:00"
+    },
+    "UCEC/3/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:08:32+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:08:42+00:00"
+    },
+    "UCEC/3/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:08:34+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:08:52+00:00"
+    },
+    "UCEC/3/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:08:40+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:08:50+00:00"
+    },
+    "UCEC/4/tri": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:08:42+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:09:00+00:00"
+    },
+    "UCEC/4/wsi": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:08:44+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:08:54+00:00"
+    },
+    "UCEC/4/rna": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:08:50+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:09:10+00:00"
+    },
+    "UCEC/4/text": {
+      "status": "done",
+      "gpu": "0",
+      "start": "2026-10-11T06:08:52+00:00",
+      "returncode": 0,
+      "end": "2026-10-11T06:09:02+00:00"
+    }
+  },
+  "meta": [
+    {
+      "start": "2026-10-11T06:02:46+00:00",
+      "argv": [
+        "/home/wuhao/NPJ/i07_code/3d01b19f/experiments/I07_ps3style_backbone/launch.py",
+        "train",
+        "--assets",
+        "/home/wuhao/NPJ/i07_assets/v1",
+        "--runs",
+        "/home/wuhao/NPJ/i07_runs/i07-ps3-20261011",
+        "--gpus",
+        "0",
+        "--per-gpu",
+        "4",
+        "--epochs",
+        "50",
+        "--python",
+        "/home/wuhao/miniconda3/envs/tcga_env/bin/python",
+        "--expected-commit",
+        "3d01b19f44b76f0500a57278b5944406b9ae93d9",
+        "--allow-low-gpu-util",
+        "I07 正式：模型小（单层注意力 d=256）、数据常驻显存，单 run 利用率达不到 50% 门禁；冒烟实测单 run 9-17 s；同卡并发 4 个"
+      ],
+      "allow_low_gpu_util": "I07 正式：模型小（单层注意力 d=256）、数据常驻显存，单 run 利用率达不到 50% 门禁；冒烟实测单 run 9-17 s；同卡并发 4 个",
+      "auth_digest": null,
+      "commit": "3d01b19f44b76f0500a57278b5944406b9ae93d9"
+    }
+  ]
+}

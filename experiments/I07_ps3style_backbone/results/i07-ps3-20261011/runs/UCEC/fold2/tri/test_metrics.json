@@ -1,0 +1,15 @@
+{
+  "cancer": "UCEC",
+  "fold": 2,
+  "arm": "tri",
+  "best_epoch": 1,
+  "c_index": {
+    "full": 0.724053724053724,
+    "only_rna__zero": 0.6068376068376068,
+    "only_rna__train_mean": 0.6068376068376068,
+    "only_wsi__zero": 0.7423687423687424,
+    "only_wsi__train_mean": 0.7423687423687424,
+    "only_text__zero": 0.46886446886446886,
+    "only_text__train_mean": 0.46886446886446886
+  }
+}

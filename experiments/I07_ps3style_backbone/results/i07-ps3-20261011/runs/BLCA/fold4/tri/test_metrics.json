@@ -1,0 +1,15 @@
+{
+  "cancer": "BLCA",
+  "fold": 4,
+  "arm": "tri",
+  "best_epoch": 1,
+  "c_index": {
+    "full": 0.5680990531682447,
+    "only_rna__zero": 0.6234522942461762,
+    "only_rna__train_mean": 0.6234522942461762,
+    "only_wsi__zero": 0.5506190823015294,
+    "only_wsi__train_mean": 0.5506190823015294,
+    "only_text__zero": 0.6016023306627822,
+    "only_text__train_mean": 0.6016023306627822
+  }
+}
