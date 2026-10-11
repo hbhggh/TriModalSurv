@@ -1,0 +1,85 @@
+{
+  "review": "Adversarial Review",
+  "target": {
+    "mode": "branch",
+    "label": "branch diff against main",
+    "baseRef": "main",
+    "explicit": true
+  },
+  "threadId": "01a124a2-73d7-78c3-9ee1-51b89454aa5a",
+  "context": {
+    "repoRoot": "<仓库根>",
+    "branch": "dev",
+    "summary": "Reviewing branch dev against main from merge-base ef5d18cb32fba9f9b8496ee64cef47d450f07716."
+  },
+  "codex": {
+    "status": 0,
+    "stderr": "",
+    "stdout": "{\"verdict\":\"needs-attention\",\"summary\":\"不应发车：训练阶段实际读取 test，测试授权未绑定评测资产，正式运行也没有硬性 provenance 门。\",\"findings\":[{\"severity\":\"high\",\"title\":\"训练入口实际加载并驻留 test 折，违反“训练不接触 test”的冻结边界\",\"body\":\"`main()` 调用 `load_fold()`，该函数无条件读取 train/val/test 的标签、RNA、文本及 WSI，并将 test 张量放到训练设备。虽然当前 `train()` 只接收 train/val，但测试隔离依赖调用者约定，而不是入口门禁；这与文件声称“本文件不接触 test”不符，也使后续日志、统计或重构可在无防护情况下接触 test。现有测试只证明改变 test 不影响当前权重，没有证明训练进程无法读取 test。\",\"file\":\"experiments/I07_ps3style_backbone/train.py\",\"line_start\":108,\"line_end\":111,\"confidence\":0.99,\"recommendation\":\"让训练入口只加载 train/val，例如为 `load_fold` 增加明确的 parts 参数，并在训练模式下拒绝加载 test；测试应监控 test 文件访问并断言训练过程零读取。\"},{\"severity\":\"high\",\"title\":\"测试授权只绑定 ckpt，未绑定 splits、特征和评测运行时\",\"body\":\"`evaluate` 门只重算 `best.pt` 摘要，随后把命令行传入的任意 `--assets` 交给评测器。授权后可替换 cohort/splits/RNA/WSI/text，或直接改用另一资产目录，而 ckpt digest 仍然通过；同一授权因此能评估不同患者集合或预处理版本，形成隐蔽择优和不可复现结果。现有测试只覆盖 ckpt 字节变化，没有覆盖资产或运行时变化。\",\"file\":\"experiments/I07_ps3style_backbone/launch.py\",\"line_start\":123,\"line_end\":132,\"confidence\":0.99,\"recommendation\":\"生成授权摘要时同时绑定清单内 ckpt、全部资产 manifest/内容摘要、评测代码 commit与固定运行参数；evaluate 入口重算并逐项核对，禁止 CLI 替换已授权的资产或运行时。\"},{\"severity\":\"high\",\"title\":\"正式训练记录 dirty/unknown 身份后仍继续，结果 provenance 不具备放行能力\",\"body\":\"`git_identity()` 在工作树脏或无法解析身份时仅把 `dirty=True/None` 写入 `run.json`，训练与产物写出照常成功；发车器也不检查冻结 tag、main 可达性或 `GIT_STAMP.json`。因此未冻结源码、脏工作树甚至无可识别 commit 的 ckpt 都可进入摘要并获得测试授权，事后记录不能阻止无效正式结果。\",\"file\":\"experiments/I07_ps3style_backbone/train.py\",\"line_start\":81,\"line_end\":90,\"confidence\":0.98,\"recommendation\":\"正式入口在训练前 fail-closed：要求可验证的冻结 commit、`dirty=0`、commit 位于 main，并校验资产锁；将这些身份字段纳入 ckpt 授权摘要。测试覆盖 dirty、unknown、伪造/漂移 GIT_STAMP 和非 main commit 的拒绝路径。\"}],\"next_steps\":[\"阻断 I07 正式训练；修复以上三项后重跑节点一核心逻辑复审。\"]}",
+    "reasoning": [
+      "**Inspecting commentary schema**",
+      "**Handling output truncation**",
+      "**Inspecting git diff files**",
+      "**Identifying missing model components**",
+      "**Reviewing Cox Breslow implementation details**",
+      "**Assessing checkpoint and data integrity risks**",
+      "**Questioning patient overlap across cancer models**",
+      "**Analyzing test data access in training**",
+      "**Examining launch and reproducibility issues**",
+      "**Clarifying Cox PH loss and batching nuances**"
+    ]
+  },
+  "result": {
+    "verdict": "needs-attention",
+    "summary": "不应发车：训练阶段实际读取 test，测试授权未绑定评测资产，正式运行也没有硬性 provenance 门。",
+    "findings": [
+      {
+        "severity": "high",
+        "title": "训练入口实际加载并驻留 test 折，违反“训练不接触 test”的冻结边界",
+        "body": "`main()` 调用 `load_fold()`，该函数无条件读取 train/val/test 的标签、RNA、文本及 WSI，并将 test 张量放到训练设备。虽然当前 `train()` 只接收 train/val，但测试隔离依赖调用者约定，而不是入口门禁；这与文件声称“本文件不接触 test”不符，也使后续日志、统计或重构可在无防护情况下接触 test。现有测试只证明改变 test 不影响当前权重，没有证明训练进程无法读取 test。",
+        "file": "experiments/I07_ps3style_backbone/train.py",
+        "line_start": 108,
+        "line_end": 111,
+        "confidence": 0.99,
+        "recommendation": "让训练入口只加载 train/val，例如为 `load_fold` 增加明确的 parts 参数，并在训练模式下拒绝加载 test；测试应监控 test 文件访问并断言训练过程零读取。"
+      },
+      {
+        "severity": "high",
+        "title": "测试授权只绑定 ckpt，未绑定 splits、特征和评测运行时",
+        "body": "`evaluate` 门只重算 `best.pt` 摘要，随后把命令行传入的任意 `--assets` 交给评测器。授权后可替换 cohort/splits/RNA/WSI/text，或直接改用另一资产目录，而 ckpt digest 仍然通过；同一授权因此能评估不同患者集合或预处理版本，形成隐蔽择优和不可复现结果。现有测试只覆盖 ckpt 字节变化，没有覆盖资产或运行时变化。",
+        "file": "experiments/I07_ps3style_backbone/launch.py",
+        "line_start": 123,
+        "line_end": 132,
+        "confidence": 0.99,
+        "recommendation": "生成授权摘要时同时绑定清单内 ckpt、全部资产 manifest/内容摘要、评测代码 commit与固定运行参数；evaluate 入口重算并逐项核对，禁止 CLI 替换已授权的资产或运行时。"
+      },
+      {
+        "severity": "high",
+        "title": "正式训练记录 dirty/unknown 身份后仍继续，结果 provenance 不具备放行能力",
+        "body": "`git_identity()` 在工作树脏或无法解析身份时仅把 `dirty=True/None` 写入 `run.json`，训练与产物写出照常成功；发车器也不检查冻结 tag、main 可达性或 `GIT_STAMP.json`。因此未冻结源码、脏工作树甚至无可识别 commit 的 ckpt 都可进入摘要并获得测试授权，事后记录不能阻止无效正式结果。",
+        "file": "experiments/I07_ps3style_backbone/train.py",
+        "line_start": 81,
+        "line_end": 90,
+        "confidence": 0.98,
+        "recommendation": "正式入口在训练前 fail-closed：要求可验证的冻结 commit、`dirty=0`、commit 位于 main，并校验资产锁；将这些身份字段纳入 ckpt 授权摘要。测试覆盖 dirty、unknown、伪造/漂移 GIT_STAMP 和非 main commit 的拒绝路径。"
+      }
+    ],
+    "next_steps": [
+      "阻断 I07 正式训练；修复以上三项后重跑节点一核心逻辑复审。"
+    ]
+  },
+  "rawOutput": "{\"verdict\":\"needs-attention\",\"summary\":\"不应发车：训练阶段实际读取 test，测试授权未绑定评测资产，正式运行也没有硬性 provenance 门。\",\"findings\":[{\"severity\":\"high\",\"title\":\"训练入口实际加载并驻留 test 折，违反“训练不接触 test”的冻结边界\",\"body\":\"`main()` 调用 `load_fold()`，该函数无条件读取 train/val/test 的标签、RNA、文本及 WSI，并将 test 张量放到训练设备。虽然当前 `train()` 只接收 train/val，但测试隔离依赖调用者约定，而不是入口门禁；这与文件声称“本文件不接触 test”不符，也使后续日志、统计或重构可在无防护情况下接触 test。现有测试只证明改变 test 不影响当前权重，没有证明训练进程无法读取 test。\",\"file\":\"experiments/I07_ps3style_backbone/train.py\",\"line_start\":108,\"line_end\":111,\"confidence\":0.99,\"recommendation\":\"让训练入口只加载 train/val，例如为 `load_fold` 增加明确的 parts 参数，并在训练模式下拒绝加载 test；测试应监控 test 文件访问并断言训练过程零读取。\"},{\"severity\":\"high\",\"title\":\"测试授权只绑定 ckpt，未绑定 splits、特征和评测运行时\",\"body\":\"`evaluate` 门只重算 `best.pt` 摘要，随后把命令行传入的任意 `--assets` 交给评测器。授权后可替换 cohort/splits/RNA/WSI/text，或直接改用另一资产目录，而 ckpt digest 仍然通过；同一授权因此能评估不同患者集合或预处理版本，形成隐蔽择优和不可复现结果。现有测试只覆盖 ckpt 字节变化，没有覆盖资产或运行时变化。\",\"file\":\"experiments/I07_ps3style_backbone/launch.py\",\"line_start\":123,\"line_end\":132,\"confidence\":0.99,\"recommendation\":\"生成授权摘要时同时绑定清单内 ckpt、全部资产 manifest/内容摘要、评测代码 commit与固定运行参数；evaluate 入口重算并逐项核对，禁止 CLI 替换已授权的资产或运行时。\"},{\"severity\":\"high\",\"title\":\"正式训练记录 dirty/unknown 身份后仍继续，结果 provenance 不具备放行能力\",\"body\":\"`git_identity()` 在工作树脏或无法解析身份时仅把 `dirty=True/None` 写入 `run.json`，训练与产物写出照常成功；发车器也不检查冻结 tag、main 可达性或 `GIT_STAMP.json`。因此未冻结源码、脏工作树甚至无可识别 commit 的 ckpt 都可进入摘要并获得测试授权，事后记录不能阻止无效正式结果。\",\"file\":\"experiments/I07_ps3style_backbone/train.py\",\"line_start\":81,\"line_end\":90,\"confidence\":0.98,\"recommendation\":\"正式入口在训练前 fail-closed：要求可验证的冻结 commit、`dirty=0`、commit 位于 main，并校验资产锁；将这些身份字段纳入 ckpt 授权摘要。测试覆盖 dirty、unknown、伪造/漂移 GIT_STAMP 和非 main commit 的拒绝路径。\"}],\"next_steps\":[\"阻断 I07 正式训练；修复以上三项后重跑节点一核心逻辑复审。\"]}",
+  "parseError": null,
+  "reasoningSummary": [
+    "**Inspecting commentary schema**",
+    "**Handling output truncation**",
+    "**Inspecting git diff files**",
+    "**Identifying missing model components**",
+    "**Reviewing Cox Breslow implementation details**",
+    "**Assessing checkpoint and data integrity risks**",
+    "**Questioning patient overlap across cancer models**",
+    "**Analyzing test data access in training**",
+    "**Examining launch and reproducibility issues**",
+    "**Clarifying Cox PH loss and batching nuances**"
+  ]
+}

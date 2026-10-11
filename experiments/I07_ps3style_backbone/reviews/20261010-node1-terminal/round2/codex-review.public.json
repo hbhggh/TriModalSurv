@@ -1,0 +1,59 @@
+{
+  "review": "Adversarial Review",
+  "target": {
+    "mode": "branch",
+    "label": "branch diff against main",
+    "baseRef": "main",
+    "explicit": true
+  },
+  "threadId": "01a1295b-55d5-7870-ac5c-7d0ddbab8595",
+  "context": {
+    "repoRoot": "<仓库根>",
+    "branch": "dev",
+    "summary": "Reviewing branch dev against main from merge-base ef5d18cb32fba9f9b8496ee64cef47d450f07716."
+  },
+  "codex": {
+    "status": 0,
+    "stderr": "",
+    "stdout": "{\"verdict\":\"needs-attention\",\"summary\":\"不应放行：测试授权仍可在单任务评估入口被绕过，且存在检查后替换资产或 checkpoint 的窗口。\",\"findings\":[{\"severity\":\"high\",\"title\":\"评估进程未自行验证授权摘要、资产内容或 checkpoint 哈希\",\"body\":\"`launch.evaluate` 只在调度前核对一次授权摘要和资产内容，随后启动的 `evaluate.main` 既不接收授权摘要/预期 checkpoint 哈希，也只比较 manifest 自身哈希，没有按 manifest 校验实际资产文件。直接调用该入口可完全绕过测试授权；并行调度期间若 `best.pt` 或资产文件被替换，入口仍会加载并产出正式 test 结果。这与“评估前逐文件校验资产、授权绑定 ckpt”的修复目标不符。\",\"file\":\"experiments/I07_ps3style_backbone/evaluate.py\",\"line_start\":66,\"line_end\":78,\"confidence\":0.99,\"recommendation\":\"给每个评估子进程传入该 run 的授权 checkpoint 哈希及授权摘要；在 `evaluate.main` 内、读取模型和数据之前调用 `verify_assets()`，重算并核对 `best.pt` 哈希及完整授权摘要。补充直接调用评估入口、篡改资产内容但不改 manifest、调度后替换 checkpoint 三类拒绝测试。\"}],\"next_steps\":[\"修复后仅复审这一授权闭环，不启动正式评估。\"]}",
+    "reasoning": [
+      "**Reviewing implementation requirements**",
+      "**Inspecting project root and diffs**",
+      "**Analyzing verification gaps in evaluation**",
+      "**Evaluating timing and identity verification risks**",
+      "**Analyzing potential TOCTOU issues**",
+      "**Summarizing authorization and evaluation gaps** I’m outlining how authorization checks happen only at launch, leaving direct evaluation calls bypassing auth digest verification, creating a security gap. I’m also noting testing limitations and data loading nuances related to train/val splits versus test rows.",
+      "**Preparing final summary and recommendations**"
+    ]
+  },
+  "result": {
+    "verdict": "needs-attention",
+    "summary": "不应放行：测试授权仍可在单任务评估入口被绕过，且存在检查后替换资产或 checkpoint 的窗口。",
+    "findings": [
+      {
+        "severity": "high",
+        "title": "评估进程未自行验证授权摘要、资产内容或 checkpoint 哈希",
+        "body": "`launch.evaluate` 只在调度前核对一次授权摘要和资产内容，随后启动的 `evaluate.main` 既不接收授权摘要/预期 checkpoint 哈希，也只比较 manifest 自身哈希，没有按 manifest 校验实际资产文件。直接调用该入口可完全绕过测试授权；并行调度期间若 `best.pt` 或资产文件被替换，入口仍会加载并产出正式 test 结果。这与“评估前逐文件校验资产、授权绑定 ckpt”的修复目标不符。",
+        "file": "experiments/I07_ps3style_backbone/evaluate.py",
+        "line_start": 66,
+        "line_end": 78,
+        "confidence": 0.99,
+        "recommendation": "给每个评估子进程传入该 run 的授权 checkpoint 哈希及授权摘要；在 `evaluate.main` 内、读取模型和数据之前调用 `verify_assets()`，重算并核对 `best.pt` 哈希及完整授权摘要。补充直接调用评估入口、篡改资产内容但不改 manifest、调度后替换 checkpoint 三类拒绝测试。"
+      }
+    ],
+    "next_steps": [
+      "修复后仅复审这一授权闭环，不启动正式评估。"
+    ]
+  },
+  "rawOutput": "{\"verdict\":\"needs-attention\",\"summary\":\"不应放行：测试授权仍可在单任务评估入口被绕过，且存在检查后替换资产或 checkpoint 的窗口。\",\"findings\":[{\"severity\":\"high\",\"title\":\"评估进程未自行验证授权摘要、资产内容或 checkpoint 哈希\",\"body\":\"`launch.evaluate` 只在调度前核对一次授权摘要和资产内容，随后启动的 `evaluate.main` 既不接收授权摘要/预期 checkpoint 哈希，也只比较 manifest 自身哈希，没有按 manifest 校验实际资产文件。直接调用该入口可完全绕过测试授权；并行调度期间若 `best.pt` 或资产文件被替换，入口仍会加载并产出正式 test 结果。这与“评估前逐文件校验资产、授权绑定 ckpt”的修复目标不符。\",\"file\":\"experiments/I07_ps3style_backbone/evaluate.py\",\"line_start\":66,\"line_end\":78,\"confidence\":0.99,\"recommendation\":\"给每个评估子进程传入该 run 的授权 checkpoint 哈希及授权摘要；在 `evaluate.main` 内、读取模型和数据之前调用 `verify_assets()`，重算并核对 `best.pt` 哈希及完整授权摘要。补充直接调用评估入口、篡改资产内容但不改 manifest、调度后替换 checkpoint 三类拒绝测试。\"}],\"next_steps\":[\"修复后仅复审这一授权闭环，不启动正式评估。\"]}",
+  "parseError": null,
+  "reasoningSummary": [
+    "**Reviewing implementation requirements**",
+    "**Inspecting project root and diffs**",
+    "**Analyzing verification gaps in evaluation**",
+    "**Evaluating timing and identity verification risks**",
+    "**Analyzing potential TOCTOU issues**",
+    "**Summarizing authorization and evaluation gaps** I’m outlining how authorization checks happen only at launch, leaving direct evaluation calls bypassing auth digest verification, creating a security gap. I’m also noting testing limitations and data loading nuances related to train/val splits versus test rows.",
+    "**Preparing final summary and recommendations**"
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "review": "Adversarial Review",
+  "target": {
+    "mode": "branch",
+    "label": "branch diff against main",
+    "baseRef": "main",
+    "explicit": true
+  },
+  "threadId": "01a1249e-395d-7df2-abbd-f6c13817c703",
+  "context": {
+    "repoRoot": "<仓库根>",
+    "branch": "dev",
+    "summary": "Reviewing branch dev against main from merge-base ef5d18cb32fba9f9b8496ee64cef47d450f07716."
+  },
+  "codex": {
+    "status": 0,
+    "stderr": "",
+    "stdout": "{\"verdict\":\"needs-attention\",\"summary\":\"禁止发车：当前沙箱对仓库内容返回“Operation not permitted”，无法读取 main..dev diff、坑台账或测试，因此不能完成节点一核心逻辑审查。\",\"findings\":[],\"next_steps\":[\"恢复该 worktree 的只读权限后，重新执行审查；在实际检查分折、预处理统计量、mask、risk、checkpoint 授权和幂等写入逻辑前，不得视为审核通过。\"]}",
+    "reasoning": [
+      "**Clarifying output requirements**",
+      "**Examining permission restrictions**",
+      "**Troubleshooting repository access**",
+      "**Exploring git patch options**",
+      "**Considering filtering tool names**",
+      "**Handling repository access limitations**"
+    ]
+  },
+  "result": {
+    "verdict": "needs-attention",
+    "summary": "禁止发车：当前沙箱对仓库内容返回“Operation not permitted”，无法读取 main..dev diff、坑台账或测试，因此不能完成节点一核心逻辑审查。",
+    "findings": [],
+    "next_steps": [
+      "恢复该 worktree 的只读权限后，重新执行审查；在实际检查分折、预处理统计量、mask、risk、checkpoint 授权和幂等写入逻辑前，不得视为审核通过。"
+    ]
+  },
+  "rawOutput": "{\"verdict\":\"needs-attention\",\"summary\":\"禁止发车：当前沙箱对仓库内容返回“Operation not permitted”，无法读取 main..dev diff、坑台账或测试，因此不能完成节点一核心逻辑审查。\",\"findings\":[],\"next_steps\":[\"恢复该 worktree 的只读权限后，重新执行审查；在实际检查分折、预处理统计量、mask、risk、checkpoint 授权和幂等写入逻辑前，不得视为审核通过。\"]}",
+  "parseError": null,
+  "reasoningSummary": [
+    "**Clarifying output requirements**",
+    "**Examining permission restrictions**",
+    "**Troubleshooting repository access**",
+    "**Exploring git patch options**",
+    "**Considering filtering tool names**",
+    "**Handling repository access limitations**"
+  ]
+}

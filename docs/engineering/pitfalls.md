@@ -259,3 +259,10 @@
 | ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
 | --- | --- | --- | --- |
 | E39 | 给 idea spark 写中文查询时 DOI 链接后紧跟全角标点（，）），DOI 正则只认半角结束符，11 条锚点 DOI 吞进后续中文、无法解析；补登记时 `add_user_ref --id` 传裸 DOI 又被存成 title 类型。 | 中文查询里的链接后一律接空格或半角标点；登记 DOI 一律带 `https://doi.org/` 前缀；Phase 0 跑完立即检查 user_refs.json 有无含非 ASCII 的 DOI。 | `manuscript/消融实验/3.LLM-缺失模态/AI研究接力记录/附件/历史归档.md` 第二节 Bug Post-Mortem（2026-10-02） |
+
+## I06 squash 收尾补充（2026-10-10）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| G7 | 把主目录未提交改动用 `git apply -3` 搬到 dev 后按组提交，`-3` 会把改动直接写进暂存区，第一个 `git commit` 把所有组一起提交，后续分组提交落空。 | `git apply -3` 之后先 `git reset`（只清暂存区）再按组 `git add` 明确路径，每次提交前打印 `git diff --cached --name-only` 核对。 | 本会话 2026-10-10 I06 squash 收尾 |
+| E40 | zsh 下用 `${PIPESTATUS[0]}` 取管道退出码得到空值，`tar -t` 又把中文路径显示成八进制转义；据此做的"成功/同名"判断都不可信。 | zsh 用 `$pipestatus`，或者不用管道、直接判断退出码；对中文路径的存在性检查用 NUL 分隔的原始清单（`git ls-files -z`），不用 `tar -t` 的显示结果；最后再逐文件 `cmp` 核对。 | 本会话 2026-10-10 I06 squash 收尾 |

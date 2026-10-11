@@ -1,0 +1,84 @@
+{
+  "review": "Adversarial Review",
+  "target": {
+    "mode": "branch",
+    "label": "branch diff against main",
+    "baseRef": "main",
+    "explicit": true
+  },
+  "threadId": "01a1296b-3d34-76c3-93d6-79dcfd42baa5",
+  "context": {
+    "repoRoot": "<仓库根>",
+    "branch": "dev",
+    "summary": "Reviewing branch dev against main from merge-base ef5d18cb32fba9f9b8496ee64cef47d450f07716."
+  },
+  "codex": {
+    "status": 0,
+    "stderr": "",
+    "stdout": "{\"verdict\":\"needs-attention\",\"summary\":\"不应放行：评估入口仍存在资产“先校验、后读取”窗口，授权摘要也未绑定运行配置；新增输出契约没有实际核对 pooled 的形状和数值。\",\"findings\":[{\"severity\":\"high\",\"title\":\"资产校验与实际加载之间仍有 TOCTOU 窗口\",\"body\":\"evaluate.main 在第 82 行逐文件校验资产，但直到第 96 行才按路径重新读取。期间资产可被并发替换；第 94 行重算授权摘要只读取 manifest 哈希，不会重新核对数据文件内容，因此可能使用未获授权或混合版本的 cohort、split、特征完成测试。现有测试仅覆盖“入口前篡改”，没有覆盖校验完成后的替换。\",\"file\":\"experiments/I07_ps3style_backbone/evaluate.py\",\"line_start\":82,\"line_end\":96,\"confidence\":0.99,\"recommendation\":\"让校验和解析消费同一份已读取字节或不可变内容寻址快照；至少增加在 verify_assets 返回后替换资产的回归测试，并确保入口 fail-closed。\"},{\"severity\":\"high\",\"title\":\"评估授权未绑定 run.json 配置及其记录的 config 哈希\",\"body\":\"授权摘要只绑定 ckpt、资产 manifest、commit 和评测协议；这里仅对 run['config'] 做值域检查，没有核对 run['config_sha256']、当前 config.yaml 哈希，也没有把 run.json 纳入授权。因此授权后可修改 lr、batch_size、epochs、seed、dropout、best_epoch 等训练元数据而摘要仍通过，最终结果会携带无法可信复现的训练 provenance。\",\"file\":\"experiments/I07_ps3style_backbone/evaluate.py\",\"line_start\":94,\"line_end\":104,\"confidence\":0.96,\"recommendation\":\"训练结束时生成包含规范化 config、config.yaml 哈希及关键 run 元数据的不可变运行摘要；将其纳入 auth_digest，并在评估前逐字段核对 run.json、config_sha256 与受审配置。\"},{\"severity\":\"medium\",\"title\":\"check_output 没有执行契约声明的 pooled 形状与有限值检查\",\"body\":\"函数只比较 pooled 的键集合，任何值类型、批大小、维度或 NaN/Inf 都会通过。例如 {'rna': tensor([nan])} 可通过契约，随后 train_means 会生成污染填充值，或错误形状直到更深处才失败。这与接口声明的每个模态必须为 [N,d] 浮点张量不一致，现有测试也没有覆盖这些违约输入。\",\"file\":\"experiments/I07_ps3style_backbone/contract.py\",\"line_start\":74,\"line_end\":82,\"confidence\":0.98,\"recommendation\":\"逐模态验证 pooled 值是有限浮点 Tensor、形状恰为 [N,d]，所有模态 d 一致；补充错误 batch、错误 d、非 Tensor 和 NaN/Inf 的拒绝测试。\"}],\"next_steps\":[\"先关闭资产 TOCTOU 窗口并补对应并发替换测试。\",\"把运行配置摘要纳入测试授权，再补齐 pooled 契约负例。\"]}",
+    "reasoning": [
+      "**Preparing JSON-only output**",
+      "**Investigating git index location**",
+      "**Inspecting diffs and files**",
+      "**Inspecting load_fold call sequence**",
+      "**Analyzing config and asset verification risks**",
+      "**Investigating TOCTOU vulnerabilities in asset verification**",
+      "**Analyzing contract and config inconsistencies**",
+      "**Examining training provenance gaps** I'm exploring issues with config hash tracking and authorization digest that threaten training reproducibility by allowing config metadata changes post-training without invalidation, and highlighting race condition risks in asset verification.",
+      "**Reviewing data validation and concurrency risks**"
+    ]
+  },
+  "result": {
+    "verdict": "needs-attention",
+    "summary": "不应放行：评估入口仍存在资产“先校验、后读取”窗口，授权摘要也未绑定运行配置；新增输出契约没有实际核对 pooled 的形状和数值。",
+    "findings": [
+      {
+        "severity": "high",
+        "title": "资产校验与实际加载之间仍有 TOCTOU 窗口",
+        "body": "evaluate.main 在第 82 行逐文件校验资产，但直到第 96 行才按路径重新读取。期间资产可被并发替换；第 94 行重算授权摘要只读取 manifest 哈希，不会重新核对数据文件内容，因此可能使用未获授权或混合版本的 cohort、split、特征完成测试。现有测试仅覆盖“入口前篡改”，没有覆盖校验完成后的替换。",
+        "file": "experiments/I07_ps3style_backbone/evaluate.py",
+        "line_start": 82,
+        "line_end": 96,
+        "confidence": 0.99,
+        "recommendation": "让校验和解析消费同一份已读取字节或不可变内容寻址快照；至少增加在 verify_assets 返回后替换资产的回归测试，并确保入口 fail-closed。"
+      },
+      {
+        "severity": "high",
+        "title": "评估授权未绑定 run.json 配置及其记录的 config 哈希",
+        "body": "授权摘要只绑定 ckpt、资产 manifest、commit 和评测协议；这里仅对 run['config'] 做值域检查，没有核对 run['config_sha256']、当前 config.yaml 哈希，也没有把 run.json 纳入授权。因此授权后可修改 lr、batch_size、epochs、seed、dropout、best_epoch 等训练元数据而摘要仍通过，最终结果会携带无法可信复现的训练 provenance。",
+        "file": "experiments/I07_ps3style_backbone/evaluate.py",
+        "line_start": 94,
+        "line_end": 104,
+        "confidence": 0.96,
+        "recommendation": "训练结束时生成包含规范化 config、config.yaml 哈希及关键 run 元数据的不可变运行摘要；将其纳入 auth_digest，并在评估前逐字段核对 run.json、config_sha256 与受审配置。"
+      },
+      {
+        "severity": "medium",
+        "title": "check_output 没有执行契约声明的 pooled 形状与有限值检查",
+        "body": "函数只比较 pooled 的键集合，任何值类型、批大小、维度或 NaN/Inf 都会通过。例如 {'rna': tensor([nan])} 可通过契约，随后 train_means 会生成污染填充值，或错误形状直到更深处才失败。这与接口声明的每个模态必须为 [N,d] 浮点张量不一致，现有测试也没有覆盖这些违约输入。",
+        "file": "experiments/I07_ps3style_backbone/contract.py",
+        "line_start": 74,
+        "line_end": 82,
+        "confidence": 0.98,
+        "recommendation": "逐模态验证 pooled 值是有限浮点 Tensor、形状恰为 [N,d]，所有模态 d 一致；补充错误 batch、错误 d、非 Tensor 和 NaN/Inf 的拒绝测试。"
+      }
+    ],
+    "next_steps": [
+      "先关闭资产 TOCTOU 窗口并补对应并发替换测试。",
+      "把运行配置摘要纳入测试授权，再补齐 pooled 契约负例。"
+    ]
+  },
+  "rawOutput": "{\"verdict\":\"needs-attention\",\"summary\":\"不应放行：评估入口仍存在资产“先校验、后读取”窗口，授权摘要也未绑定运行配置；新增输出契约没有实际核对 pooled 的形状和数值。\",\"findings\":[{\"severity\":\"high\",\"title\":\"资产校验与实际加载之间仍有 TOCTOU 窗口\",\"body\":\"evaluate.main 在第 82 行逐文件校验资产，但直到第 96 行才按路径重新读取。期间资产可被并发替换；第 94 行重算授权摘要只读取 manifest 哈希，不会重新核对数据文件内容，因此可能使用未获授权或混合版本的 cohort、split、特征完成测试。现有测试仅覆盖“入口前篡改”，没有覆盖校验完成后的替换。\",\"file\":\"experiments/I07_ps3style_backbone/evaluate.py\",\"line_start\":82,\"line_end\":96,\"confidence\":0.99,\"recommendation\":\"让校验和解析消费同一份已读取字节或不可变内容寻址快照；至少增加在 verify_assets 返回后替换资产的回归测试，并确保入口 fail-closed。\"},{\"severity\":\"high\",\"title\":\"评估授权未绑定 run.json 配置及其记录的 config 哈希\",\"body\":\"授权摘要只绑定 ckpt、资产 manifest、commit 和评测协议；这里仅对 run['config'] 做值域检查，没有核对 run['config_sha256']、当前 config.yaml 哈希，也没有把 run.json 纳入授权。因此授权后可修改 lr、batch_size、epochs、seed、dropout、best_epoch 等训练元数据而摘要仍通过，最终结果会携带无法可信复现的训练 provenance。\",\"file\":\"experiments/I07_ps3style_backbone/evaluate.py\",\"line_start\":94,\"line_end\":104,\"confidence\":0.96,\"recommendation\":\"训练结束时生成包含规范化 config、config.yaml 哈希及关键 run 元数据的不可变运行摘要；将其纳入 auth_digest，并在评估前逐字段核对 run.json、config_sha256 与受审配置。\"},{\"severity\":\"medium\",\"title\":\"check_output 没有执行契约声明的 pooled 形状与有限值检查\",\"body\":\"函数只比较 pooled 的键集合，任何值类型、批大小、维度或 NaN/Inf 都会通过。例如 {'rna': tensor([nan])} 可通过契约，随后 train_means 会生成污染填充值，或错误形状直到更深处才失败。这与接口声明的每个模态必须为 [N,d] 浮点张量不一致，现有测试也没有覆盖这些违约输入。\",\"file\":\"experiments/I07_ps3style_backbone/contract.py\",\"line_start\":74,\"line_end\":82,\"confidence\":0.98,\"recommendation\":\"逐模态验证 pooled 值是有限浮点 Tensor、形状恰为 [N,d]，所有模态 d 一致；补充错误 batch、错误 d、非 Tensor 和 NaN/Inf 的拒绝测试。\"}],\"next_steps\":[\"先关闭资产 TOCTOU 窗口并补对应并发替换测试。\",\"把运行配置摘要纳入测试授权，再补齐 pooled 契约负例。\"]}",
+  "parseError": null,
+  "reasoningSummary": [
+    "**Preparing JSON-only output**",
+    "**Investigating git index location**",
+    "**Inspecting diffs and files**",
+    "**Inspecting load_fold call sequence**",
+    "**Analyzing config and asset verification risks**",
+    "**Investigating TOCTOU vulnerabilities in asset verification**",
+    "**Analyzing contract and config inconsistencies**",
+    "**Examining training provenance gaps** I'm exploring issues with config hash tracking and authorization digest that threaten training reproducibility by allowing config metadata changes post-training without invalidation, and highlighting race condition risks in asset verification.",
+    "**Reviewing data validation and concurrency risks**"
+  ]
+}

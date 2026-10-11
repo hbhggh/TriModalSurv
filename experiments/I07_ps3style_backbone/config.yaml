@@ -1,0 +1,10 @@
+# I07 超参数（研究计划书 v0.2 第 4 节，PS3 原值）。键与类型由 contract.CONFIG_TYPES 强制。
+# 浮点必须带小数点（1.0e-4），否则 PyYAML 读成字符串、加载即报错。
+# 欠拟合预案只允许把 epochs 从 50 改成 100（命令行 --epochs），其余不改。
+d: 256
+lr: 1.0e-4
+weight_decay: 1.0e-5
+batch_size: 64
+epochs: 50
+dropout: 0.25
+seed: 2026
