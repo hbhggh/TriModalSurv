@@ -1,0 +1,321 @@
+<title>M³Surv 自适应切片权重</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<style>
+/* 布局：一张从左到右的计算流水线（打分 → 均值 → softmax → 门控 → 池化相加），下方是三张公式卡与原文/代码出入说明 */
+:root{
+  /* 颜色：沿用 framework_animation 的 H&E 染色配色 */
+  --bg:#f6f5f9; --surface:#ffffff; --fg:#1f1d2b; --muted:#666379; --line:#bdb9cd; --soft:#e8e6ef;
+  --attn:#3b38a0; --path:#bf3d78; --ffpe:#c0641c; --ff:#0f8077; --mem:#7d3f8f; --sel:#e3a600;
+  --warn-bg:#fbf1e4; --warn-fg:#7d4609;
+  /* 字体：标题 Bricolage Grotesque，正文 IBM Plex Sans，维度与数字 IBM Plex Mono */
+  --f-display:"Bricolage Grotesque","PingFang SC","Hiragino Sans GB","Noto Sans SC",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans","PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono","SFMono-Regular",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14131b; --surface:#1c1b26; --fg:#ebe8f4; --muted:#a6a2bb; --line:#46425c; --soft:#2a2838;
+    --attn:#9d99f5; --path:#ee7fb0; --ffpe:#f0a060; --ff:#4fc6b8; --mem:#c48ad8; --sel:#ffcf3d;
+    --warn-bg:#33281a; --warn-fg:#f2c98f; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14131b; --surface:#1c1b26; --fg:#ebe8f4; --muted:#a6a2bb; --line:#46425c; --soft:#2a2838;
+  --attn:#9d99f5; --path:#ee7fb0; --ffpe:#f0a060; --ff:#4fc6b8; --mem:#c48ad8; --sel:#ffcf3d;
+  --warn-bg:#33281a; --warn-fg:#f2c98f; color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.6;
+  padding-block:14px 28px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:flex-end;justify-content:space-between}
+.brand{min-width:0}
+.brand h1{font-family:var(--f-display);font-weight:700;font-size:clamp(22px,3vw,30px);line-height:1.1;margin:0;letter-spacing:-.01em;text-wrap:balance}
+.brand p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.ctl{display:flex;flex-wrap:wrap;gap:6px}
+button{font:inherit;font-size:13px;line-height:1.2;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;padding:7px 11px;cursor:pointer}
+button:hover{border-color:var(--attn)}
+button:focus-visible{outline:2px solid var(--attn);outline-offset:2px}
+button.primary{background:var(--attn);border-color:var(--attn);color:var(--surface)}
+.thesis{margin:14px 0 0;max-width:80ch}
+.thesis code{font-family:var(--f-mono);font-size:14px}
+.stage{background:var(--surface);border:1px solid var(--soft);border-radius:10px;padding:8px;overflow-x:auto;margin-top:14px}
+.stage svg{width:100%;min-width:820px;height:auto;display:block}
+.label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 4px}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+@media(max-width:900px){.cards{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--soft);border-radius:10px;padding:14px 16px;min-width:0}
+.card h2{font-family:var(--f-display);font-size:17px;margin:0 0 6px;font-weight:700}
+.card p{margin:0 0 6px;font-size:14px}
+.tex{overflow-x:auto;margin:6px 0;padding:6px 10px;background:var(--bg);border-radius:6px;font-size:14px}
+.tex code{font-family:var(--f-mono);font-size:12px;white-space:pre-wrap;color:var(--muted)}
+.dims{font-family:var(--f-mono);font-size:12.5px;color:var(--muted);margin:4px 0 0}
+.lower{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:12px;margin-top:12px}
+@media(max-width:900px){.lower{grid-template-columns:minmax(0,1fr)}}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+td,th{padding:5px 8px;border-bottom:1px solid var(--soft);text-align:left}
+td.num{font-family:var(--f-mono);text-align:right}
+.note{background:var(--warn-bg);color:var(--warn-fg);border-radius:6px;padding:8px 10px;font-size:13px;line-height:1.55;margin:0 0 8px}
+.note b{font-weight:600}
+.foot{font-size:12.5px;color:var(--muted);margin:14px 0 0;max-width:90ch}
+.sheet{position:fixed;inset:0;background:color-mix(in srgb,var(--bg) 70%,transparent);display:grid;place-items:center;z-index:20;
+  padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.sheet .box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;max-width:min(1100px,100%);max-height:100%;overflow:auto;display:grid;gap:10px}
+.sheet img{width:100%;height:auto;border:1px solid var(--soft);border-radius:6px;background:var(--bg)}
+.sheet .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.sheet p{margin:0;font-size:13px;color:var(--muted)}
+
+/* ---------- SVG ---------- */
+svg text{font-family:var(--f-body)}
+.t{fill:var(--fg);font-size:13px}
+.tm{fill:var(--fg);font-size:12px}
+.ts{fill:var(--muted);font-size:11px}
+.tb{fill:var(--fg);font-size:16px;font-weight:600}
+.mono{font-family:var(--f-mono)}
+.link{fill:none;stroke:var(--line);stroke-width:1.6}
+.dash{stroke-dasharray:5 4}
+.ah{fill:var(--line)}
+.k-attn{fill:var(--attn);fill-opacity:.13;stroke:var(--attn);stroke-width:1.4}
+.k-sel{fill:var(--surface);stroke:var(--sel);stroke-width:2}
+.st{transition:opacity .35s}
+svg.playing .st:not(.on){opacity:.18}
+@media (prefers-reduced-motion: reduce){ .st{transition:none} }
+</style>
+
+<header class="top">
+  <div class="brand">
+    <h1>M³Surv 自适应切片权重</h1>
+    <p>w_ff、w_ffpe 怎么算出来，P_s 怎么由它们加权得到 · 对应论文式 5 与图 2 的 Adaptive Weighting</p>
+  </div>
+  <div class="ctl">
+    <button id="bPlay" type="button" class="primary">播放计算过程</button>
+    <button id="bNew" type="button">换一位病人</button>
+    <button id="bImg" type="button">生成图片</button>
+    <button id="bTheme" type="button" title="切换浅色（白底）/ 深色（黑底）背景，便于截图放进 PPT">背景：跟随系统</button>
+  </div>
+</header>
+<p class="thesis">w_ff、w_ffpe 是这位病人两张切片各自的一个标量，直接乘在未池化的 <code>P_ff ∈ ℝ^(N_ff×d)</code>、<code>P_ffpe ∈ ℝ^(N_ffpe×d)</code> 上，形状不变。两块行数不同，不能逐元素相加，所以沿 token 维拼接成 <code>(N_ff + N_ffpe) × d</code>，再经片间超图卷积得到 P_s。</p>
+
+<div class="stage">
+  <p class="label">计算流水线 · 示意数据（d 取 8，FF 画 8 行，FFPE 画 10 行代表 4096 行）</p>
+  <svg id="flow" viewBox="0 0 1200 540" role="img" aria-label="从 P_ff 与 P_ffpe 经打分、均值、softmax 得到 w_ff 与 w_ffpe；权重乘在未池化矩阵上，两块沿 token 维拼接后经片间超图卷积得到 (N_ff+N_ffpe)×d 的 P_s">
+    <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker></defs>
+    <g id="g"></g>
+    <g id="dots"></g>
+  </svg>
+</div>
+
+<div class="cards">
+  <div class="card">
+    <h2>① 每张切片打一个分</h2>
+    <p>每个 patch 向量乘 W_ff 得到一个分数，再对全部 patch 求平均，得到这张切片的总分 s_ff。</p>
+    <div class="tex" data-tex="s_{\mathrm{ff}}=\frac{1}{N_{\mathrm{ff}}}\sum_{k=1}^{N_{\mathrm{ff}}} p_k W_{\mathrm{ff}}"></div>
+    <p class="dims">(N_ff×d)·(d×1) = N_ff×1 → 求平均 → 1×1</p>
+  </div>
+  <div class="card">
+    <h2>② 两个分数做 softmax</h2>
+    <p>两张切片的总分一起做 softmax，得到两个加起来等于 1 的权重。分数高的切片权重大。</p>
+    <div class="tex" data-tex="w_{\mathrm{ff}},\,w_{\mathrm{ffpe}}=\frac{\exp(s_{\mathrm{ff}}),\ \exp(s_{\mathrm{ffpe}})}{\exp(s_{\mathrm{ff}})+\exp(s_{\mathrm{ffpe}})}"></div>
+    <p class="dims">两个标量 → 两个标量，w_ff + w_ffpe = 1</p>
+    <p>w_ff 是这位病人 FF 切片的一个数，切片里所有 patch 共用它；左边那列逐 patch 分数只是算出 w 的中间量。换一位病人，w 会变。</p>
+  </div>
+  <div class="card">
+    <h2>③ 门控后拼接，再做超图卷积</h2>
+    <p>权重乘在整块未池化矩阵上；两块行数不同，沿 token 维拼接，再在式 4 的片间超边上做 L 层超图卷积。</p>
+    <div class="tex" data-tex="\tilde P=\big[\,w_{\mathrm{ff}}P_{\mathrm{ff}}\ ;\ w_{\mathrm{ffpe}}P_{\mathrm{ffpe}}\,\big]\in\mathbb{R}^{(N_{\mathrm{ff}}+N_{\mathrm{ffpe}})\times d}"></div>
+    <div class="tex" data-tex="P_s=\mathrm{HGNN}^{L}\big(\tilde P,\ \mathcal{E}_s\big)\in\mathbb{R}^{(N_{\mathrm{ff}}+N_{\mathrm{ffpe}})\times d}"></div>
+    <p class="dims">N_ff×d、N_ffpe×d → 拼接 (N_ff+N_ffpe)×d → 超图卷积后形状不变</p>
+  </div>
+</div>
+
+<div class="lower">
+  <div class="card">
+    <h2>这位示意病人的数值</h2>
+    <table aria-label="示意病人的计算结果">
+      <tbody id="vals"></tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h2>和论文、作者代码的出入</h2>
+    <div class="note"><b>为什么拼接而不相加：</b>P_ff 有约 300–500 行，P_ffpe 有 4096 行，行数不同的矩阵不能逐元素相加；不池化又要合并，只能沿 token 维拼接。若写成 w_ff·P_ff + w_ffpe·P_ffpe，就必须先池化成 1×d，P_s 只剩 1 行，式 6 的注意力会退化（softmax 只有一个元素，恒为 1）。</div>
+    <div class="note"><b>与论文、代码的对应：</b>拼接后的形状 (N_ff + N_ffpe) × d 与作者代码一致（model_M3Surv.py 第 194 行拼接，第 207、211–214 行在片间超图上做 3 层卷积）。论文只说权重「整合进超图卷积」，没写乘在哪一步；本页把它乘在卷积前的输入上，这个位置是推断。</div>
+    <div class="note"><b>打分怎么汇聚成一个数：</b>式 5 没写 W_ff P_ff 的 N 个分数如何变成一个标量；本页取均值，和作者代码的 torch.mean 一致。</div>
+    <div class="note"><b>代码里的权重：</b>作者代码先取均值，再过 sigmoid，加一个 log 修正项，最后 softmax；算出的 weights 之后没有被使用（model_M3Surv.py 第 183–193 行）。</div>
+  </div>
+</div>
+<p class="foot">图中矩阵、W 与数值都是固定随机种子生成的示意数据，用来说明维度怎么变化，不是论文的真实数值。点「换一位病人」会换一组数据，权重随之变化。</p>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="box" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="row"><strong id="sheetTitle">流水线图片</strong><button id="bClose" type="button">关闭</button></div>
+    <p>在图片上右键（手机上长按）即可保存为 PNG，背景跟随当前选择的浅色或深色。</p>
+    <img id="sheetImg" alt="自适应切片权重的计算流水线">
+  </div>
+</div>
+
+<script>
+'use strict';
+const NS='http://www.w3.org/2000/svg', $=s=>document.querySelector(s);
+const svg=$('#flow'), G=$('#g'), DOTS=$('#dots');
+function el(tag,a={},p){ const e=document.createElementNS(NS,tag); for(const k in a){ if(k==='text') e.textContent=a[k]; else e.setAttribute(k,a[k]); } if(p) p.appendChild(e); return e; }
+const text=(p,x,y,s,cls='ts',anchor='start')=>el('text',{x,y,class:cls,'text-anchor':anchor,text:s},p);
+function rng(seed){ let s=seed>>>0; return ()=>{ s=(s*1664525+1013904223)>>>0; return s/4294967296; }; }
+const RM=(()=>{ try{ return matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){ return false; } })();
+let gen=0;
+const ease=p=>p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+function tween(dur,fn){ const g=gen; if(RM){ fn(1); return Promise.resolve(); }
+  return new Promise(res=>{ const t0=performance.now(); const step=now=>{ if(g!==gen) return; const p=Math.min(1,(now-t0)/dur); fn(ease(p)); if(p<1) requestAnimationFrame(step); else res(); }; requestAnimationFrame(step); }); }
+function fly(path,color,r=4,dur=700){ const L=path.getTotalLength(), c=el('circle',{r,fill:color},DOTS);
+  return tween(dur,k=>{ const p=path.getPointAtLength(k*L); c.setAttribute('cx',p.x); c.setAttribute('cy',p.y); if(k>=1) c.remove(); }); }
+
+/* ---------- 数据 ---------- */
+const D=8, NF=8, NP=10;
+let seed=7, S;
+function compute(sd){
+  const r=rng(sd), M=(n)=>Array.from({length:n},()=>Array.from({length:D},()=>r()));
+  const Pf=M(NF), Pp=M(NP), Wf=Array.from({length:D},()=>r()*2-1), Wp=Array.from({length:D},()=>r()*2-1);
+  const dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0);
+  const sf=Pf.map(p=>dot(p,Wf)), sp=Pp.map(p=>dot(p,Wp));
+  const mean=a=>a.reduce((s,v)=>s+v,0)/a.length;
+  const sF=mean(sf), sP=mean(sp), eF=Math.exp(sF), eP=Math.exp(sP), wF=eF/(eF+eP), wP=eP/(eF+eP);
+  const colMean=(P)=>Array.from({length:D},(_,k)=>mean(P.map(row=>row[k])));
+  const mF=colMean(Pf), mP=colMean(Pp), gF=mF.map(v=>v*wF), gP=mP.map(v=>v*wP), Ps=gF.map((v,k)=>v+gP[k]);
+  return {Pf,Pp,Wf,Wp,sf,sp,sF,sP,wF,wP,mF,mP,gF,gP,Ps};
+}
+
+/* ---------- 画图 ---------- */
+const CS=14, YF=96, YP=312, XA=44, XW=196, XS=262, XC=430, XE=730, XG=880;
+let refs={};
+function mat(p,x,y,rows,color,vals,scale=1){ const cells=[];
+  rows.forEach((row,i)=>row.forEach((v,j)=>cells.push(el('rect',{x:x+j*CS,y:y+i*CS,width:CS-1.5,height:CS-1.5,rx:1.5,fill:color,'fill-opacity':(.1+.85*v*scale).toFixed(2)},p))));
+  return cells; }
+function col(p,x,y,vals,color,cs=CS){ const mx=Math.max(...vals.map(Math.abs))||1;
+  return vals.map((v,i)=>el('rect',{x,y:y+i*cs,width:cs-1.5,height:cs-1.5,rx:1.5,fill:v>=0?color:'var(--path)','fill-opacity':(.15+.8*Math.abs(v)/mx).toFixed(2)},p)); }
+function row(p,x,y,vals,color,cs=18,mx=1){ return vals.map((v,k)=>el('rect',{x:x+k*cs,y,width:cs-2,height:cs-2,rx:2,fill:color,'fill-opacity':(.12+.85*v/mx).toFixed(2)},p)); }
+function arrow(p,d,id,dash){ return el('path',{d,id,class:'link'+(dash?' dash':''),'marker-end':'url(#arr)'},p); }
+function stage(i){ return el('g',{class:'st',id:'st'+i},G); }
+
+function draw(){
+  G.innerHTML=''; DOTS.innerHTML='';
+  const H=[['① 未池化特征','N × d',100],['② 逐 patch 打分','N × 1',282],['③ 按 N 取均值','1 × 1',XC],['④ softmax 归一化','w_ff + w_ffpe = 1',575],['⑤ 门控（不池化）','N × d',XE+56],['⑥ 沿 token 维拼接 → 超图卷积','(N_ff + N_ffpe) × d',1040]];
+  H.forEach(([a,b,x])=>{ text(G,x,22,a,'t','middle'); text(G,x,40,b,'ts mono','middle'); });
+  const s=[0,1,2,3,4,5].map(stage);
+  // ① 原始矩阵
+  mat(s[0],XA,YF,S.Pf,'var(--ff)'); mat(s[0],XA,YP,S.Pp,'var(--ffpe)');
+  text(s[0],XA+56,YF+NF*CS+18,'P_ff ∈ ℝ^(N_ff × d)','tm','middle'); text(s[0],XA+56,YF+NF*CS+34,'N_ff ≈ 300–500','ts','middle');
+  text(s[0],XA+56,YP+NP*CS+18,'P_ffpe ∈ ℝ^(N_ffpe × d)','tm','middle'); text(s[0],XA+56,YP+NP*CS+34,'N_ffpe = 4096','ts','middle');
+  // ② 乘 W 得到逐 patch 分数
+  [[YF,S.Wf,'W_ff',S.sf,'var(--ff)'],[YP,S.Wp,'W_ffpe',S.sp,'var(--ffpe)']].forEach(([y,W,name,sc,c],k)=>{
+    text(s[1],XW-8,y+56,'×','tb','middle');
+    col(s[1],XW,y+4,W,'var(--attn)',12); text(s[1],XW+6,y-8,name,'tm','middle'); text(s[1],XW+6,y+4+D*12+14,'d × 1','ts mono','middle');
+    text(s[1],XS-18,y+56,'=','tb','middle');
+    col(s[1],XS,y,sc,c); text(s[1],XS+7,y-8,'分数','tm','middle');
+    text(s[1],XS+7,y+sc.length*CS+18,(k?'N_ffpe':'N_ff')+' × 1','ts mono','middle');
+  });
+  // ③ 均值得到标量
+  const yF=YF+NF*CS/2, yP=YP+NP*CS/2;
+  const a1=arrow(s[2],`M${XS+18},${yF} H${XC-26}`,'p1'), a2=arrow(s[2],`M${XS+18},${yP} H${XC-26}`,'p2');
+  text(s[2],(XS+XC)/2,yF-8,'按 N 取均值','ts','middle'); text(s[2],(XS+XC)/2,yP-8,'按 N 取均值','ts','middle');
+  [[yF,'s_ff',S.sF,'var(--ff)'],[yP,'s_ffpe',S.sP,'var(--ffpe)']].forEach(([y,n,v,c])=>{
+    el('circle',{cx:XC,cy:y,r:24,fill:'var(--surface)',stroke:c,'stroke-width':2},s[2]);
+    text(s[2],XC,y+4,n,'tm','middle'); text(s[2],XC,y+42,'= '+v.toFixed(3),'tm mono','middle'); text(s[2],XC,y+58,'1 × 1','ts mono','middle'); });
+  // ④ softmax
+  const bx=520, by=246;
+  el('rect',{x:bx,y:by,width:110,height:44,rx:8,class:'k-attn'},s[3]); text(s[3],bx+55,by+27,'softmax','t','middle');
+  const a3=arrow(s[3],`M${XC+24},${yF} C${XC+60},${yF} ${bx-20},${by+10} ${bx},${by+14}`,'p3');
+  const a4=arrow(s[3],`M${XC+24},${yP} C${XC+60},${yP} ${bx-20},${by+34} ${bx},${by+30}`,'p4');
+  [[yF,'w_ff',S.wF,'var(--ff)'],[yP,'w_ffpe',S.wP,'var(--ffpe)']].forEach(([y,n,v,c])=>{
+    el('rect',{x:592,y:y-18,width:112,height:36,rx:18,fill:'var(--surface)',stroke:c,'stroke-width':2},s[3]);
+    text(s[3],648,y+5,`${n} = ${v.toFixed(2)}`,'tm mono','middle'); });
+  const a5=arrow(s[3],`M${bx+70},${by} C${bx+80},${by-40} 600,${yF+20} 610,${yF+18}`,'p5');
+  const a6=arrow(s[3],`M${bx+70},${by+44} C${bx+80},${by+84} 600,${yP-20} 610,${yP-18}`,'p6');
+  el('rect',{x:bx,y:by+56,width:110*S.wF,height:10,fill:'var(--ff)'},s[3]); el('rect',{x:bx+110*S.wF,y:by+56,width:110*S.wP,height:10,fill:'var(--ffpe)'},s[3]);
+  text(s[3],bx+55,by+82,'两者相加 = 1','ts','middle');
+  // ⑤ 门控：标量权重直接乘在未池化的 N×d 矩阵上，形状不变
+  const sc=1/Math.max(S.wF,S.wP);
+  mat(s[4],XE,YF,S.Pf,'var(--ff)',null,S.wF*sc); mat(s[4],XE,YP,S.Pp,'var(--ffpe)',null,S.wP*sc);
+  const a7=arrow(s[4],`M705,${yF} H${XE-6}`,'p7'), a8=arrow(s[4],`M705,${yP} H${XE-6}`,'p8');
+  text(s[4],716,yF-8,'×','tb','middle'); text(s[4],716,yP-8,'×','tb','middle');
+  text(s[4],XE+56,YF+NF*CS+18,'w_ff · P_ff ∈ ℝ^(N_ff × d)','tm','middle'); text(s[4],XE+56,YF+NF*CS+34,'整块矩阵乘同一个标量','ts','middle');
+  text(s[4],XE+56,YP+NP*CS+18,'w_ffpe · P_ffpe ∈ ℝ^(N_ffpe × d)','tm','middle'); text(s[4],XE+56,YP+NP*CS+34,'仍是 4096 行，不池化','ts','middle');
+  const a9=arrow(s[4],`M${XA+56},${YF-6} C${XA+56},62 ${XE+56},62 ${XE+56},${YF-6}`,'p9',true);
+  text(s[4],400,58,'原矩阵 P_ff 不池化，直接送去门控','ts','middle');
+  const a10=arrow(s[4],`M${XA+56},${YP+NP*CS+42} C${XA+56},530 ${XE+56},530 ${XE+56},${YP+NP*CS+42}`,'p10',true);
+  text(s[4],400,510,'原矩阵 P_ffpe 不池化，直接送去门控','ts','middle');
+  // ⑥ 两块行数不同不能相加，沿 token 维拼接，再经片间超图卷积得到 P_s
+  const XK=900, CK=12, yS=(yF+yP)/2, yK=yS-(NF+NP)*CK/2;
+  const kc=(rows,y0,c,w)=>rows.forEach((r,i)=>r.forEach((v,j)=>el('rect',{x:XK+j*CK,y:y0+i*CK,width:CK-1.5,height:CK-1.5,rx:1.5,fill:c,'fill-opacity':(.1+.85*v*w*sc).toFixed(2)},s[5])));
+  kc(S.Pf,yK,'var(--ff)',S.wF); kc(S.Pp,yK+NF*CK,'var(--ffpe)',S.wP);
+  el('line',{x1:XK-4,y1:yK+NF*CK-1,x2:XK+D*CK+2,y2:yK+NF*CK-1,stroke:'var(--fg)','stroke-width':1.2,'stroke-dasharray':'3 2'},s[5]);
+  el('path',{d:`M${XK-8},${yK} h-5 v${(NF+NP)*CK} h5`,fill:'none',stroke:'var(--fg)','stroke-width':1.3},s[5]);
+  text(s[5],XK+D*CK/2,yK-22,'P̃ = [ w_ff·P_ff ; w_ffpe·P_ffpe ]','tm','middle');
+  text(s[5],XK+D*CK/2,yK-8,'(N_ff + N_ffpe) × d','ts mono','middle');
+  const a11=arrow(s[5],`M${XE+118},${yF} C${XE+150},${yF} ${XK-30},${yK+NF*CK/2} ${XK-16},${yK+NF*CK/2}`,'p11');
+  const a12=arrow(s[5],`M${XE+118},${yP} C${XE+150},${yP} ${XK-30},${yK+NF*CK+NP*CK/2} ${XK-16},${yK+NF*CK+NP*CK/2}`,'p12');
+  const bxK=1022;
+  el('rect',{x:bxK,y:yS-32,width:164,height:64,rx:8,class:'k-attn'},s[5]);
+  text(s[5],bxK+82,yS-8,'L 层片间超图卷积','tm','middle'); text(s[5],bxK+82,yS+10,'超边来自式 4（ℰ_s）','ts','middle');
+  const a13=arrow(s[5],`M${XK+D*CK+6},${yS} H${bxK-4}`,'p13');
+  text(s[5],bxK+82,yS+56,'P_s ∈ ℝ^((N_ff+N_ffpe)×d)','tm','middle'); text(s[5],bxK+82,yS+72,'行数不变，每个 patch 一行','ts','middle');
+  el('rect',{x:bxK-4,y:yS+40,width:172,height:42,rx:6,fill:'none',stroke:'var(--sel)','stroke-width':2,'stroke-dasharray':'5 3'},s[5]);
+  refs.paths={a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13};
+}
+function fillVals(){
+  const rows=[['s_ff（FF 切片总分）',S.sF.toFixed(3)],['s_ffpe（FFPE 切片总分）',S.sP.toFixed(3)],['w_ff',S.wF.toFixed(3)],['w_ffpe',S.wP.toFixed(3)],['w_ff + w_ffpe',(S.wF+S.wP).toFixed(3)],['P̃ 与 P_s 的形状','(N_ff + 4096) × d（图中示意 18 × 8）']];
+  $('#vals').innerHTML=rows.map(([a,b])=>`<tr><td>${a}</td><td class="num">${b}</td></tr>`).join('');
+}
+function render(){ gen++; svg.classList.remove('playing'); S=compute(seed); draw(); fillVals(); }
+
+/* ---------- 播放 ---------- */
+async function play(){
+  render(); const g=gen; svg.classList.add('playing');
+  const st=i=>document.getElementById('st'+i).classList.add('on'), P=refs.paths, wait=ms=>tween(ms,()=>{});
+  st(0); await wait(500); if(g!==gen) return;
+  st(1); await wait(700); if(g!==gen) return;
+  st(2); await Promise.all([fly(P.a1,'var(--ff)'),fly(P.a2,'var(--ffpe)')]); if(g!==gen) return;
+  st(3); await Promise.all([fly(P.a3,'var(--ff)'),fly(P.a4,'var(--ffpe)')]); await Promise.all([fly(P.a5,'var(--ff)'),fly(P.a6,'var(--ffpe)')]); if(g!==gen) return;
+  st(4); await Promise.all([fly(P.a9,'var(--ff)',4,1200),fly(P.a10,'var(--ffpe)',4,1200),fly(P.a7,'var(--ff)'),fly(P.a8,'var(--ffpe)')]); if(g!==gen) return;
+  st(5); await Promise.all([fly(P.a11,'var(--ff)'),fly(P.a12,'var(--ffpe)')]); await fly(P.a13,'var(--attn)',5); if(g!==gen) return;
+  await wait(600); svg.classList.remove('playing');
+}
+$('#bPlay').onclick=play;
+$('#bNew').onclick=()=>{ seed+=11; render(); };
+
+/* ---------- 公式 ---------- */
+function renderTex(){ document.querySelectorAll('.tex').forEach(d=>{
+  if(window.katex){ try{ katex.render(d.dataset.tex,d,{displayMode:true,throwOnError:false,output:'mathml'}); return; }catch(e){} }
+  d.innerHTML=''; const c=document.createElement('code'); c.textContent=d.dataset.tex; d.append(c); }); }
+window.addEventListener('load',renderTex);
+
+/* ---------- 背景切换 ---------- */
+const THEMES=['auto','light','dark'], TN={auto:'背景：跟随系统',light:'背景：浅色（白底）',dark:'背景：深色（黑底）'};
+let theme='auto'; try{ theme=localStorage.getItem('m3s-bg')||'auto'; }catch(e){}
+if(!THEMES.includes(theme)) theme='auto';
+function applyTheme(){ if(theme==='auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme',theme); $('#bTheme').textContent=TN[theme]; }
+$('#bTheme').onclick=()=>{ theme=THEMES[(THEMES.indexOf(theme)+1)%3]; try{ localStorage.setItem('m3s-bg',theme); }catch(e){} applyTheme(); };
+applyTheme();
+
+/* ---------- 生成图片（页内弹窗，右键保存） ---------- */
+const PROPS=['fill','stroke','stroke-width','stroke-dasharray','stroke-opacity','fill-opacity','opacity','font-size','font-family','font-weight','text-anchor'];
+function snapshot(){
+  const c=svg.cloneNode(true), src=svg.querySelectorAll('*'), dst=c.querySelectorAll('*');
+  src.forEach((s,i)=>{ const st=getComputedStyle(s); dst[i].setAttribute('style',PROPS.map(p=>`${p}:${st.getPropertyValue(p)}`).join(';')); dst[i].removeAttribute('class'); });
+  c.removeAttribute('class'); c.setAttribute('xmlns',NS); c.setAttribute('width',1200); c.setAttribute('height',540);
+  const bg=el('rect',{x:0,y:0,width:1200,height:540,fill:getComputedStyle(document.querySelector('.stage')).backgroundColor}); c.insertBefore(bg,c.firstChild);
+  return new XMLSerializer().serializeToString(c);
+}
+$('#bImg').onclick=()=>{
+  const url=URL.createObjectURL(new Blob([snapshot()],{type:'image/svg+xml'})), img=new Image();
+  img.onload=()=>{ const cv=document.createElement('canvas'); cv.width=2400; cv.height=1080; const x=cv.getContext('2d'); x.scale(2,2); x.drawImage(img,0,0); URL.revokeObjectURL(url); $('#sheetImg').src=cv.toDataURL('image/png'); };
+  img.src=url; $('#sheet').hidden=false; $('#bClose').focus();
+};
+$('#bClose').onclick=()=>{ $('#sheet').hidden=true; $('#bImg').focus(); };
+$('#sheet').addEventListener('click',e=>{ if(e.target.id==='sheet') $('#sheet').hidden=true; });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') $('#sheet').hidden=true; });
+
+render();
+</script>

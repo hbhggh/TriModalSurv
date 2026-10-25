@@ -1,0 +1,1250 @@
+<title>M³Surv 框架数据流</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<style>
+/* 布局：读片工作台。左侧上为全局图（论文图 2 的缩略），下为当前步骤的显微特写；右侧为读片记录（公式、形状、原文疑点） */
+:root{
+  /* 颜色：取自 H&E 染色——苏木精靛蓝作主色，伊红粉作病理色；中性色带一点靛紫偏色 */
+  --bg:#f6f5f9; --surface:#ffffff; --fg:#1f1d2b; --muted:#666379; --line:#bdb9cd; --soft:#e8e6ef;
+  --attn:#3b38a0;      /* 苏木精：注意力 / 主色 */
+  --path:#bf3d78;      /* 伊红：病理表示 */
+  --ffpe:#c0641c; --ff:#0f8077; --omics:#2c8650; --mem:#7d3f8f; --sel:#e3a600;
+  --warn-bg:#fbf1e4; --warn-fg:#7d4609;
+  --tissue:#f6e1ea; --tissue-stroke:#d9a3b9;
+  --he-t:#a9407a; --he-s:#e49abb; --he-l:#544cad;   /* 示意 patch：肿瘤 / 间质 / 淋巴 */
+  --k1:#c0641c; --k2:#0f8077; --k3:#bf3d78; --k4:#3b38a0; --k5:#7c8a1c;
+  /* 字体：标题用 Bricolage Grotesque（克制使用），正文 IBM Plex Sans，张量形状与数字用 IBM Plex Mono */
+  --f-display:"Bricolage Grotesque","PingFang SC","Hiragino Sans GB","Noto Sans SC",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans","PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono","SFMono-Regular",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14131b; --surface:#1c1b26; --fg:#ebe8f4; --muted:#a6a2bb; --line:#46425c; --soft:#2a2838;
+    --attn:#9d99f5; --path:#ee7fb0; --ffpe:#f0a060; --ff:#4fc6b8; --omics:#6fcb92; --mem:#c48ad8; --sel:#ffcf3d;
+    --warn-bg:#33281a; --warn-fg:#f2c98f;
+    --tissue:#352530; --tissue-stroke:#7a4a60;
+    --he-t:#d0679f; --he-s:#f0b3cd; --he-l:#8a83e6;
+    --k1:#f0a060; --k2:#4fc6b8; --k3:#ee7fb0; --k4:#9d99f5; --k5:#c2d05a;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14131b; --surface:#1c1b26; --fg:#ebe8f4; --muted:#a6a2bb; --line:#46425c; --soft:#2a2838;
+  --attn:#9d99f5; --path:#ee7fb0; --ffpe:#f0a060; --ff:#4fc6b8; --omics:#6fcb92; --mem:#c48ad8; --sel:#ffcf3d;
+  --warn-bg:#33281a; --warn-fg:#f2c98f;
+  --tissue:#352530; --tissue-stroke:#7a4a60;
+  --he-t:#d0679f; --he-s:#f0b3cd; --he-l:#8a83e6;
+  --k1:#f0a060; --k2:#4fc6b8; --k3:#ee7fb0; --k4:#9d99f5; --k5:#c2d05a;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.6;
+  padding-block:14px 24px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:flex-end;justify-content:space-between}
+.brand{min-width:0}
+.brand h1{font-family:var(--f-display);font-weight:700;font-size:clamp(22px,3vw,30px);line-height:1.1;margin:0;letter-spacing:-.01em;text-wrap:balance}
+.brand p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.ctl{display:flex;flex-wrap:wrap;gap:6px}
+button{font:inherit;font-size:13px;line-height:1.2;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;padding:7px 11px;cursor:pointer}
+button:hover{border-color:var(--attn)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--attn);outline-offset:2px}
+button.primary{background:var(--attn);border-color:var(--attn);color:var(--surface)}
+/* 片盒：11 步是真实的先后顺序，所以用编号 */
+nav.tray{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+nav.tray button{display:flex;gap:6px;align-items:baseline;padding:5px 9px;font-size:12.5px}
+nav.tray button b{font-family:var(--f-mono);font-weight:500;color:var(--muted)}
+nav.tray button.on{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+nav.tray button.on b{color:var(--bg)}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,380px);gap:16px;margin-top:14px;align-items:start}
+@media(max-width:980px){.wrap{grid-template-columns:minmax(0,1fr)}}
+.stages{display:grid;gap:10px;min-width:0}
+.stage{background:var(--surface);border:1px solid var(--soft);border-radius:10px;padding:6px;overflow-x:auto;min-width:0}
+.stage svg{width:100%;min-width:760px;height:auto;display:block}
+.label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 6px}
+.panel{background:var(--surface);border:1px solid var(--soft);border-radius:10px;padding:16px 18px;min-width:0}
+.panel h2{font-family:var(--f-display);font-weight:700;font-size:19px;line-height:1.25;margin:0 0 8px;text-wrap:balance}
+.panel .what{margin:0 0 10px;max-width:65ch}
+.tex{overflow-x:auto;margin:8px 0;padding:6px 10px;background:var(--bg);border-radius:6px;font-size:14px}
+.tex code{font-family:var(--f-mono);font-size:12px;white-space:pre-wrap;color:var(--muted)}
+.panel h3{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:16px 0 6px;font-weight:600}
+.panel ul{margin:0;padding-left:18px;font-size:13.5px}
+.panel ul li{font-variant-numeric:tabular-nums}
+.note{background:var(--warn-bg);color:var(--warn-fg);border-radius:6px;padding:8px 10px;font-size:13px;line-height:1.55;margin:6px 0}
+.note b{font-weight:600}
+#ctrl{display:grid;gap:10px;margin-top:6px}
+#ctrl label{font-size:13px;display:grid;gap:4px}
+#ctrl .row{display:flex;gap:6px;flex-wrap:wrap}
+#ctrl input[type=range]{width:100%;accent-color:var(--attn)}
+#live{font-size:13px;color:var(--attn);min-height:1.2em;margin-top:8px;font-variant-numeric:tabular-nums}
+.hint{font-size:13px;color:var(--muted);margin:12px 0 0}
+.foot{font-size:12.5px;color:var(--muted);margin:16px 0 0;max-width:90ch}
+/* 图片弹窗：artifact 里页面不能自己触发下载，所以把图放在弹窗里，右键或长按保存 */
+.sheet{position:fixed;inset:0;background:color-mix(in srgb,var(--bg) 70%,transparent);display:grid;place-items:center;z-index:20;
+  padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.sheet .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;max-width:min(1100px,100%);max-height:100%;overflow:auto;display:grid;gap:10px}
+.sheet img{width:100%;height:auto;border:1px solid var(--soft);border-radius:6px;background:var(--bg)}
+.sheet .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.sheet p{margin:0;font-size:13px;color:var(--muted)}
+.sheet textarea{width:100%;height:120px;font-family:var(--f-mono);font-size:11px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:6px}
+
+/* ---------- SVG ---------- */
+svg text{font-family:var(--f-body)}
+.box{fill:var(--surface);stroke:var(--line);stroke-width:1.4}
+.frame{fill:none;stroke:var(--line);stroke-width:1.2;stroke-dasharray:5 4}
+.t{fill:var(--fg);font-size:13px}
+.ts{fill:var(--muted);font-size:11px}
+.tb{fill:var(--fg);font-size:16px;font-weight:600}
+.tm{fill:var(--fg);font-size:12px}
+.link{fill:none;stroke:var(--line);stroke-width:1.6}
+.link.dash{stroke-dasharray:5 4}
+.ghost{fill:none;stroke:none}
+.ah{fill:var(--line)}
+.reg{transition:opacity .45s}
+#ov.focus .reg:not(.on){opacity:.16}
+.k-attn{fill:var(--attn);fill-opacity:.13;stroke:var(--attn);stroke-width:1.4}
+.k-mem{fill:var(--mem);fill-opacity:.14;stroke:var(--mem);stroke-width:1.6}
+.k-omics{fill:var(--omics);fill-opacity:.13;stroke:var(--omics);stroke-width:1.3}
+.k-path{fill:var(--path);fill-opacity:.12;stroke:var(--path);stroke-width:1.3}
+.k-enc{fill:var(--soft);stroke:var(--muted);stroke-width:1.3}
+.slidebg{fill:var(--tissue);stroke:var(--tissue-stroke);stroke-width:1.2}
+.cell{cursor:pointer;stroke:none}
+.nopt{pointer-events:none}
+.selc{fill:none;stroke:var(--sel);stroke-width:3}
+.nbT{fill:none;stroke:var(--attn);stroke-width:2.2}
+.nbF{fill:none;stroke:var(--ffpe);stroke-width:2.2}
+.nbX{fill:none;stroke:var(--mem);stroke-width:2.2}
+.edgeT{stroke:var(--attn);stroke-width:1.4}
+.edgeF{fill:none;stroke:var(--ffpe);stroke-width:1.4;stroke-dasharray:4 3}
+.edgeX{fill:none;stroke:var(--mem);stroke-width:1.2;stroke-opacity:.8}
+.edgeG{stroke:var(--muted);stroke-width:.7;stroke-opacity:.55}
+.radius{fill:var(--attn);fill-opacity:.08;stroke:var(--attn);stroke-dasharray:4 3}
+.hull{fill:var(--attn);fill-opacity:.12;stroke:var(--attn);stroke-width:1.6}
+.axis{stroke:var(--line);stroke-width:1}
+.clk{cursor:pointer}
+.clk:hover rect{stroke:var(--attn);stroke-width:2}
+@media (prefers-reduced-motion: reduce){ .reg{transition:none} }
+</style>
+
+<header class="top">
+  <div class="brand">
+    <h1>M³Surv 框架数据流</h1>
+    <p>Qu et al., <i>Medical Image Analysis</i> 107 (2026) 103846 · 图 2 逐步拆解</p>
+  </div>
+  <div class="ctl">
+    <button id="bPrev" type="button" title="快捷键 ←">上一步</button>
+    <button id="bPlay" type="button" class="primary" title="快捷键 空格">自动播放</button>
+    <button id="bNext" type="button" title="快捷键 →">下一步</button>
+    <button id="bReplay" type="button" title="快捷键 R">重播本步</button>
+    <button id="bImg" type="button">生成本步图片</button>
+    <button id="bTheme" type="button" title="切换浅色（白底）/ 深色（黑底）背景，便于截图放进 PPT">背景：跟随系统</button>
+  </div>
+</header>
+<nav class="tray" id="chips" aria-label="步骤"></nav>
+<div class="wrap">
+  <div class="stages">
+    <div class="stage">
+      <p class="label">全局 · 论文图 2</p>
+      <svg id="ov" viewBox="0 0 1200 250" role="img" aria-label="M3Surv 框架总览（对应论文图 2）">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+        </defs>
+        <g class="reg" id="r-frame">
+          <rect x="250" y="20" width="392" height="216" rx="12" class="frame"/>
+          <text id="ovFrameLab" x="446" y="14" text-anchor="middle" class="ts">多切片超图（Multi-slide Hypergraph）</text>
+        </g>
+        <g class="reg" id="r-input">
+          <rect x="18" y="30" width="94" height="70" rx="8" class="box"/>
+          <ellipse cx="65" cy="65" rx="36" ry="24" class="slidebg"/>
+          <text x="65" y="116" text-anchor="middle" class="tm">FFPE 切片</text>
+          <rect x="18" y="140" width="94" height="70" rx="8" class="box"/>
+          <ellipse cx="65" cy="175" rx="24" ry="20" class="slidebg"/>
+          <text x="65" y="226" text-anchor="middle" class="tm">FF 切片</text>
+          <polygon points="132,28 174,48 174,202 132,222" class="k-enc"/>
+          <text x="153" y="130" text-anchor="middle" class="tb">E<tspan font-size="11" dy="4">p</tspan></text>
+          <path id="f-in-ffpe" d="M112,65 H186" class="link" marker-end="url(#arr)"/>
+          <path id="f-in-ff" d="M112,175 H186" class="link" marker-end="url(#arr)"/>
+          <g fill="var(--ffpe)" fill-opacity=".55"><rect x="190" y="52" width="18" height="26" rx="2"/><rect x="195" y="56" width="18" height="26" rx="2"/><rect x="200" y="60" width="18" height="26" rx="2"/></g>
+          <text x="206" y="102" text-anchor="middle" class="ts">P_ffpe⁽⁰⁾</text>
+          <g fill="var(--ff)" fill-opacity=".55"><rect x="190" y="162" width="18" height="26" rx="2"/><rect x="195" y="166" width="18" height="26" rx="2"/><rect x="200" y="170" width="18" height="26" rx="2"/></g>
+          <text x="206" y="212" text-anchor="middle" class="ts">P_ff⁽⁰⁾</text>
+        </g>
+        <g class="reg" id="r-intra">
+          <path id="f-intra-ffpe" d="M222,70 H282" class="link" marker-end="url(#arr)"/>
+          <path id="f-intra-ff" d="M222,180 H282" class="link" marker-end="url(#arr)"/>
+          <g id="ovIntraA"></g><g id="ovIntraB"></g>
+          <text x="320" y="104" text-anchor="middle" class="ts">片内超图·FFPE</text>
+          <text x="320" y="222" text-anchor="middle" class="ts">片内超图·FF</text>
+          <path id="f-hgL-a" d="M348,64 H366" class="link" marker-end="url(#arr)"/>
+          <path id="f-hgL-b" d="M348,182 H366" class="link" marker-end="url(#arr)"/>
+          <g fill="var(--ffpe)" fill-opacity=".85"><rect x="369" y="50" width="14" height="24" rx="2"/><rect x="373" y="54" width="14" height="24" rx="2"/><rect x="377" y="58" width="14" height="24" rx="2"/></g>
+          <text x="384" y="96" text-anchor="middle" class="ts">P_ffpe⁽ᴸ⁾</text>
+          <g fill="var(--ff)" fill-opacity=".85"><rect x="369" y="168" width="14" height="24" rx="2"/><rect x="373" y="172" width="14" height="24" rx="2"/><rect x="377" y="176" width="14" height="24" rx="2"/></g>
+          <text x="384" y="214" text-anchor="middle" class="ts">P_ff⁽ᴸ⁾</text>
+        </g>
+        <g class="reg" id="r-inter">
+          <path id="f-inter-a" d="M212,88 C232,122 352,126 390,118" class="link" marker-end="url(#arr)"/>
+          <path id="f-inter-b" d="M212,160 C232,128 352,124 390,128" class="link" marker-end="url(#arr)"/>
+          <rect x="392" y="100" width="100" height="46" rx="8" class="k-path"/>
+          <text x="442" y="119" text-anchor="middle" class="tm">片间超图</text>
+          <text x="442" y="136" text-anchor="middle" class="tm">+ 自适应权重</text>
+          <text x="515" y="127" text-anchor="middle" class="ts">P_s⁽ᴸ⁾</text>
+        </g>
+        <g class="reg" id="r-align">
+          <path id="f-al-1" d="M394,62 H538" class="link" marker-end="url(#arr)"/>
+          <path id="f-al-2" d="M492,112 C515,100 520,72 538,68" class="link" marker-end="url(#arr)"/>
+          <path id="f-al-3" d="M492,134 C515,146 520,176 538,180" class="link" marker-end="url(#arr)"/>
+          <path id="f-al-4" d="M394,182 H538" class="link" marker-end="url(#arr)"/>
+          <rect x="540" y="46" width="86" height="32" rx="7" class="k-attn"/>
+          <text x="583" y="67" text-anchor="middle" class="tm">交叉注意力</text>
+          <rect x="540" y="168" width="86" height="32" rx="7" class="k-attn"/>
+          <text x="583" y="189" text-anchor="middle" class="tm">交叉注意力</text>
+          <path id="f-pm-1" d="M626,62 C652,62 652,186 670,196" class="link" marker-end="url(#arr)"/>
+          <path id="f-pm-2" d="M626,184 C645,184 652,196 670,200" class="link" marker-end="url(#arr)"/>
+          <g fill="var(--path)" fill-opacity=".55"><rect x="674" y="184" width="16" height="30" rx="2"/><rect x="679" y="188" width="16" height="30" rx="2"/><rect x="684" y="192" width="16" height="30" rx="2"/></g>
+          <text x="690" y="240" text-anchor="middle" class="t">𝒫<tspan font-size="10" dy="3">m</tspan></text>
+        </g>
+        <g class="reg" id="r-omics">
+          <path id="f-om-1" d="M1160,26 H966 M930,26 C850,26 780,54 714,56" class="ghost"/>
+          <path id="f-om-2" d="M1160,58 H966 M930,58 C850,58 780,58 714,58" class="ghost"/>
+          <path id="f-om-3" d="M1160,90 H966 M930,90 C850,90 780,62 714,60" class="ghost"/>
+          <path d="M1160,26 H966 M930,26 C850,26 780,54 714,56 M1160,58 H966 M930,58 C850,58 780,58 714,58 M1160,90 H966 M930,90 C850,90 780,62 714,60" class="link"/>
+          <circle cx="1172" cy="26" r="9" fill="var(--omics)" fill-opacity=".8"/>
+          <circle cx="1172" cy="58" r="9" fill="var(--omics)" fill-opacity=".55"/>
+          <circle cx="1172" cy="90" r="9" fill="var(--omics)" fill-opacity=".35"/>
+          <g class="ts" text-anchor="end"><text x="1158" y="18">基因组</text><text x="1158" y="50">转录组</text><text x="1158" y="82">蛋白组</text></g>
+          <rect x="1010" y="16" width="82" height="20" rx="5" class="k-omics"/><text x="1051" y="30" text-anchor="middle" class="ts">6 个功能组</text>
+          <rect x="1010" y="48" width="82" height="20" rx="5" class="k-omics"/><text x="1051" y="62" text-anchor="middle" class="ts">331 条通路</text>
+          <rect x="1010" y="80" width="82" height="20" rx="5" class="k-omics"/><text x="1051" y="94" text-anchor="middle" class="ts">ESM 嵌入</text>
+          <g><rect x="930" y="16" width="36" height="20" rx="4" class="k-enc"/><rect x="930" y="48" width="36" height="20" rx="4" class="k-enc"/><rect x="930" y="80" width="36" height="20" rx="4" class="k-enc"/></g>
+          <g class="ts" text-anchor="middle"><text x="948" y="30">E_g</text><text x="948" y="62">E_g</text><text x="948" y="94">E_g</text></g>
+          <g fill="var(--omics)" fill-opacity=".55"><rect x="680" y="40" width="16" height="30" rx="2"/><rect x="685" y="44" width="16" height="30" rx="2"/><rect x="690" y="48" width="16" height="30" rx="2"/></g>
+          <text x="696" y="34" text-anchor="middle" class="t">𝒪 (图中记 𝒢)</text>
+        </g>
+        <g class="reg" id="r-mem">
+          <path id="f-mem-1" d="M712,74 C728,86 742,92 760,98" class="link" marker-end="url(#arr)"/>
+          <path id="f-mem-2" d="M712,196 C730,180 744,164 760,150" class="link" marker-end="url(#arr)"/>
+          <path id="f-imp-1" d="M790,98 C790,78 760,64 716,64" class="link dash" marker-end="url(#arr)"/>
+          <path id="f-imp-2" d="M790,150 C790,172 760,200 716,204" class="link dash" marker-end="url(#arr)"/>
+          <rect x="740" y="98" width="86" height="52" rx="10" class="k-mem"/>
+          <text x="783" y="122" text-anchor="middle" class="tb">ℳ</text>
+          <text x="783" y="140" text-anchor="middle" class="ts">原型记忆库</text>
+        </g>
+        <g class="reg" id="r-fuse">
+          <path id="f-fu-1" d="M712,58 C800,58 806,126 848,132" class="link" marker-end="url(#arr)"/>
+          <path id="f-fu-2" d="M712,206 C790,206 806,204 848,204" class="link" marker-end="url(#arr)"/>
+          <path id="f-fu-3" d="M712,62 C810,70 812,190 848,198" class="link dash" marker-end="url(#arr)"/>
+          <path id="f-fu-4" d="M712,200 C810,192 812,142 848,138" class="link dash" marker-end="url(#arr)"/>
+          <rect x="850" y="118" width="86" height="30" rx="7" class="k-attn"/><text x="893" y="138" text-anchor="middle" class="tm">交叉注意力</text>
+          <rect x="850" y="189" width="86" height="30" rx="7" class="k-attn"/><text x="893" y="209" text-anchor="middle" class="tm">交叉注意力</text>
+          <path id="f-fo-1" d="M936,133 H952" class="link"/>
+          <path id="f-fo-2" d="M936,204 H952" class="link"/>
+          <g fill="var(--omics)" fill-opacity=".75"><rect x="954" y="120" width="14" height="26" rx="2"/><rect x="958" y="123" width="14" height="26" rx="2"/></g>
+          <text x="966" y="164" text-anchor="middle" class="ts">𝒪_c</text>
+          <g fill="var(--path)" fill-opacity=".75"><rect x="954" y="191" width="14" height="26" rx="2"/><rect x="958" y="194" width="14" height="26" rx="2"/></g>
+          <text x="966" y="236" text-anchor="middle" class="ts">𝒫_c</text>
+        </g>
+        <g class="reg" id="r-out">
+          <path id="f-out-1" d="M976,133 C1004,133 1014,168 1040,174" class="link" marker-end="url(#arr)"/>
+          <path id="f-out-2" d="M976,204 C1004,204 1014,186 1040,182" class="link" marker-end="url(#arr)"/>
+          <rect x="1042" y="120" width="148" height="116" rx="10" class="box"/>
+          <path d="M1058,140 H1090 V158 H1118 V184 H1150 V206 H1178" fill="none" stroke="var(--omics)" stroke-width="2"/>
+          <path d="M1058,140 H1080 V170 H1104 V200 H1130 V218 H1178" fill="none" stroke="var(--path)" stroke-width="2"/>
+          <text x="1116" y="232" text-anchor="middle" class="ts">预测 φ_h(t), φ_s(t)</text>
+        </g>
+        <g id="ovPin" class="nopt" hidden>
+          <rect x="262" y="34" width="134" height="196" rx="10" fill="none" stroke="var(--sel)" stroke-width="2.4" stroke-dasharray="6 4"/>
+          <rect x="196" y="1" width="356" height="20" rx="10" fill="var(--surface)" stroke="var(--sel)" stroke-width="2"/>
+          <text x="374" y="15" text-anchor="middle" class="tm" font-weight="600">📍 论文 Fig. 2 对应位置：P⁽⁰⁾ ──[L 层 HGNN]──► P⁽ᴸ⁾</text>
+        </g>
+        <g id="ovDots" class="nopt"></g>
+      </svg>
+    </div>
+    <div class="stage">
+      <p class="label">特写 · 当前步骤</p>
+      <svg id="dt" viewBox="0 0 1200 484" role="img" aria-label="当前步骤细节动画">
+        <defs>
+          <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker>
+        </defs>
+        <text id="dtCap" x="16" y="20" class="t" font-weight="600"></text>
+        <g id="scene" transform="translate(0,24)"></g>
+      </svg>
+    </div>
+  </div>
+  <aside class="panel" aria-live="polite">
+    <h2 id="pTitle"></h2>
+    <p class="what" id="pWhat"></p>
+    <div id="pTex"></div>
+    <div id="pShapesWrap"><h3>张量形状 / 关键数字</h3><ul id="pShapes"></ul></div>
+    <div id="pNotesWrap"><h3>原文未明示或不一致之处</h3><div id="pNotes"></div></div>
+    <div id="ctrlWrap"><h3>交互</h3><div id="ctrl"></div><div id="live"></div></div>
+    <p class="hint" id="pHint"></p>
+  </aside>
+</div>
+<p class="foot">画面中的 patch、特征点、注意力数值都是示意数据（固定随机种子生成），只用来说明数据怎么流动，不是论文的真实数值。公式、维度和超参数按原文录入（全文检索过）；原文没写清的地方在右侧橙色框中标注。</p>
+<div class="sheet" id="sheet" hidden>
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="row"><strong id="sheetTitle">本步图片</strong><button id="bClose" type="button">关闭</button></div>
+    <p>在图片上右键（手机上长按）即可保存为 PNG。需要矢量图时，复制下方 SVG 源码，存成 .svg 文件。</p>
+    <img id="sheetImg" alt="当前步骤的全局图与特写图">
+    <div class="row"><button id="bCopy" type="button">复制 SVG 源码</button><span id="copyMsg" class="hint"></span></div>
+    <textarea id="svgSrc" readonly hidden aria-label="SVG 源码"></textarea>
+  </div>
+</div>
+
+<script>
+'use strict';
+const NS='http://www.w3.org/2000/svg';
+const $=s=>document.querySelector(s);
+const ov=$('#ov'), dt=$('#dt'), scene=$('#scene');
+function el(tag,attrs={},parent){
+  const e=document.createElementNS(NS,tag);
+  for(const k in attrs){ if(k==='text') e.textContent=attrs[k]; else e.setAttribute(k,attrs[k]); }
+  if(parent) parent.appendChild(e);
+  return e;
+}
+function rng(seed){ let s=seed>>>0; return ()=>{ s=(s*1664525+1013904223)>>>0; return s/4294967296; }; }
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+/* ---------------- 动画引擎（换步即全部失效） ---------------- */
+const RM=(()=>{ try{ return matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){ return false; } })();
+let anims=[], gen=0, rafOn=false;
+function addAnim(f){ anims.push(f); if(!rafOn){ rafOn=true; requestAnimationFrame(loop); } }
+function loop(now){ anims=anims.filter(f=>f(now)!==false); if(anims.length) requestAnimationFrame(loop); else rafOn=false; }
+function clearAnims(){ anims=[]; gen++; }
+const ease=p=>p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+function tween(dur,fn,delay=0){
+  if(RM){ dur=1; delay=0; }
+  const g=gen, t0=performance.now()+delay;
+  return new Promise(res=>addAnim(now=>{
+    if(g!==gen) return false;
+    const p=(now-t0)/dur; if(p<0) return true;
+    if(p>=1){ fn(1); res(); return false; }
+    fn(ease(p)); return true;
+  }));
+}
+const sleep=ms=>tween(ms,()=>{});
+const alive=g=>g===gen;
+// 粒子沿路径循环流动
+function flowPath(path,{color='var(--attn)',n=3,dur=2200,r=4,delay=0,layer}={}){
+  const g=gen, L=path.getTotalLength(), parent=layer||path.parentNode;
+  const dots=[]; for(let i=0;i<n;i++) dots.push(el('circle',{r,fill:color,opacity:0,class:'nopt'},parent));
+  if(RM){ dots.forEach((d,i)=>{ const pt=path.getPointAtLength(((i+.5)/n)*L); d.setAttribute('cx',pt.x); d.setAttribute('cy',pt.y); d.setAttribute('opacity',.85); }); return dots; }
+  const t0=performance.now()+delay;
+  addAnim(now=>{
+    if(g!==gen) return false;
+    const t=now-t0; if(t<0) return true;
+    dots.forEach((d,i)=>{ const p=((t/dur)+i/n)%1; const pt=path.getPointAtLength(p*L);
+      d.setAttribute('cx',pt.x); d.setAttribute('cy',pt.y); d.setAttribute('opacity',Math.min(1,Math.sin(p*Math.PI)*1.8)); });
+    return true;
+  });
+  return dots;
+}
+function flowPts(g,pts,opts={}){
+  const d='M'+pts.map(p=>p[0]+','+p[1]).join(' L');
+  const p=el('path',{d,class:'ghost'},g);
+  return flowPath(p,{layer:g,...opts});
+}
+// 单次飞行：返回 Promise
+function fly(g,pts,{color='var(--attn)',r=4,dur=900,delay=0}={}){
+  const d='M'+pts.map(p=>p[0]+','+p[1]).join(' L');
+  const p=el('path',{d,class:'ghost'},g), L=p.getTotalLength();
+  const c=el('circle',{r,fill:color,opacity:0,class:'nopt'},g);
+  return tween(dur,k=>{ const pt=p.getPointAtLength(k*L); c.setAttribute('cx',pt.x); c.setAttribute('cy',pt.y);
+    c.setAttribute('opacity',k<1?1:0); },delay);
+}
+
+/* ---------------- 共用绘图组件 ---------------- */
+const TYPES=[{name:'肿瘤',c:'var(--he-t)',f:[0.78,0.72]},{name:'间质',c:'var(--he-s)',f:[0.24,0.70]},{name:'淋巴',c:'var(--he-l)',f:[0.52,0.20]}];
+function makeSlide(seed,cols,rows,x0,y0,cs){
+  const r=rng(seed), cells=[];
+  const seeds=[...Array(6)].map((_,k)=>({x:r()*cols,y:r()*rows,t:k%3}));
+  for(let j=0;j<rows;j++) for(let i=0;i<cols;i++){
+    const dx=(i+.5)/cols-.5, dy=(j+.5)/rows-.5;
+    if(dx*dx/.25+dy*dy/.25>1-r()*.15) continue;
+    let best=0,bd=1e9; seeds.forEach((s,k)=>{ const d=(s.x-i)**2+(s.y-j)**2; if(d<bd){bd=d;best=k;} });
+    let t=seeds[best].t; if(r()<.12) t=Math.floor(r()*3);
+    const f=[TYPES[t].f[0]+(r()-.5)*.24, TYPES[t].f[1]+(r()-.5)*.24];
+    cells.push({i,j,t,f,x:x0+i*cs,y:y0+j*cs,cx:x0+i*cs+cs/2,cy:y0+j*cs+cs/2,cs});
+  }
+  return cells;
+}
+function drawSlide(g,cells,label){
+  const cs=cells[0].cs;
+  const xs=cells.map(c=>c.x), ys=cells.map(c=>c.y);
+  const x0=Math.min(...xs), x1=Math.max(...xs)+cs, y0=Math.min(...ys), y1=Math.max(...ys)+cs;
+  el('rect',{x:x0-8,y:y0-8,width:x1-x0+16,height:y1-y0+16,rx:16,class:'slidebg'},g);
+  if(label) el('text',{x:x0-8,y:y0-15,class:'tm',text:label},g);
+  const cg=el('g',{},g);
+  cells.forEach(c=>{ c.rect=el('rect',{x:c.x+1,y:c.y+1,width:cs-2,height:cs-2,rx:3,fill:TYPES[c.t].c,
+    'fill-opacity':(0.55+0.4*((c.f[0]*7+c.f[1]*3)%1)).toFixed(2),class:'cell'},cg); });
+  return {x0,x1,y0,y1};
+}
+function legendTypes(g,x,y){
+  TYPES.forEach((t,k)=>{ el('rect',{x:x+k*70,y:y-9,width:11,height:11,rx:2,fill:t.c},g);
+    el('text',{x:x+k*70+15,y:y,class:'ts',text:t.name+'（示意）'},g); });
+}
+function centerCell(cells){
+  const mx=cells.reduce((a,c)=>a+c.i,0)/cells.length, my=cells.reduce((a,c)=>a+c.j,0)/cells.length;
+  return cells.reduce((b,c)=>Math.hypot(c.i-mx,c.j-my)<Math.hypot(b.i-mx,b.j-my)?c:b);
+}
+const fdist=(a,b)=>Math.hypot(a.f[0]-b.f[0],a.f[1]-b.f[1]);
+const SIG=.15, simF=(a,b)=>Math.exp(-(fdist(a,b)**2)/(2*SIG*SIG));
+function matrix(g,x,y,rows,cols,cs,color,{label,seed=1,ell=false,lab2}={}){
+  const r=rng(seed), rowsEl=[];
+  for(let i=0;i<rows;i++){ const rg=el('g',{},g); rowsEl.push(rg);
+    for(let j=0;j<cols;j++) el('rect',{x:x+j*cs,y:y+i*cs,width:cs-1.5,height:cs-1.5,rx:1.5,fill:color,'fill-opacity':(.18+.65*r()).toFixed(2)},rg); }
+  if(ell) el('text',{x:x+cols*cs/2,y:y+rows*cs+13,'text-anchor':'middle',class:'ts',text:'⋮'},g);
+  if(label) el('text',{x:x+cols*cs/2,y:y+rows*cs+(ell?30:16),'text-anchor':'middle',class:'tm',text:label},g);
+  if(lab2) el('text',{x:x+cols*cs/2,y:y+rows*cs+(ell?45:31),'text-anchor':'middle',class:'ts',text:lab2},g);
+  return {x,y,rows,cols,cs,rowsEl,rowY:i=>y+i*cs+cs/2,w:cols*cs,h:rows*cs};
+}
+function box(g,x,y,w,h,cls,lines,{rx=8,size='tm'}={}){
+  el('rect',{x,y,width:w,height:h,rx,class:cls},g);
+  const n=lines.length;
+  lines.forEach((s,k)=>el('text',{x:x+w/2,y:y+h/2+(k-(n-1)/2)*16+4,'text-anchor':'middle',class:k===0?size:'ts',text:s},g));
+}
+function arrow(g,d,dash){ return el('path',{d,class:'link'+(dash?' dash':''),'marker-end':'url(#arr2)'},g); }
+function text(g,x,y,s,cls='ts',anchor='start'){ return el('text',{x,y,class:cls,'text-anchor':anchor,text:s},g); }
+
+/* ---------------- 面板控件 ---------------- */
+const ctrl=$('#ctrl');
+function live(s){ $('#live').textContent=s; }
+function addSlider(label,min,max,step,val,fn,fmt=v=>v){
+  const lab=document.createElement('label');
+  const sp=document.createElement('span'); sp.textContent=`${label}：${fmt(val)}`;
+  const inp=document.createElement('input'); Object.assign(inp,{type:'range',min,max,step,value:val});
+  inp.addEventListener('input',()=>{ sp.textContent=`${label}：${fmt(+inp.value)}`; fn(+inp.value); });
+  inp.id='ctl-'+(ctrl.children.length); lab.append(sp,inp); ctrl.append(lab); $('#ctrlWrap').hidden=false; return inp;
+}
+function addButtons(list){
+  const row=document.createElement('div'); row.className='row';
+  list.forEach(([t,f,on])=>{ const b=document.createElement('button'); b.textContent=t; if(on) b.className='primary';
+    b.addEventListener('click',()=>{ if(list.radio){ row.querySelectorAll('button').forEach(x=>x.className=''); b.className='primary'; } f(); }); row.append(b); });
+  ctrl.append(row); $('#ctrlWrap').hidden=false; return row;
+}
+
+/* ================= 各步骤场景 ================= */
+
+// 0 总览
+function s0(g){
+  text(g,600,26,'三大阶段：特征提取 → 多切片超图学习 → 多模态融合；任一模态缺失时由原型记忆库 ℳ 补全','t','middle');
+  const B=[
+    {x:30,  t:'① 特征提取', l:['FF / FFPE 切片 → E_p','三种组学 → E_g'], to:1, cls:'k-enc'},
+    {x:330, t:'② 多切片超图', l:['片内超图（拓扑 + 结构）','片间超图 + 自适应权重 → 对齐'], to:2, cls:'k-path'},
+    {x:630, t:'③ 多模态融合', l:['双向交叉注意力','𝒫_m ⇄ 𝒪 → 𝒫_c, 𝒪_c'], to:8, cls:'k-attn'},
+    {x:930, t:'④ 生存预测', l:['FFN → φ_h(t), φ_s(t)','NLL 损失（式 1）'], to:9, cls:'box'},
+  ];
+  B.forEach(b=>{ const c=el('g',{class:'clk'},g); c.addEventListener('click',()=>go(b.to));
+    el('rect',{x:b.x,y:90,width:240,height:120,rx:12,class:b.cls},c);
+    text(c,b.x+120,128,b.t,'tb','middle'); b.l.forEach((s,k)=>text(c,b.x+120,156+k*20,s,'tm','middle'));
+    text(c,b.x+120,232,`点击进入第 ${b.to} 步`,'ts','middle'); });
+  const m=el('g',{class:'clk'},g); m.addEventListener('click',()=>go(10));
+  el('rect',{x:630,y:300,width:240,height:96,rx:12,class:'k-mem'},m);
+  text(m,750,334,'ℳ 原型记忆库','tb','middle'); text(m,750,358,'训练：存（病理, 组学）原型对','tm','middle');
+  text(m,750,378,'推理：检索原型补全缺失模态','tm','middle'); text(m,750,416,'点击进入第 10 步','ts','middle');
+  const pP=arrow(g,'M270,140 H328'), pP2=arrow(g,'M570,140 H628'), pF=arrow(g,'M870,150 H928');
+  const pO=arrow(g,'M150,210 C150,280 560,280 690,212');
+  text(g,380,272,'组学支路（不经过超图）','ts','middle');
+  const pM=arrow(g,'M750,300 V214',true);
+  const pM2=arrow(g,'M560,150 C600,250 640,300 640,320',true);
+  flowPath(pP,{color:'var(--path)',layer:g}); flowPath(pP2,{color:'var(--path)',layer:g,delay:500});
+  flowPath(pF,{color:'var(--attn)',layer:g,delay:900}); flowPath(pO,{color:'var(--omics)',layer:g,dur:3200});
+  flowPath(pM,{color:'var(--mem)',layer:g,n:2,dur:1800});
+  text(g,600,460,'下方病理、组学两条支路在 ③ 汇合；虚线 = 记忆库在训练时收集原型、推理时回填缺失模态','ts','middle');
+}
+
+// 1 病理特征提取
+function s1(g){
+  const ffpe=makeSlide(3,20,13,30,48,15), ff=makeSlide(5,10,8,90,300,15);
+  drawSlide(g,ffpe,'FFPE 切片：20× 下切 256×256 patch，随机采样 N_k = 4096 个');
+  drawSlide(g,ff,'FF 切片：约 300–500 个 patch，全部保留');
+  const r=rng(9), sampled=ffpe.filter(()=>r()<.33);
+  ffpe.forEach(c=>{ if(!sampled.includes(c)) c.rect.setAttribute('fill-opacity',.12); });
+  sampled.forEach(c=>el('rect',{x:c.x+.5,y:c.y+.5,width:14,height:14,rx:3,fill:'none',stroke:'var(--ffpe)','stroke-width':1.6,class:'nopt'},g));
+  ff.forEach(c=>el('rect',{x:c.x+.5,y:c.y+.5,width:14,height:14,rx:3,fill:'none',stroke:'var(--ff)','stroke-width':1.6,class:'nopt'},g));
+  legendTypes(g,40,452);
+  el('polygon',{points:'400,60 470,100 470,380 400,420',class:'k-enc'},g);
+  text(g,435,236,'E_p','tb','middle'); text(g,435,440,'预训练编码器（如 ResNet50）','ts','middle');
+  const A=matrix(g,540,60,9,10,13,'var(--ffpe)',{label:'P_ffpe ∈ ℝ^(4096×d)',ell:true,seed:3,lab2:'每行 = 一个 patch 的 d 维特征'});
+  const Z=matrix(g,690,60,9,2,13,'var(--muted)',{label:'ζ = (x, y)',ell:true,seed:4});
+  const B=matrix(g,540,300,6,10,13,'var(--ff)',{label:'P_ff ∈ ℝ^(N_ff×d)',ell:true,seed:5,lab2:'N_ff ≈ 300–500'});
+  matrix(g,690,300,6,2,13,'var(--muted)',{label:'ζ',ell:true,seed:6});
+  const ly=el('g',{},g);
+  const pick=(arr,n)=>{ const rr=rng(n); return [...Array(n)].map(()=>arr[Math.floor(rr()*arr.length)]); };
+  pick(sampled,10).forEach((c,k)=>flowPts(ly,[[c.cx,c.cy],[400,Math.max(80,Math.min(400,c.cy+40))],[470,Math.max(110,Math.min(370,c.cy+40))],[536,A.rowY(k%9)]],{color:'var(--ffpe)',n:1,dur:2600,delay:k*260,r:3.5}));
+  pick(ff,6).forEach((c,k)=>flowPts(ly,[[c.cx,c.cy],[400,Math.min(400,c.cy)],[470,Math.min(370,c.cy)],[536,B.rowY(k%6)]],{color:'var(--ff)',n:1,dur:2600,delay:k*380,r:3.5}));
+  const ex=el('g',{},g);
+  el('rect',{x:800,y:60,width:380,height:250,rx:12,class:'box'},ex);
+  text(ex,820,88,'为什么同时用两种切片？','t');
+  ['FFPE（石蜡包埋）：形态保存好、最常见；面积大，','  因此随机采样 4096 个 patch 控制计算量。','FF（冷冻）：制备快、能提供互补的分子层面信息；','  面积小，所以全部 patch 都保留。','','每个 patch 同时记下坐标 ζ —— 第 2 步要用它','按空间距离建「拓扑超边」。'].forEach((s,k)=>text(ex,820,116+k*24,s,'tm'));
+  text(g,990,350,'𝒫 = { P_ff , P_ffpe }','tb','middle');
+  text(g,990,376,'同一病人的两张切片构成病理输入','ts','middle');
+}
+
+// 2 拓扑超边
+function s2(g){
+  const cells=makeSlide(7,17,13,40,46,24);
+  drawSlide(g,cells,'FFPE 切片 patch 网格（点击任一 patch）'); legendTypes(g,40,388);
+  const hl=el('g',{class:'nopt'},g), right=el('g',{},g);
+  let sel=centerCell(cells), delta=1.5;
+  function cmp(nodes){
+    right.innerHTML='';
+    const n=nodes.length, R=96;
+    const pos=(cx,cy)=>nodes.map((c,k)=>[cx+R*Math.cos(2*Math.PI*k/n-Math.PI/2),cy+R*Math.sin(2*Math.PI*k/n-Math.PI/2)]);
+    const a=pos(680,215), b=pos(1000,215);
+    text(right,680,72,'普通图：只能两两相连','t','middle');
+    text(right,680,92,`这 ${n} 个顶点需要 C(${n},2) = ${n*(n-1)/2} 条边`,'ts','middle');
+    for(let i=0;i<n;i++) for(let j=i+1;j<n;j++) el('line',{x1:a[i][0],y1:a[i][1],x2:a[j][0],y2:a[j][1],class:'edgeG'},right);
+    text(right,1000,72,'超图：1 条超边一次连起全部顶点','t','middle');
+    text(right,1000,92,'刻画「这一片组织」的高阶关系','ts','middle');
+    el('circle',{cx:1000,cy:215,r:R+22,class:'hull'},right);
+    text(right,1000,215+R+44,'超边 e = {p_i} ∪ 𝒩_T(p_i)','tm','middle');
+    [a,b].forEach(P=>P.forEach((p,k)=>el('circle',{cx:p[0],cy:p[1],r:k===0?10:8,fill:TYPES[nodes[k].t].c,stroke:k===0?'var(--sel)':'none','stroke-width':3},right)));
+    text(right,840,436,'实现细节（§4.1）：δ、γ、ω 都按邻居数 k = 9 设定，即每个 patch 与它最近的 8 个 patch 组成一条超边','ts','middle');
+  }
+  function upd(){
+    hl.innerHTML='';
+    const nb=cells.filter(c=>c!==sel&&Math.hypot(c.i-sel.i,c.j-sel.j)<=delta+1e-9);
+    el('circle',{cx:sel.cx,cy:sel.cy,r:delta*24,class:'radius'},hl);
+    nb.forEach(c=>{ el('line',{x1:sel.cx,y1:sel.cy,x2:c.cx,y2:c.cy,class:'edgeT'},hl);
+      el('rect',{x:c.x+1,y:c.y+1,width:22,height:22,rx:3,class:'nbT'},hl); });
+    el('rect',{x:sel.x,y:sel.y,width:24,height:24,rx:3,class:'selc'},hl);
+    cmp([sel,...nb]);
+    live(`选中 patch (${sel.i}, ${sel.j})：拓扑超边含 ${nb.length+1} 个顶点（自身 + ${nb.length} 个空间邻居）`);
+  }
+  cells.forEach(c=>c.rect.addEventListener('click',()=>{ sel=c; upd(); }));
+  addSlider('δ：空间距离阈值（单位 = patch 边长）',1,3,.1,1.5,v=>{ delta=v; upd(); },v=>v.toFixed(1));
+  upd();
+}
+
+// 3 结构超边 + 超图卷积
+function s3(g){
+  const cells=makeSlide(7,17,13,30,46,21);
+  drawSlide(g,cells,'同一张切片（点击 patch）'); legendTypes(g,30,346);
+  const SX=440,SY=50,SW=330;
+  el('rect',{x:SX,y:SY,width:SW,height:SW,rx:8,class:'box'},g);
+  text(g,SX,SY-10,'特征空间（2 维示意，真实为 d 维）','tm');
+  cells.forEach(c=>{ c.dot=el('circle',{cx:SX+c.f[0]*SW,cy:SY+SW-c.f[1]*SW,r:3.2,fill:TYPES[c.t].c,'fill-opacity':.8},g); });
+  const hl=el('g',{class:'nopt'},g);
+  let sel=centerCell(cells), gamma=.92;
+  function upd(){
+    hl.innerHTML='';
+    const T=cells.filter(c=>c!==sel&&Math.hypot(c.i-sel.i,c.j-sel.j)<=1.5);
+    const F=cells.filter(c=>c!==sel&&simF(sel,c)>=gamma);
+    T.forEach(c=>el('rect',{x:c.x+1,y:c.y+1,width:19,height:19,rx:3,class:'nbT'},hl));
+    F.forEach(c=>{ el('path',{d:`M${sel.cx},${sel.cy} Q${(sel.cx+c.cx)/2},${Math.min(sel.cy,c.cy)-40} ${c.cx},${c.cy}`,class:'edgeF'},hl);
+      el('rect',{x:c.x+3,y:c.y+3,width:15,height:15,rx:2,class:'nbF'},hl);
+      el('circle',{cx:SX+c.f[0]*SW,cy:SY+SW-c.f[1]*SW,r:6,class:'nbF'},hl); });
+    el('rect',{x:sel.x,y:sel.y,width:21,height:21,rx:3,class:'selc'},hl);
+    const rr=SIG*Math.sqrt(-2*Math.log(gamma))*SW;
+    el('circle',{cx:SX+sel.f[0]*SW,cy:SY+SW-sel.f[1]*SW,r:rr,fill:'var(--ffpe)','fill-opacity':.08,stroke:'var(--ffpe)','stroke-dasharray':'4 3'},hl);
+    el('circle',{cx:SX+sel.f[0]*SW,cy:SY+SW-sel.f[1]*SW,r:7,class:'selc'},hl);
+    const far=F.filter(c=>Math.hypot(c.i-sel.i,c.j-sel.j)>3).length;
+    live(`拓扑邻居 ${T.length} 个（蓝），结构邻居 ${F.length} 个（橙），其中 ${far} 个在空间上距离 > 3 个 patch——靠特征相似连起来`);
+  }
+  cells.forEach(c=>c.rect.addEventListener('click',()=>{ sel=c; upd(); }));
+  addSlider('γ：特征相似度阈值（越大越严格）',.5,.99,.01,.92,v=>{ gamma=v; upd(); },v=>v.toFixed(2));
+  text(g,30,390,'蓝框 = 拓扑超边 ℰ_T（空间近）；橙框 + 弧线 = 结构超边 ℰ_F（特征像）；ℰ_I = ℰ_T ∪ ℰ_F','tm');
+  text(g,30,412,'每个 patch 都生成这两类超边，合在一起就是这张切片的片内超图。','ts');
+  // 超图卷积示意
+  const H=el('g',{},g);
+  text(H,1000,40,'L 层超图卷积（示意）','t','middle');
+  const V=[[840,90],[840,150],[840,210],[840,270],[840,330]], E=[[990,140],[990,280]], O=[1140,210];
+  box(H,950,122,80,36,'k-attn',['e_T'],{size:'tm'}); box(H,950,262,80,36,'k-path',['e_F'],{size:'tm'});
+  V.forEach((p,k)=>el('circle',{cx:p[0],cy:p[1],r:10,fill:TYPES[k%3].c},H));
+  el('circle',{cx:O[0],cy:O[1],r:13,fill:'none',stroke:'var(--sel)','stroke-width':3},H);
+  text(H,O[0],O[1]+34,'p_i^(l+1)','tm','middle');
+  text(H,840,370,'顶点','ts','middle'); text(H,990,330,'超边','ts','middle');
+  text(H,915,400,'① 顶点 → 超边：聚合超边内特征','ts','middle');
+  text(H,1060,420,'② 超边 → 顶点：回传更新','ts','middle');
+  const hot=el('g',{class:'clk',tabindex:0,role:'button','aria-label':'跳到第 4 步：超图卷积逐层动画'},H);
+  el('rect',{x:842,y:432,width:316,height:26,rx:13,fill:'var(--surface)',stroke:'var(--sel)','stroke-width':2},hot);
+  text(hot,1000,450,'🔍 点击展开 P⁽⁰⁾→P⁽ᴸ⁾ 逐层动画（第 4 步）','tm','middle');
+  hot.addEventListener('click',()=>go(4));
+  hot.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(4); } });
+  V.forEach((p,k)=>{ const e=E[k<3?0:1]; const pa=el('path',{d:`M${p[0]+10},${p[1]} L${e[0]-40},${e[1]}`,class:'link'},H);
+    flowPath(pa,{color:'var(--attn)',n:1,dur:1600,delay:k*150,layer:H}); });
+  E.forEach((e,k)=>{ const pa=el('path',{d:`M${e[0]+40},${e[1]} L${O[0]-13},${O[1]}`,class:'link'},H);
+    flowPath(pa,{color:k?'var(--ffpe)':'var(--attn)',n:2,dur:1600,delay:800,layer:H}); });
+  upd();
+}
+
+// 4 超图卷积逐层：P^(0) → P^(1) → … → P^(L)
+function sHG(g){
+  const G=gen, CS=20, D=8, LMAX=3, cells=makeSlide(7,17,13,30,46,CS), N=cells.length;
+  const SUP={0:'⁽⁰⁾',1:'⁽¹⁾',2:'⁽²⁾',3:'⁽³⁾',L:'⁽ᴸ⁾'};
+  drawSlide(g,cells,'切片 patch 网格（点击切换中心点 p_i）');
+  // 示意超图：每个 patch 一条拓扑超边（自身 + 周围一圈，k = 9）、一条结构超边（特征最近的 9 个）
+  const edges=[];
+  cells.forEach(c=>{
+    edges.push({type:'T',m:cells.map((_,j)=>j).filter(j=>Math.max(Math.abs(cells[j].i-c.i),Math.abs(cells[j].j-c.j))<=1)});
+    edges.push({type:'F',m:cells.map((d,j)=>[fdist(c,d),j]).sort((a,b)=>a[0]-b[0]).slice(0,9).map(x=>x[1])});
+  });
+  const dv=new Array(N).fill(0); edges.forEach(e=>e.m.forEach(j=>dv[j]++));
+  // HGNN 传播矩阵 A = D_v^-1/2 H W_e D_e^-1 H^T D_v^-1/2（w_e = 1）；via 记录两点共享的超边类型
+  const A=cells.map(()=>new Float64Array(N)), via=cells.map(()=>new Uint8Array(N));
+  edges.forEach(e=>{ const de=e.m.length; e.m.forEach(a=>e.m.forEach(b=>{ A[a][b]+=1/(de*Math.sqrt(dv[a]*dv[b])); via[a][b]|=e.type==='T'?1:2; })); });
+  // 每个 patch 的 8 维示意特征 P^(0)，逐层 P^(l+1) = A P^(l)（忽略 Θ 与 σ）
+  const PROF=[[.85,.7,.2,.8,.3,.6,.15,.5],[.3,.5,.8,.25,.7,.4,.6,.3],[.5,.2,.4,.6,.9,.2,.8,.7]];
+  const rr=rng(99), X=[cells.map(c=>PROF[c.t].map(v=>Math.max(.05,v+(rr()-.5)*.5)))];
+  for(let l=1;l<=LMAX;l++) X.push(X[l-1].map((_,a)=>{ const o=new Array(D).fill(0);
+    for(let b=0;b<N;b++){ const w=A[a][b]; if(w) for(let k=0;k<D;k++) o[k]+=w*X[l-1][b][k]; } return o; }));
+  let sel=centerCell(cells), si=cells.indexOf(sel), lay=0, H=[], share=[], mid=null;
+  const hopsOf=s=>{ const h=new Array(N).fill(-1); h[s]=0; let fr=[s];
+    for(let d=1;d<=LMAX;d++){ const nx=[]; fr.forEach(a=>{ for(let b=0;b<N;b++) if(A[a][b]>0&&h[b]<0){ h[b]=d; nx.push(b); } }); fr=nx; } return h; };
+  const sharesOf=s=>{ let r=new Float64Array(N); r[s]=1; const out=[[1,0,0,0]];
+    for(let l=1;l<=LMAX;l++){ const n=new Float64Array(N); for(let a=0;a<N;a++) if(r[a]) for(let b=0;b<N;b++) if(A[a][b]) n[b]+=r[a]*A[a][b];
+      r=n; const sh=[0,0,0,0]; let tot=0; for(let b=0;b<N;b++) if(H[b]>=0){ sh[H[b]]+=r[b]; tot+=r[b]; } out.push(sh.map(v=>v/tot)); }
+    return out; };
+
+  // ---------- 左：切片上的感受野 ----------
+  const ringG=el('g',{class:'nopt'},g), flyG=el('g',{class:'nopt'},g), msgG=el('g',{},g);
+  [['var(--sel)','中心点 p_i'],['var(--attn)','1 阶·拓扑'],['var(--ffpe)','1 阶·结构'],['var(--mem)','2 阶'],['var(--muted)','3 阶']].forEach(([c,t],k)=>{
+    el('rect',{x:30+k*76,y:322,width:11,height:11,rx:2,fill:'none',stroke:c,'stroke-width':2},g); text(g,45+k*76,332,t,'ts'); });
+  const MSG=[
+    ['l = 0：P⁽⁰⁾ 就是 E_p 的输出。','p_i⁽⁰⁾ 只含它自己这个 patch 的形态特征，','感受野 = 1 个 patch（0 跳）。'],
+    ['l = 1：P⁽⁰⁾ → P⁽¹⁾，聚合 1 阶邻居。','① 邻居特征按 α 加权汇入超边 e_T、e_F；','② 超边按 β 回传，p_i 更新为 p_i⁽¹⁾。','切片上每个 patch 同时做这件事，所以每个 p_j⁽¹⁾','里已装进 p_j 自己的邻居（p_i 的 2 阶邻居）。'],
+    ['l = 2：P⁽¹⁾ → P⁽²⁾，超边连接不变，','但 p_j⁽¹⁾ 已含 2 阶邻居 p_k⁽⁰⁾ 的信息，','于是沿 p_k⁽⁰⁾ → p_j⁽¹⁾ → e → p_i⁽²⁾，','邻居的邻居也流进了 p_i。'],
+    ['l = 3 = L：输出 P⁽ᴸ⁾。','p_i⁽ᴸ⁾ 融合了一圈圈外扩的局部微环境，','以及结构超边连来的全片同类组织上下文。'],
+  ];
+  function rings(l){
+    ringG.innerHTML='';
+    cells.forEach((c,b)=>{ const h=H[b], on=h>=0&&h<=l; c.rect.setAttribute('opacity',on?1:.28);
+      if(!on||h===0) return;
+      const st=h===1?((via[si][b]&1)?'var(--attn)':'var(--ffpe)'):h===2?'var(--mem)':'var(--muted)';
+      const a={x:c.x+1.5,y:c.y+1.5,width:CS-3,height:CS-3,rx:3,fill:'none',stroke:st,'stroke-width':h===1?2:h===2?1.8:1.4};
+      if(h>1) a['stroke-dasharray']=h===2?'3 2':'2 2';
+      el('rect',a,ringG); });
+    if(l>=1) cells.forEach((c,b)=>{ if(H[b]===1&&!(via[si][b]&1))
+      el('path',{d:`M${sel.cx},${sel.cy} Q${(sel.cx+c.cx)/2},${Math.min(sel.cy,c.cy)-30} ${c.cx},${c.cy}`,class:'edgeF'},ringG); });
+    el('rect',{x:sel.x,y:sel.y,width:CS,height:CS,rx:3,class:'selc'},ringG);
+  }
+  function showMsg(l){ msgG.innerHTML=''; MSG[l].forEach((s,k)=>text(msgG,30,354+k*18,s,k===0?'tm':'ts')); }
+  const pick=(arr,n,seed)=>{ const r=rng(seed), a=arr.slice(), out=[]; while(a.length&&out.length<n) out.push(a.splice(Math.floor(r()*a.length),1)[0]); return out; };
+  const linkTo=(from,hop)=>{ for(let b=0;b<N;b++) if(H[b]===hop&&A[from][b]>0) return b; return null; };
+  async function flowLeft(l){
+    if(RM) return;
+    flyG.innerHTML='';
+    const yS=Math.max(56,sel.cy-34), cx=x=>Math.max(42,Math.min(358,x));
+    const st={T:[cx(sel.cx-30),yS],F:[cx(sel.cx+30),yS]};
+    [['T','var(--attn)'],['F','var(--ffpe)']].forEach(([k,c])=>{ const p=st[k];
+      el('path',{d:`M${p[0]},${p[1]-8} L${p[0]+8},${p[1]} L${p[0]},${p[1]+8} L${p[0]-8},${p[1]} Z`,fill:'var(--surface)',stroke:c,'stroke-width':2},flyG);
+      text(flyG,p[0],p[1]-11,'e_'+k,'ts','middle'); });
+    const P=b=>[cells[b].cx,cells[b].cy], C=[sel.cx,sel.cy], viaSt=b=>(via[si][b]&1)?st.T:st.F;
+    const of=h=>H.map((x,b)=>x===h?b:-1).filter(b=>b>=0);
+    let routes=[];
+    if(l===1) routes=pick(of(1),10,si).map(b=>({pts:[P(b),viaSt(b),C],c:(via[si][b]&1)?'var(--attn)':'var(--ffpe)'}));
+    if(l===2) routes=pick(of(2),10,si+1).map(k=>{ const j=linkTo(k,1); return {pts:[P(k),P(j),viaSt(j),C],c:'var(--mem)'}; });
+    if(l===3) routes=pick(of(3),10,si+2).map(k=>{ const k2=linkTo(k,2), j=linkTo(k2,1); return {pts:[P(k),P(k2),P(j),viaSt(j),C],c:'var(--muted)'}; });
+    await Promise.all(routes.map((R,n)=>fly(flyG,R.pts,{color:R.c,r:3.2,dur:1100+R.pts.length*180,delay:n*90})));
+    if(!alive(G)) return;
+    const ring=el('circle',{cx:sel.cx,cy:sel.cy,r:6,fill:'none',stroke:'var(--sel)','stroke-width':3},flyG);
+    await tween(500,k=>{ ring.setAttribute('r',6+k*22); ring.setAttribute('opacity',(1-k).toFixed(2)); });
+  }
+
+  // ---------- 中：单层算子 = 两步加权求和 ----------
+  const MG=el('g',{},g), IX=462, YS=[96,156,212,292], EC={T:[614,146],F:[614,282]}, OUT=[748,200];
+  function drawMid(){
+    MG.innerHTML='';
+    text(MG,605,40,'单层超图卷积 = 两步加权求和','t','middle');
+    const eT=edges[2*si], eF=edges[2*si+1], be=1/Math.sqrt(dv[si]);
+    const tN=eT.m.filter(j=>j!==si).slice(0,2), fN=eF.m.filter(j=>j!==si&&!eT.m.includes(j));
+    const ins=[[si,'p_i'],[tN[0],'p_j1'],[tN[1],'p_j2'],[fN.length?fN[0]:eF.m.find(j=>j!==si),'p_m1']];
+    const lines=[];
+    [[0,'T'],[1,'T'],[2,'T'],[0,'F'],[3,'F']].forEach(([n,k])=>{
+      const j=ins[n][0], e=k==='T'?eT:eF, a=1/(e.m.length*Math.sqrt(dv[j])), y=YS[n], to=[EC[k][0]-46,EC[k][1]];
+      el('line',{x1:IX+11,y1:y,x2:to[0],y2:to[1],class:'link'},MG);
+      text(MG,IX+11+(to[0]-IX-11)*.5,y+(to[1]-y)*.5-5,'α='+a.toFixed(3),'ts','middle');
+      lines.push({from:[IX+11,y],to,a,c:k==='T'?'var(--attn)':'var(--ffpe)'}); });
+    ['T','F'].forEach(k=>{ const ec=EC[k]; el('line',{x1:ec[0]+46,y1:ec[1],x2:OUT[0]-14,y2:OUT[1],class:'link'},MG);
+      text(MG,(ec[0]+46+OUT[0])/2-4,(ec[1]+OUT[1])/2+(k==='T'?-8:16),'β='+be.toFixed(3),'ts','middle'); });
+    box(MG,568,126,92,40,'k-attn',['e_T','空间超边'],{}); box(MG,568,262,92,40,'k-path',['e_F','语义超边'],{});
+    const inL=ins.map(([j,name],n)=>{ el('circle',{cx:IX,cy:YS[n],r:11,fill:TYPES[cells[j].t].c,stroke:n===0?'var(--sel)':'none','stroke-width':3},MG);
+      return {t:text(MG,IX,YS[n]+27,'','ts','middle'),name}; });
+    el('circle',{cx:OUT[0],cy:OUT[1],r:14,fill:'var(--surface)',stroke:'var(--sel)','stroke-width':3},MG);
+    const outL=text(MG,OUT[0],OUT[1]+32,'','tm','middle'), thL=text(MG,OUT[0],OUT[1]-24,'','ts','middle');
+    text(MG,470,72,'Step A','tm','middle'); text(MG,700,110,'Step B','tm','middle');
+    text(MG,435,334,'Step A：超边内的邻居按 α 加权求和','tm');
+    text(MG,435,352,'Step B：各超边按 β 回传，乘 Θ 后经 σ 更新 p_i','tm');
+    text(MG,435,378,'p_i⁽ˡ⁺¹⁾ = σ( Σ_e β_e · Σ_{j∈e} α_{j→e} · p_j⁽ˡ⁾ Θ⁽ˡ⁾ )','tm');
+    text(MG,435,398,'α_{j→e} = 1/(δ(e)·√d(j))，β_e = w_e/√d(i)；本页 w_e = 1','ts');
+    text(MG,435,416,`p_i 实际属于 ${dv[si]} 条超边，这里只画以 p_i 为中心的 2 条`,'ts');
+    mid={lines,be,inL,outL,thL};
+  }
+  function setMidLabels(l){
+    const a=SUP[Math.max(0,l-1)], b=l===0?SUP[1]:l===LMAX?SUP.L:SUP[l];
+    mid.inL.forEach(x=>x.t.textContent=x.name+a); mid.outL.textContent='p_i'+b; mid.thL.textContent='Θ'+a;
+  }
+  async function flowMid(){
+    if(RM) return;
+    const fg=el('g',{class:'nopt'},MG);
+    await Promise.all(mid.lines.map((L,n)=>fly(fg,[L.from,L.to],{color:L.c,r:2+L.a*60,dur:800,delay:n*110})));
+    if(!alive(G)) return;
+    await Promise.all(['T','F'].map((k,n)=>fly(fg,[[EC[k][0]+46,EC[k][1]],[OUT[0]-14,OUT[1]]],{color:'var(--sel)',r:2+mid.be*14,dur:700,delay:n*120})));
+    fg.remove();
+  }
+
+  // ---------- 右：P^(l) 的形状不变、第 i 行的数值在变 ----------
+  const RG=el('g',{},g), MX=812, MY=54, MC=12, BY=310, BH=64, SX=810, SW=366;
+  let mCells=[], rowsIdx=[], bars=[], segs=[], shareTxt=null, badge=null, curV=null;
+  function drawRight(){
+    RG.innerHTML='';
+    text(RG,800,40,'P⁽ˡ⁾ ∈ ℝ^(N×d)：形状不变，数值在变','t');
+    const others=cells.map((_,b)=>b).filter(b=>b!==si); rowsIdx=[...others.slice(0,4),si,...others.slice(4,11)];
+    mCells=rowsIdx.map((b,r)=>Array.from({length:D},(_,k)=>el('rect',{x:MX+k*MC,y:MY+r*MC,width:MC-1.5,height:MC-1.5,rx:1.5,fill:b===si?'var(--sel)':'var(--path)','fill-opacity':.5},RG)));
+    el('rect',{x:MX-3,y:MY+4*MC-2,width:D*MC+4,height:MC+2,rx:3,fill:'none',stroke:'var(--sel)','stroke-width':2.2},RG);
+    text(RG,MX+D*MC/2,MY+12*MC+12,'⋮','ts','middle');
+    text(RG,MX+D*MC+10,MY+4*MC+9,'← 第 i 行 = p_i','tm');
+    text(RG,920,64,`N = ${N} 行（示意切片的 patch 数）`,'ts'); text(RG,920,82,'d = 8 列（示意）','ts');
+    text(RG,920,140,'层数 0 → L 递进时：','tm'); text(RG,920,158,'N 与 d 始终不变，','tm'); text(RG,920,176,'变的是每一行的数值与语义深度。','tm');
+    badge=el('text',{x:1176,y:118,'text-anchor':'end','font-size':26,'font-weight':700,fill:'var(--attn)'},RG);
+    text(RG,800,226,'p_i⁽ˡ⁾ 的 d 维特征向量（展示 8 维）','tm');
+    el('line',{x1:810,y1:BY,x2:1176,y2:BY,class:'axis'},RG);
+    bars=Array.from({length:D},(_,k)=>{ const x=816+k*45; text(RG,x+14,BY+14,'d'+(k+1),'ts','middle');
+      return {r:el('rect',{x,y:BY,width:28,height:0,rx:3,fill:'var(--attn)'},RG),v:text(RG,x+14,BY-4,'','ts','middle')}; });
+    text(RG,800,352,'p_i⁽ˡ⁾ 的信息来源构成','tm');
+    segs=['var(--sel)','var(--attn)','var(--mem)','var(--muted)'].map(c=>el('rect',{x:SX,y:362,width:0,height:20,fill:c},RG));
+    el('rect',{x:SX,y:362,width:SW,height:20,rx:3,fill:'none',stroke:'var(--line)'},RG);
+    shareTxt=el('text',{x:SX,y:400,class:'ts'},RG);
+    text(RG,SX,418,'按示意超图的传播矩阵逐层相乘算出，忽略 Θ 与 σ','ts');
+    curV=null;
+  }
+  function rightVals(l){
+    const mx=Math.max(...X.flatMap(x=>x[si]));
+    return {bars:X[l][si].map(v=>v/mx), mats:rowsIdx.map(b=>{ const row=X[l][b], m=Math.max(...row); return row.map(v=>v/m); }), sh:share[l]};
+  }
+  async function updRight(l,anim){
+    const to=rightVals(l), from=curV||to; curV=to;
+    badge.textContent=l===LMAX?'P⁽³⁾ = P⁽ᴸ⁾':'P'+SUP[l];
+    shareTxt.innerHTML='';
+    ['自身','1 阶','2 阶','3 阶'].forEach((n,d)=>{ const ts=el('tspan',{fill:['var(--fg)','var(--attn)','var(--mem)','var(--muted)'][d],'font-weight':d===0?600:400},shareTxt);
+      ts.textContent=`${d?' · ':''}${n} ${Math.round(to.sh[d]*100)}%`; });
+    const apply=k=>{
+      bars.forEach((B,d)=>{ const v=from.bars[d]+(to.bars[d]-from.bars[d])*k, h=v*BH; B.r.setAttribute('y',BY-h); B.r.setAttribute('height',h); B.v.setAttribute('y',BY-h-4); B.v.textContent=v.toFixed(2); });
+      mCells.forEach((row,r)=>row.forEach((c,d)=>c.setAttribute('fill-opacity',(.12+.8*(from.mats[r][d]+(to.mats[r][d]-from.mats[r][d])*k)).toFixed(2))));
+      let x=SX; segs.forEach((s,d)=>{ const w=Math.max(0,SW*(from.sh[d]+(to.sh[d]-from.sh[d])*k)); s.setAttribute('x',x); s.setAttribute('width',w); x+=w; });
+    };
+    if(anim&&!RM) await tween(900,apply); else apply(1);
+  }
+
+  // ---------- 联动 ----------
+  const ST=['只含自身特征（0 跳）','已聚合 1 阶邻居','已含「邻居的邻居」','= P⁽ᴸ⁾，最终输出'];
+  function liveUpd(){ const n=d=>H.filter(h=>h===d).length;
+    live(`p_i = (${sel.i}, ${sel.j})｜1 阶 ${n(1)} 个 · 2 阶 ${n(2)} 个 · 3 阶 ${n(3)} 个｜l = ${lay}：p_i${lay===LMAX?SUP.L:SUP[lay]} ${ST[lay]}`); }
+  const radio=addButtons(Object.assign(['l = 0（初始 P⁽⁰⁾）','l = 1（P⁽¹⁾ 聚合 1 阶邻居）','l = 2（P⁽²⁾ 聚合邻居的邻居）','l = 3（P⁽ᴸ⁾ 最终输出）']
+    .map((t,l)=>[t,()=>setLayer(l,true),l===0]),{radio:true}));
+  async function setLayer(l,anim){
+    lay=l; [...radio.children].forEach((b,i)=>b.className=i===l?'primary':'');
+    rings(l); showMsg(l); setMidLabels(l); liveUpd();
+    const ps=[updRight(l,anim)];
+    if(anim&&l>0) ps.push(flowLeft(l),flowMid());
+    await Promise.all(ps);
+  }
+  async function play(){ for(let l=0;l<=LMAX;l++){ if(!alive(G)) return; await setLayer(l,true); await sleep(l?900:1200); } }
+  addButtons([['▶ 完整播放 P⁽⁰⁾→P⁽ᴸ⁾',play]]);
+  function setSel(c){ sel=c; si=cells.indexOf(c); H=hopsOf(si); share=sharesOf(si); drawMid(); drawRight(); flyG.innerHTML=''; setLayer(lay,false); }
+  cells.forEach(c=>c.rect.addEventListener('click',()=>setSel(c)));
+  setSel(sel);
+  if(!RM) play();
+}
+
+// 5 片间超图 + 自适应权重
+function s4(g){
+  const ff=makeSlide(11,12,10,30,58,20), fp=makeSlide(7,16,12,330,46,18);
+  drawSlide(g,ff,'FF 切片'); drawSlide(g,fp,'FFPE 切片');
+  const hl=el('g',{class:'nopt'},g);
+  let sel=centerCell(ff), omega=.85;
+  function upd(){
+    hl.innerHTML='';
+    const other=ff.includes(sel)?fp:ff;
+    const N=other.filter(c=>simF(sel,c)>=omega);
+    N.forEach(c=>{ el('path',{d:`M${sel.cx},${sel.cy} Q${(sel.cx+c.cx)/2},${Math.max(sel.cy,c.cy)+60} ${c.cx},${c.cy}`,class:'edgeX'},hl);
+      el('rect',{x:c.x+1,y:c.y+1,width:c.cs-2,height:c.cs-2,rx:3,class:'nbX'},hl); });
+    el('rect',{x:sel.x,y:sel.y,width:sel.cs,height:sel.cs,rx:3,class:'selc'},hl);
+    live(`${ff.includes(sel)?'FF → FFPE':'FFPE → FF'}：sim ≥ ω 的跨切片邻居 ${N.length} 个，与选中 patch 组成 1 条片间超边`);
+  }
+  [...ff,...fp].forEach(c=>c.rect.addEventListener('click',()=>{ sel=c; upd(); }));
+  addSlider('ω：跨切片相似度阈值',.5,.97,.01,.85,v=>{ omega=v; upd(); },v=>v.toFixed(2));
+  text(g,30,316,'紫色弧线 = 片间超边 ℰ_s：一个 FF patch 连向与它相似的若干 FFPE patch（反方向同理）','tm');
+  text(g,30,338,'作用：利用同一病人两种切片的生物学一致性，让信息在两张切片之间流动。','ts');
+  // 自适应权重
+  const W=el('g',{},g);
+  el('rect',{x:680,y:20,width:500,height:300,rx:12,class:'box'},W);
+  text(W,700,48,'自适应权重（式 5）：每张切片一个权重','t');
+  text(W,700,74,'s_ff = W_ff · P_ff ，  s_ffpe = W_ffpe · P_ffpe   （打分）','tm');
+  text(W,700,96,'w = softmax(s_ff, s_ffpe)','tm');
+  const bars=[['w_ff','var(--ff)',130],['w_ffpe','var(--ffpe)',190]].map(([n,c,y])=>{
+    text(W,700,y+18,n,'t'); el('rect',{x:770,y,width:380,height:26,rx:6,fill:'var(--soft)'},W);
+    const b=el('rect',{x:770,y,width:190,height:26,rx:6,fill:c},W); const v=text(W,1160,y+18,'0.50','t','end'); return {b,v}; });
+  text(W,700,250,'两个权重作为超边权重进入超图卷积 → 片间特征 P_s','tm');
+  text(W,700,274,'权重随病人而变：某张切片质量差 / 信息少时自动降权。','ts');
+  let cur=[.5,.5]; const rr=rng(21);
+  async function patient(){
+    const s=[rr()*3-1.5,rr()*3-1.5], e=s.map(Math.exp), w=[e[0]/(e[0]+e[1]),e[1]/(e[0]+e[1])], from=cur.slice(); cur=w;
+    await tween(800,k=>bars.forEach((B,i)=>{ const v=from[i]+(w[i]-from[i])*k; B.b.setAttribute('width',380*v); B.v.textContent=v.toFixed(2); }));
+  }
+  addButtons([['换一位病人',patient]]);
+  // P_s 输出
+  box(g,760,360,180,44,'k-path',['L 层超图卷积（带权）'],{});
+  const ps=matrix(g,1010,352,4,10,13,'var(--path)',{label:'P_s（片间特征）',seed:12});
+  const a1=arrow(g,'M640,382 H756'), a2=arrow(g,'M940,382 H1004');
+  text(g,700,374,'ℰ_s + w','ts','middle');
+  flowPath(a1,{color:'var(--mem)',layer:g}); flowPath(a2,{color:'var(--path)',layer:g,delay:600});
+  upd(); patient();
+}
+
+// 注意力块（第 5、7 步共用）
+async function attnBlock(g,{x,y,nq,nk,d=5,cs=13,title,qLab,kLab,vLab,outLab,qC,kC,oC,seed}){
+  const r=rng(seed), G=gen;
+  text(g,x,y-6,title,'t');
+  const qx=x, qy=y+d*cs+30, hx=qx+d*cs+30, kx=hx, ky=y+12, vx=hx+nk*cs+30, ox=vx+d*cs+46;
+  const Q=matrix(g,qx,qy,nq,d,cs,qC,{label:qLab,seed:seed+1});
+  const K=matrix(g,kx,ky,d,nk,cs,kC,{seed:seed+2}); text(g,kx+nk*cs+6,ky+d*cs/2+4,kLab,'ts');
+  const V=matrix(g,vx,qy,nk,d,cs,kC,{label:vLab,seed:seed+3});
+  text(g,hx+nk*cs/2,qy+nq*cs+16,'φ(QKᵀ/√d)','tm','middle');
+  const heat=[]; for(let i=0;i<nq;i++){ heat.push([]); for(let j=0;j<nk;j++) heat[i].push(el('rect',{x:hx+j*cs,y:qy+i*cs,width:cs-1.5,height:cs-1.5,rx:1.5,fill:'var(--attn)','fill-opacity':.05},g)); }
+  const out=[]; for(let i=0;i<nq;i++){ const rg=el('g',{opacity:.12},g); out.push(rg);
+    for(let j=0;j<d;j++) el('rect',{x:ox+j*cs,y:qy+i*cs,width:cs-1.5,height:cs-1.5,rx:1.5,fill:oC,'fill-opacity':(.3+.6*r()).toFixed(2)},rg); }
+  text(g,ox+d*cs/2,qy+nq*cs+16,outLab,'tm','middle');
+  const mark=el('rect',{x:qx-3,y:qy-2,width:d*cs+3,height:cs+2,rx:3,fill:'none',stroke:'var(--sel)','stroke-width':2.2,opacity:0},g);
+  const fl=el('g',{class:'nopt'},g);
+  for(let i=0;i<nq;i++){
+    if(!alive(G)) return;
+    mark.setAttribute('y',qy+i*cs-2); mark.setAttribute('opacity',1);
+    const sc=[...Array(nk)].map(()=>r()*3), ex=sc.map(Math.exp), s=ex.reduce((a,b)=>a+b), w=ex.map(v=>v/s);
+    await tween(320,k=>heat[i].forEach((h,j)=>h.setAttribute('fill-opacity',(.05+Math.min(.9,w[j]*nk*.45)*k).toFixed(2))));
+    const ps=w.map((wj,j)=>fly(fl,[[vx+d*cs,V.rowY(j)],[ox-6,Q.rowY(i)]],{color:qC==='var(--path)'?'var(--attn)':'var(--attn)',r:1.5+wj*8,dur:440}));
+    await Promise.all(ps);
+    await tween(200,k=>out[i].setAttribute('opacity',.12+.88*k));
+  }
+  mark.setAttribute('opacity',0);
+  return {out,ox,oy:qy,cs,d,nq};
+}
+
+// 5 多切片对齐
+async function s5(g){
+  const G=gen;
+  const A=attnBlock(g,{x:30,y:24,nq:4,nk:6,title:'FF 精炼：Q 来自 P_ff，K / V 来自片间特征 P_s',qLab:'Q = W_q·P_ff',kLab:'Kᵀ = (W_k·P_s)ᵀ',vLab:'V = W_v·P_s',outLab:"P'_ff",qC:'var(--ff)',kC:'var(--path)',oC:'var(--ff)',seed:31});
+  const ra=await A; if(!alive(G)) return;
+  const rb=await attnBlock(g,{x:30,y:250,nq:5,nk:6,title:'FFPE 精炼：Q 来自 P_ffpe，K / V 同样来自 P_s',qLab:'Q = W_q·P_ffpe',kLab:'Kᵀ = (W_k·P_s)ᵀ',vLab:'V = W_v·P_s',outLab:"P'_ffpe",qC:'var(--ffpe)',kC:'var(--path)',oC:'var(--ffpe)',seed:41});
+  if(!alive(G)) return;
+  const cx=780, cy=120, cs=13;
+  text(g,cx+30,cy-20,'拼接 → 病人级病理表示','t','middle');
+  const moves=[];
+  [[ra,0],[rb,ra.nq]].forEach(([R,off])=>R.out.forEach((row,i)=>{ const c=row.cloneNode(true); g.appendChild(c);
+    const dx=cx-R.ox, dy=cy+(off+i)*cs-(R.oy+i*cs);
+    moves.push(tween(900,k=>c.setAttribute('transform',`translate(${dx*k},${dy*k})`),(off+i)*90)); }));
+  await Promise.all(moves); if(!alive(G)) return;
+  el('path',{d:`M${cx-8},${cy} h-6 v${9*cs} h6`,fill:'none',stroke:'var(--fg)','stroke-width':1.4},g);
+  text(g,cx+32,cy+9*cs+22,"𝒫_m = [ P'_ff ; P'_ffpe ]",'tb','middle');
+  text(g,cx+32,cy+9*cs+44,'上 4 行来自 FF，下 5 行来自 FFPE（示意）','ts','middle');
+  const a=arrow(g,`M${cx+80},${cy+60} H1060`); flowPath(a,{color:'var(--path)',layer:g});
+  box(g,1064,cy+36,120,48,'k-attn',['送入第 8 步','多模态融合'],{});
+}
+
+// 6 多组学编码
+function s6(g){
+  const lanes=[
+    {y:20, title:'基因组 Genomic：RNA-seq + CNV', src:'基因', bins:['抑癌','致癌','蛋白激酶','细胞分化','转录','细胞因子/生长'], enc:'SNN', tok:'z_g ∈ ℝ^(6×d)', ntok:6, ell:false, c:'var(--omics)'},
+    {y:162,title:'转录组 Transcriptomic：mRNA', src:'mRNA', bins:['通路 1','通路 2','通路 3','通路 4','⋯','通路 331'], enc:'SNN', tok:'z_t ∈ ℝ^(331×d)', ntok:6, ell:true, c:'var(--omics)'},
+    {y:304,title:'蛋白组 Proteomic：表达量最高的 100 个蛋白', src:'蛋白', bins:['P1 MKTAYIAK…','P2 MSEQLRKA…','P3 MAHHHHGS…','⋯','P100 MDLSALRV…'], enc:'ESM', tok:'z_pr ∈ ℝ^(100×d)', ntok:5, ell:true, c:'var(--omics)'},
+  ];
+  const fl=el('g',{class:'nopt'},g);
+  lanes.forEach((L,li)=>{
+    text(g,30,L.y+6,L.title,'t');
+    const r=rng(60+li), nb=L.bins.length, bh=15, by=L.y+20, binY=k=>by+k*(bh+2)+bh/2;
+    const chips=[]; for(let k=0;k<24;k++){ const cx=30+(k%8)*30, cy=L.y+28+Math.floor(k/8)*30;
+      el('rect',{x:cx,y:cy,width:24,height:12,rx:3,fill:L.c,'fill-opacity':(.25+.6*r()).toFixed(2)},g); chips.push([cx+24,cy+6]); }
+    text(g,30,L.y+28+3*30+6,li===2?'表达量 + 氨基酸序列（UniProt）':`${L.src}（示意 24 个）`,'ts');
+    L.bins.forEach((b,k)=>{ el('rect',{x:330,y:by+k*(bh+2),width:130,height:bh,rx:4,class:'k-omics'},g); text(g,338,by+k*(bh+2)+11.5,b,'ts'); });
+    box(g,520,L.y+40,70,50,'k-enc',[L.enc],{size:'t'});
+    const T=matrix(g,650,L.y+30,L.ntok,8,11,L.c,{seed:70+li});
+    if(L.ell) text(g,650+44,L.y+30+L.ntok*11+11,'⋮','ts','middle');
+    text(g,750,L.y+60,L.tok,'tm');
+    chips.forEach((p,k)=>{ if(k%3) return; flowPts(fl,[p,[326,binY(k%nb)]],{color:L.c,n:1,dur:1800,delay:k*90+li*300,r:3}); });
+    [0,2,4].forEach(k=>flowPts(fl,[[460,binY(Math.min(k,nb-1))],[518,L.y+65]],{color:L.c,n:1,dur:1500,delay:900+k*120,r:3}));
+    flowPts(fl,[[590,L.y+65],[646,L.y+60]],{color:L.c,n:2,dur:1500,delay:1400,r:3});
+    flowPts(fl,[[900,L.y+56],[1010,250]],{color:L.c,n:2,dur:1800,delay:1800+li*200,r:3});
+  });
+  text(g,330,452,'分组依据：基因组按 6 个功能组（同 Chen 2021b）；转录组按 331 条通路（Reactome 281 + MSigDB-Hallmarks 50，覆盖 4,999 个基因）','ts');
+  // 合并
+  el('rect',{x:1012,y:170,width:20,height:30,rx:2,fill:'var(--omics)','fill-opacity':.9},g);
+  el('rect',{x:1012,y:202,width:20,height:70,rx:2,fill:'var(--omics)','fill-opacity':.6},g);
+  el('rect',{x:1012,y:274,width:20,height:44,rx:2,fill:'var(--omics)','fill-opacity':.35},g);
+  text(g,1040,190,'z_g','ts'); text(g,1040,240,'z_t','ts'); text(g,1040,300,'z_pr','ts');
+  text(g,1100,140,'𝒪 = { z_g , z_t , z_pr }','tb','middle');
+  text(g,1100,346,'按原文维度推算共','ts','middle');
+  text(g,1100,364,'6 + 331 + 100 = 437 个 token','ts','middle');
+}
+
+// 7 双向交叉注意力
+async function s7(g){
+  const G=gen;
+  await attnBlock(g,{x:30,y:24,nq:6,nk:5,title:'病理 → 组学：Q = 𝒫_m，K / V = 𝒪   （组学增强的病理特征）',qLab:'Q = W_q·𝒫_m',kLab:'Kᵀ = (W_k·𝒪)ᵀ',vLab:'V = W_v·𝒪',outLab:'𝒫_c',qC:'var(--path)',kC:'var(--omics)',oC:'var(--path)',seed:51});
+  if(!alive(G)) return;
+  await attnBlock(g,{x:30,y:262,nq:5,nk:6,title:'组学 → 病理：Q = 𝒪，K / V = 𝒫_m   （病理增强的组学特征）',qLab:'Q = W_q·𝒪',kLab:'Kᵀ = (W_k·𝒫_m)ᵀ',vLab:'V = W_v·𝒫_m',outLab:'𝒪_c',qC:'var(--omics)',kC:'var(--path)',oC:'var(--omics)',seed:61});
+  if(!alive(G)) return;
+  el('rect',{x:800,y:150,width:370,height:150,rx:12,class:'box'},g);
+  text(g,820,180,'两个方向各做一次，信息双向交换：','t');
+  text(g,820,206,'· 病理 token 去「问」组学：哪些通路和我相关？','tm');
+  text(g,820,230,'· 组学 token 去「问」病理：哪些区域体现了我？','tm');
+  text(g,820,262,'输出 𝒫_c、𝒪_c → 第 9 步拼接后预测','tm');
+}
+
+// 8 预测与损失
+async function s8(g){
+  const G=gen;
+  matrix(g,30,50,4,6,12,'var(--path)',{label:'𝒫_c',seed:81}); matrix(g,30,140,4,6,12,'var(--omics)',{label:'𝒪_c',seed:82});
+  box(g,130,90,90,54,'k-enc',['汇聚','（方式未明示）'],{});
+  const vec=matrix(g,250,108,1,12,13,'var(--attn)',{label:'拼接向量',seed:83});
+  const lay=[[420,6],[490,5],[560,4]], nodes=[];
+  lay.forEach(([x,n])=>{ const col=[]; for(let k=0;k<n;k++){ const y=120-((n-1)*24)/2+k*24; col.push([x,y]); } nodes.push(col); });
+  for(let l=0;l<lay.length-1;l++) nodes[l].forEach(a=>nodes[l+1].forEach(b=>el('line',{x1:a[0],y1:a[1],x2:b[0],y2:b[1],class:'edgeG'},g)));
+  nodes.flat().forEach(p=>el('circle',{cx:p[0],cy:p[1],r:7,fill:'var(--surface)',stroke:'var(--attn)','stroke-width':1.6},g));
+  text(g,490,212,'FFN','t','middle');
+  const pa=arrow(g,'M222,114 H246'); arrow(g,'M408,114 H410');
+  flowPath(arrow(g,'M110,110 H128'),{color:'var(--attn)',layer:g}); flowPath(pa,{color:'var(--attn)',layer:g,delay:300});
+  // hazard
+  const h=[.12,.22,.35,.30]; const S=[]; h.reduce((s,v,k)=>{ S[k]=s*(1-v); return S[k]; },1);
+  const hx=640, hy=200;
+  text(g,hx,40,'各时间区间的风险 φ_h(t)','tm');
+  el('line',{x1:hx,y1:hy,x2:hx+200,y2:hy,class:'axis'},g);
+  const hb=h.map((v,k)=>{ text(g,hx+22+k*48,hy+16,`t${k+1}`,'ts','middle'); text(g,hx+22+k*48,hy-v*300-6,v.toFixed(2),'ts','middle');
+    return el('rect',{x:hx+8+k*48,y:hy,width:28,height:0,rx:3,fill:'var(--path)'},g); });
+  arrow(g,'M576,120 H632');
+  // survival
+  const sx=900, sy=200, sw=260, sh=150;
+  text(g,sx,40,'生存概率 φ_s(t) = ∏ (1 − φ_h)','tm');
+  el('line',{x1:sx,y1:sy,x2:sx+sw,y2:sy,class:'axis'},g); el('line',{x1:sx,y1:sy,x2:sx,y2:sy-sh,class:'axis'},g);
+  text(g,sx-6,sy-sh+4,'1','ts','end'); text(g,sx-6,sy+4,'0','ts','end');
+  let d=`M${sx},${sy-sh}`; S.forEach((s,k)=>{ d+=` H${sx+(k+1)*sw/4} V${sy-s*sh}`; });
+  const curve=el('path',{d,fill:'none',stroke:'var(--omics)','stroke-width':2.6},g);
+  const CL=curve.getTotalLength(); curve.setAttribute('stroke-dasharray',CL); curve.setAttribute('stroke-dashoffset',CL);
+  arrow(g,'M846,140 H892');
+  // 损失
+  el('rect',{x:30,y:258,width:1140,height:190,rx:12,class:'box'},g);
+  text(g,50,286,'训练目标：负对数似然 NLL（式 1）——按式 1 本身的写法，c = 1 为删失、c = 0 为发生事件','t');
+  const tl=(y,lab,k,cens)=>{ text(g,50,y+4,lab,'tm'); el('line',{x1:200,y1:y,x2:600,y2:y,class:'axis'},g);
+    for(let i=0;i<=4;i++) text(g,200+i*100,y+18,i?`t${i}`:'0','ts','middle');
+    const px=200+k*100; el('line',{x1:200,y1:y,x2:px,y2:y,stroke:cens?'var(--attn)':'var(--path)','stroke-width':4},g);
+    if(cens) el('circle',{cx:px,cy:y,r:7,fill:'var(--surface)',stroke:'var(--attn)','stroke-width':2.4},g);
+    else el('path',{d:`M${px-7},${y-7} L${px+7},${y+7} M${px+7},${y-7} L${px-7},${y+7}`,stroke:'var(--path)','stroke-width':3},g); };
+  tl(330,'患者 A（事件，c=0）',3,false); tl(400,'患者 B（删失，c=1）',2,true);
+  text(g,640,326,'A 在 t3 发生事件 → 贡献 log φ_s(t2) + log φ_h(t3)','tm');
+  text(g,640,346,'「活过 t2，并恰在 t3 发生」','ts');
+  text(g,640,396,'B 在 t2 后失访 → 只贡献 log φ_s(t2)','tm');
+  text(g,640,416,'「至少活过了 t2」，之后的情况未知','ts');
+  text(g,640,436,'𝓛 = −Σ（每位患者的对数似然）','ts');
+  await tween(900,k=>hb.forEach((b,i)=>{ b.setAttribute('height',h[i]*300*k); b.setAttribute('y',hy-h[i]*300*k); }),300);
+  if(!alive(G)) return;
+  await tween(1400,k=>curve.setAttribute('stroke-dashoffset',CL*(1-k)));
+}
+
+// 9、10 共用：记忆库数据（固定种子）
+const MB=(()=>{
+  const r=rng(42), K=5, N=60;
+  const cP=[[.2,.25],[.75,.2],[.5,.55],[.2,.8],[.8,.78]], cO=[[.78,.3],[.25,.22],[.6,.75],[.5,.45],[.18,.75]];
+  const pts=[...Array(N)].map((_,i)=>{ const g=i%K, nz=()=>(r()-.5)*.2; return {g,P:[cP[g][0]+nz(),cP[g][1]+nz()],O:[cO[g][0]+nz(),cO[g][1]+nz()]}; });
+  let C=[3,17,29,41,54].map(i=>pts[i].P.slice()); const hist=[]; let asg=[];
+  for(let it=0;it<7;it++){
+    asg=pts.map(p=>{ let b=0,bd=1e9; C.forEach((c,k)=>{ const d=(p.P[0]-c[0])**2+(p.P[1]-c[1])**2; if(d<bd){bd=d;b=k;} }); return b; });
+    hist.push({C:C.map(c=>c.slice()),asg:asg.slice()});
+    C=C.map((c,k)=>{ const m=pts.filter((_,i)=>asg[i]===k); return m.length?[m.reduce((a,p)=>a+p.P[0],0)/m.length,m.reduce((a,p)=>a+p.P[1],0)/m.length]:c; });
+  }
+  const CO=C.map((_,k)=>{ const m=pts.filter((_,i)=>asg[i]===k); return [m.reduce((a,p)=>a+p.O[0],0)/m.length,m.reduce((a,p)=>a+p.O[1],0)/m.length]; });
+  return {K,pts,hist,CP:C,CO,asg};
+})();
+const KC=['var(--k1)','var(--k2)','var(--k3)','var(--k4)','var(--k5)'];
+function plot(g,x,y,s,title){ el('rect',{x,y,width:s,height:s,rx:8,class:'box'},g); text(g,x,y-10,title,'tm');
+  return p=>[x+p[0]*s,y+s-p[1]*s]; }
+const star=(cx,cy,R,attrs,g)=>{ let d=''; for(let k=0;k<10;k++){ const a=-Math.PI/2+k*Math.PI/5, rr=k%2?R*.45:R; d+=(k?'L':'M')+(cx+rr*Math.cos(a))+','+(cy+rr*Math.sin(a)); } return el('path',{d:d+'Z',...attrs},g); };
+function slots(g){
+  text(g,600,50,'ℳ：K 个原型对','t','middle');
+  return MB.CP.map((_,k)=>{ const y=70+k*68; el('rect',{x:500,y,width:200,height:54,rx:10,class:'k-mem'},g);
+    text(g,520,y+22,`第 ${k+1} 对`,'ts'); const a=el('circle',{cx:560,cy:y+34,r:8,fill:KC[k],opacity:.15},g);
+    text(g,600,y+38,'↔','t','middle'); const b=el('rect',{x:632,y:y+26,width:16,height:16,rx:3,fill:KC[k],opacity:.15},g);
+    text(g,575,y+22,'C_P','ts'); text(g,654,y+22,'C_O','ts');
+    const bar=el('rect',{x:510,y:y+46,width:0,height:4,rx:2,fill:'var(--mem)'},g);
+    return {y,a,b,bar}; });
+}
+
+// 9 记忆库训练
+async function s9(g){
+  const G=gen;
+  const LP=plot(g,40,60,360,'病理表示空间 𝒫_m（每点 = 一位训练病人）'), RP=plot(g,800,60,360,'组学表示空间 𝒪（同一病人的配对点）');
+  const S=slots(g);
+  const hv=el('g',{class:'nopt'},g);
+  const dots=MB.pts.map((p,i)=>{ const a=LP(p.P), b=RP(p.O);
+    const da=el('circle',{cx:a[0],cy:a[1],r:4.5,fill:'var(--muted)','fill-opacity':.7},g), db=el('circle',{cx:b[0],cy:b[1],r:4.5,fill:'var(--muted)','fill-opacity':.7},g);
+    [da,db].forEach(d=>{ d.addEventListener('mouseenter',()=>{ hv.innerHTML=''; el('line',{x1:a[0],y1:a[1],x2:b[0],y2:b[1],stroke:'var(--sel)','stroke-width':1.6,'stroke-dasharray':'4 3'},hv);
+      el('circle',{cx:a[0],cy:a[1],r:8,class:'selc'},hv); el('circle',{cx:b[0],cy:b[1],r:8,class:'selc'},hv); live(`病人 #${i+1}：病理点与组学点是一对`); });
+      d.addEventListener('mouseleave',()=>{ hv.innerHTML=''; }); });
+    return {da,db}; });
+  text(g,40,450,'鼠标悬停任一点，可看到它在另一空间中的配对点','ts');
+  live('第 1 阶段：k-means 聚类（在病理空间示意）');
+  const cent=MB.CP.map((_,k)=>{ const p=LP(MB.hist[0].C[k]); return star(0,0,11,{fill:KC[k],stroke:'var(--fg)','stroke-width':1,transform:`translate(${p[0]},${p[1]})`},g); });
+  for(let it=0;it<MB.hist.length;it++){
+    if(!alive(G)) return;
+    const H=MB.hist[it]; H.asg.forEach((k,i)=>{ dots[i].da.setAttribute('fill',KC[k]); dots[i].da.setAttribute('fill-opacity',.85); });
+    const nxt=MB.hist[Math.min(it+1,MB.hist.length-1)].C;
+    await tween(600,t=>cent.forEach((c,k)=>{ const a=LP(H.C[k]), b=LP(nxt[k]); c.setAttribute('transform',`translate(${a[0]+(b[0]-a[0])*t},${a[1]+(b[1]-a[1])*t})`); }));
+    live(`k-means 第 ${it+1} 轮：重新分配 → 更新中心`);
+  }
+  if(!alive(G)) return;
+  live('第 2 阶段：组学原型 = 同一组病人组学特征的均值（式 8）');
+  MB.asg.forEach((k,i)=>{ dots[i].db.setAttribute('fill',KC[k]); dots[i].db.setAttribute('fill-opacity',.85); });
+  const centO=MB.CO.map((c,k)=>{ const p=RP(c); const s=el('rect',{x:p[0]-9,y:p[1]-9,width:18,height:18,rx:3,fill:KC[k],stroke:'var(--fg)','stroke-width':1,opacity:0},g); return s; });
+  await tween(700,t=>centO.forEach(s=>s.setAttribute('opacity',t)));
+  if(!alive(G)) return;
+  live('第 3 阶段：成对写入记忆库 ℳ');
+  const fl=el('g',{class:'nopt'},g);
+  await Promise.all(MB.CP.map((c,k)=>Promise.all([fly(fl,[LP(c),[560,S[k].y+34]],{color:KC[k],r:6,dur:900,delay:k*150}),
+    fly(fl,[RP(MB.CO[k]),[640,S[k].y+34]],{color:KC[k],r:6,dur:900,delay:k*150})]).then(()=>{ S[k].a.setAttribute('opacity',1); S[k].b.setAttribute('opacity',1); })));
+  if(!alive(G)) return;
+  // 动量更新
+  live('第 4 阶段：每个 epoch 用动量 θ 更新记忆（式 9）');
+  const ghost=el('g',{class:'nopt'},g); let theta=.75, ep=1; const r=rng(77);
+  addSlider('θ：新数据所占比例（动量系数，原文最优 0.75）',0,1,.05,.75,v=>{ theta=v; },v=>v.toFixed(2));
+  const mem=MB.CP.map(c=>c.slice());
+  while(alive(G)&&!RM){
+    ghost.innerHTML=''; ep++;
+    const neu=mem.map((m,k)=>[MB.CP[k][0]+(r()-.5)*.16,MB.CP[k][1]+(r()-.5)*.16]);
+    const old=mem.map(m=>m.slice()), tgt=old.map((o,k)=>[theta*neu[k][0]+(1-theta)*o[0],theta*neu[k][1]+(1-theta)*o[1]]);
+    neu.forEach((n,k)=>{ const p=LP(n); el('circle',{cx:p[0],cy:p[1],r:9,fill:'none',stroke:KC[k],'stroke-dasharray':'3 2','stroke-width':1.6},ghost);
+      const o=LP(old[k]); el('circle',{cx:o[0],cy:o[1],r:3,fill:KC[k]},ghost); });
+    live(`epoch r = ${ep}：虚线圈 = 本轮新算出的原型；★ 只向它移动 θ = ${theta.toFixed(2)} 的比例`);
+    await tween(1100,t=>cent.forEach((c,k)=>{ const a=LP(old[k]), b=LP(tgt[k]); c.setAttribute('transform',`translate(${a[0]+(b[0]-a[0])*t},${a[1]+(b[1]-a[1])*t})`);
+      S[k].bar.setAttribute('width',180*theta*t); }),200);
+    tgt.forEach((t,k)=>{ mem[k]=t; });
+    await sleep(900);
+  }
+}
+
+// 10 记忆库推理
+function s10(g){
+  let missing='omics', mu=2, pa=[.42,.48];
+  const L=el('g',{},g), fl=el('g',{class:'nopt'},g);
+  function draw(){
+    clearAnims(); startOvFlows(); L.innerHTML=''; fl.innerHTML='';
+    const avail=missing==='omics'?MB.CP:MB.CO, miss=missing==='omics'?MB.CO:MB.CP;
+    const LP=plot(L,40,60,360,missing==='omics'?'可用模态：病理空间（点击移动 ★）':'可用模态：组学空间（点击移动 ★）');
+    const RP=plot(L,800,60,360,missing==='omics'?'缺失模态：组学空间':'缺失模态：病理空间');
+    const S=slots(L);
+    const hit=el('rect',{x:40,y:60,width:360,height:360,fill:'transparent',style:'cursor:crosshair'},L);
+    hit.addEventListener('click',e=>{ const pt=dt.createSVGPoint(); pt.x=e.clientX; pt.y=e.clientY; const q=pt.matrixTransform(scene.getScreenCTM().inverse());
+      pa=[Math.max(0,Math.min(1,(q.x-40)/360)),Math.max(0,Math.min(1,1-(q.y-60)/360))]; draw(); });
+    avail.forEach((c,k)=>{ const p=LP(c); star(p[0],p[1],10,{fill:KC[k],stroke:'var(--fg)','stroke-width':1,class:'nopt'},L); });
+    miss.forEach((c,k)=>{ const p=RP(c); el('rect',{x:p[0]-8,y:p[1]-8,width:16,height:16,rx:3,fill:KC[k],stroke:'var(--fg)','stroke-width':1},L); });
+    const me=LP(pa); el('circle',{cx:me[0],cy:me[1],r:9,fill:'var(--sel)',stroke:'var(--fg)','stroke-width':1.5,class:'nopt'},L);
+    text(L,me[0]+12,me[1]-10,'C_a（该病人）','tm');
+    el('rect',{x:800,y:60,width:360,height:360,rx:8,fill:'var(--soft)','fill-opacity':.35,class:'nopt'},L);
+    text(L,980,446,'？该病人这一模态缺失','ts','middle');
+    const sim=avail.map(c=>-Math.hypot(c[0]-pa[0],c[1]-pa[1])/.1);
+    const top=sim.map((s,k)=>[s,k]).sort((a,b)=>b[0]-a[0]).slice(0,mu);
+    const ex=top.map(([s])=>Math.exp(s)), Z=ex.reduce((a,b)=>a+b,0), w=ex.map(v=>v/Z);
+    const est=[0,0]; top.forEach(([_,k],j)=>{ est[0]+=w[j]*miss[k][0]; est[1]+=w[j]*miss[k][1]; });
+    top.forEach(([_,k],j)=>{ const p=LP(avail[k]); el('line',{x1:me[0],y1:me[1],x2:p[0],y2:p[1],stroke:KC[k],'stroke-width':1+w[j]*6,class:'nopt'},L);
+      el('rect',{x:500,y:S[k].y,width:200,height:54,rx:10,fill:'none',stroke:KC[k],'stroke-width':3,class:'nopt'},L);
+      text(L,708,S[k].y+38,`w = ${w[j].toFixed(2)}`,'tm');
+      S[k].a.setAttribute('opacity',1); S[k].b.setAttribute('opacity',1); S[k].bar.setAttribute('width',180*w[j]); });
+    MB.CP.forEach((_,k)=>{ if(!top.some(t=>t[1]===k)){ S[k].a.setAttribute('opacity',.25); S[k].b.setAttribute('opacity',.25); } });
+    const e=RP(est);
+    const dia=el('path',{d:`M${e[0]},${e[1]-13} L${e[0]+13},${e[1]} L${e[0]},${e[1]+13} L${e[0]-13},${e[1]} Z`,fill:'var(--sel)',stroke:'var(--fg)','stroke-width':1.5,opacity:0},L);
+    text(L,e[0]+16,e[1]+5,'M̂_m（补全结果）','tm');
+    top.forEach(([_,k],j)=>{ const p=RP(miss[k]); flowPts(fl,[[648,S[k].y+34],p,e],{color:KC[k],n:1,dur:2200,delay:j*200,r:2+w[j]*5});
+      flowPts(fl,[me,LP(avail[k]),[552,S[k].y+34]],{color:KC[k],n:1,dur:2200,delay:j*200,r:3}); });
+    tween(600,t=>dia.setAttribute('opacity',t),900);
+    const a=arrow(L,`M${e[0]},${e[1]+16} C${e[0]},470 1180,470 1180,430`,true);
+    text(L,1190,450,'→ 送入第 8 步融合','ts','end');
+    live(`top-μ = ${mu}：权重 ${w.map(v=>v.toFixed(2)).join(' / ')}；M̂_m = Σ w_j · 第 j 对原型中缺失模态那一半`);
+  }
+  const row=addButtons(Object.assign([['缺组学（用病理补组学）',()=>{ missing='omics'; draw(); },true],['缺病理（用组学补病理）',()=>{ missing='path'; draw(); }]],{radio:true}));
+  addSlider('μ：检索的原型对个数',1,MB.K,1,2,v=>{ mu=v; draw(); });
+  draw();
+}
+
+/* ================= 步骤定义 ================= */
+const R=String.raw;
+const STEPS=[
+ {short:'0 总览', title:'0 · 总览：三大阶段', regs:['r-input','r-frame','r-intra','r-inter','r-align','r-omics','r-mem','r-fuse','r-out'],
+  flows:[['f-in-ffpe','var(--ffpe)'],['f-in-ff','var(--ff)'],['f-al-1','var(--path)'],['f-al-4','var(--path)'],['f-pm-1','var(--path)'],['f-om-2','var(--omics)'],['f-fu-1','var(--omics)'],['f-fu-2','var(--path)'],['f-out-1','var(--attn)'],['f-out-2','var(--attn)']],
+  what:'M³Surv 同时使用同一病人的 FF（冷冻）与 FFPE（石蜡）两种全切片，以及基因组、转录组、蛋白组三种组学。病理侧先建「多切片超图」得到 𝒫_m，组学侧编码得到 𝒪；二者经双向交叉注意力融合后预测生存。任一模态缺失时，用记忆库 ℳ 中的原型补全。',
+  tex:[R`X=\{\mathbf{H},y\},\quad \mathbf{H}=\{\mathcal{P},\mathcal{O}\},\quad y=\{c,t\}`],
+  shapes:['𝒫：FF + FFPE 切片的病理特征','𝒪：多组学特征 {z_g, z_t, z_pr}','模型输出：风险函数 φ_h(t) 与生存函数 φ_s(t)'],
+  notes:['<b>记号：</b>正文用 𝒪 表示多组学，图 2 / 图 3 用 𝒢，二者指同一对象；本页统一写 𝒪。'],
+  hint:'点击下方画布里的模块可直接跳转；键盘 ← / → 切换步骤，空格自动播放。', scene:s0},
+ {short:'1 病理特征', title:'1 · 病理特征提取（E_p）', regs:['r-input'], flows:[['f-in-ffpe','var(--ffpe)'],['f-in-ff','var(--ff)']],
+  what:'FFPE 切片很大：在 20× 倍率下切成 256×256 的 patch，随机采样 N_k = 4096 个。FF 切片较小（约 300–500 个 patch），全部保留、不采样。预训练编码器 E_p（如 ResNet50）把每个 patch 编成 d 维向量，同时记下坐标 ζ，供第 2 步按空间距离建超边。',
+  tex:[R`P=\{p_1,\dots,p_{N_k}\}\in\mathbb{R}^{N_k\times d},\qquad \zeta_{p_k}=(x_k,y_k)`,R`\mathcal{P}=\{P_{\mathrm{ff}},P_{\mathrm{ffpe}}\}`],
+  shapes:['P_ffpe ∈ ℝ^(4096×d)（随机采样）','P_ff ∈ ℝ^(N_ff×d)，N_ff ≈ 300–500（全量）','ζ：每个 patch 一对坐标 (x, y)'],
+  notes:['<b>d 未给出：</b>全文只写「d 维」，没给具体数值（取决于所用编码器）。'],
+  hint:'左侧亮框 = 被采样的 patch；暗格 = 未被采样。', scene:s1},
+ {short:'2 拓扑超边', title:'2 · 片内超图：拓扑超边（空间邻近）', regs:['r-frame','r-intra'], flows:[['f-intra-ffpe','var(--ffpe)'],['f-intra-ff','var(--ff)']],
+  what:'每个 patch 是一个顶点。以 p_i 为中心、空间距离不超过 δ 的 patch 构成它的拓扑邻居 𝒩_T，p_i 与这些邻居合成一条「拓扑超边」，刻画局部组织结构。和普通图不同，一条超边可以一次连接多个顶点，表达「这一小片组织」的整体关系。',
+  tex:[R`\mathcal{N}_T(p_i)=\{p_j\mid \lVert\zeta_{p_i}-\zeta_{p_j}\rVert_2\le\delta\}`,R`\mathcal{E}_T=\{\{p_i,p_{j_1},p_{j_2},\dots\}\mid \forall p_j\in\mathcal{N}_T(p_i)\}`],
+  shapes:['每个 patch 生成 1 条拓扑超边','实现：k = 9（自身 + 周围一圈 8 个 patch）','消融（图 8）：k = 0 / 5 / 9 / 25 中 k = 9 显著优于 k = 0、5'],
+  notes:['<b>阈值实为 kNN：</b>式 2 写的是距离阈值 δ，但 §4.1 说 δ、γ、ω 都通过「邻居数 k = 9」来确定，所以实际是按最近邻个数取邻居。'],
+  hint:'点击切片上任意 patch；拖动 δ 改变邻域半径，δ = 1.5 时正好是 3×3 = 9 个 patch。', scene:s2},
+ {short:'3 结构超边', title:'3 · 片内超图：结构超边 + 超图卷积', regs:['r-frame','r-intra'], pin:true, flows:[['f-intra-ffpe','var(--ffpe)'],['f-intra-ff','var(--ff)'],['f-hgL-a','var(--ffpe)'],['f-hgL-b','var(--ff)']],
+  what:'再按「长得像不像」找邻居：与 p_i 特征相似度 ≥ γ 的 patch 构成结构超边。这些 patch 可能在空间上相距很远，但形态相近（如散布各处的同类肿瘤区域）。两类超边合并为 ℰ_I = ℰ_T ∪ ℰ_F，经过 L 层超图卷积得到片内表示。',
+  tex:[R`\mathcal{N}_F(p_i)=\{p_j\mid \mathrm{sim}(p_i,p_j)\ge\gamma\}`,R`\mathcal{E}_I=\mathcal{E}_T\cup\mathcal{E}_F`,R`\xrightarrow{\;L\text{ 层超图卷积}\;}\ P_{\mathrm{ff}}=P_{\mathrm{ff}}^{(L)},\ \ P_{\mathrm{ffpe}}=P_{\mathrm{ffpe}}^{(L)}`],
+  shapes:['超图卷积不改变 token 数：P^(L) 仍为 N×d'],
+  notes:['<b>sim 的定义前后不一：</b>式 3 写 sim(·,·)「例如 L2 距离」，§3.2 正文写「余弦距离（cosine distance）」——两处给的都是距离（越小越像），却用 ≥ γ 取邻居。本页按「相似度越大越像」演示。','<b>超图卷积的具体形式</b>（如 HGNN 的归一化方式）原文只引用文献，未写出公式。'],
+  hint:'点击 patch：蓝框 = 拓扑邻居，橙框 + 弧线 = 结构邻居；右侧特征空间里虚线圈 = 相似度阈值 γ 对应的范围。', scene:s3},
+ {short:'4 超图卷积逐层', title:'4 · 超图卷积逐层：P⁽⁰⁾ → P⁽ᴸ⁾', regs:['r-frame','r-intra'], pin:true, flows:[['f-intra-ffpe','var(--ffpe)'],['f-intra-ff','var(--ff)'],['f-hgL-a','var(--ffpe)'],['f-hgL-b','var(--ff)']],
+  what:'超图卷积（HGNN）不增加也不减少 patch token 的个数。每一层里，每个 patch 都作为中心点，通过它所在的拓扑超边 e_T 和结构超边 e_F 收集邻居特征，加权求和后更新自己的 d 维向量。堆叠 L 层后，第 1 层吸收直接邻居，第 2 层吸收「邻居的邻居」，最终 P⁽ᴸ⁾ 里每个 token 都编码了更大范围的肿瘤微环境信息。',
+  tex:[R`P^{(l+1)}=\sigma\!\left(D_v^{-1/2}HW_eD_e^{-1}H^{\top}D_v^{-1/2}P^{(l)}\Theta^{(l)}\right),\quad l=0,1,\dots,L-1`,
+       R`p_i^{(l+1)}=\sigma\!\Big(\sum_{e\ni i}\underbrace{\frac{w_e}{\sqrt{d(i)}}}_{\beta_e}\sum_{j\in e}\underbrace{\frac{1}{\delta(e)\sqrt{d(j)}}}_{\alpha_{j\to e}}\,p_j^{(l)}\Theta^{(l)}\Big)\in\mathbb{R}^{1\times d}`],
+  shapes:['P⁽ˡ⁾ ∈ ℝ^(N×d)：每一层 N 和 d 都不变','H ∈ {0,1}^(N×|ℰ|)：哪个 patch 属于哪条超边','D_v：patch 所在超边数 d(i)；D_e：超边大小 δ(e)；W_e：超边权重','Θ⁽ˡ⁾ ∈ ℝ^(d×d)：第 l 层可学习的线性变换'],
+  notes:['<b>公式形式与层数未明示：</b>原文 §3.2 只写「经过 L 层超图卷积（引用 Feng et al., 2019 等）得到 P_ff = P_ff⁽ᴸ⁾、P_ffpe = P_ffpe⁽ᴸ⁾」，没有写出传播公式、关联矩阵 H 和 L 的数值。本页按 Feng 2019 的 HGNN 公式、以 L = 3 演示。','<b>一层就能触及 2 格外：</b>p_i 不只属于以自己为中心的两条超边，也属于以每个邻居为中心的超边，所以「共享超边」的 1 阶邻居在网格上是 5×5 的范围，再加上结构超边连到的远处 patch。','<b>占比与特征值是算出来的：</b>右侧 8 维特征和信息来源占比，由本页示意超图的传播矩阵逐层相乘得到，忽略了 Θ 与 σ，只说明信息怎么扩散，不是论文数值。'],
+  hint:'点击切片上任意 patch 切换中心点 p_i；用下方按钮切换层数 l，或点「完整播放」看 P⁽⁰⁾ 一层层变成 P⁽ᴸ⁾。', scene:sHG},
+ {short:'4 片间超图', title:'4 · 片间超图 + 自适应权重', regs:['r-frame','r-inter','r-intra'], flows:[['f-inter-a','var(--ffpe)'],['f-inter-b','var(--ff)']],
+  what:'同一病人的 FF 与 FFPE 切片应在生物学上一致。对 FF 中的每个 patch，找 FFPE 中相似度 ≥ ω 的 patch，连成片间超边（反方向同理）。再用自适应权重 w_ff、w_ffpe 衡量两张切片各自的贡献，作为超边权重参与 L 层超图卷积，得到片间特征 P_s。',
+  tex:[R`\mathcal{N}_{\mathrm{ff}\to\mathrm{ffpe}}(p^{(i)}_{\mathrm{ff}})=\{p^{(j)}_{\mathrm{ffpe}}\mid \mathrm{sim}(p^{(i)}_{\mathrm{ff}},p^{(j)}_{\mathrm{ffpe}})\ge\omega\}`,R`w_{\mathrm{ff}},w_{\mathrm{ffpe}}=\frac{\exp(W_{\mathrm{ff}}P_{\mathrm{ff}}),\ \exp(W_{\mathrm{ffpe}}P_{\mathrm{ffpe}})}{\exp(W_{\mathrm{ff}}P_{\mathrm{ff}})+\exp(W_{\mathrm{ffpe}}P_{\mathrm{ffpe}})}`],
+  shapes:['W_ff, W_ffpe ∈ ℝ^(d×1)','w_ff + w_ffpe = 1','输出 P_s：片间特征'],
+  notes:['<b>权重如何变成一个标量：</b>W_ff ∈ ℝ^(d×1) 乘 N×d 的 P_ff 得到 N 个值，如何汇聚成「每张切片一个权重」原文未写明；本页示意为每张切片一个打分。'],
+  hint:'点击任一切片中的 patch 查看跨切片邻居；点「换一位病人」看权重如何变化。', scene:s4},
+ {short:'5 多切片对齐', title:'5 · 多切片对齐（交叉注意力）→ 𝒫_m', regs:['r-frame','r-align'], flows:[['f-al-1','var(--ffpe)'],['f-al-2','var(--path)'],['f-al-3','var(--path)'],['f-al-4','var(--ff)'],['f-pm-1','var(--path)'],['f-pm-2','var(--path)']],
+  what:'以片间特征 P_s 为「共同参照」做交叉注意力：Q 来自 P_ff，K、V 都来自 P_s，得到精炼后的 P\'_ff；FFPE 同理得到 P\'_ffpe。二者拼接成病人级病理表示 𝒫_m——既保留各切片自身特点，又对齐了跨切片的共同信息。',
+  tex:[R`P'_{\mathrm{ff}}=\mathrm{CAttn}_{s\to \mathrm{ff}}=\phi\!\left(\frac{W_qP_{\mathrm{ff}}(W_kP_s)^{\top}}{\sqrt d}\right)W_vP_s`,R`\mathcal{P}_m=[P'_{\mathrm{ff}};\,P'_{\mathrm{ffpe}}]`],
+  shapes:['注意力图：N_ff × N_s（每行和为 1）','输出行数 = Q 的行数（N_ff）','φ = softmax；W_q, W_k, W_v ∈ ℝ^(d×d)'],
+  notes:['<b>拼接方向未明示：</b>沿 token 维还是特征维拼接，原文没写清；本页按 token 维堆叠示意。'],
+  hint:'每一行 = 一个 token；黄框 = 正在计算的 Q 行；热力图一行 = 该 token 对 P_s 各 token 的注意力；粒子大小 ∝ 注意力权重。', scene:s5},
+ {short:'6 多组学', title:'6 · 多组学编码（E_g）→ 𝒪', regs:['r-omics'], flows:[['f-om-1','var(--omics)'],['f-om-2','var(--omics)'],['f-om-3','var(--omics)']],
+  what:'基因组（RNA-seq + CNV）按 6 个功能组分组，经 SNN 编码得到 z_g；转录组按 331 条通路分组，每条通路用 SNN 编码为一个 d 维向量，得到 z_t；蛋白组取表达量最高的 100 个蛋白，用 ESM 蛋白语言模型编码氨基酸序列，再与表达量结合得到 z_pr。三者合起来就是 𝒪。',
+  tex:[R`z_g\in\mathbb{R}^{6\times d},\quad z_t\in\mathbb{R}^{331\times d},\quad z_{pr}\in\mathbb{R}^{100\times d}`,R`\mathcal{O}=\{z_g,\,z_t,\,z_{pr}\}`],
+  shapes:['基因组 6 组：抑癌 / 致癌 / 蛋白激酶 / 细胞分化 / 转录 / 细胞因子与生长','转录组 331 通路 = Reactome 281 + MSigDB-Hallmarks 50，覆盖 4,999 个基因','蛋白组：top-100 蛋白；序列来自 UniProt'],
+  notes:['<b>token 总数为推算：</b>6 + 331 + 100 = 437 是按原文维度推算的，原文没有直接写。','<b>序列嵌入与表达量如何「结合」</b>（相乘还是拼接）原文未明示。'],
+  hint:'粒子：原始特征 → 分组 → 编码器 → token 矩阵 → 合并为 𝒪。', scene:s6},
+ {short:'7 融合', title:'7 · 多模态融合：双向交叉注意力', regs:['r-fuse'], flows:[['f-fu-1','var(--omics)'],['f-fu-2','var(--path)'],['f-fu-3','var(--omics)'],['f-fu-4','var(--path)'],['f-fo-1','var(--omics)'],['f-fo-2','var(--path)']],
+  what:'病理与组学互相「查询」：Q = 𝒫_m、K/V = 𝒪，得到组学增强的病理特征 𝒫_c；反过来 Q = 𝒪、K/V = 𝒫_m，得到病理增强的组学特征 𝒪_c。信息双向交换。',
+  tex:[R`\mathcal{P}_c=\mathrm{CAttn}_{p\to g}=\phi\!\left(\frac{W_q\mathcal{P}_m(W_k\mathcal{O})^{\top}}{\sqrt d}\right)W_v\mathcal{O}`,R`\mathcal{O}_c:\ \text{同理，}Q\text{ 来自 }\mathcal{O},\ K/V\text{ 来自 }\mathcal{P}_m`],
+  shapes:['𝒫_c 行数 = 𝒫_m 的 token 数','𝒪_c 行数 = 𝒪 的 token 数'],
+  notes:['<b>记号：</b>图 2 把 𝒪_c 记作 𝒢_c。'],
+  hint:'上下两个注意力块方向相反：注意谁当 Q、谁当 K/V。', scene:s7},
+ {short:'8 预测', title:'8 · 生存预测与 NLL 损失', regs:['r-out','r-fuse'], flows:[['f-out-1','var(--attn)'],['f-out-2','var(--attn)']],
+  what:'𝒫_c 与 𝒪_c 拼接后送入前馈网络 FFN，输出各时间区间的风险 φ_h(t) 与生存概率 φ_s(t)，用负对数似然训练：发生事件的病人，看「活过前一个区间、并恰在该区间发生事件」的概率；删失病人，只看「至少活过删失时刻」的概率。',
+  tex:[R`\begin{aligned}\mathcal{L}_{\mathrm{surv}}=-\sum_{i=1}^{n}\Big\{&\log\!\big(\phi_s(t_i-1\mid\mathbf{H}_i)^{(1-c_i)}\cdot\phi_s(t_i\mid\mathbf{H}_i)^{c_i}\big)\\&+\log\!\big(\phi_h(t_i\mid\mathbf{H}_i)^{(1-c_i)}\big)\Big\}\end{aligned}`],
+  shapes:['φ_h(t)：在区间 t 发生事件的条件概率','φ_s(t)：活过区间 t 的概率'],
+  notes:['<b>删失记号与正文相反：</b>正文说「c = 0 表示删失」；但代入式 1，c = 1 时只剩 log φ_s(t)（删失项），c = 0 时为 log φ_s(t−1) + log φ_h(t)（事件项），也就是说式 1 对应的是 c = 1 表示删失。式下方的 Events / Censoring 标注也与此对不上。本页按式 1 本身演示。','<b>φ_s = ∏(1 − φ_h)</b> 是离散时间生存模型的常用关系，原文没有写出。','<b>汇聚方式未明示：</b>从 token 序列变成 FFN 输入向量用的是均值池化还是别的方式，原文未写。'],
+  hint:'下方时间轴：× = 发生事件，○ = 删失。', scene:s8},
+ {short:'9 记忆库·训练', title:'9 · 原型记忆库：训练阶段', regs:['r-mem'], flows:[['f-mem-1','var(--omics)'],['f-mem-2','var(--path)']],
+  what:'训练时收集所有病人的配对表示 {(𝒫_m,i, 𝒪_i)}，用 k-means 聚成 K 类；每一类分别求病理原型 C_P,l 和组学原型 C_O,l（同一组病人的均值），成对存进 ℳ。每个 epoch 用动量 θ 更新：新算出的原型占 θ，旧记忆占 1 − θ。',
+  tex:[R`C_{\mathcal{P}_l}=\frac{1}{|S_l|}\sum_{i\in S_l}\mathcal{P}_{m_i},\qquad C_{\mathcal{O}_l}=\frac{1}{|S_l|}\sum_{i\in S_l}\mathcal{O}_i`,R`\begin{aligned}\mathcal{M}^{(r)}\leftarrow\;&\theta\cdot\big\langle\mathcal{P}^{(r)}_m,\mathcal{O}^{(r)},C^{(r)}_{\mathcal{P}},C^{(r)}_{\mathcal{O}}\big\rangle\\&+(1-\theta)\cdot\mathcal{M}^{(r-1)}\end{aligned}`],
+  shapes:['ℳ = {⟨𝒫_mk, 𝒪_k, C_Pk, C_Ok⟩}，k = 1…K','S_l：被分到第 l 类的病人集合','θ ∈ [0, 1]：动量系数；消融（图 7b）中 θ = 0.75 最优','训练时间仅增加约 4.3%，推理时间增加约 2.2%'],
+  notes:['<b>聚类空间未明示：</b>k-means 在病理空间、组学空间还是拼接空间上做，原文没写；本页在病理空间聚类，组学原型取同一组病人的均值。','<b>𝒫_mk、𝒪_k 的含义：</b>ℳ 中除原型外还存了这两项，原文未进一步说明。','<b>K 只在插件实验里给出：</b>把记忆库接到 MCAT / SurvPath 时，原型数为基因组 6、转录组 8、FFPE 16（§4 消融）；M³Surv 主模型本身的 K 没有单独写明（本页示意 K = 5）。'],
+  hint:'鼠标悬停任一点可看到它的配对点；动画最后进入循环，可拖动 θ 观察「记忆」更新的快慢。', scene:s9},
+ {short:'10 记忆库·推理', title:'10 · 原型记忆库：推理时补全缺失模态', regs:['r-mem','r-fuse'], flows:[['f-imp-1','var(--mem)'],['f-imp-2','var(--mem)']],
+  what:'推理时如果某个模态缺失（例如没有组学数据），用可用模态的原型 C_a 去 ℳ 中找最相似的 top-μ 个原型，按相似度做 softmax 加权，再把这些原型对里「缺失模态那一半」加权求和，得到补全特征 M̂_m，送入第 8 步融合。',
+  tex:[R`\hat{M}_m=\sum_{j=1}^{\mu}\frac{\exp\!\big(\mathrm{sim}(C_a,C^{(j)}_a)\big)}{\sum_{h=1}^{\mu}\exp\!\big(\mathrm{sim}(C_a,C^{(h)}_a)\big)}\,M^{(j)}_m`],
+  shapes:['C_a：可用模态的原型','C_a^(j)：第 j 对原型中可用模态那一半','M_m^(j)：第 j 对原型中缺失模态那一半'],
+  notes:['<b>C_a 怎么来：</b>对单个病人如何得到「可用模态的原型 C_a」，原文没写；本页直接用该病人的可用模态特征（黄点）。','<b>sim 与温度未指定：</b>本页示意 sim = −‖·‖₂ / 0.1。','<b>μ 的取值：</b>消融（图 7c）中 μ = 1 最好，μ > 1 会混入不相关聚类的噪声；本页默认 μ = 2 只是为了能看到加权过程。'],
+  hint:'切换缺失哪个模态；在左图点击移动黄点；拖动 μ 看权重怎么重新分配。', scene:s10},
+];
+// 插入新步骤后，标题里的序号按实际位置重排
+STEPS.forEach((s,k)=>{ s.title=s.title.replace(/^\d+ · /,k+' · '); });
+
+/* ================= 总览图：片内超图小图 ================= */
+function miniGraph(g,cx,cy,col){
+  const r=rng(cx+cy), P=[...Array(7)].map((_,k)=>[cx+Math.cos(k*0.9)*22*(.6+r()*.5),cy+Math.sin(k*0.9)*18*(.6+r()*.5)]);
+  el('ellipse',{cx:cx-6,cy:cy-3,rx:20,ry:14,fill:col,'fill-opacity':.15,stroke:col},g);
+  el('ellipse',{cx:cx+8,cy:cy+4,rx:18,ry:13,fill:'var(--attn)','fill-opacity':.1,stroke:'var(--attn)'},g);
+  P.forEach(p=>el('circle',{cx:p[0],cy:p[1],r:3.5,fill:col},g));
+}
+miniGraph($('#ovIntraA'),320,62,'var(--ffpe)'); miniGraph($('#ovIntraB'),320,180,'var(--ff)');
+
+/* ================= 导航 ================= */
+let cur=0, playTimer=null;
+const chips=$('#chips');
+STEPS.forEach((s,k)=>{ const b=document.createElement('button'); b.type='button'; const n=document.createElement('b'); n.textContent=k; b.append(n,' '+s.short.replace(/^\d+ /,'')); b.addEventListener('click',()=>{ stopPlay(); go(k); }); chips.append(b); });
+function renderTex(){
+  document.querySelectorAll('#pTex .tex').forEach(d=>{
+    if(window.katex){ try{ katex.render(d.dataset.tex,d,{displayMode:true,throwOnError:false,output:'mathml'}); return; }catch(e){} }
+    d.innerHTML=''; const c=document.createElement('code'); c.textContent=d.dataset.tex; d.append(c);
+  });
+}
+function startOvFlows(){ $('#ovDots').innerHTML='';
+  STEPS[cur].flows.forEach(([id,c],i)=>flowPath(document.getElementById(id),{color:c,layer:$('#ovDots'),n:2,dur:2000,delay:i*150,r:3.5})); }
+function go(k){
+  k=Math.max(0,Math.min(STEPS.length-1,k)); cur=k; const s=STEPS[k];
+  clearAnims(); scene.innerHTML=''; $('#ovDots').innerHTML=''; ctrl.innerHTML=''; live('');
+  [...chips.children].forEach((b,i)=>b.classList.toggle('on',i===k));
+  ov.classList.toggle('focus',k!==0);
+  document.querySelectorAll('#ov .reg').forEach(r=>r.classList.toggle('on',s.regs.includes(r.id)));
+  if(s.pin){ $('#ovPin').removeAttribute('hidden'); $('#ovFrameLab').setAttribute('visibility','hidden'); }
+  else { $('#ovPin').setAttribute('hidden',''); $('#ovFrameLab').removeAttribute('visibility'); }
+  startOvFlows();
+  $('#dtCap').textContent=`步骤 ${s.title}`;
+  $('#pTitle').textContent=s.title; $('#pWhat').textContent=s.what;
+  $('#pTex').innerHTML=''; s.tex.forEach(t=>{ const d=document.createElement('div'); d.className='tex'; d.dataset.tex=t; $('#pTex').append(d); }); renderTex();
+  $('#pShapes').innerHTML=s.shapes.map(x=>`<li>${x}</li>`).join(''); $('#pShapesWrap').hidden=!s.shapes.length;
+  $('#pNotes').innerHTML=s.notes.map(x=>`<div class="note">${x}</div>`).join(''); $('#pNotesWrap').hidden=!s.notes.length;
+  $('#pHint').textContent=s.hint;
+  s.scene(scene);
+  $('#ctrlWrap').hidden=!ctrl.children.length;
+  try{ history.replaceState(null,'','#step'+k); }catch(e){}
+}
+function stopPlay(){ if(playTimer){ clearInterval(playTimer); playTimer=null; } $('#bPlay').textContent='自动播放'; }
+function togglePlay(){ if(playTimer){ stopPlay(); return; } $('#bPlay').textContent='暂停';
+  playTimer=setInterval(()=>{ if(cur>=STEPS.length-1){ stopPlay(); return; } go(cur+1); },16000); }
+$('#bPrev').onclick=()=>{ stopPlay(); go(cur-1); };
+$('#bNext').onclick=()=>{ stopPlay(); go(cur+1); };
+$('#bReplay').onclick=()=>go(cur);
+$('#bPlay').onclick=togglePlay;
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!$('#sheet').hidden){ closeSheet(); return; } if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||!$('#sheet').hidden) return;
+  if(e.key==='ArrowRight'){ stopPlay(); go(cur+1); } else if(e.key==='ArrowLeft'){ stopPlay(); go(cur-1); }
+  else if(e.key===' '){ e.preventDefault(); togglePlay(); } else if(e.key==='r'||e.key==='R') go(cur); });
+
+/* ================= 导出 ================= */
+const PROPS=['fill','stroke','stroke-width','stroke-dasharray','stroke-opacity','fill-opacity','opacity','font-size','font-family','font-weight','text-anchor','display','visibility'];
+function inlineClone(svg){
+  const c=svg.cloneNode(true), src=svg.querySelectorAll('*'), dst=c.querySelectorAll('*');
+  src.forEach((s,i)=>{ const st=getComputedStyle(s); dst[i].setAttribute('style',PROPS.map(p=>`${p}:${st.getPropertyValue(p)}`).join(';')); dst[i].removeAttribute('class'); });
+  c.removeAttribute('class'); c.removeAttribute('style'); return c;
+}
+function composeSVG(){
+  const W=1200, H=40+250+10+484, out=document.createElementNS(NS,'svg');
+  out.setAttribute('xmlns',NS); out.setAttribute('viewBox',`0 0 ${W} ${H}`); out.setAttribute('width',W); out.setAttribute('height',H);
+  el('rect',{x:0,y:0,width:W,height:H,fill:getComputedStyle(document.body).backgroundColor},out);
+  el('text',{x:16,y:26,'font-size':16,'font-weight':650,fill:getComputedStyle(document.body).color,'font-family':getComputedStyle(document.body).fontFamily,text:'M³Surv 框架数据流 · '+STEPS[cur].title},out);
+  [[ov,40,250],[dt,300,484]].forEach(([s,y,h])=>{ const c=inlineClone(s); c.setAttribute('x',0); c.setAttribute('y',y); c.setAttribute('width',W); c.setAttribute('height',h); out.appendChild(c); });
+  return new XMLSerializer().serializeToString(out);
+}
+let lastSVG='';
+function openSheet(){
+  lastSVG=composeSVG();
+  const url=URL.createObjectURL(new Blob([lastSVG],{type:'image/svg+xml'})), img=new Image();
+  img.onload=()=>{ const cv=document.createElement('canvas'); cv.width=img.width*2; cv.height=img.height*2; const x=cv.getContext('2d'); x.scale(2,2); x.drawImage(img,0,0);
+    URL.revokeObjectURL(url); $('#sheetImg').src=cv.toDataURL('image/png'); };
+  img.src=url;
+  $('#sheetTitle').textContent='步骤 '+STEPS[cur].title; $('#copyMsg').textContent=''; $('#svgSrc').hidden=true;
+  $('#sheet').hidden=false; $('#bClose').focus();
+}
+function closeSheet(){ $('#sheet').hidden=true; $('#bImg').focus(); }
+$('#bImg').onclick=()=>{ stopPlay(); openSheet(); };
+$('#bClose').onclick=closeSheet;
+$('#sheet').addEventListener('click',e=>{ if(e.target.id==='sheet') closeSheet(); });
+$('#bCopy').onclick=()=>{
+  const fallback=()=>{ const t=$('#svgSrc'); t.value=lastSVG; t.hidden=false; t.focus(); t.select(); $('#copyMsg').textContent='无法直接写入剪贴板，已选中源码，请按 ⌘C / Ctrl+C 复制。'; };
+  try{ navigator.clipboard.writeText(lastSVG).then(()=>{ $('#copyMsg').textContent='已复制 SVG 源码。'; },fallback); }catch(e){ fallback(); }
+};
+
+/* ================= 背景切换（截图放进 PPT 用） ================= */
+const THEMES=['auto','light','dark'], THEME_NAME={auto:'背景：跟随系统',light:'背景：浅色（白底）',dark:'背景：深色（黑底）'};
+let theme='auto'; try{ theme=localStorage.getItem('m3s-bg')||'auto'; }catch(e){}
+if(!THEMES.includes(theme)) theme='auto';
+function applyTheme(){
+  if(theme==='auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme',theme);
+  $('#bTheme').textContent=THEME_NAME[theme];
+}
+$('#bTheme').onclick=()=>{ theme=THEMES[(THEMES.indexOf(theme)+1)%THEMES.length]; try{ localStorage.setItem('m3s-bg',theme); }catch(e){} applyTheme(); };
+applyTheme();
+
+window.addEventListener('load',renderTex);
+const m=/^#step(\d+)$/.exec(location.hash); go(m?+m[1]:0);
+</script>
