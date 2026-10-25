@@ -1,0 +1,723 @@
+{
+  "modules": {
+    "legend.otimes": [
+      "legend.otimes.ring",
+      "legend.otimes.d1",
+      "legend.otimes.d2"
+    ],
+    "legend": [
+      "legend.box",
+      "legend.missing.front",
+      "legend.missing.top",
+      "legend.missing.side",
+      "legend.missing.text",
+      "legend.fire",
+      "legend.trainable.text",
+      "legend.snow",
+      "legend.frozen.text",
+      "legend.otimes.ring",
+      "legend.otimes.d1",
+      "legend.otimes.d2",
+      "legend.aggregate.text"
+    ],
+    "wsi.slide": [
+      "wsi.slide.sheet.back",
+      "wsi.slide.sheet.front",
+      "wsi.slide.tissue",
+      "wsi.slide.purple",
+      "wsi.slide.light",
+      "wsi.slide.speck0",
+      "wsi.slide.speck1",
+      "wsi.slide.speck2",
+      "wsi.slide.speck3",
+      "wsi.slide.speck4",
+      "wsi.slide.speck5",
+      "wsi.slide.speck6",
+      "wsi.slide.speck7",
+      "wsi.slide.speck8",
+      "wsi.slide.speck9",
+      "wsi.slide.speck10",
+      "wsi.slide.speck11",
+      "wsi.slide.speck12",
+      "wsi.slide.speck13",
+      "wsi.slide.speck14",
+      "wsi.slide.speck15",
+      "wsi.slide.speck16",
+      "wsi.slide.speck17",
+      "wsi.slide.speck18",
+      "wsi.slide.speck19",
+      "wsi.slide.speck20",
+      "wsi.slide.speck21",
+      "wsi.slide.speck22",
+      "wsi.slide.speck23",
+      "wsi.slide.speck24",
+      "wsi.slide.speck25",
+      "wsi.slide.edge"
+    ],
+    "wsi.tiles": [
+      "wsi.tiles.r0c0",
+      "wsi.tiles.r0c1",
+      "wsi.tiles.r0c2",
+      "wsi.tiles.r0c3",
+      "wsi.tiles.r0c4",
+      "wsi.tiles.r1c0",
+      "wsi.tiles.r1c1",
+      "wsi.tiles.r1c2",
+      "wsi.tiles.r1c3",
+      "wsi.tiles.r1c4",
+      "wsi.tiles.r2c0",
+      "wsi.tiles.r2c1",
+      "wsi.tiles.r2c2",
+      "wsi.tiles.r2c3",
+      "wsi.tiles.r2c4",
+      "wsi.tiles.r3c0",
+      "wsi.tiles.r3c1",
+      "wsi.tiles.r3c2",
+      "wsi.tiles.r3c3",
+      "wsi.tiles.r3c4",
+      "wsi.tiles.r4c0",
+      "wsi.tiles.r4c1",
+      "wsi.tiles.r4c2",
+      "wsi.tiles.r4c3",
+      "wsi.tiles.r4c4",
+      "wsi.tiles.x03a",
+      "wsi.tiles.x03b",
+      "wsi.tiles.x04a",
+      "wsi.tiles.x04b",
+      "wsi.tiles.x14a",
+      "wsi.tiles.x14b",
+      "wsi.tiles.x24a",
+      "wsi.tiles.x24b",
+      "wsi.tiles.x30a",
+      "wsi.tiles.x30b",
+      "wsi.tiles.x43a",
+      "wsi.tiles.x43b"
+    ],
+    "wsi.backbone": [
+      "wsi.backbone.shape",
+      "wsi.backbone.snow",
+      "wsi.backbone.text"
+    ],
+    "wsi.E": [
+      "wsi.E.front",
+      "wsi.E.left",
+      "wsi.E.bottom"
+    ],
+    "report.pages": [
+      "report.pages.sheet.back",
+      "report.pages.sheet.front",
+      "report.pages.l0",
+      "report.pages.l1",
+      "report.pages.l2",
+      "report.pages.l3",
+      "report.pages.l4",
+      "report.pages.l5",
+      "report.pages.l6",
+      "report.pages.l7",
+      "report.pages.l8",
+      "report.pages.l9",
+      "report.pages.l10",
+      "report.pages.l11",
+      "report.pages.rule",
+      "report.pages.l13",
+      "report.pages.l14",
+      "report.pages.l15",
+      "report.pages.l16",
+      "report.pages.l17",
+      "report.pages.l18",
+      "report.pages.l19",
+      "report.pages.hw0",
+      "report.pages.hw1",
+      "report.pages.hw2",
+      "report.pages.hw3"
+    ],
+    "report.ocr": [
+      "report.ocr.box",
+      "report.ocr.box.label"
+    ],
+    "report.backbone": [
+      "report.backbone.shape",
+      "report.backbone.snow",
+      "report.backbone.text"
+    ],
+    "report.E": [
+      "report.E.front",
+      "report.E.left",
+      "report.E.bottom"
+    ],
+    "rna.heatmap": [
+      "rna.heatmap.sheet.back",
+      "rna.heatmap.sheet.front",
+      "rna.heatmap.r0c0",
+      "rna.heatmap.r0c1",
+      "rna.heatmap.r0c2",
+      "rna.heatmap.r0c3",
+      "rna.heatmap.r0c4",
+      "rna.heatmap.r0c5",
+      "rna.heatmap.r1c0",
+      "rna.heatmap.r1c1",
+      "rna.heatmap.r1c2",
+      "rna.heatmap.r1c3",
+      "rna.heatmap.r1c4",
+      "rna.heatmap.r1c5",
+      "rna.heatmap.r2c0",
+      "rna.heatmap.r2c1",
+      "rna.heatmap.r2c2",
+      "rna.heatmap.r2c3",
+      "rna.heatmap.r2c4",
+      "rna.heatmap.r2c5",
+      "rna.heatmap.r3c0",
+      "rna.heatmap.r3c1",
+      "rna.heatmap.r3c2",
+      "rna.heatmap.r3c3",
+      "rna.heatmap.r3c4",
+      "rna.heatmap.r3c5",
+      "rna.heatmap.r4c0",
+      "rna.heatmap.r4c1",
+      "rna.heatmap.r4c2",
+      "rna.heatmap.r4c3",
+      "rna.heatmap.r4c4",
+      "rna.heatmap.r4c5",
+      "rna.heatmap.r5c0",
+      "rna.heatmap.r5c1",
+      "rna.heatmap.r5c2",
+      "rna.heatmap.r5c3",
+      "rna.heatmap.r5c4",
+      "rna.heatmap.r5c5",
+      "rna.heatmap.r6c0",
+      "rna.heatmap.r6c1",
+      "rna.heatmap.r6c2",
+      "rna.heatmap.r6c3",
+      "rna.heatmap.r6c4",
+      "rna.heatmap.r6c5",
+      "rna.heatmap.r7c0",
+      "rna.heatmap.r7c1",
+      "rna.heatmap.r7c2",
+      "rna.heatmap.r7c3",
+      "rna.heatmap.r7c4",
+      "rna.heatmap.r7c5",
+      "rna.heatmap.r8c0",
+      "rna.heatmap.r8c1",
+      "rna.heatmap.r8c2",
+      "rna.heatmap.r8c3",
+      "rna.heatmap.r8c4",
+      "rna.heatmap.r8c5",
+      "rna.heatmap.r9c0",
+      "rna.heatmap.r9c1",
+      "rna.heatmap.r9c2",
+      "rna.heatmap.r9c3",
+      "rna.heatmap.r9c4",
+      "rna.heatmap.r9c5",
+      "rna.heatmap.dl1",
+      "rna.heatmap.dl2",
+      "rna.heatmap.dl3",
+      "rna.heatmap.dl4",
+      "rna.heatmap.dl5",
+      "rna.heatmap.dl6",
+      "rna.heatmap.dl7",
+      "rna.heatmap.dt1",
+      "rna.heatmap.dt2",
+      "rna.heatmap.dt3",
+      "rna.heatmap.dt4",
+      "rna.heatmap.dt5"
+    ],
+    "rna.backbone": [
+      "rna.backbone.shape",
+      "rna.backbone.snow",
+      "rna.backbone.text"
+    ],
+    "rna.seq": [
+      "rna.seq.box",
+      "rna.seq.box.label"
+    ],
+    "rna.E": [
+      "rna.E.front",
+      "rna.E.left",
+      "rna.E.bottom"
+    ],
+    "mid.E_I": [
+      "mid.E_I.front",
+      "mid.E_I.left",
+      "mid.E_I.bottom"
+    ],
+    "mid.E_T": [
+      "mid.E_T.front",
+      "mid.E_T.left",
+      "mid.E_T.bottom"
+    ],
+    "mid.E_R": [
+      "mid.E_R.front",
+      "mid.E_R.left",
+      "mid.E_R.bottom"
+    ],
+    "mid.tokenizerI": [
+      "mid.tokenizerI.box",
+      "mid.tokenizerI.box.label",
+      "mid.tokenizerI.fire"
+    ],
+    "mid.tokenizerR": [
+      "mid.tokenizerR.box",
+      "mid.tokenizerR.box.label",
+      "mid.tokenizerR.fire"
+    ],
+    "mid.Z_I": [
+      "mid.Z_I.left",
+      "mid.Z_I.top",
+      "mid.Z_I.front"
+    ],
+    "mid.Z_R": [
+      "mid.Z_R.left",
+      "mid.Z_R.top",
+      "mid.Z_R.front"
+    ],
+    "mid.memoryBank": [
+      "mid.memoryBank.box",
+      "mid.memoryBank.fire",
+      "mid.memoryBank.p0.top",
+      "mid.memoryBank.p0.side",
+      "mid.memoryBank.p0.front",
+      "mid.memoryBank.p1.top",
+      "mid.memoryBank.p1.side",
+      "mid.memoryBank.p1.front",
+      "mid.memoryBank.p2.top",
+      "mid.memoryBank.p2.side",
+      "mid.memoryBank.p2.front",
+      "mid.memoryBank.p3.top",
+      "mid.memoryBank.p3.side",
+      "mid.memoryBank.p3.front",
+      "mid.memoryBank.p4.top",
+      "mid.memoryBank.p4.side",
+      "mid.memoryBank.p4.front",
+      "mid.memoryBank.dots",
+      "mid.memoryBank.p5.top",
+      "mid.memoryBank.p5.side",
+      "mid.memoryBank.p5.front",
+      "mid.memoryBank.title"
+    ],
+    "mid.weights": [
+      "mid.weights.box",
+      "mid.weights.qI.axes",
+      "mid.weights.qI.bar0",
+      "mid.weights.qI.bar1",
+      "mid.weights.qI.bar2",
+      "mid.weights.qI.bar3",
+      "mid.weights.qI.bar4",
+      "mid.weights.qR.axes",
+      "mid.weights.qR.bar0",
+      "mid.weights.qR.bar1",
+      "mid.weights.qR.bar2",
+      "mid.weights.qR.bar3",
+      "mid.weights.qR.bar4"
+    ],
+    "mid.aggregate": [
+      "mid.aggregate.ring",
+      "mid.aggregate.d1",
+      "mid.aggregate.d2"
+    ],
+    "mid.branchI.Z": [
+      "mid.branchI.Z.left",
+      "mid.branchI.Z.top",
+      "mid.branchI.Z.front"
+    ],
+    "mid.branchI.refine": [
+      "mid.branchI.refine.box",
+      "mid.branchI.refine.box.label",
+      "mid.branchI.refine.fire"
+    ],
+    "mid.branchI.tokens": [
+      "mid.branchI.tokens.t0",
+      "mid.branchI.tokens.t1",
+      "mid.branchI.tokens.t2",
+      "mid.branchI.tokens.t3",
+      "mid.branchI.tokens.t4"
+    ],
+    "mid.branchR.Z": [
+      "mid.branchR.Z.left",
+      "mid.branchR.Z.top",
+      "mid.branchR.Z.front"
+    ],
+    "mid.branchR.refine": [
+      "mid.branchR.refine.box",
+      "mid.branchR.refine.box.label",
+      "mid.branchR.refine.fire"
+    ],
+    "mid.branchR.tokens": [
+      "mid.branchR.tokens.c0",
+      "mid.branchR.tokens.c1",
+      "mid.branchR.tokens.c2",
+      "mid.branchR.tokens.c3",
+      "mid.branchR.tokens.c4"
+    ],
+    "mid.branchT.Z": [
+      "mid.branchT.Z.left",
+      "mid.branchT.Z.top",
+      "mid.branchT.Z.front"
+    ],
+    "mid.branchT.refine": [
+      "mid.branchT.refine.box",
+      "mid.branchT.refine.box.label",
+      "mid.branchT.refine.fire"
+    ],
+    "mid.branchT.tokens": [
+      "mid.branchT.tokens.s0",
+      "mid.branchT.tokens.s1",
+      "mid.branchT.tokens.s2",
+      "mid.branchT.tokens.s3",
+      "mid.branchT.tokens.s4"
+    ],
+    "pre.alignIT": [
+      "pre.alignIT.axes",
+      "pre.alignIT.viT",
+      "pre.alignIT.vjI",
+      "pre.alignIT.vjT",
+      "pre.alignIT.far1",
+      "pre.alignIT.close",
+      "pre.alignIT.far2"
+    ],
+    "pre.alignIR": [
+      "pre.alignIR.axes",
+      "pre.alignIR.viR",
+      "pre.alignIR.viI",
+      "pre.alignIR.vjI",
+      "pre.alignIR.close",
+      "pre.alignIR.far1",
+      "pre.alignIR.far2"
+    ],
+    "pre.alignTR": [
+      "pre.alignTR.axes",
+      "pre.alignTR.vjT",
+      "pre.alignTR.viR",
+      "pre.alignTR.vjR",
+      "pre.alignTR.far1",
+      "pre.alignTR.far2",
+      "pre.alignTR.close"
+    ],
+    "pre.view1": [
+      "pre.view1.bracketL",
+      "pre.view1.bracketR",
+      "pre.view1.t0",
+      "pre.view1.t1",
+      "pre.view1.t2",
+      "pre.view1.t3",
+      "pre.view1.t4",
+      "pre.view1.s0",
+      "pre.view1.s1",
+      "pre.view1.s2",
+      "pre.view1.s3",
+      "pre.view1.s4",
+      "pre.view1.c0",
+      "pre.view1.c1",
+      "pre.view1.c2",
+      "pre.view1.c3",
+      "pre.view1.c4"
+    ],
+    "pre.view2": [
+      "pre.view2.bracketL",
+      "pre.view2.bracketR",
+      "pre.view2.t0",
+      "pre.view2.t1",
+      "pre.view2.t2",
+      "pre.view2.t3",
+      "pre.view2.t4",
+      "pre.view2.s0",
+      "pre.view2.s1",
+      "pre.view2.s2",
+      "pre.view2.s3",
+      "pre.view2.s4",
+      "pre.view2.c0",
+      "pre.view2.c1",
+      "pre.view2.c2",
+      "pre.view2.c3",
+      "pre.view2.c4"
+    ],
+    "pre.viewAug": [
+      "pre.viewAug.box",
+      "pre.viewAug.box.label"
+    ],
+    "pre.backbone": [
+      "pre.backbone.box",
+      "pre.backbone.fire",
+      "pre.backbone.text",
+      "pre.backbone.moe1",
+      "pre.backbone.moe1.label",
+      "pre.backbone.transformer",
+      "pre.backbone.transformer.label",
+      "pre.backbone.moe2",
+      "pre.backbone.moe2.label"
+    ],
+    "pre.fusion": [
+      "pre.fusion.box",
+      "pre.fusion.box.label",
+      "pre.fusion.fire"
+    ],
+    "pre.h1row": [
+      "pre.h1row.cell0",
+      "pre.h1row.cell0.label.base",
+      "pre.h1row.cell0.label.sub",
+      "pre.h1row.cell0.label.sup",
+      "pre.h1row.cell1",
+      "pre.h1row.cell1.label.base",
+      "pre.h1row.cell1.label.sub",
+      "pre.h1row.cell1.label.sup",
+      "pre.h1row.cell2",
+      "pre.h1row.cell2.dots",
+      "pre.h1row.cell3",
+      "pre.h1row.cell3.label.base",
+      "pre.h1row.cell3.label.sub",
+      "pre.h1row.cell3.label.sup",
+      "pre.h1row.cell4",
+      "pre.h1row.cell4.label.base",
+      "pre.h1row.cell4.label.sub",
+      "pre.h1row.cell4.label.sup"
+    ],
+    "pre.h2col": [
+      "pre.h2col.cell0",
+      "pre.h2col.cell0.label.base",
+      "pre.h2col.cell0.label.sub",
+      "pre.h2col.cell0.label.sup",
+      "pre.h2col.cell1",
+      "pre.h2col.cell1.label.base",
+      "pre.h2col.cell1.label.sub",
+      "pre.h2col.cell1.label.sup",
+      "pre.h2col.cell2",
+      "pre.h2col.cell2.dots",
+      "pre.h2col.cell3",
+      "pre.h2col.cell3.label.base",
+      "pre.h2col.cell3.label.sub",
+      "pre.h2col.cell3.label.sup",
+      "pre.h2col.cell4",
+      "pre.h2col.cell4.label.base",
+      "pre.h2col.cell4.label.sub",
+      "pre.h2col.cell4.label.sup"
+    ],
+    "pre.simMatrix": [
+      "pre.simMatrix.r0c0",
+      "pre.simMatrix.r0c1",
+      "pre.simMatrix.r0c2",
+      "pre.simMatrix.r0c3",
+      "pre.simMatrix.r0c4",
+      "pre.simMatrix.r1c0",
+      "pre.simMatrix.r1c1",
+      "pre.simMatrix.r1c2",
+      "pre.simMatrix.r1c3",
+      "pre.simMatrix.r1c4",
+      "pre.simMatrix.r2c0",
+      "pre.simMatrix.r2c1",
+      "pre.simMatrix.r2c2",
+      "pre.simMatrix.r2c3",
+      "pre.simMatrix.r2c4",
+      "pre.simMatrix.r3c0",
+      "pre.simMatrix.r3c1",
+      "pre.simMatrix.r3c2",
+      "pre.simMatrix.r3c3",
+      "pre.simMatrix.r3c4",
+      "pre.simMatrix.r4c0",
+      "pre.simMatrix.r4c1",
+      "pre.simMatrix.r4c2",
+      "pre.simMatrix.r4c3",
+      "pre.simMatrix.r4c4"
+    ]
+  },
+  "labels": {
+    "wsi.E.label": [
+      "wsi.E.label.base",
+      "wsi.E.label.sub",
+      "wsi.E.label.sup"
+    ],
+    "report.E.label": [
+      "report.E.label.base",
+      "report.E.label.sub",
+      "report.E.label.sup"
+    ],
+    "rna.E.label": [
+      "rna.E.label.base",
+      "rna.E.label.sub",
+      "rna.E.label.sup"
+    ],
+    "mid.E_I.label": [
+      "mid.E_I.label.base",
+      "mid.E_I.label.sub",
+      "mid.E_I.label.sup"
+    ],
+    "mid.E_T.label": [
+      "mid.E_T.label.base",
+      "mid.E_T.label.sub",
+      "mid.E_T.label.sup"
+    ],
+    "mid.E_R.label": [
+      "mid.E_R.label.base",
+      "mid.E_R.label.sub",
+      "mid.E_R.label.sup"
+    ],
+    "mid.Z_I.label": [
+      "mid.Z_I.label.base",
+      "mid.Z_I.label.sub",
+      "mid.Z_I.label.sup"
+    ],
+    "mid.Z_R.label": [
+      "mid.Z_R.label.base",
+      "mid.Z_R.label.sub",
+      "mid.Z_R.label.sup"
+    ],
+    "mid.qI.label": [
+      "mid.qI.label.base",
+      "mid.qI.label.sub",
+      "mid.qI.label.sup"
+    ],
+    "mid.qR.label": [
+      "mid.qR.label.base",
+      "mid.qR.label.sub",
+      "mid.qR.label.sup"
+    ],
+    "mid.branchI.Z.label": [
+      "mid.branchI.Z.label.base",
+      "mid.branchI.Z.label.sub",
+      "mid.branchI.Z.label.sup"
+    ],
+    "mid.branchR.Z.label": [
+      "mid.branchR.Z.label.base",
+      "mid.branchR.Z.label.sub",
+      "mid.branchR.Z.label.sup"
+    ],
+    "mid.branchT.Z.label": [
+      "mid.branchT.Z.label.base",
+      "mid.branchT.Z.label.sub",
+      "mid.branchT.Z.label.sup"
+    ],
+    "mid.branchI.Zt.label": [
+      "mid.branchI.Zt.label.base",
+      "mid.branchI.Zt.label.sub",
+      "mid.branchI.Zt.label.sup"
+    ],
+    "mid.branchR.Zt.label": [
+      "mid.branchR.Zt.label.base",
+      "mid.branchR.Zt.label.sub",
+      "mid.branchR.Zt.label.sup"
+    ],
+    "mid.branchT.Zt.label": [
+      "mid.branchT.Zt.label.base",
+      "mid.branchT.Zt.label.sub",
+      "mid.branchT.Zt.label.sup"
+    ],
+    "pre.alignIT.viT.label": [
+      "pre.alignIT.viT.label.base",
+      "pre.alignIT.viT.label.sub",
+      "pre.alignIT.viT.label.sup"
+    ],
+    "pre.alignIT.vjI.label": [
+      "pre.alignIT.vjI.label.base",
+      "pre.alignIT.vjI.label.sub",
+      "pre.alignIT.vjI.label.sup"
+    ],
+    "pre.alignIT.vjT.label": [
+      "pre.alignIT.vjT.label.base",
+      "pre.alignIT.vjT.label.sub",
+      "pre.alignIT.vjT.label.sup"
+    ],
+    "pre.alignIR.viR.label": [
+      "pre.alignIR.viR.label.base",
+      "pre.alignIR.viR.label.sub",
+      "pre.alignIR.viR.label.sup"
+    ],
+    "pre.alignIR.viI.label": [
+      "pre.alignIR.viI.label.base",
+      "pre.alignIR.viI.label.sub",
+      "pre.alignIR.viI.label.sup"
+    ],
+    "pre.alignIR.vjI.label": [
+      "pre.alignIR.vjI.label.base",
+      "pre.alignIR.vjI.label.sub",
+      "pre.alignIR.vjI.label.sup"
+    ],
+    "pre.alignTR.vjT.label": [
+      "pre.alignTR.vjT.label.base",
+      "pre.alignTR.vjT.label.sub",
+      "pre.alignTR.vjT.label.sup"
+    ],
+    "pre.alignTR.viR.label": [
+      "pre.alignTR.viR.label.base",
+      "pre.alignTR.viR.label.sub",
+      "pre.alignTR.viR.label.sup"
+    ],
+    "pre.alignTR.vjR.label": [
+      "pre.alignTR.vjR.label.base",
+      "pre.alignTR.vjR.label.sub",
+      "pre.alignTR.vjR.label.sup"
+    ],
+    "pre.h1.label": [
+      "pre.h1.label.base",
+      "pre.h1.label.sub",
+      "pre.h1.label.sup"
+    ],
+    "pre.h2.label": [
+      "pre.h2.label.base",
+      "pre.h2.label.sub",
+      "pre.h2.label.sup"
+    ],
+    "pre.h1row.cell0.label": [
+      "pre.h1row.cell0.label.base",
+      "pre.h1row.cell0.label.sub",
+      "pre.h1row.cell0.label.sup"
+    ],
+    "pre.h1row.cell1.label": [
+      "pre.h1row.cell1.label.base",
+      "pre.h1row.cell1.label.sub",
+      "pre.h1row.cell1.label.sup"
+    ],
+    "pre.h1row.cell3.label": [
+      "pre.h1row.cell3.label.base",
+      "pre.h1row.cell3.label.sub",
+      "pre.h1row.cell3.label.sup"
+    ],
+    "pre.h1row.cell4.label": [
+      "pre.h1row.cell4.label.base",
+      "pre.h1row.cell4.label.sub",
+      "pre.h1row.cell4.label.sup"
+    ],
+    "pre.h2col.cell0.label": [
+      "pre.h2col.cell0.label.base",
+      "pre.h2col.cell0.label.sub",
+      "pre.h2col.cell0.label.sup"
+    ],
+    "pre.h2col.cell1.label": [
+      "pre.h2col.cell1.label.base",
+      "pre.h2col.cell1.label.sub",
+      "pre.h2col.cell1.label.sup"
+    ],
+    "pre.h2col.cell3.label": [
+      "pre.h2col.cell3.label.base",
+      "pre.h2col.cell3.label.sub",
+      "pre.h2col.cell3.label.sup"
+    ],
+    "pre.h2col.cell4.label": [
+      "pre.h2col.cell4.label.base",
+      "pre.h2col.cell4.label.sub",
+      "pre.h2col.cell4.label.sup"
+    ]
+  },
+  "texts": [
+    "title.preprocess",
+    "title.imputation",
+    "title.pretraining",
+    "wsi.caption",
+    "wsi.tiles.caption",
+    "report.caption",
+    "rna.caption",
+    "pre.alignIT.far1.text",
+    "pre.alignIT.close.text",
+    "pre.alignIT.far2.text",
+    "pre.alignIT.caption",
+    "pre.alignIR.close.text",
+    "pre.alignIR.far1.text",
+    "pre.alignIR.far2.text",
+    "pre.alignIR.caption",
+    "pre.alignTR.far1.text",
+    "pre.alignTR.far2.text",
+    "pre.alignTR.close.text",
+    "pre.alignTR.caption",
+    "pre.interModality.title",
+    "pre.view1.caption",
+    "pre.view2.caption",
+    "pre.interView.title"
+  ]
+}
