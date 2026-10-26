@@ -275,3 +275,4 @@
 | ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
 | --- | --- | --- | --- |
 | E43 | Office Viewer `dist/index.min.js` 在 2026-10-07/09 被另一工作目录（`~/Documents/Codex/excalidraw-tag-integration/`）的脚本在补丁 C 之上连续叠了 4 层，各自记账却没回写 C 的 `hashes.json`，导致 `manage-patch.py check/apply/rollback` 全部拒绝；绕过哈希强行回滚会连带抹掉这 4 层。 | 改任何已记账的扩展文件前，先跑该文件所属台账的 `check`；改完把新哈希登记回同一台账（`hashes.json` 加上层键，README 写清层次与回滚顺序），不在别的目录另起一套哈希表而不回写。 | /Users/wuhao/Documents/Codex/patches/office-outline-color-20260922/README.md（2026-10-26 台账断账 Post-Mortem） |
+| E44 | 测"循环/游标/重置"的断言时，初始状态恰好让"继续前进"与"重置"落到同一目标（2 个目标、游标停在第 2 个），删掉重置语句的变体仍全绿，测试形同虚设。 | 这类断言先构造让"继续"与"重置"结果不同的初始状态，并用删掉重置语句的变体确认测试会变红。 | /Users/wuhao/Documents/Codex/patches/outline-tag-badges-20261026/result.md（Bug Post-Mortem） |
