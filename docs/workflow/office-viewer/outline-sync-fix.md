@@ -264,6 +264,7 @@ todo.md 原文：「#BUG 修复Markdown文件使用office viewer 渲染后的md�
 - 文件：`resource/markdown/dist/index.min.js`，只改目录生成区（`D_e` / `i$` / `officeOutlineStrike`）。
 - 基线（含 A + 阅读位置补丁）SHA-256：`5389639d9e4b44dd9b0abdb462b91e332be29b85f1bd369459b8438d6196d52a`
 - 安装后 SHA-256：`9f67af52fda7203f11ea561134694c0aa2d7e2d7ffb604b0f421c81eeea58177`
+- 2026-10-26 补记：C 之上又叠了 4 层（2026-10-07/09：同名标题 slug、复制此段链接的列表项/标题锚点、跨文件跳转居中），当前安装值 `ba2ab3fd70a4861e8a4cb5db79f675b9b477b4f2d4f96caa6ec22b5f89b12cd0`；`manage-patch.py check` 输出 `applied+stack-20261009`，此状态下 `rollback` 有意拒绝。层次、备份与回滚顺序见补丁目录 README「上层补丁」节。
 - 补丁目录：`/Users/wuhao/Documents/Codex/patches/office-outline-color-20260922/`（`backup/`、`candidate/`、`outline-color.js`、`build-color.py`、`manage-patch.py`、`hashes.json`、`office-outline-color.patch`、`manifest-before.json`、`installed-verification.json`、`test-color.cjs`、`test-strike-regression.cjs`、`outline-color-demo.md`、日志）。
 - 全量清单核对：1759 个安装文件仅上述 1 个文件变化，新增 0、删除 0。
 
@@ -409,6 +410,8 @@ function officeOutlineStrike(heading, label) {
 - 未覆盖：工具栏字体颜色（Pro 授权）编辑路径、撤销/重做后的目录刷新时序只由既有重建机制保证，未逐一原生实点。
 
 ## 回滚 / 重新应用
+
+> 回滚前 `check` 必须输出 `applied`；输出 `applied+stack-20261009` 时，先按补丁目录 README「上层补丁」节倒序退掉 4 层，再回滚 C。（2026-10-26 补记）
 
 ```sh
 python3 /Users/wuhao/Documents/Codex/patches/office-outline-color-20260922/manage-patch.py check
