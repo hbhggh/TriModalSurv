@@ -269,3 +269,10 @@
 | C17 | 在 Claude 会话里跑 `scripts/codex_review.sh`：Codex 只读沙箱下 xcrun 版 `/usr/bin/git` 写不了缓存而失败；修好后又因会话沙箱读不到 Codex 配置报 "failed to load configuration: Operation not permitted"。 | Codex 审查由用户在自己的终端运行，命令前置 `PATH="/Library/Developer/CommandLineTools/usr/bin:$PATH"`；Claude 只给出完整命令并处理落盘结果。 | 本会话 2026-10-10 I07 节点一 |
 | E41 | macOS 上 `tar -rf` 追加文件会带上扩展属性，Linux 解包多出 `._<文件名>`（AppleDouble），远端文件数比清单多 1 个。 | 在 macOS 上打包传服务器前 `export COPYFILE_DISABLE=1`；远端核对除了 `sha256sum -c` 还要比对文件数。 | 本会话 2026-10-11 I07 冒烟部署 |
 | V43 | 授权摘要只绑定 ckpt 时，授权后改 run.json（config、best_epoch）仍能通过评估；资产先整体校验、后按路径重读，中间有替换窗口。 | 测试授权同时绑定 best.pt 与 run.json 的哈希，评估入口核对 config 哈希；数据文件只读一次字节、按 manifest 核对后从同一份字节解析。 | I07 节点一第 3 轮审查（reviews/20261010-node1-terminal/round3） |
+
+## Office Viewer 补丁台账补充（2026-10-26）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| E43 | Office Viewer `dist/index.min.js` 在 2026-10-07/09 被另一工作目录（`~/Documents/Codex/excalidraw-tag-integration/`）的脚本在补丁 C 之上连续叠了 4 层，各自记账却没回写 C 的 `hashes.json`，导致 `manage-patch.py check/apply/rollback` 全部拒绝；绕过哈希强行回滚会连带抹掉这 4 层。 | 改任何已记账的扩展文件前，先跑该文件所属台账的 `check`；改完把新哈希登记回同一台账（`hashes.json` 加上层键，README 写清层次与回滚顺序），不在别的目录另起一套哈希表而不回写。 | /Users/wuhao/Documents/Codex/patches/office-outline-color-20260922/README.md（2026-10-26 台账断账 Post-Mortem） |
+| E44 | 测"循环/游标/重置"的断言时，初始状态恰好让"继续前进"与"重置"落到同一目标（2 个目标、游标停在第 2 个），删掉重置语句的变体仍全绿，测试形同虚设。 | 这类断言先构造让"继续"与"重置"结果不同的初始状态，并用删掉重置语句的变体确认测试会变红。 | /Users/wuhao/Documents/Codex/patches/outline-tag-badges-20261026/result.md（Bug Post-Mortem） |
