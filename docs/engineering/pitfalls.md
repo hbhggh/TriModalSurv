@@ -276,3 +276,10 @@
 | --- | --- | --- | --- |
 | E43 | Office Viewer `dist/index.min.js` 在 2026-10-07/09 被另一工作目录（`~/Documents/Codex/excalidraw-tag-integration/`）的脚本在补丁 C 之上连续叠了 4 层，各自记账却没回写 C 的 `hashes.json`，导致 `manage-patch.py check/apply/rollback` 全部拒绝；绕过哈希强行回滚会连带抹掉这 4 层。 | 改任何已记账的扩展文件前，先跑该文件所属台账的 `check`；改完把新哈希登记回同一台账（`hashes.json` 加上层键，README 写清层次与回滚顺序），不在别的目录另起一套哈希表而不回写。 | /Users/wuhao/Documents/Codex/patches/office-outline-color-20260922/README.md（2026-10-26 台账断账 Post-Mortem） |
 | E44 | 测"循环/游标/重置"的断言时，初始状态恰好让"继续前进"与"重置"落到同一目标（2 个目标、游标停在第 2 个），删掉重置语句的变体仍全绿，测试形同虚设。 | 这类断言先构造让"继续"与"重置"结果不同的初始状态，并用删掉重置语句的变体确认测试会变红。 | /Users/wuhao/Documents/Codex/patches/outline-tag-badges-20261026/result.md（Bug Post-Mortem） |
+
+## Office Viewer 大纲进度补充（2026-11-01）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| E47 | Office Viewer 大纲进度条按条目宽度取百分比，jsdom 测试全过，真实 Chromium 里 40% 的条却接近满格：Vditor 的大纲 `ul` 是 `width: max-content`，所有条目都和最长标题一样宽（734px，可见区只有 320px）。 | 按百分比画长度的样式，先在真实浏览器里量一次容器宽度与可见宽度是否一致；要跟可见宽度走时用容器查询单位（`container-type: inline-size` + `cqi`）；jsdom 只验属性值，不验视觉长度。 | /Users/wuhao/Documents/Codex/patches/outline-tag-badges-20261026/layers/outline-progress-20261101/README.md（Bug Post-Mortem：进度条按条目宽度失真） |
+| E48 | 用 MutationObserver 断言"渲染不写正文 DOM"，一处监视窗口跨过了测试自己的重建（i$ 按原值重写标题 id，任何实现都红），另一处回调是空函数、`await` 之后 `takeRecords()` 恒为 0，断言形同虚设。 | 用 MutationObserver 断言零写入时，回调必须累积记录，监视窗口只包被测调用，并加一条正向自检（同步写入和跨 await 的写入都能抓到）。 | 同上（Bug Post-Mortem：「不碰正文 DOM」断言失效） |
