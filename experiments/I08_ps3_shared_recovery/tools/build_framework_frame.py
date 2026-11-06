@@ -1,84 +1,24 @@
 """生成 I08 总体框架 frame（PS3-style + A1·B1·C1），追加进一份 .excalidraw 的副本。
 
 用法：python3 build_framework_frame.py <源.excalidraw> <输出.excalidraw>
-- 只追加新元素（新 frame 放在原 PS3 frame 右侧），不改任何已有元素；输出前断言旧元素逐个不变。
+- 只追加新元素（新 frame 放在原 PS3 frame 右侧），不改任何已有元素；守卫见 excalidraw_kit.append_frame。
 - 样式沿用原 PS3 frame：Excalifont（fontFamily 5）、20 px、lineHeight 1.25、圆角矩形、同一套浅色填充。
-- 重复运行：若源文件里已有同 id 的 frame 则拒绝（不覆盖）。
 """
 from __future__ import annotations
 
-import copy
-import json
-import random
 import sys
-import unicodedata
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from excalidraw_kit import Canvas, append_frame  # noqa: E402
 
 FRAME_ID = 'i08-abc-framework-frame'
 X0, Y0 = -1500.0, 14384.0
 W, H = 2730.0, 1190.0
-FONT, LH = 20, 1.25
-rng = random.Random(20261106)
-NOW = 1793952000000
-_n = 0
-_index_base = 'b7'
 
 
-def _id(tag):
-    global _n
-    _n += 1
-    return f'i08-{tag}-{_n:03d}'
-
-
-def _index():
-    return f'{_index_base}{_n:03d}V'   # 结尾不能是 0（fractional index 规则）
-
-
-def _common(t, x, y, w, h, **kw):
-    e = {'id': _id(t), 'type': t, 'x': x, 'y': y, 'width': w, 'height': h, 'angle': 0, 'strokeColor': '#1e1e1e',
-         'backgroundColor': 'transparent', 'fillStyle': 'solid', 'strokeWidth': 1, 'strokeStyle': 'solid',
-         'roughness': 1, 'opacity': 100, 'groupIds': [], 'frameId': FRAME_ID, 'index': None,
-         'roundness': None, 'seed': rng.randrange(1, 2**31), 'version': 1, 'versionNonce': rng.randrange(1, 2**31),
-         'isDeleted': False, 'boundElements': [], 'updated': NOW, 'link': None, 'locked': False}
-    e.update(kw)
-    e['index'] = _index()
-    return e
-
-
-def text_width(line, size=FONT):
-    w = 0.0
-    for ch in line:
-        wide = unicodedata.east_asian_width(ch) in ('W', 'F')
-        w += size * (1.0 if wide else 0.6)
-    return w
-
-
-def text(x, y, s, size=FONT, color='#1e1e1e'):
-    lines = s.split('\n')
-    w = max(text_width(l, size) for l in lines)
-    h = len(lines) * size * LH
-    return _common('text', x, y, w, h, strokeColor=color, strokeWidth=2, text=s, originalText=s, fontSize=size,
-                   fontFamily=5, textAlign='left', verticalAlign='top', containerId=None, autoResize=True,
-                   lineHeight=LH)
-
-
-def box(x, y, w, h, fill, body, dashed=False, stroke='#1e1e1e', size=FONT):
-    r = _common('rectangle', x, y, w, h, backgroundColor=fill, roundness={'type': 3},
-                strokeStyle='dashed' if dashed else 'solid', strokeColor=stroke, strokeWidth=2 if dashed else 1)
-    t = text(x + 15, y + 12, body, size)
-    assert t['width'] <= w - 20 and t['height'] <= h - 14, f'文字溢出：{body.splitlines()[0]} {t["width"]:.0f}×{t["height"]:.0f} > {w}×{h}'
-    return [r, t]
-
-
-def arrow(pts, dashed=False, color='#1e1e1e', width=1):
-    (x, y), rel = pts[0], [[px - pts[0][0], py - pts[0][1]] for px, py in pts]
-    xs, ys = [p[0] for p in rel], [p[1] for p in rel]
-    return _common('arrow', x, y, max(xs) - min(xs), max(ys) - min(ys), roundness={'type': 2} if len(pts) == 2 else None,
-                   strokeStyle='dashed' if dashed else 'solid', strokeColor=color, strokeWidth=width, points=rel,
-                   lastCommittedPoint=None, startBinding=None, endBinding=None, startArrowhead=None,
-                   endArrowhead='arrow', elbowed=False)
-
-
-def build():
+def build(c):
+    text, box, arrow = c.text, c.box, c.arrow
     X, Y = X0, Y0
     els = []
     els.append(text(X + 18, Y + 17, 'PS3-style + 算子 A1·B1·C1 总体框架（I08，2026-11-06）', 36, '#e03131'))
@@ -148,34 +88,11 @@ def build():
                '· 均值 μ^F、μ^Ω 只用本折 train；选模：本折 val 六模式平均 Cox 损失；候选 r ∈ {16, 32} × λ_m ∈ {0.05, 0.1}；test 锁定\n'
                '· 颜色：灰 = 冻结 I07 ｜ 红 = 算子 A ｜ 黄 = 算子 B ｜ 红虚线 = 算子 C（训练期）｜ 绿 = 可见直送 ｜ 蓝 = 完整直通')
 
-    frame = _common('frame', X, Y, W, H, frameId=None, strokeWidth=2, name='I08 PS3-style + A1·B1·C1 框架')
-    frame['id'] = FRAME_ID   # 子元素的 frameId 指向它；不能用 _id() 生成的序号 id
-    for e in els:
-        assert X <= e['x'] and e['x'] + e['width'] <= X + W + 1 and Y <= e['y'] and e['y'] + e['height'] <= Y + H + 1, \
-            f'元素越出 frame：{e["id"]} {e.get("text", "")[:20]}'
-    return els, frame
+    return els, c.frame(X, Y, W, H, 'I08 PS3-style + A1·B1·C1 框架')
 
 
 def main(src, out):
-    d = json.load(open(src, encoding='utf-8'))
-    before = copy.deepcopy(d['elements'])
-    if any(e['id'] == FRAME_ID for e in before):
-        raise SystemExit(f'源文件已含 {FRAME_ID}，拒绝重复追加')
-    live = [e for e in before if not e.get('isDeleted')]
-    for e in live:   # 新 frame 区域内不得已有元素
-        if e['x'] < X0 + W and e['x'] + e.get('width', 0) > X0 and e['y'] < Y0 + H and e['y'] + e.get('height', 0) > Y0:
-            raise SystemExit(f'目标区域已被占用：{e["id"]} {e["type"]}')
-    global _index_base
-    last = max((e.get('index') or '') for e in before)
-    _index_base = last + 'V'        # 排在已有最大分数索引之后
-    new, frame = build()
-    frame['index'] = _index_base + 'zzV'
-    assert frame['id'] == FRAME_ID and all(e['frameId'] == frame['id'] for e in new), '子元素未挂到 frame 上'
-    assert len({e['id'] for e in before + new + [frame]}) == len(before) + len(new) + 1, 'id 重复'
-    d['elements'] = before + new + [frame]
-    assert d['elements'][:len(before)] == before, '已有元素被改动'
-    json.dump(d, open(out, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
-    print(f'追加 {len(new) + 1} 个元素（{len(new)} 个子元素 + 1 个 frame）→ {out}')
+    append_frame(src, out, Canvas(FRAME_ID, 'i08', 20261106), X0, Y0, W, H, build)
 
 
 if __name__ == '__main__':
