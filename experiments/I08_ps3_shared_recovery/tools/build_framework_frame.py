@@ -149,6 +149,7 @@ def build():
                '· 颜色：灰 = 冻结 I07 ｜ 红 = 算子 A ｜ 黄 = 算子 B ｜ 红虚线 = 算子 C（训练期）｜ 绿 = 可见直送 ｜ 蓝 = 完整直通')
 
     frame = _common('frame', X, Y, W, H, frameId=None, strokeWidth=2, name='I08 PS3-style + A1·B1·C1 框架')
+    frame['id'] = FRAME_ID   # 子元素的 frameId 指向它；不能用 _id() 生成的序号 id
     for e in els:
         assert X <= e['x'] and e['x'] + e['width'] <= X + W + 1 and Y <= e['y'] and e['y'] + e['height'] <= Y + H + 1, \
             f'元素越出 frame：{e["id"]} {e.get("text", "")[:20]}'
@@ -169,6 +170,8 @@ def main(src, out):
     _index_base = last + 'V'        # 排在已有最大分数索引之后
     new, frame = build()
     frame['index'] = _index_base + 'zzV'
+    assert frame['id'] == FRAME_ID and all(e['frameId'] == frame['id'] for e in new), '子元素未挂到 frame 上'
+    assert len({e['id'] for e in before + new + [frame]}) == len(before) + len(new) + 1, 'id 重复'
     d['elements'] = before + new + [frame]
     assert d['elements'][:len(before)] == before, '已有元素被改动'
     json.dump(d, open(out, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
