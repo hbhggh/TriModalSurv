@@ -1,0 +1,89 @@
+# I08 超参数与接口登记：故事线 A-1 v1（A1 + B1 + C1），接在冻结的 I07 pooled 与风险头之间。
+# 键、类型、取值与张量形状由 contract.py 强制（check_config / tensor_spec）；违约即报错。
+# 浮点必须带小数点（1.0e-3），否则 PyYAML 读成字符串。
+# 〔建议〕= 故事线 §4 Step 3 的建议值；〔裁定〕= 故事线未写明、本文件补定的接口细节。两类都要过节点一审查。
+# 形状里的符号：B = batch（任意），d = backbone.d，r = operator_A.r，k = 该缺失模式下可见模态数（1 或 2）。
+
+backbone:                        # 冻结的 I07，只读
+  experiment: I07_ps3style_backbone
+  results_run: i07-ps3-20261011  # tri 臂 25 个 ckpt（5 癌 × 5 折）的来源批次
+  arm: tri
+  frozen: true                   # 全部参数、buffer 与风险头 requires_grad=False，且 eval()（dropout 关）
+  modalities: [rna, wsi, text]   # 拼接顺序 = PS3 的 [P | H | T] = 风险头权重切片顺序
+  d: 256                         # pooled[m] 维度
+  head_in: 768                   # self.risk = Linear(768 → 1)，768 = 3 × d
+  cancers: [BLCA, BRCA, LUAD, LGG, UCEC]
+  folds: [0, 1, 2, 3, 4]
+
+position:                        # A/B 接入点（旧编号 B4 位置）
+  insert_after: pooled           # PS3Style.forward：f_β → head_ln → 有效 token 均值 之后的 pooled[m]
+  insert_before: risk_head       # 拼接 [rna | wsi | text] → Linear(768 → 1) 之前
+  full_route: bypass             # Ω = 三模态全有：不经过 A/B，直接用 I07 原风险分（逐患者恒等）
+  visible_route: passthrough     # 缺失分支中可见模态的 p^Ω 原样送入风险头（W1-4）
+  missing_route: recovered       # 只有缺失位置填 p̂ = μ^F_u + U_u ẑ
+
+features:                        # Step 1 缓存（冻结 I07 前向一次，训练只读缓存）
+  dtype: float32
+  views: [full, rna, wsi, text, rna+wsi, rna+text, wsi+text]   # 对应 forward(present=…)
+  splits: [train, val]           # 训练与选模只用这两部分；test 在 Step 4 授权后才前向
+  mean_source: train             # μ^F_m 与 μ^Ω_{Ω,m} 只用本折 train 计算
+  input_mean: pattern            # 〔裁定〕可见输入中心化用该模式自己的 μ^Ω_{Ω,m}；目标与解码用 μ^F_u
+
+operator_A:                      # A1 低秩正交共享基（推理时参与）
+  name: A1_shared_basis
+  r: 32                          # 〔建议〕
+  per_modality: true             # 每个模态一套 U_m
+  parametrization: orthogonal    # torch.nn.utils.parametrizations.orthogonal，结构保证 U_mᵀU_m = I_r
+  init: pca_train_full           # U_m 初始为本折 train 上 x^F_m 的前 r 个主方向（只作初始化）
+  orth_tol: 1.0e-5               # ‖U_mᵀU_m − I_r‖_max 的单测容差
+
+operator_B:                      # B1 按缺失模式的线性恢复（推理时参与）
+  name: B1_pattern_linear
+  patterns: [rna, wsi, text, rna+wsi, rna+text, wsi+text]   # 可见模态集合 Ω
+  input_order: modalities        # 拼接 z 按 backbone.modalities 顺序，R_{Ω→u} ∈ R^{r × k·r}
+  bias: true                     # b_{Ω,u} ∈ R^r
+  residual_generation: false     # 缺失模态的剩余部分不生成
+
+operator_C:                      # C1 模态对齐 + 恢复一致性（只在训练期计算，无参数）
+  name: C1_align_consistency
+  inference: false
+  lambda_modal: 0.1              # 〔建议〕L_modal = E_{i,m<n}[1 − cos(z^F_{i,m}, z^F_{i,n})]
+  lambda_cons: 1.0               # 〔建议〕L_cons = E_{i,Ω,u∉Ω} (1/r)‖ẑ^Ω_{i,u} − sg(U_uᵀx^F_{i,u})‖²
+  cos_eps: 1.0e-8                # 余弦分母下限；零向量另有断言
+  stop_grad_target: true         # 只停 L_cons 目标这一项的梯度
+
+loss:
+  cox: missing_pattern_mean      # 六种缺失模式的 Cox 部分似然等权平均（Full 不进损失）
+  lambda_anchor: 1.0             # 〔建议〕L_anchor = E‖x^F − U_mU_mᵀx^F‖²/d，三个模态平均（〔裁定〕用 x^F）
+
+train:
+  optimizer: adamw
+  lr: 1.0e-3                     # 〔建议〕
+  weight_decay: 0.0              # 〔裁定〕故事线未写；先置 0，节点一前确认
+  batch: full                    # 本折 train 全量一批（Cox 风险集完整）
+  max_epochs: 200                # 〔建议〕上限
+  select_metric: val_cox_missing_mean   # 本折 val 六模式平均 Cox 损失，最小者为 best
+  seed: 2026
+  candidates:                    # 运行前固定；选模只在 val 上
+    r: [16, 32]
+    lambda_modal: [0.05, 0.1]
+  test_access: false             # Step 1–3 全程不读 test；Step 4 须用户授权
+
+controls: [zero, train_mean, ridge_full_B0, ridge_risk_residual_C0]
+ablations: [wo_A, wo_B, wo_C]    # wo_A 恢复整个 d 维；wo_B = train_mean；wo_C 令 λ_m = λ_c = 0
+
+tensors:                         # 每个张量的形状、类型、位置与是否回传梯度（contract.tensor_spec 读这里）
+  p_full:      {shape: [B, d], dtype: float32, at: "I07 pooled[m]，present=全部", grad: false}
+  p_vis:       {shape: [B, d], dtype: float32, at: "I07 pooled[m]，present=Ω，m∈Ω", grad: false}
+  mu_full:     {shape: [d], dtype: float32, at: "本折 train 的 p^F_m 均值", grad: false}
+  mu_pattern:  {shape: [d], dtype: float32, at: "本折 train 的 p^Ω_m 均值，按 (Ω, m) 存", grad: false}
+  U:           {shape: [d, r], dtype: float32, at: "A，每个模态一套", grad: true}
+  z_vis:       {shape: [B, r], dtype: float32, at: "A 输出：U_mᵀ(p^Ω_m − μ^Ω_{Ω,m})", grad: true}
+  z_full:      {shape: [B, r], dtype: float32, at: "A 输出：U_mᵀ(p^F_m − μ^F_m)，供 C", grad: true}
+  b_in:        {shape: [B, k*r], dtype: float32, at: "B 输入：可见 z 按模态顺序拼接", grad: true}
+  R:           {shape: [r, k*r], dtype: float32, at: "B，每个 (Ω, u) 一个", grad: true}
+  bias:        {shape: [r], dtype: float32, at: "B，每个 (Ω, u) 一个", grad: true}
+  z_hat:       {shape: [B, r], dtype: float32, at: "B 输出：缺失共享坐标 ẑ^Ω_u", grad: true}
+  p_hat:       {shape: [B, d], dtype: float32, at: "解码：μ^F_u + U_u ẑ，填入风险头缺失位", grad: true}
+  head_in:     {shape: [B, head_in], dtype: float32, at: "风险头输入，按 rna|wsi|text 拼接", grad: true}
+  risk:        {shape: [B], dtype: float32, at: "冻结风险头输出，越大预后越差", grad: true}
