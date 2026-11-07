@@ -122,3 +122,79 @@ def test_check_frozen():
 def test_views_match_i07_present_sets():
     assert contract.VIEWS[0] == 'full'
     assert all(set(contract.visible(p)) <= set(MODALITIES) for p in contract.PATTERNS)
+
+
+# ---------- handoff v1 第五节扩展：operator_B_variants、B6 张量、自查询泄漏守卫 ----------
+
+@pytest.mark.parametrize('path,bad', [
+    (('operator_B_variants', 'B6_LOO', 'exclude_self_in_train'), False),       # 允许自查询 = 泄漏
+    (('operator_B_variants', 'B6_LOO', 'candidates', 'alpha_max'), [0.25, 0.5]),  # 缺 0.0 保底格点
+    (('operator_B_variants', 'B6_LOO', 'K'), 7),                                # 默认不在候选内
+    (('operator_B_variants', 'B6_LOO', 'tau'), 0.3),
+    (('operator_B_variants', 'B6_LOO', 'alpha_max'), 0.75),
+    (('operator_B_variants', 'B6_LOO', 'residual_mode'), 'in_sample'),          # 不支持的残差口径
+    (('operator_B_variants', 'B6_LOO', 'gate_gamma_mode'), 'learned'),          # 门控不许有可学习参数
+    (('operator_B_variants', 'B6_LOO', 'tau'), 1),                              # int 冒充 float
+    (('operator_B_variants', 'active'), 'B7'),
+    (('operator_B_variants', 'B6_Naive', 'gate'), 'density'),                   # M5 定义被改
+    (('operator_B_variants', 'B3', 'exclude_self_in_train'), False),
+    (('train', 'ridge_default'), 3.0),                                          # 默认不在 ridge_alphas
+    (('train', 'ridge_alphas'), [1, 10]),
+    (('ablations',), ['wo_A', 'wo_B', 'wo_C']),                                 # 旧三项消融清单不再是口径
+])
+def test_b_variant_violations_are_rejected(cfg, path, bad):
+    c = copy.deepcopy(cfg)
+    sec = c
+    for k in path[:-1]:
+        sec = sec[k]
+    sec[path[-1]] = bad
+    with pytest.raises(contract.ContractError):
+        contract.check_config(c)
+
+
+def test_b6_config_defaults(cfg):
+    b6 = cfg['operator_B_variants']['B6_LOO']
+    assert b6['residual_mode'] == 'in_fold_masked' and b6['sim_mode'] == 'per_modality_mean_cos'
+    assert 0.0 in b6['candidates']['alpha_max'] and b6['exclude_self_in_train'] is True
+    assert len(cfg['ablations']) == 12
+
+
+def test_b6_tensor_shapes(cfg):
+    assert contract.tensor_shape(cfg, 'e_pool', n_tr=120) == (120, 32)
+    assert contract.tensor_shape(cfg, 'sim_mat', n_tr=120) == (None, 120)
+    assert contract.tensor_shape(cfg, 'attn_w', K=10) == (None, 10)
+    assert contract.tensor_shape(cfg, 'alpha_gate') == (None, 1)
+    assert contract.tensor_shape(cfg, 'e_pool', n_tr=50, r=16) == (50, 16)
+    with pytest.raises(contract.ContractError):
+        contract.tensor_shape(cfg, 'e_pool')                       # 含 N_tr 却没给
+    with pytest.raises(contract.ContractError):
+        contract.tensor_shape(cfg, 'attn_w')                       # 含 K 却没给
+    sim = torch.zeros(3, 5)
+    sim[0, 0] = float('-inf')
+    contract.check_tensor(cfg, 'sim_mat', sim, n_tr=5, allow_neg_inf=True)
+    with pytest.raises(contract.ContractError):
+        contract.check_tensor(cfg, 'sim_mat', sim, n_tr=5)         # 其他张量不许 -inf
+    contract.check_tensor(cfg, 'alpha_gate', torch.zeros(3, 1))
+
+
+def test_check_b6_no_self_leak():
+    train_ids = ['a', 'b', 'c', 'd']
+    sim = torch.rand(4, 4)
+    with pytest.raises(contract.ContractError):
+        contract.check_b6_no_self_leak(sim, train_ids, train_ids)          # 对角线未屏蔽
+    sim.fill_diagonal_(float('-inf'))
+    assert contract.check_b6_no_self_leak(sim, train_ids, train_ids) == 4
+    bad_idx = torch.tensor([[0, 1], [0, 2], [0, 1], [0, 1]])             # 查询 a 的邻居含自身（下标 0）
+    with pytest.raises(contract.ContractError):
+        contract.check_b6_no_self_leak(sim, train_ids, train_ids, bad_idx)
+    ok_idx = torch.tensor([[1, 2], [0, 2], [0, 1], [0, 1]])
+    contract.check_b6_no_self_leak(sim, train_ids, train_ids, ok_idx)
+    # val 查询与 train 无重叠：不要求任何 -inf
+    assert contract.check_b6_no_self_leak(torch.rand(2, 4), ['x', 'y'], train_ids, torch.tensor([[0, 1], [2, 3]])) == 0
+    # 患者 id 重叠但查询顺序不同：按 id 对齐，不按下标
+    sim2 = torch.rand(2, 4)
+    sim2[0, 2] = float('-inf')
+    with pytest.raises(contract.ContractError):
+        contract.check_b6_no_self_leak(sim2, ['c', 'a'], train_ids)        # a 在第 0 列未屏蔽
+    sim2[1, 0] = float('-inf')
+    assert contract.check_b6_no_self_leak(sim2, ['c', 'a'], train_ids) == 2

@@ -1,8 +1,9 @@
-# I08 超参数与接口登记：故事线 A-1 v1（A1 + B1 + C1），接在冻结的 I07 pooled 与风险头之间。
+# I08 超参数与接口登记：故事线 A-1 v1（A1 + B1/B6-LOO/B5/B3 + C1），接在冻结的 I07 pooled 与风险头之间。
+# 规范来源：主目录 患者级动态恢复_v1.handoff.md 第五节（向后兼容演进：保留原 A1+B1+C1 全部键与取值）。
 # 键、类型、取值与张量形状由 contract.py 强制（check_config / tensor_spec）；违约即报错。
 # 浮点必须带小数点（1.0e-3），否则 PyYAML 读成字符串。
-# 〔建议〕= 故事线 §4 Step 3 的建议值；〔裁定〕= 故事线未写明、本文件补定的接口细节。两类都要过节点一审查。
-# 形状里的符号：B = batch（任意），d = backbone.d，r = operator_A.r，k = 该缺失模式下可见模态数（1 或 2）。
+# 〔建议〕= 故事线建议值；〔裁定〕= 故事线 / handoff 未写明、本文件补定的细节（2026-11-08 用户裁定的标注了日期）。
+# 形状符号：B = batch（任意），N_tr = 本折训练样本数，d = backbone.d，r = operator_A.r，k = 可见模态数（1 或 2），K = B6 邻居数。
 
 backbone:                        # 冻结的 I07，只读
   experiment: I07_ps3style_backbone
@@ -44,6 +45,37 @@ operator_B:                      # B1 按缺失模式的线性恢复（推理时
   bias: true                     # b_{Ω,u} ∈ R^r
   residual_generation: false     # 缺失模态的剩余部分不生成
 
+operator_B_variants:             # Stage 2b：固定 Stage 2a 的 U_m 与 R,b，在同一潜空间坐标系下零重训插拔
+  active: B6_LOO                 # 主验证算子：可选 [B1, B3, B5_MapPrecision, B5_DirectCoord, B6_Naive, B6_LOO]
+  coupling_mode: plugin_after_b1 # 消除坐标漂移；M2–M6 共用同一套 U_m
+  B6_LOO:
+    residual_mode: in_fold_masked            # 默认；M6-b 用 exact_loo_hat
+    supported_residual_modes: [in_fold_masked, exact_loo_hat]
+    ridge_lam_for_hat: 1.0                   # exact_loo_hat 的岭系数（Hat 矩阵对角线 H_jj）
+    sim_mode: per_modality_mean_cos          # 逐可见模态 L2 归一化后的平均余弦
+    supported_sim_modes: [per_modality_mean_cos, concat_cos]
+    exclude_self_in_train: true              # train 查询强制 s_ii = -inf
+    K: 10
+    tau: 0.1
+    alpha_max: 0.5
+    gate_delta_source: train_loo_nn_median   # δ_Ω = 本折 train 留一最近邻相似度中位数（零可学习参数）
+    gate_gamma_mode: iqr_scaled              # γ_Ω = clamp(1.349 / max(IQR_Ω, 1e-3), 5.0, 30.0)；可选 fixed_10
+    candidates:                              # 在本折 val 上按 val_cox_missing_mean 选优
+      K: [5, 10, 20]
+      tau: [0.05, 0.1, 0.2]
+      alpha_max: [0.0, 0.25, 0.5, 1.0]       # 含 0.0：精确退化回 B1 的保底格点
+  B6_Naive:                      # 〔裁定 2026-11-08〕M5 = 去门控（α_i ≡ α_max）+ δ/IQR 统计不做自掩码；其余同 B6_LOO
+    gate: none
+    self_mask_in_gate_stats: false
+  B3:
+    K: 10
+    tau: 0.1
+    sim_mode: per_modality_mean_cos
+    exclude_self_in_train: true
+  B5:
+    modes: [B5_MapPrecision, B5_DirectCoord]
+    var_eps: 1.0e-6
+
 operator_C:                      # C1 模态对齐 + 恢复一致性（只在训练期计算，无参数）
   name: C1_align_consistency
   inference: false
@@ -67,10 +99,30 @@ train:
   candidates:                    # 运行前固定；选模只在 val 上
     r: [16, 32]
     lambda_modal: [0.05, 0.1]
-  test_access: false             # Step 1–3 全程不读 test；Step 4 须用户授权
+  ridge_alphas: [0.1, 1.0, 10.0, 100.0]  # B0 / C0 / M7 闭式 Ridge 的候选正则系数（本折 val 选优）
+  ridge_default: 1.0             # 〔裁定 2026-11-08〕"固定默认超参、不在 val 上选择"参照行用的 Ridge 系数
+  test_access: false             # 全程不读 test；访问 test 须用户另行书面授权
+
+interpretability:                # 〔裁定〕handoff 6.2 的可解释性核验参数（对 M6-a 的默认超参配置计算，见 interface.md）
+  bootstrap_n: 20
+  bootstrap_frac: 0.8
+  seed: 2026
+  mechanism_ridge: 1.0           # 机理表：可见 → 目标 p^sha / p^res 的 Ridge 系数（固定，不选）
 
 controls: [zero, train_mean, ridge_full_B0, ridge_risk_residual_C0]
-ablations: [wo_A, wo_B, wo_C]    # wo_A 恢复整个 d 维；wo_B = train_mean；wo_C 令 λ_m = λ_c = 0
+ablations:
+  - wo_A                         # M7：256 维 B6-LOO，无 A1（在 B0 256 维 LOO 残差上做 Top-K 核校准）
+  - wo_B                         # M0-b：train_mean（缺失位填 μ^F_u）
+  - wo_C_for_B1                  # M10-a：A1 + B1，λ_m = 0, λ_c = 0
+  - wo_L_modal_for_B1            # M10-b：A1 + B1 + C1，λ_m = 0, λ_c = 1.0
+  - wo_L_cons_for_B1             # M10-c：A1 + B1 + C1，λ_m = 0.1, λ_c = 0
+  - wo_C_for_B6                  # M8：在 M10-a 的无 C1 潜空间上挂载 B6-LOO
+  - pca32_A5_for_B6              # M9：PCA-32 (A5) + B6-LOO
+  - B3_direct_neighbor           # M3
+  - B5_map_precision             # M4-a
+  - B5_direct_coord              # M4-b
+  - B6_naive_no_loo_or_gate      # M5
+  - B6_loo_exact_hat             # M6-b
 
 tensors:                         # 每个张量的形状、类型、位置与是否回传梯度（contract.tensor_spec 读这里）
   p_full:      {shape: [B, d], dtype: float32, at: "I07 pooled[m]，present=全部", grad: false}
@@ -83,6 +135,10 @@ tensors:                         # 每个张量的形状、类型、位置与是
   b_in:        {shape: [B, k*r], dtype: float32, at: "B 输入：可见 z 按模态顺序拼接", grad: true}
   R:           {shape: [r, k*r], dtype: float32, at: "B，每个 (Ω, u) 一个", grad: true}
   bias:        {shape: [r], dtype: float32, at: "B，每个 (Ω, u) 一个", grad: true}
+  e_pool:      {shape: [N_tr, r], dtype: float32, at: "B6：本折 train 在 (Ω, u) 下的留一预测残差池", grad: false}
+  sim_mat:     {shape: [B, N_tr], dtype: float32, at: "B6：查询与本折 train 的平均余弦相似度（自查询位 -inf）", grad: false}
+  attn_w:      {shape: [B, K], dtype: float32, at: "B6：Top-K 邻居注意力权重", grad: false}
+  alpha_gate:  {shape: [B, 1], dtype: float32, at: "B6：患者级密度自适应门控 α_i", grad: false}
   z_hat:       {shape: [B, r], dtype: float32, at: "B 输出：缺失共享坐标 ẑ^Ω_u", grad: true}
   p_hat:       {shape: [B, d], dtype: float32, at: "解码：μ^F_u + U_u ẑ，填入风险头缺失位", grad: true}
   head_in:     {shape: [B, head_in], dtype: float32, at: "风险头输入，按 rna|wsi|text 拼接", grad: true}
