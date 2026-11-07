@@ -1,7 +1,7 @@
 # I08 接口定义：A1 + B1 + C1 接入 PS3-style 骨架
 
 > 故事线：主目录 `03_index-故事线 A-1｜患者级动态恢复_v1.md`（A1-B1-C1）。超参数与张量登记：`config.yaml`；强制核对：`contract.py`。
-> 状态（2026-11-06）：接口稿，未实现训练；上机前须走节点一审查 + 用户点头。
+> 状态（2026-11-08）：已实现 handoff v1（主目录 `患者级动态恢复_v1.handoff.md`）的 A1 + B1/B3/B5/B6 + C1 与 M0–M10 消融；开发期 val 实验（用户裁定 2026-11-08：val 同时用于选参与报告，不进论文主表）；全程不读 test。
 
 ## 1. 网络中的位置
 
@@ -40,6 +40,10 @@
 | p_hat | [B, 256] | float32 | 解码，填入风险头缺失位 | 是 |
 | head_in | [B, 768] | float32 | 风险头输入 | 是 |
 | risk | [B] | float32 | 冻结风险头输出，越大预后越差 | 是 |
+| e_pool | [N_tr, r] | float32 | B6：本折 train 在 (Ω, u) 下的无泄漏残差池 | 否 |
+| sim_mat | [B, N_tr] | float32 | B6：查询与 train 锚点的逐模态平均余弦（自查询位 −inf） | 否 |
+| attn_w | [B, K] | float32 | B6：Top-K 邻居 softmax 权重 a_ij | 否 |
+| alpha_gate | [B, 1] | float32 | B6：患者级密度门控 α_i ∈ [0, α_max] | 否 |
 
 ## 3. 七种场景路由
 
@@ -89,3 +93,44 @@
 | 余弦遇到零向量 | NaN 传播 | `cos_eps` + 零向量断言 |
 | 默认 r / λ_m 不在候选网格 | 报告的配置与选模不一致 | `check_config` 断言默认值 ∈ 候选 |
 | YAML 整数冒充浮点 | 类型漂移 | 逐键 `type(v) is t` |
+
+## 6. Stage 2a / 2b 与 B 变体（handoff v1 §3.3–3.4、§6.1）
+
+| 阶段 | 内容 | 代码 |
+| --- | --- | --- |
+| Step 1 | 冻结 I07 前向 7 视角 → pooled 缓存（train / val），D0 守卫 + sha256 manifest | `cache.py` |
+| Stage 2a | full-batch AdamW 训练 A1 + B1（+ C1），按 val 六模式 Cox 选 epoch 与配置 | `train_eval.train_base / stage2a_grid` |
+| Stage 2b | 固定 Stage 2a 的 U_m、R、b，零重训挂载 B3 / B5 / B6，K × τ × α_max 网格按 val 选 | `train_eval.Plugin`、`operators.py` |
+
+- B6-LOO：ẑ = ẑ^{B1} + α_i Σ_{j∈N_K(i)} a_ij e_j；残差池两种口径 `in_fold_masked`（B1 的 train 误差，检索排除自身）与
+  `exact_loo_hat`（固定 U 上闭式 Ridge 的 PRESS 精确留一残差）；相似度默认 `per_modality_mean_cos`；
+  门控 α_i = α_max σ(γ(s_{i,(1)} − δ))，δ / IQR 来自 train 留一最近邻相似度，零可学习参数。α_max = 0 时逐值退化为 B1（单测钉死）。
+- 自查询：val 患者本不在残差池里，自掩码只影响 train 侧统计；守卫 `contract.check_b6_no_self_leak` 在每次检索后按 patient_id 核对。
+- M5（用户裁定 2026-11-08）= 去门控（α_i ≡ α_max）+ δ/IQR 统计不做自掩码。
+- 每个需要选参的方法另报 `@default` 行（固定默认超参，不在 val 上选择；Stage 2a 仍按 val 选 epoch）。
+- 可解释性（`interpretability.py`）在 M2 默认基座 + B6-LOO 默认超参上计算。
+
+| 编号 | 方法 | S1 | S2 | S5 |
+| --- | --- | --- | --- | --- |
+| M0-a / M0-b | 零填充 / 训练均值 | — | 常数 | — |
+| M1-a / M1-b | B0 256 维 Ridge / C0 风险残差 Ridge | — | 闭式 Ridge | — |
+| M2 | A1 + B1 + C1（共享基座） | A1 | B1 | C1 |
+| M3 | A1 + B3 + C1 | M2 的 U | B3 | M2 |
+| M4-a / M4-b | A1 + B5-MapPrecision / DirectCoord + C1 | M2 的 U | B5 | M2 |
+| M5 | A1 + B6-Naive + C1 | M2 的 U | B6 无门控 | M2 |
+| M6-a / M6-b | A1 + B6-LOO（in_fold_masked / exact_loo_hat）+ C1 | M2 的 U | B6 | M2 |
+| M7 | 256 维 B6-LOO（w/o A1） | — | B0 + 256 维 LOO 残差 | — |
+| M8 | A1 + B6-LOO（w/o C1） | M10-a 的 U | B6 | 无 C1 |
+| M9 | PCA-32（A5）+ B6-LOO | 冻结 PCA | B1 + B6 | L_cons |
+| M10-a/b/c | A1 + B1 的 C1 细粒度消融 | A1 | B1 | λ_m / λ_c 组合 |
+
+新增静默错误守卫：
+
+| 可能的静默错误 | 守卫 |
+| --- | --- |
+| train 检索命中自身，残差泄漏 | `mask_self` 按 id 置 −inf + `check_b6_no_self_leak`；反事实扰动单测（改 e_i 对自身输出影响 == 0.0） |
+| α_max = 0 未精确退化 | 单测：z_hat / p_hat / risk 与 B1 差 == 0.0 |
+| U 训练后失去正交 | cayley 映射（householder + weight decay 会失效，单测覆盖 wd > 0）；训练后断言 < orth_tol |
+| 缓存混入 test | `cache.export_fold` 只收 train/val，`load_fold_cache` 拒绝 test 键 |
+| 缓存与 I07 不一致 | 导出时 D0 三项 < 1e-6；`train_eval` 重算零填充风险与缓存差 < 1e-5 |
+| 结果文件被替换 | `run_meta.json` 记录每个输出的 sha256，`report` 逐个核对 |
