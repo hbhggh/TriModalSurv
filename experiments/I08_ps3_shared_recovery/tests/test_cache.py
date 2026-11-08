@@ -1,11 +1,12 @@
 """I08 Step 1 缓存：只导出 train/val、D0 守卫、manifest 绑定、往返一致。"""
+import io
 import json
 
 import numpy as np
 import pytest
 import torch
 
-from experiments.I07_ps3style_backbone import data
+from experiments.I07_ps3style_backbone import data, provenance
 from experiments.I07_ps3style_backbone.model import MODALITIES
 from experiments.I07_ps3style_backbone.tests.test_train import small_model, write_assets
 from experiments.I08_ps3_shared_recovery import cache
@@ -16,7 +17,8 @@ from experiments.I08_ps3_shared_recovery.contract import PATTERNS, VIEWS, visibl
 def fold(tmp_path_factory):
     root = tmp_path_factory.mktemp('i08cache')
     write_assets(root)
-    parts, meta = data.load_fold(root, 'BLCA', 0, parts=('train', 'val'))
+    reader = cache.TrainValReader(provenance.AssetReader(root), 'BLCA', 0)
+    parts, meta = data.load_fold(root, 'BLCA', 0, parts=('train', 'val'), reader=reader)
     m = small_model()
     for p in m.parameters():
         p.requires_grad_(False)
@@ -83,7 +85,107 @@ def test_roundtrip_and_manifest_binding(fold, tmp_path):
         cache.load_fold_cache(tmp_path, 'BLCA', 0, manifest)
 
 
-def test_registry_parses_repo_checkpoint_list():
+def test_registry_module_matches_repo_files():
+    """i07_registry（受身份门保护的 .py）与仓库内 checkpoint-sha256.txt、run.json 逐项一致。"""
+    from experiments.I08_ps3_shared_recovery import i07_registry
     reg = cache.registered_ckpts()
-    tri = [k for k in reg if k.endswith('/tri/best.pt')]
-    assert len(tri) == 25 and all(len(v) == 64 for v in reg.values())
+    tri = {k: v for k, v in reg.items() if k.endswith('/tri/best.pt')}
+    assert set(tri) == set(i07_registry.TRI) and len(tri) == 25
+    runs = cache.CKPT_LIST.parent / 'runs'
+    for rel, (ck, rn) in i07_registry.TRI.items():
+        assert tri[rel] == ck
+        assert cache.sha256((runs / rel.replace('best.pt', 'run.json')).read_bytes()) == rn
+    srcs = {p.name for p in cache.SOURCES}
+    assert 'i07_registry.py' in srcs and all(p.suffix in ('.py', '.yaml') for p in cache.SOURCES)  # GIT_STAMP 覆盖的后缀
+
+
+def test_trainval_reader_never_hands_test_rows_to_loader(tmp_path):
+    """load_fold 经代理拿到的所有字节里没有 test 患者；test 的 WSI 文件被拒读；结果与原路径逐值相同。"""
+    write_assets(tmp_path)
+    full = provenance.AssetReader(tmp_path)
+    test_ids = {r['patient_id'] for r in data.csv_rows(full.read('splits', 'splits.csv')) if r['part'] == 'test'}
+    assert test_ids
+
+    class Spy(cache.TrainValReader):
+        def read(self, sub, rel):
+            blob = super().read(sub, rel)
+            self.blobs.append(blob)
+            return blob
+    spy = Spy(provenance.AssetReader(tmp_path), 'BLCA', 0)
+    spy.blobs = []
+    parts, _ = data.load_fold(tmp_path, 'BLCA', 0, parts=('train', 'val'), reader=spy)
+    fp = data.fold_parts(full, 'BLCA', 0)
+    parts_ids = fp['train'] + fp['val']
+    allowed = set(parts_ids)
+    n_npz = 0
+    for (sub, rel), blob in zip(spy.reads, spy.blobs):
+        if rel.endswith('.npz') and sub in ('rna', 'text'):              # npz 里的 id 是 UTF-32，必须解析后核对
+            with np.load(io.BytesIO(blob)) as z:
+                ids = {str(x) for x in z['patient_ids']}
+                assert ids == allowed, (sub, rel)
+                assert z['X' if 'X' in z.files else 'emb'].shape[0] == len(allowed)      # 特征行也只剩 train/val
+            n_npz += 1
+        else:
+            for t in test_ids:
+                assert t.encode() not in blob, (sub, rel)
+    assert n_npz == 2 and len(parts_ids) == len(allowed)
+    assert not [rel for sub, rel in spy.reads if sub == 'wsi_tokens' and rel.split('/')[-1][:-4] in test_ids]
+    ref, _ = data.load_fold(tmp_path, 'BLCA', 0, parts=('train', 'val'))
+    for s_ in ('train', 'val'):
+        assert parts[s_].patient_ids == ref[s_].patient_ids
+        for f in ('wsi', 'wsi_mask', 'rna', 'text', 'text_nm', 'time', 'event'):
+            assert torch.equal(getattr(parts[s_], f), getattr(ref[s_], f)), f
+    with pytest.raises(PermissionError):
+        spy.read('wsi_tokens', f'BLCA/{sorted(test_ids)[0]}.npz')
+
+
+def test_load_backbone_rejects_tampered_ckpt_or_run_json(tmp_path):
+    m = small_model()
+    d = tmp_path / 'run'
+    d.mkdir()
+    torch.save(m.state_dict(), d / 'best.pt')
+    (d / 'run.json').write_text(json.dumps({'arm': 'tri', 'config': {'d': 32, 'lr': 1e-4, 'weight_decay': 1e-5,
+                                            'batch_size': 64, 'epochs': 50, 'dropout': 0.0, 'seed': 2026}}))
+    good = (cache.sha256((d / 'best.pt').read_bytes()), cache.sha256((d / 'run.json').read_bytes()))
+    for bad in ((good[0], '0' * 64), ('0' * 64, good[1])):
+        with pytest.raises(PermissionError):
+            cache.load_backbone(d, None, 'X/fold0/tri/best.pt', 'cpu', registry={'X/fold0/tri/best.pt': bad})
+    with pytest.raises(PermissionError):                                       # 未登记
+        cache.load_backbone(d, None, 'X/fold0/tri/best.pt', 'cpu', registry={})
+
+
+def _good_manifest(cfg):
+    from experiments.I08_ps3_shared_recovery import i07_registry
+    head = cache._git('rev-parse', 'HEAD').stdout.strip()
+    files = {cache.fold_name(c, k): {'sha256': '0' * 64, 'ckpt_sha256': i07_registry.TRI[f'{c}/fold{k}/tri/best.pt'][0],
+                                     'run_sha256': i07_registry.TRI[f'{c}/fold{k}/tri/best.pt'][1], 'assets_fp': {},
+                                     'n': {'train': 10, 'val': 3}, 'd0_max_abs': 1e-7, 'd0': {}}
+             for c in cfg['backbone']['cancers'] for k in cfg['backbone']['folds']}
+    return {'source': {'commit': head, 'dirty': False, 'source': 'git'}, 'source_files': cache.source_files(),
+            'config_sha256': 'x', 'config_cache_view_sha256': cache.config_cache_view_sha(cfg), 'splits': ['train', 'val'],
+            'views': list(VIEWS), 'backbone_run': 'i07-ps3-20261011', 'd0_tol': cache.D0_TOL, 'files': files}
+
+
+def test_verify_cache_manifest(tmp_path):
+    import copy
+    from experiments.I08_ps3_shared_recovery import contract
+    cfg = contract.load_config()[0]
+    good = _good_manifest(cfg)
+    assert cache.verify_cache_manifest(good, cfg)
+    first = cache.fold_name('BLCA', 0)
+    mutations = [
+        lambda m: m['source'].update(dirty=True),
+        lambda m: m['source'].update(commit='f' * 40),                         # 不是 HEAD 祖先
+        lambda m: m['source_files'].update({'experiments/I08_ps3_shared_recovery/cache.py': '0' * 64}),
+        lambda m: m.update(splits=['train', 'val', 'test']),
+        lambda m: m['files'].pop(first),                                        # 缺折
+        lambda m: m['files'][first].update(ckpt_sha256='0' * 64),
+        lambda m: m['files'][first].update(run_sha256='0' * 64),
+        lambda m: m['files'][first].update(d0_max_abs=1e-3),
+        lambda m: m.update(extra=1),
+    ]
+    for mut in mutations:
+        m = copy.deepcopy(good)
+        mut(m)
+        with pytest.raises(PermissionError):
+            cache.verify_cache_manifest(m, cfg)

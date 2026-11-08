@@ -96,29 +96,78 @@ def test_interpretability_fields(fold_run):
     assert len(it['utility']['dE']) == 24 * 6
 
 
-def test_cli_run_and_report(tmp_path, cfg):
+def _synthetic_cache(tmp_path, cancers):
     cdir = tmp_path / 'cache'
     cdir.mkdir()
-    man = {'files': {}}
-    for c in ('BLCA', 'BRCA'):
-        blob = cache.npz_bytes(synth_arrays(hash(c) % 1000))
+    man = {'source': {'commit': 'b' * 40, 'dirty': False, 'source': 'test'}, 'files': {}}
+    for c in cancers:
+        blob = cache.npz_bytes(synth_arrays(sum(map(ord, c))))
         name = cache.fold_name(c, 0)
         (cdir / name).write_bytes(blob)
         man['files'][name] = {'sha256': cache.sha256(blob)}
-    (cdir / 'manifest.json').write_text(json.dumps(man))
+    raw = json.dumps(man).encode()
+    (cdir / 'manifest.json').write_bytes(raw)
+    return cdir, cache.sha256(raw)
+
+
+@pytest.fixture
+def relaxed(monkeypatch):
+    """测试只经代码注入放宽身份门与 manifest 核对（I05-06），不挂任何 CLI 参数。"""
+    monkeypatch.setattr(cache, 'source_identity', lambda c: {'commit': c, 'dirty': False, 'source': 'test'})
+    monkeypatch.setattr(cache, 'verify_cache_manifest', lambda m, c: True)
+    monkeypatch.setattr(train_eval, 'REPORT_REQUIRE_FULL', False)
+
+
+def test_cli_run_and_report(tmp_path, relaxed):
+    cdir, msha = _synthetic_cache(tmp_path, ('BLCA', 'BRCA'))
     out = tmp_path / 'res'
-    train_eval.main(['run', '--cache', str(cdir), '--out', str(out), '--cancers', 'BLCA,BRCA', '--folds', '0',
-                     '--max-epochs', '3'])
+    args = ['run', '--cache', str(cdir), '--out', str(out), '--cancers', 'BLCA,BRCA', '--folds', '0',
+            '--max-epochs', '3', '--expected-commit', 'a' * 40, '--cache-manifest-sha256', msha]
+    train_eval.main(args)
     train_eval.main(['report', '--out', str(out)])
     md = (out / 'val_ablation_report_v1.md').read_text()
     for h in ('表 1', '表 2', '表 3', '表 4', '表 5', 'M6-a@default', 'M10-c'):
         assert h in md, h
     assert not any('test' in p.name for p in (out / 'val_runs').iterdir())
     with pytest.raises(FileExistsError):                                    # 不覆盖已有结果目录
-        train_eval.main(['run', '--cache', str(cdir), '--out', str(out), '--cancers', 'BLCA', '--folds', '0',
-                         '--max-epochs', '2'])
-    # 篡改结果文件 → 报告拒绝
-    f = out / 'val_runs' / 'BLCA_fold0.json'
+        train_eval.main(args)
+    f = out / 'val_runs' / 'BLCA_fold0.json'                                # 篡改结果文件 → 报告拒绝
     f.write_text(f.read_text().replace('"fold": 0', '"fold": 0 '))
     with pytest.raises(PermissionError):
         train_eval.main(['report', '--out', str(out)])
+
+
+def test_cli_requires_identity_and_frozen_manifest(tmp_path, relaxed):
+    cdir, msha = _synthetic_cache(tmp_path, ('BLCA',))
+    base = ['run', '--cache', str(cdir), '--out', str(tmp_path / 'r1'), '--cancers', 'BLCA', '--folds', '0', '--max-epochs', '2']
+    with pytest.raises(SystemExit):                                         # 无 --expected-commit / manifest 摘要
+        train_eval.main(base)
+    with pytest.raises(PermissionError):                                    # manifest 摘要不符
+        train_eval.main(base + ['--expected-commit', 'a' * 40, '--cache-manifest-sha256', '0' * 64])
+    with pytest.raises(PermissionError):                                    # 超出 config 癌×折范围
+        train_eval.main(['run', '--cache', str(cdir), '--out', str(tmp_path / 'r2'), '--cancers', 'XXXX', '--folds', '0',
+                         '--expected-commit', 'a' * 40, '--cache-manifest-sha256', msha])
+
+
+def test_report_rejects_unverified_or_smoke_runs(tmp_path, relaxed, monkeypatch):
+    cdir, msha = _synthetic_cache(tmp_path, ('BLCA',))
+    out = tmp_path / 'res'
+    train_eval.main(['run', '--cache', str(cdir), '--out', str(out), '--cancers', 'BLCA', '--folds', '0', '--max-epochs', '2',
+                     '--expected-commit', 'a' * 40, '--cache-manifest-sha256', msha])
+    monkeypatch.setattr(train_eval, 'REPORT_REQUIRE_FULL', True)
+    with pytest.raises(PermissionError):                                    # 非全集 / 冒烟运行
+        train_eval.main(['report', '--out', str(out)])
+    monkeypatch.setattr(train_eval, 'REPORT_REQUIRE_FULL', False)
+    meta = json.loads((out / 'run_meta.json').read_text())
+    meta['verified'] = False
+    (out / 'run_meta.json').write_text(json.dumps(meta))
+    with pytest.raises(PermissionError):
+        train_eval.main(['report', '--out', str(out)])
+
+
+def test_real_cli_path_rejects_self_signed_manifest(tmp_path):
+    """不放宽时：自造的最小 manifest 过不了 verify_cache_manifest（或先过不了身份门）。"""
+    cdir, msha = _synthetic_cache(tmp_path, ('BLCA',))
+    with pytest.raises(PermissionError):
+        train_eval.main(['run', '--cache', str(cdir), '--out', str(tmp_path / 'r'), '--cancers', 'BLCA', '--folds', '0',
+                         '--expected-commit', 'a' * 40, '--cache-manifest-sha256', msha])

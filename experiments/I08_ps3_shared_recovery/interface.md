@@ -131,6 +131,8 @@
 | train 检索命中自身，残差泄漏 | `mask_self` 按 id 置 −inf + `check_b6_no_self_leak`；反事实扰动单测（改 e_i 对自身输出影响 == 0.0） |
 | α_max = 0 未精确退化 | 单测：z_hat / p_hat / risk 与 B1 差 == 0.0 |
 | U 训练后失去正交 | cayley 映射（householder + weight decay 会失效，单测覆盖 wd > 0）；训练后断言 < orth_tol |
-| 缓存混入 test | `cache.export_fold` 只收 train/val，`load_fold_cache` 拒绝 test 键 |
+| 缓存混入 test | `TrainValReader` 在完整性核对后剔除 test 行、拒读 test WSI；`cache.export_fold` 只收 train/val，`load_fold_cache` 拒绝 test 键 |
+| ckpt / run.json 被替换 | 两者哈希都须等于 `i07_registry.py`（受源码身份门保护） |
+| 用未验身份的缓存出报告 | `run` 必填 `--expected-commit` 与 `--cache-manifest-sha256`，`verify_cache_manifest` 完整核对；`report` 拒绝未验证 / 冒烟 / 非全集运行 |
 | 缓存与 I07 不一致 | 导出时 D0 三项 < 1e-6；`train_eval` 重算零填充风险与缓存差 < 1e-5 |
 | 结果文件被替换 | `run_meta.json` 记录每个输出的 sha256，`report` 逐个核对 |

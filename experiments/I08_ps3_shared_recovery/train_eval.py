@@ -35,7 +35,8 @@ from .contract import PATTERNS, targets, visible
 SPLITS = ('train', 'val')
 ONE_MOD = ('rna', 'wsi', 'text')
 TWO_MOD = ('rna+wsi', 'rna+text', 'wsi+text')
-M0A_TOL = 1e-5          # 本机 CPU 用缓存特征重算的零填充风险 vs 缓存的 I07 风险（跨设备容差，I05-02）
+M0A_TOL = 1e-5
+REPORT_REQUIRE_FULL = True   # report 只接受 config 全集（5 癌 × 5 折）的运行；测试经 monkeypatch 放宽，不挂 CLI          # 本机 CPU 用缓存特征重算的零填充风险 vs 缓存的 I07 风险（跨设备容差，I05-02）
 
 # 方法 → (表 1 的显示名, 槽位说明)
 METHODS = {
@@ -559,13 +560,18 @@ def cmd_run(a):
     cfg, cfg_sha = contract.load_config()
     if cfg['train']['test_access'] is not False:
         raise PermissionError('test_access 必须为 false')
-    ident = cache.source_identity(a.expected_commit) if a.expected_commit else {'commit': None, 'dirty': None,
-                                                                                  'source': 'unchecked (smoke)'}
+    ident = cache.source_identity(a.expected_commit)                 # 强制源码身份门（finding 3）
     manifest_blob = (a.cache / 'manifest.json').read_bytes()
+    if hashlib.sha256(manifest_blob).hexdigest() != a.cache_manifest_sha256:
+        raise PermissionError('缓存 manifest.json 的 sha256 与 --cache-manifest-sha256 不同，拒绝')
     manifest = json.loads(manifest_blob)
+    cache.verify_cache_manifest(manifest, cfg)
+    want_c, want_k = cfg['backbone']['cancers'], cfg['backbone']['folds']
+    if not set(a.cancers.split(',')) <= set(want_c) or not {int(k) for k in a.folds.split(',')} <= set(want_k):
+        raise PermissionError('--cancers / --folds 超出 config 的癌×折范围')
     out = a.out / 'val_runs'
     out.mkdir(parents=True, exist_ok=False)
-    run_meta = {'source': ident, 'config_sha256': cfg_sha, 'cache_manifest_sha256': hashlib.sha256(manifest_blob).hexdigest(),
+    run_meta = {'verified': True, 'source': ident, 'cache_source': manifest['source'], 'config_sha256': cfg_sha, 'cache_manifest_sha256': hashlib.sha256(manifest_blob).hexdigest(),
                 'max_epochs': a.max_epochs or cfg['train']['max_epochs'], 'cancers': a.cancers.split(','),
                 'folds': [int(k) for k in a.folds.split(',')], 'files': {}}
     for c in run_meta['cancers']:
@@ -601,6 +607,17 @@ def load_results(out: Path):
 
 def cmd_report(a):
     run_meta, results = load_results(a.out)
+    cfg, cfg_sha = contract.load_config()
+    if run_meta.get('verified') is not True or not run_meta.get('source', {}).get('commit'):
+        raise PermissionError('该运行未经过源码身份门与缓存核对，拒绝生成报告')
+    if run_meta['config_sha256'] != cfg_sha:
+        raise PermissionError('运行时的 config 与当前 config.yaml 不同，拒绝生成报告')
+    if REPORT_REQUIRE_FULL and (run_meta['cancers'] != cfg['backbone']['cancers'] or run_meta['folds'] != cfg['backbone']['folds']):
+        raise PermissionError('报告只接受 config 全集的运行')
+    if REPORT_REQUIRE_FULL and run_meta['max_epochs'] != cfg['train']['max_epochs']:
+        raise PermissionError('冒烟运行（--max-epochs）不能生成报告')
+    if set(results) != {(c, k) for c in run_meta['cancers'] for k in run_meta['folds']}:
+        raise PermissionError('结果文件缺折或多折')
     digest = hashlib.sha256(json.dumps(run_meta['files'], sort_keys=True).encode()).hexdigest()
     meta = {'cache_manifest_sha256': run_meta['cache_manifest_sha256'], 'config_sha256': run_meta['config_sha256'],
             'commit': run_meta['source'].get('commit'), 'results_digest': digest}
@@ -616,8 +633,9 @@ def main(argv=None):
     r.add_argument('--out', required=True, type=Path)
     r.add_argument('--cancers', default='BLCA,BRCA,LUAD,LGG,UCEC')
     r.add_argument('--folds', default='0,1,2,3,4')
-    r.add_argument('--max-epochs', type=int, default=None, help='只用于冒烟；正式开发期运行不传（取 config 的 200）')
-    r.add_argument('--expected-commit', default=None, help='给出时过源码身份门（干净 + commit 相等）')
+    r.add_argument('--max-epochs', type=int, default=None, help='只用于冒烟；开发期运行不传（取 config 的 200）')
+    r.add_argument('--expected-commit', required=True, help='源码身份门：干净且 commit 相等')
+    r.add_argument('--cache-manifest-sha256', required=True, help='已冻结的缓存 manifest.json 摘要')
     r.add_argument('--no-interp', action='store_true')
     p = sub.add_parser('report')
     p.add_argument('--out', required=True, type=Path)
