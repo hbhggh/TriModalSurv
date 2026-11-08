@@ -69,17 +69,20 @@ class SharedBasis(nn.Module):
             u0 = init[m].float()
             d, r = u0.shape
             if trainable:
-                lin = nn.Linear(r, d, bias=False)         # weight: [d, r]（tall），正交参数化保证列正交
-                # 显式 cayley：tall 矩阵默认的 householder 映射叠加 AdamW weight_decay 后 UᵀU 偏离 I 达 1.0（本会话实测）
+                # weight: [d, r]（tall），正交参数化保证列正交。
+                # 显式 cayley：tall 矩阵默认的 householder 映射叠加 AdamW weight_decay 后 UᵀU 偏离 I 达 1.0（本会话实测）。
+                # float64 参数化：float32 的 cayley 在第 1 个 AdamW step 后 ‖UᵀU − I‖ 跳到 ~1.1e-5，超过 orth_tol
+                # （2026-11-08 BLCA/1 实跑中断，回归 test_orthogonality_after_first_adamw_step_r16）；U() 对外输出 float32。
+                lin = nn.Linear(r, d, bias=False, dtype=torch.float64)
                 parametrizations.orthogonal(lin, orthogonal_map='cayley')
                 with torch.no_grad():
-                    lin.weight = u0
+                    lin.weight = u0.double()
                 self.lins[m] = lin
             else:
                 self.register_buffer(f'U_{m}', u0.clone())
 
     def U(self, m):
-        return self.lins[m].weight if self.trainable else getattr(self, f'U_{m}')
+        return self.lins[m].weight.float() if self.trainable else getattr(self, f'U_{m}')
 
     def all(self):
         return {m: self.U(m) for m in MODALITIES}

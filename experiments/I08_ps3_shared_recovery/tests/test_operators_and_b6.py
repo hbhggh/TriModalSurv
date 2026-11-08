@@ -302,3 +302,22 @@ def test_b3_and_b5_formulas():
     assert torch.allclose(out, (1 * zq['rna'] + 2 * 2 * zq['wsi']) / (1 + 1 + 2))
     out2 = op.b5_direct_coord(zq, {'rna': 2.0, 'wsi': 2.0}, 1.0)           # τ = 0.5, 0.5
     assert torch.allclose(out2, (0.5 * zq['rna'] + 0.5 * zq['wsi']) / 2.0)
+
+
+@pytest.mark.parametrize('seed', range(4))
+def test_orthogonality_after_first_adamw_step_r16(seed):
+    """回归（2026-11-08 BLCA/1 实跑中断）：float32 cayley 映射在第 1 个 AdamW step 后 ‖UᵀU − I‖ 跳到 ~1.1e-5，
+    r=16 在第 1 个 epoch 取到 val 最优时载回的正是这一步。U 必须在 float64 中参数化，输出 float32 仍 < 1e-5。"""
+    torch.manual_seed(seed)
+    x = torch.randn(200, 256) * torch.linspace(3, 0.1, 256)
+    x -= x.mean(0)
+    b = op.SharedBasis({m: op.pca_basis(x, 16) for m in MODALITIES})
+    opt = torch.optim.AdamW(b.parameters(), lr=1e-3, weight_decay=0.0)
+    loss = sum((x @ b.U(m)).pow(2).mean() * (i + 1) for i, m in enumerate(MODALITIES)) + (b.U('rna')[:, 0] * torch.randn(256)).sum()
+    opt.zero_grad()
+    loss.backward()
+    opt.step()
+    for m in MODALITIES:
+        U = b.U(m)
+        assert U.dtype == torch.float32
+        assert op.orth_error(U) < 1e-5, (m, op.orth_error(U))
