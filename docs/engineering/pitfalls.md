@@ -289,3 +289,12 @@
 | ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
 | --- | --- | --- | --- |
 | E49 | 生成 Excalidraw frame 时 frame 元素沿用通用 id 生成器（`i08-frame-053`），子元素的 frameId 却写常量 `i08-abc-framework-frame`，52 个子元素挂不到 frame 上；预览按 frameId 过滤，正好把 frame 本身漏掉，渲染图看不出问题，拷回主检出后才发现。 | 生成 frame 后断言"frame.id 等于子元素 frameId、所有 id 不重复"；预览要包含 frame 本身，确认能看到 frame 边框与名称再交付。 | experiments/I08_ps3_shared_recovery/tools/build_framework_frame.py（本会话 2026-11-06 Bug Post-Mortem） |
+
+## I08 实现补充（2026-11-08）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| E50 | torch `parametrizations.orthogonal` 对 tall 矩阵默认 householder 映射，叠加 AdamW weight decay 后 ‖UᵀU−I‖ 达 1.0；换 cayley 后 float32 仍在第 1 个 AdamW step 跳到 ~1.1e-5，超过 1e-5 守卫，r=16 在第 1 个 epoch 取 val 最优时载回该状态，开发期 val 实跑中断。 | 正交参数化显式指定映射并在 float64 中计算、对外再转 float32；正交性单测必须覆盖"第 1 步之后"与 weight decay > 0，而不只看训练终点。 | experiments/I08_ps3_shared_recovery/tests/test_operators_and_b6.py（test_orthogonality_after_first_adamw_step_r16）；提交 f4b30740 |
+| V44 | 间谍测试按 `t.encode() in blob` 断言 npz 字节里没有 test 患者 id，但 numpy 的 `<U` 字符串按 UTF-32 存储，ASCII 搜索永远搜不到，删掉行过滤的变异仍全绿。 | 对二进制容器（npz / pickle / parquet）的"不含某值"断言必须先解析再核对字段值与行数；新守卫一律用"删掉守卫"的变异确认测试会变红。 | experiments/I08_ps3_shared_recovery/tests/test_cache.py（test_trainval_reader_never_hands_test_rows_to_loader） |
+| V45 | 为隔离 test 在读取代理里先删掉 test 行再交给下游加载器，下游自带的跨 split 重叠检查随之失效：同一患者若同时在 train 与 test，会作为 train 数据带入。 | 在边界处过滤数据前，先在完整数据上做下游原本负责的完整性检查（D1：part 枚举、id 唯一、两两不交），再过滤；补"跨 split 重复必须拒绝"的负例。 | experiments/I08_ps3_shared_recovery/reviews/20261108-node1-impl/（Codex 复审 R2-1） |
+| E51 | zsh 中 `git cat-file -e $H:experiments/__init__.py` 的 `$H:e` 被当作扩展名修饰符，路径变成 `xperiments/...`，检查报不存在。 | zsh 里变量后紧跟冒号一律写 `${H}:`；"文件不存在"类结论先核对命令实际展开的参数。 | 本会话 2026-11-08 I08 部署 |
