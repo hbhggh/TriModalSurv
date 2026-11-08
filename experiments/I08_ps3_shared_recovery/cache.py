@@ -88,7 +88,15 @@ class TrainValReader:
         self.fingerprint = reader.fingerprint
         self.reads = []
         rows = self._csv(reader.read('splits', 'splits.csv'))
-        mine = [r for r in rows if r['cancer'] == cancer and int(r['fold']) == self.fold and r['part'] in SPLITS]
+        fold_rows = [r for r in rows if r['cancer'] == cancer and int(r['fold']) == self.fold]
+        # 复审 R2-1：删 test 行之前，在本折完整划分上做 D1 校验（I07 fold_parts 的重叠检查看不到被删的行）
+        bad = {r['part'] for r in fold_rows} - {'train', 'val', 'test'}
+        if bad:
+            raise ValueError(f'{cancer} 折 {fold} 有未知 part：{sorted(bad)}')
+        ids = [r['patient_id'] for r in fold_rows]
+        if any(not p for p in ids) or len(ids) != len(set(ids)):
+            raise AssertionError(f'{cancer} 折 {fold} 的 patient_id 为空或在 train/val/test 间重复')
+        mine = [r for r in fold_rows if r['part'] in SPLITS]
         self.allowed = {r['patient_id'] for r in mine}
         if not mine or {r['part'] for r in mine} != set(SPLITS):
             raise ValueError(f'{cancer} 折 {fold} 没有完整的 train / val 划分')
@@ -144,8 +152,9 @@ def registered_ckpts(path=CKPT_LIST) -> dict:
     return out
 
 
-def load_backbone(run_dir: Path, meta, rel: str, device, registry=None):
-    """返回 (冻结的 I07 tri 模型, {'ckpt': sha, 'run': sha})。best.pt 与 run.json 的哈希都必须等于 i07_registry 登记值。"""
+def load_backbone(run_dir: Path, meta, rel: str, device, registry=None, assets_fp=None):
+    """返回 (冻结的 I07 tri 模型, {'ckpt': sha, 'run': sha})。best.pt 与 run.json 的哈希都必须等于 i07_registry 登记值；
+    run.json 记录的训练资产指纹必须等于本次读取的资产指纹（meta['assets_fp']）且等于登记的 ASSETS_FP（复审 R2-2）。"""
     from experiments.I07_ps3style_backbone.train import build_model
     registry = i07_registry.TRI if registry is None else registry
     blob, run_blob = (run_dir / 'best.pt').read_bytes(), (run_dir / 'run.json').read_bytes()
@@ -156,6 +165,9 @@ def load_backbone(run_dir: Path, meta, rel: str, device, registry=None):
     run = json.loads(run_blob)
     if run.get('arm') != 'tri':
         raise ValueError(f'{rel} 不是 tri 臂')
+    want_fp = i07_registry.ASSETS_FP if assets_fp is None else assets_fp
+    if run.get('assets_fp') != want_fp or meta['assets_fp'] != want_fp:
+        raise PermissionError(f'{rel}：ckpt 训练资产指纹、本次读取的资产指纹与登记值三者不一致')
     cfg = i07_contract.check_config(run['config'])
     model = build_model(meta, 'tri', cfg).to(device)
     model.load_state_dict(torch.load(io.BytesIO(blob), map_location=device, weights_only=True))
@@ -285,6 +297,7 @@ def verify_cache_manifest(manifest: dict, cfg: dict):
         need(isinstance(e, dict) and set(e) == FILE_KEYS, f'{name} 的键不对')
         need((e['ckpt_sha256'], e['run_sha256']) == tuple(i07_registry.TRI[rel]), f'{name} 的 ckpt / run.json 哈希与登记不符')
         need(isinstance(e['d0_max_abs'], float) and e['d0_max_abs'] < D0_TOL, f'{name} 的 D0 误差 {e["d0_max_abs"]}')
+        need(e['assets_fp'] == i07_registry.ASSETS_FP, f'{name} 的资产指纹与 ckpt 训练资产不符')
         need(set(e['n']) == set(SPLITS) and all(isinstance(v, int) and v > 0 for v in e['n'].values()), f'{name} 的 n 不对')
     return True
 

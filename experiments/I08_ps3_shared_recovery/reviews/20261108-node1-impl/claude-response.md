@@ -23,3 +23,23 @@ I07 正式训练入口（`train.py`，经节点一审查）对同一组文件的
 
 - I08 全部单测：70 passed。
 - 全仓 CI：见提交前运行记录（`PYTHON_BIN=<protomasksurv-exp1>/bin/python bash scripts/ci.sh`）。
+
+## 复审（round2，2026-11-08）：仍有 2 条 high → 按闭环第 5 条停下交用户裁决
+
+复审对象：`b3336893`。原文 `round2/codex-review.json`（本地），入库版 `round2/codex-review.public.json`。
+
+| # | 级别 | finding | 判断 | 拟议修复（待用户裁决，未动代码） |
+| --- | --- | --- | --- | --- |
+| R2-1 | high | `TrainValReader` 先删 test 行再交给 `load_fold`，I07 `fold_parts` 的跨 split 患者重叠检查看不到被删的 test 行；同一患者若同时在 train 与 test，会被当作 train 数据带入 | 成立（修复首审 finding 1 时引入的回归） | 过滤前对该癌种该折的完整 splits 行做 D1 校验：part ∈ {train, val, test}、patient_id 在折内唯一、三部分两两不交，任一违反即拒；补“同一患者同时在 train/test 必须拒绝”的负例 |
+| R2-2 | high | `load_backbone` 只用 run.json 的 config，未要求 `run.json.assets_fp == meta.assets_fp`；`verify_cache_manifest` 也不核对每折 `assets_fp` | 成立 | `load_backbone` 强制 `run.json.assets_fp` 等于本次 `AssetReader` 指纹（I07 evaluate 同规则）；`verify_cache_manifest` 要求每折 `assets_fp` 等于受登记 run.json 绑定的同一组五份资产摘要（登记模块追加该摘要）；补替换资产 manifest 必须拒绝的负例 |
+
+### 用户裁定与处理结果（2026-11-08）
+
+用户裁定：**修复后直接导出缓存，不跑第三轮审查**。两条均采纳：
+
+| # | 修复位置 | 补测 |
+| --- | --- | --- |
+| R2-1 | `cache.TrainValReader.__init__`：删 test 行之前，在本折完整划分上校验 part ∈ {train, val, test}、patient_id 非空且在三部分间唯一，违反即拒 | `test_trainval_reader_rejects_cross_split_duplicates`（同一患者同时在 train 与 test、未知 part 均拒）；变异检验：删去校验后变红 |
+| R2-2 | `i07_registry.ASSETS_FP`（25 个 tri run.json 共同记录的五份资产 manifest 摘要，已核对 25 个完全一致）；`load_backbone` 要求 run.json 的 assets_fp、本次读取的 assets_fp、登记值三者相等；`verify_cache_manifest` 要求每折 assets_fp 等于登记值 | `test_load_backbone_rejects_tampered_ckpt_or_run_json`（读到的资产或登记值换了即拒）、`test_verify_cache_manifest`（换一套资产即拒）、`test_registry_module_matches_repo_files`（25 个 run.json 的 assets_fp 等于登记值）；变异检验：两处各自删去后均变红 |
+
+I08 单测 71 passed。

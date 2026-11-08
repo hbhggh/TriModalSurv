@@ -96,6 +96,9 @@ def test_registry_module_matches_repo_files():
         assert tri[rel] == ck
         assert cache.sha256((runs / rel.replace('best.pt', 'run.json')).read_bytes()) == rn
     srcs = {p.name for p in cache.SOURCES}
+    for rel in i07_registry.TRI:
+        run = json.loads((runs / rel.replace('best.pt', 'run.json')).read_bytes())
+        assert run['assets_fp'] == i07_registry.ASSETS_FP
     assert 'i07_registry.py' in srcs and all(p.suffix in ('.py', '.yaml') for p in cache.SOURCES)  # GIT_STAMP 覆盖的后缀
 
 
@@ -144,22 +147,47 @@ def test_load_backbone_rejects_tampered_ckpt_or_run_json(tmp_path):
     d = tmp_path / 'run'
     d.mkdir()
     torch.save(m.state_dict(), d / 'best.pt')
-    (d / 'run.json').write_text(json.dumps({'arm': 'tri', 'config': {'d': 32, 'lr': 1e-4, 'weight_decay': 1e-5,
-                                            'batch_size': 64, 'epochs': 50, 'dropout': 0.0, 'seed': 2026}}))
+    fp = {'cohort': 'a', 'rna': 'b', 'splits': 'c', 'text': 'd', 'wsi_tokens': 'e'}
+    (d / 'run.json').write_text(json.dumps({'arm': 'tri', 'assets_fp': fp, 'config': {'d': 32, 'lr': 1e-4,
+                                            'weight_decay': 1e-5, 'batch_size': 64, 'epochs': 50, 'dropout': 0.0, 'seed': 2026}}))
     good = (cache.sha256((d / 'best.pt').read_bytes()), cache.sha256((d / 'run.json').read_bytes()))
     for bad in ((good[0], '0' * 64), ('0' * 64, good[1])):
         with pytest.raises(PermissionError):
             cache.load_backbone(d, None, 'X/fold0/tri/best.pt', 'cpu', registry={'X/fold0/tri/best.pt': bad})
     with pytest.raises(PermissionError):                                       # 未登记
         cache.load_backbone(d, None, 'X/fold0/tri/best.pt', 'cpu', registry={})
+    reg = {'X/fold0/tri/best.pt': good}
+    meta = {'assets_fp': dict(fp), 'pathways': [[0, 1, 2], [3, 4, 5]], 'n_fields': 4}
+    for bad_meta, bad_reg in ((dict(fp, rna='zz'), fp), (fp, dict(fp, splits='zz'))):   # 读到的资产或登记值换了
+        with pytest.raises(PermissionError):
+            cache.load_backbone(d, dict(meta, assets_fp=bad_meta), 'X/fold0/tri/best.pt', 'cpu', registry=reg,
+                                assets_fp=bad_reg)
+
+
+def test_trainval_reader_rejects_cross_split_duplicates(tmp_path):
+    """复审 R2-1：同一患者同时在 train 与 test（删 test 行后 I07 的重叠检查看不到）必须拒绝；未知 part 也拒绝。"""
+    write_assets(tmp_path)
+    split_path = tmp_path / 'splits' / 'splits.csv'
+    rows = data.csv_rows(split_path.read_bytes())
+    tr = next(r for r in rows if r['part'] == 'train' and r['cancer'] == 'BLCA' and r['fold'] == '0')
+    for extra in (dict(tr, part='test'), dict(tr, part='holdout')):
+        blob = cache.TrainValReader._dump(rows[0].keys(), rows + [extra])
+        split_path.write_bytes(blob)
+        man = tmp_path / 'splits' / 'splits.manifest.json'
+        mj = json.loads(man.read_text())
+        mj['files']['splits.csv'] = cache.sha256(blob)
+        man.write_text(json.dumps(mj))
+        with pytest.raises((AssertionError, ValueError)):
+            cache.TrainValReader(provenance.AssetReader(tmp_path), 'BLCA', 0)
 
 
 def _good_manifest(cfg):
     from experiments.I08_ps3_shared_recovery import i07_registry
     head = cache._git('rev-parse', 'HEAD').stdout.strip()
     files = {cache.fold_name(c, k): {'sha256': '0' * 64, 'ckpt_sha256': i07_registry.TRI[f'{c}/fold{k}/tri/best.pt'][0],
-                                     'run_sha256': i07_registry.TRI[f'{c}/fold{k}/tri/best.pt'][1], 'assets_fp': {},
-                                     'n': {'train': 10, 'val': 3}, 'd0_max_abs': 1e-7, 'd0': {}}
+                                     'run_sha256': i07_registry.TRI[f'{c}/fold{k}/tri/best.pt'][1],
+                                     'n': {'train': 10, 'val': 3}, 'd0_max_abs': 1e-7, 'd0': {},
+                                     'assets_fp': dict(i07_registry.ASSETS_FP)}
              for c in cfg['backbone']['cancers'] for k in cfg['backbone']['folds']}
     return {'source': {'commit': head, 'dirty': False, 'source': 'git'}, 'source_files': cache.source_files(),
             'config_sha256': 'x', 'config_cache_view_sha256': cache.config_cache_view_sha(cfg), 'splits': ['train', 'val'],
@@ -182,6 +210,7 @@ def test_verify_cache_manifest(tmp_path):
         lambda m: m['files'][first].update(ckpt_sha256='0' * 64),
         lambda m: m['files'][first].update(run_sha256='0' * 64),
         lambda m: m['files'][first].update(d0_max_abs=1e-3),
+        lambda m: m['files'][first]['assets_fp'].update(splits='0' * 64),     # 换了一套资产
         lambda m: m.update(extra=1),
     ]
     for mut in mutations:

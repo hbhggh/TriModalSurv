@@ -6,6 +6,14 @@
 tests/test_cache.py 核对两者一致。
 """
 BACKBONE_RUN = 'i07-ps3-20261011'
+# 25 个 tri run.json 共同记录的训练资产指纹（五份 manifest 的 sha256）；缓存导出与使用都必须等于它（复审 R2-2）
+ASSETS_FP = {
+    'cohort': '289f374698c1a850488414e9e5449870595ab8894065ef99c5b308b082d613d6',
+    'rna': 'aa233e63dbceaab56032d8810d8b1418463e6fefcfdf54793dc5259269b08ab4',
+    'splits': 'f6e3e4b0747e49dd0ff4fc95e903fcff03e4b5c84a2d33ac251a6be7f58a960f',
+    'text': 'de8ef94c2a1c160a786db4be6f6ae97775c4fa88a4b2e712cc053551e8799259',
+    'wsi_tokens': '7b19edc44b621d4624173bc9d9d86d56dbc7ca3f1c6d515fae22b8bab5b3e59c',
+}
 TRI = {
     'BLCA/fold0/tri/best.pt': ('ab980963f291ebe3f85896c96f94b0e66c2c601065526a4dff51d713bad5bb2a',
         '4c1439e17f34a307ab640dcf51524503b1cbb4b06caaa38f78e256bb402cd4b2'),
