@@ -187,12 +187,17 @@ class Plugin:
             zt, zq = L['train']['z_vis'][pat], L['val']['z_vis'][pat]
             self.sim[pat] = op.mask_self(op.similarity(zq, zt, sim_mode), va_ids, tr_ids)
             self.stats[pat] = op.gate_stats(zt, sim_mode, exclude_self=stats_exclude_self, gamma_mode=self.gamma_mode)
+            b_in_tr = op.b_in_of(zt, pat)
             for u in targets(pat):
                 zf = L['train']['z_full'][u]
                 if residual_mode == 'in_fold_masked':
-                    e = op.residual_pool_in_fold(zf, L['train']['z_hat'][(pat, u)])
+                    e = op.residual_pool_in_fold(
+                        zf, L['train']['z_hat'][(pat, u)],
+                        b_in_train=b_in_tr if stats_exclude_self else None,
+                        lam=b6['ridge_lam_for_hat'],
+                    )
                 elif residual_mode == 'exact_loo_hat':
-                    e = op.residual_pool_exact_loo(op.b_in_of(zt, pat), zf, b6['ridge_lam_for_hat'])
+                    e = op.residual_pool_exact_loo(b_in_tr, zf, b6['ridge_lam_for_hat'])
                 else:
                     raise ValueError(residual_mode)
                 self.pool[(pat, u)] = e

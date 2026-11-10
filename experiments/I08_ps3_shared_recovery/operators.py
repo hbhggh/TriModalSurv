@@ -245,9 +245,16 @@ def gate_alpha(s1: torch.Tensor, alpha_max: float, delta: float, gamma: float, g
 
 # ---------------------------------------------------------------- 残差池
 
-def residual_pool_in_fold(z_full_u_train, z_hat_b1_train):
-    """口径 A：e_j = z^F_{j,u} − ẑ^{B1}_{j,u}（梯度训练的 B1 在 train 上的误差）；检索时自身由 mask_self 排除。"""
-    return (z_full_u_train - z_hat_b1_train).detach()
+def residual_pool_in_fold(z_full_u_train, z_hat_b1_train, b_in_train=None, lam: float = 1.0):
+    """口径 A：e_j = (z^F_{j,u} − ẑ^{B1}_{j,u}) / max(1 − H_jj, 1e-4)（梯度训练的 B1 在 train 上的留一杠杆去偏残差）；
+    当 b_in_train=None 时退化为未缩放残差以保持向后兼容；检索时自身由 mask_self 排除。"""
+    raw = (z_full_u_train - z_hat_b1_train).detach()
+    if b_in_train is None:
+        return raw
+    fit = ridge_fit(b_in_train, z_full_u_train, lam)
+    h = ridge_hat_diag(fit).to(raw.dtype)
+    scale = (1.0 - h).clamp(min=LEV_FLOOR).unsqueeze(1)
+    return (raw / scale).detach()
 
 
 def ridge_fit(X: torch.Tensor, Y: torch.Tensor, lam: float):

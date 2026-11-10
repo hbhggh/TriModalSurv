@@ -61,8 +61,8 @@ operator_B_variants:             # Stage 2b：固定 Stage 2a 的 U_m 与 R,b，
     gate_delta_source: train_loo_nn_median   # δ_Ω = 本折 train 留一最近邻相似度中位数（零可学习参数）
     gate_gamma_mode: iqr_scaled              # γ_Ω = clamp(1.349 / max(IQR_Ω, 1e-3), 5.0, 30.0)；可选 fixed_10
     candidates:                              # 在本折 val 上按 val_cox_missing_mean 选优
-      K: [5, 10, 20]
-      tau: [0.05, 0.1, 0.2]
+      K: [3, 5, 10, 15, 20]
+      tau: [0.02, 0.05, 0.1, 0.2]
       alpha_max: [0.0, 0.25, 0.5, 1.0]       # 含 0.0：精确退化回 B1 的保底格点
   B6_Naive:                      # 〔裁定 2026-11-08〕M5 = 去门控（α_i ≡ α_max）+ δ/IQR 统计不做自掩码；其余同 B6_LOO
     gate: none
@@ -97,8 +97,8 @@ train:
   select_metric: val_cox_missing_mean   # 本折 val 六模式平均 Cox 损失，最小者为 best
   seed: 2026
   candidates:                    # 运行前固定；选模只在 val 上
-    r: [16, 32]
-    lambda_modal: [0.05, 0.1]
+    r: [32]
+    lambda_modal: [0.1]
   ridge_alphas: [0.1, 1.0, 10.0, 100.0]  # B0 / C0 / M7 闭式 Ridge 的候选正则系数（本折 val 选优）
   ridge_default: 1.0             # 〔裁定 2026-11-08〕"固定默认超参、不在 val 上选择"参照行用的 Ridge 系数
   test_access: false             # 全程不读 test；访问 test 须用户另行书面授权

@@ -176,7 +176,7 @@ def test_alpha_zero_is_exactly_b1():
         assert torch.equal(r1, out['risk'][pat])
 
 
-@pytest.mark.parametrize('mode', ['in_fold_masked', 'exact_loo_hat'])
+@pytest.mark.parametrize('mode', ['in_fold_masked', 'in_fold_hat_scaled', 'exact_loo_hat'])
 def test_counterfactual_own_residual_has_zero_effect(mode):
     """train 检索：改动患者 i 自身的残差 e_i，i 自己的 B6 输出变化严格为 0.0；改动 i 的某个邻居则必须有变化。"""
     p, _, _ = synth(n=30)
@@ -188,6 +188,10 @@ def test_counterfactual_own_residual_has_zero_effect(mode):
     zb1 = out['z_hat'][(pat, u)]
     if mode == 'in_fold_masked':
         e = op.residual_pool_in_fold(out['z_full'][u], zb1)
+    elif mode == 'in_fold_hat_scaled':
+        e_raw = op.residual_pool_in_fold(out['z_full'][u], zb1)
+        e = op.residual_pool_in_fold(out['z_full'][u], zb1, b_in_train=op.b_in_of(zv, pat), lam=1.0)
+        assert bool((e.abs() >= e_raw.abs() - 1e-6).all())      # 1 / (1 - H_jj) >= 1
     else:
         e = op.residual_pool_exact_loo(op.b_in_of(zv, pat), out['z_full'][u], 1.0)
     ret = op.retrieve(zv, zv, 5, 0.1, 'per_modality_mean_cos', ids, ids)
