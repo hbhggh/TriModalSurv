@@ -14,7 +14,7 @@
 | [test_run_provenance.py](test_run_provenance.py) | 运行参数、来源与产物记录 |
 | [test_gitstamp.py](test_gitstamp.py) | commit 身份、拒跑门、无 `.git` 拷贝的 stamp 与可重建账本 |
 | [test_shared_runtime_main.py](test_shared_runtime_main.py) | 公共主流程的受控产物写入与冲突拒绝 |
-| [test_workflow_scripts.py](test_workflow_scripts.py) | Git 工作流脚本（临时仓库）：`cleanup` 冻结身份核对、`ci.sh` 参数先于副作用、`gitflow.sh` 帮助路径、bash 3.2 多字节变量名 |
+| [test_workflow_scripts.py](test_workflow_scripts.py) | Git 工作流脚本（临时仓库）：`cleanup` 冻结身份核对、`CODE_PATHS` 代码范围干净门（论文与笔记不阻塞，代码脏改动拒绝）、`--link-assets` 链接回归（只摘链接、主目录目标完好、真实 checkpoint 与被篡改链接拒绝）、`wt-add` → `merge --ff-only` → `wt-rm` 闭环、`ci.sh` 参数先于副作用、`gitflow.sh` 帮助路径、bash 3.2 多字节变量名 |
 
 ## 验证边界
 
@@ -22,4 +22,4 @@
 
 受控合成测试、真实 checkpoint 对拍和正式科研实验分别记录，不混用结论。历史重构验收证据见 [docs/refactor/](../docs/refactor/)，正式实验启动规则见 [AGENTS.md](../AGENTS.md)。
 
-[返回项目首页](../README.md) · [项目状态](../STATUS.md)
+[返回项目首页](../README.md)

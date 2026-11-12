@@ -4,7 +4,11 @@
   // 把 shell 的 trap 命令算成 trap。插件的 ripgrep 扫盘不认 [python] 语言覆盖（实测无效），所以只能一条正则兼顾：
   // "#" 后允许空格的只限代码注释常用的 todo / fixme / hack / xxx（"# TODO: ..." 照收），其余标签（bug、re 系列、final、???、trap、inno）必须 # 紧贴，
   // 与用户级正则一致；不再允许行首裸写标签；去掉了 ";" 前缀（本仓库没有分号注释的语言，它只会把 Python 里 "x; final" 算成标签）。改标签集合时，这里括号里的四个名字要跟着看一眼。
-  "better-todo-tree.regex.regex": "(#(?=[A-Za-z?])|#[ \\t]+(?=(?:todo|fixme|hack|xxx)(?![A-Za-z0-9_]|[-.][A-Za-z0-9]))|(?://|<!--|/\\*)[ \\t]*(?=(?:todo|fixme|hack|xxx|bug)(?![A-Za-z0-9_]|[-.][A-Za-z0-9]))|^[ \\t]*(?:#{1,6}[ \\t]+)?(?:[-*+]|\\d+\\.)[ \\t]+(?=\\[))\\s*(?=\\[[xX]\\]|\\[ \\]|[A-Za-z0-9_?])($TAGS)(?![A-Za-z0-9_]|[-.][A-Za-z0-9])",
+  // 2026-10-19：??? 的问号允许全角 ？ 混写，两处环视各加 |？ 分支，与用户级正则同步（归组由用户级 tagGroups 负责）。
+  // 2026-10-22（用户定）：todo 组只留 # 紧贴的 #todo。"# TODO"（带空格）和 // /* <!-- 后的 todo 不再收，两处括号里删掉 todo；
+  // 上面"四个名字"现为 fixme / hack / xxx，它们归用户级 tagGroups 的 code 组。
+  // 2026-10-26：末尾追加删除线前瞻，与用户级正则同步（划掉的标签不进待办树；写法禁忌见用户级 settings.json 同日注释）。
+  "better-todo-tree.regex.regex": "(#(?=[A-Za-z?]|？)|#[ \\t]+(?=(?:fixme|hack|xxx)(?![A-Za-z0-9_]|[-.][A-Za-z0-9]))|(?://|<!--|/\\*)[ \\t]*(?=(?:fixme|hack|xxx|bug)(?![A-Za-z0-9_]|[-.][A-Za-z0-9]))|^[ \\t]*(?:#{1,6}[ \\t]+)?(?:[-*+]|\\d+\\.)[ \\t]+(?=\\[))\\s*(?=\\[[xX]\\]|\\[ \\]|[A-Za-z0-9_?]|？)($TAGS)(?![A-Za-z0-9_]|[-.][A-Za-z0-9])(?![^~\\r\\n]*(?:~(?!~)[^~\\r\\n]*)*~~(?:[^~\\r\\n]*(?:~(?!~)[^~\\r\\n]*)*~~[^~\\r\\n]*(?:~(?!~)[^~\\r\\n]*)*~~)*[^~\\r\\n]*(?:~(?!~)[^~\\r\\n]*)*(?![^\\r\\n]))",
   "better-todo-tree.tree.disableCompactFolders": true,
   "better-todo-tree.tree.showCountsInTree": true,
   "search.exclude": {

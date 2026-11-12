@@ -13,8 +13,8 @@ GITFLOW = ROOT / 'scripts' / 'gitflow.sh'
 CI = ROOT / 'scripts' / 'ci.sh'
 CODEX_REVIEW = ROOT / 'scripts' / 'codex_review.sh'
 # 外层环境里的这些变量会改变脚本行为，或把 git 指回真实仓库（GIT_DIR 等），子进程一律清掉
-LEAKY = ('MAIN_BRANCH', 'DEV_BRANCH', 'TAG_PREFIX', 'RUN_BRANCH_PREFIX', 'WT_ROOT', 'CI_CMD', 'STAMP_CMD',
-         'TEST_CMD', 'PYTHON_BIN', 'CDPATH', 'BASH_ENV', 'ENV', 'CODEX_COMPANION', 'CODEX_MODEL')
+LEAKY = ('MAIN_BRANCH', 'TAG_PREFIX', 'RUN_BRANCH_PREFIX', 'WT_BRANCH_PREFIX', 'WT_ROOT', 'CODE_PATHS', 'CI_CMD',
+         'STAMP_CMD', 'TEST_CMD', 'PYTHON_BIN', 'CDPATH', 'BASH_ENV', 'ENV', 'CODEX_COMPANION', 'CODEX_MODEL')
 
 
 def _env(ceiling, **values):
@@ -191,6 +191,272 @@ class GitflowCleanupTests(_Sandbox):
         self.assert_removed(self.gitflow('cleanup', 'r1'), run_dir)
 
 
+class GitflowCodeGateTests(_Sandbox):
+    """单主干（用户裁决 2026-11-12）：candidate / freeze 的干净门只看 CODE_PATHS，写到一半的论文与根目录笔记不阻塞实验。"""
+
+    def setUp(self):
+        super().setUp()
+        for rel, text in (('src/model.py', 'V = 1\n'), ('experiments/I01/run.py', 'RUN = 1\n'),
+                          ('manuscript/draft.tex', 'draft v1\n'), ('.gitignore', 'GIT_STAMP.json\n__pycache__/\n')):
+            path = self.repo / rel
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text, encoding='utf-8')
+        self.git('add', '-A')
+        self.git('commit', '-q', '-m', 'base')
+        self.head = self.git('rev-parse', 'HEAD')
+        self.wt_root = self.tmp / 'repo.worktrees'
+        self.run_dir = self.wt_root / 'run-r1'
+
+    def gitflow(self, *args, **env):
+        return _run(['bash', GITFLOW, *args], self.repo, {**self.env, 'CI_CMD': 'true', **env})
+
+    def edit_paper_and_notes(self):
+        (self.repo / 'manuscript' / 'draft.tex').write_text('draft v2，写到一半\n', encoding='utf-8')
+        (self.repo / '想法笔记.md').write_text('未跟踪的根目录笔记\n', encoding='utf-8')
+
+    def assert_nothing_frozen(self, result, *fragments):
+        self.assertNotEqual(result.returncode, 0, result.stdout)
+        for fragment in fragments:
+            self.assertIn(fragment, result.stderr)
+        self.assertIsNone(self.ref('refs/tags/run/r1'))
+        self.assertIsNone(self.ref('refs/heads/train/r1'))
+        self.assertFalse(self.run_dir.exists())
+
+    def test_candidate_passes_on_main_with_unfinished_paper_and_untracked_note(self):
+        self.edit_paper_and_notes()
+        result = self.gitflow('candidate')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn(self.head[:7], result.stdout)
+
+    def test_candidate_refuses_modified_source(self):
+        (self.repo / 'src' / 'model.py').write_text('V = 2\n', encoding='utf-8')
+        result = self.gitflow('candidate')
+        self.assertNotEqual(result.returncode, 0, result.stdout)
+        self.assertIn('src/model.py', result.stderr)
+
+    def test_candidate_refuses_untracked_file_under_experiments(self):
+        (self.repo / 'experiments' / 'I01' / 'scratch.py').write_text('X = 1\n', encoding='utf-8')
+        result = self.gitflow('candidate')
+        self.assertNotEqual(result.returncode, 0, result.stdout)
+        self.assertIn('experiments/I01/scratch.py', result.stderr)
+
+    def test_candidate_fails_when_ci_fails(self):
+        self.assertNotEqual(self.gitflow('candidate', CI_CMD='false').returncode, 0)
+
+    def test_freeze_passes_with_unfinished_paper_and_freezes_committed_content(self):
+        self.edit_paper_and_notes()
+        result = self.gitflow('freeze', 'r1')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.ref('refs/tags/run/r1'), self.head)
+        self.assertEqual(self.git('rev-parse', 'HEAD', cwd=self.run_dir), self.head)
+        self.assertEqual((self.run_dir / 'manuscript' / 'draft.tex').read_text(encoding='utf-8'), 'draft v1\n')
+        self.assertFalse((self.run_dir / '想法笔记.md').exists())
+        self.assertIn('写到一半', (self.repo / 'manuscript' / 'draft.tex').read_text(encoding='utf-8'))  # 主目录草稿原样
+        self.assertTrue((self.repo / '想法笔记.md').exists())
+
+    def test_freeze_refuses_modified_source_without_tagging(self):
+        (self.repo / 'src' / 'model.py').write_text('V = 2\n', encoding='utf-8')
+        self.assert_nothing_frozen(self.gitflow('freeze', 'r1'), 'src/model.py')
+
+    def test_freeze_refuses_untracked_file_under_experiments_without_tagging(self):
+        (self.repo / 'experiments' / 'I01' / 'scratch.py').write_text('X = 1\n', encoding='utf-8')
+        self.assert_nothing_frozen(self.gitflow('freeze', 'r1'), 'experiments/I01/scratch.py')
+
+    def test_code_paths_can_be_overridden(self):
+        self.edit_paper_and_notes()
+        self.assert_nothing_frozen(self.gitflow('freeze', 'r1', CODE_PATHS='src manuscript'), 'manuscript/draft.tex')
+
+    def test_freeze_no_worktree_only_tags_and_stamps(self):
+        self.edit_paper_and_notes()
+        result = self.gitflow('freeze', 'r1', '--no-worktree')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.ref('refs/tags/run/r1'), self.head)
+        self.assertIsNone(self.ref('refs/heads/train/r1'))
+        self.assertFalse(self.run_dir.exists())
+        stamp = json.loads((self.wt_root / 'run-r1.GIT_STAMP.json').read_text(encoding='utf-8'))  # 沙箱无 git_stamp.py，走内置最小版
+        self.assertEqual((stamp['commit'], stamp['tag'], stamp['dirty']), (self.head, 'run/r1', False))
+        self.assertEqual(self.git('worktree', 'list', '--porcelain').count('worktree '), 1)
+
+    def test_freeze_unknown_option_is_refused_without_tagging(self):
+        self.assert_nothing_frozen(self.gitflow('freeze', 'r1', '--bogus'), '--bogus')
+
+    def test_status_runs_on_single_trunk(self):
+        result = self.gitflow('status')
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+
+class GitflowLinkedAssetsTests(_Sandbox):
+    """--link-assets：临时 worktree 用符号链接挂主目录的重资产；收尾只摘链接本身，绝不递归触碰目标（坑 G5 的延伸）。"""
+
+    CKPT = 'experiments/I01/results/r0/checkpoints'
+
+    def setUp(self):
+        super().setUp()
+        for rel, text in (('src/model.py', 'V = 1\n'), ('experiments/I01/results/index.md', '# results\n'),
+                          ('.gitignore', 'logs/\ncheckpoints/\n*.pth\n*.npz\nGIT_STAMP.json\n__pycache__/\n')):
+            path = self.repo / rel
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text, encoding='utf-8')
+        self.git('add', '-A')
+        self.git('commit', '-q', '-m', 'base')
+        self.head = self.git('rev-parse', 'HEAD')
+        self.assets = {f'{self.CKPT}/best.pth': b'weights-1', f'{self.CKPT}/feats.npz': b'npz-bytes',
+                       'logs/train.log': b'epoch 1\n'}
+        for rel, data in self.assets.items():
+            path = self.repo / rel
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(data)
+        self.assertEqual(self.git('status', '--porcelain'), '')  # 主目录的重资产全部被忽略
+        self.wt_root = self.tmp / 'repo.worktrees'
+        self.run_dir = self.wt_root / 'run-r1'
+        self.wt_dir = self.wt_root / 'wt-feat'
+
+    def gitflow(self, *args, **env):
+        return _run(['bash', GITFLOW, *args], self.repo, {**self.env, **env})
+
+    def ok(self, *args, **env):
+        result = self.gitflow(*args, **env)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return result
+
+    def assert_assets_intact(self):
+        for rel, data in self.assets.items():
+            path = self.repo / rel
+            self.assertFalse(any(p.is_symlink() for p in (path, *path.parents)), rel)
+            self.assertEqual(path.read_bytes(), data, rel)
+
+    def assert_linked(self, worktree, rel):
+        link = worktree / rel
+        self.assertTrue(link.is_symlink(), rel)
+        self.assertEqual(link.resolve(), (self.repo / rel).resolve())
+
+    def assert_refused(self, result, worktree, *fragments):
+        self.assertNotEqual(result.returncode, 0, result.stdout)
+        for fragment in ('不删', *fragments):
+            self.assertIn(fragment, result.stderr)
+        self.assertTrue(worktree.is_dir())  # 排查现场保留
+        self.assert_assets_intact()
+
+    def assert_nothing_created(self, result):
+        self.assertNotEqual(result.returncode, 0, result.stdout)
+        for name in ('refs/tags/run/r1', 'refs/heads/train/r1', 'refs/heads/wt/feat'):
+            self.assertIsNone(self.ref(name), name)
+        self.assertFalse(self.run_dir.exists())
+        self.assertFalse(self.wt_dir.exists())
+        self.assert_assets_intact()
+
+    def test_freeze_links_assets_and_cleanup_only_removes_the_links(self):
+        self.ok('freeze', 'r1', '--link-assets', self.CKPT, 'logs')
+        self.assert_linked(self.run_dir, self.CKPT)
+        self.assert_linked(self.run_dir, 'logs')
+        self.assertEqual((self.run_dir / self.CKPT / 'best.pth').read_bytes(), b'weights-1')  # 经链接可读
+        # 钉住 git 行为：以 / 结尾的忽略规则（logs/）不匹配符号链接，链接在 worktree 里显示为未跟踪
+        self.assertIn('?? logs', self.git('status', '--porcelain', '--untracked-files=all', cwd=self.run_dir))
+        self.ok('cleanup', 'r1')
+        self.assertFalse(self.run_dir.exists())
+        self.assertIsNone(self.ref('refs/heads/train/r1'))
+        self.assertEqual(self.ref('refs/tags/run/r1'), self.head)
+        self.assert_assets_intact()
+
+    def test_wt_add_links_assets_and_wt_rm_only_removes_the_links(self):
+        self.ok('wt-add', 'feat', '--link-assets', self.CKPT, 'logs')
+        self.assertEqual(self.git('symbolic-ref', 'HEAD', cwd=self.wt_dir), 'refs/heads/wt/feat')
+        self.assert_linked(self.wt_dir, self.CKPT)
+        self.assert_linked(self.wt_dir, 'logs')
+        self.ok('wt-rm', 'feat')
+        self.assertFalse(self.wt_dir.exists())
+        self.assertIsNone(self.ref('refs/heads/wt/feat'))
+        self.assert_assets_intact()
+
+    def test_file_written_through_a_link_lands_in_main_and_survives(self):
+        self.ok('freeze', 'r1', '--link-assets', 'logs')
+        (self.run_dir / 'logs' / 'new.log').write_bytes(b'epoch 2\n')
+        self.ok('cleanup', 'r1')
+        self.assertEqual((self.repo / 'logs' / 'new.log').read_bytes(), b'epoch 2\n')
+        self.assert_assets_intact()
+
+    def test_real_checkpoint_next_to_a_link_is_refused_and_links_are_kept(self):
+        for command, name, worktree in (('freeze', 'r1', self.run_dir), ('wt-add', 'feat', self.wt_dir)):
+            with self.subTest(command=command):
+                self.ok(command, name, '--link-assets', self.CKPT, 'logs')
+                (worktree / 'best.pth').write_bytes(b'weights-2')  # 真实文件直接写进 worktree
+                closer = 'cleanup' if command == 'freeze' else 'wt-rm'
+                self.assert_refused(self.gitflow(closer, name), worktree, 'best.pth')
+                self.assertEqual((worktree / 'best.pth').read_bytes(), b'weights-2')
+                self.assert_linked(worktree, self.CKPT)  # 拒绝时不摘任何链接
+                self.assert_linked(worktree, 'logs')
+
+    def test_unregistered_symlink_is_refused(self):
+        self.ok('freeze', 'r1')
+        os.symlink(self.repo / 'logs', self.run_dir / 'logs')  # 不是 gitflow 建的链接
+        self.assert_refused(self.gitflow('cleanup', 'r1'), self.run_dir, 'logs')
+        self.assertTrue((self.run_dir / 'logs').is_symlink())
+
+    def test_retargeted_link_is_refused(self):
+        self.ok('freeze', 'r1', '--link-assets', 'logs')
+        elsewhere = self.tmp / 'elsewhere'
+        elsewhere.mkdir()
+        (elsewhere / 'keep.log').write_bytes(b'outside')
+        (self.run_dir / 'logs').unlink()
+        os.symlink(elsewhere, self.run_dir / 'logs')  # 登记过的路径被换成指向主目录之外
+        self.assert_refused(self.gitflow('cleanup', 'r1'), self.run_dir, 'logs')
+        self.assertTrue((self.run_dir / 'logs').is_symlink())
+        self.assertEqual((elsewhere / 'keep.log').read_bytes(), b'outside')
+
+    def test_link_replaced_by_a_real_directory_is_refused(self):
+        self.ok('wt-add', 'feat', '--link-assets', 'logs')
+        (self.wt_dir / 'logs').unlink()
+        (self.wt_dir / 'logs').mkdir()
+        (self.wt_dir / 'logs' / 'train.log').write_bytes(b'real run output')
+        self.assert_refused(self.gitflow('wt-rm', 'feat'), self.wt_dir, 'logs/train.log')
+        self.assertEqual((self.wt_dir / 'logs' / 'train.log').read_bytes(), b'real run output')
+
+    def test_invalid_link_paths_are_refused_before_anything_is_created(self):
+        (self.repo / 'logs' / 'sub').mkdir()
+        cases = (['/etc'], [str(self.repo / 'logs')], ['../outside'], ['experiments/../logs'], ['missing/dir'],
+                 ['src'], ['src/model.py'], ['logs', 'logs/sub'], ['logs', 'logs'], [])
+        for paths in cases:
+            for command, name in (('freeze', 'r1'), ('wt-add', 'feat')):
+                with self.subTest(command=command, paths=paths):
+                    self.assert_nothing_created(self.gitflow(command, name, '--link-assets', *paths))
+
+    def test_wt_cycle_add_commit_fast_forward_remove(self):
+        utf8 = {'LC_ALL': 'en_US.UTF-8'}  # 坑 G3：bash 3.2 的多字节问题只在 UTF-8 locale 下出现
+        self.ok('wt-add', 'feat', **utf8)
+        (self.wt_dir / 'src' / 'model.py').write_text('V = 2\n', encoding='utf-8')
+        self.git('commit', '-q', '-am', 'feat(I9): step', cwd=self.wt_dir)
+        tip = self.git('rev-parse', 'HEAD', cwd=self.wt_dir)
+        refused = self.gitflow('wt-rm', 'feat', **utf8)  # 还没合入 main
+        self.assert_refused(refused, self.wt_dir, 'wt/feat')
+        self.assertEqual(self.ref('refs/heads/wt/feat'), tip)
+        self.git('merge', '-q', '--ff-only', 'wt/feat')
+        self.ok('wt-rm', 'feat', **utf8)
+        self.assertFalse(self.wt_dir.exists())
+        self.assertIsNone(self.ref('refs/heads/wt/feat'))
+        self.assertEqual(self.git('rev-parse', 'main'), tip)
+
+    def test_wt_rm_refuses_uncommitted_change(self):
+        self.ok('wt-add', 'feat')
+        (self.wt_dir / 'src' / 'model.py').write_text('V = 3\n', encoding='utf-8')
+        self.assert_refused(self.gitflow('wt-rm', 'feat'), self.wt_dir)
+        self.assertEqual((self.wt_dir / 'src' / 'model.py').read_text(encoding='utf-8'), 'V = 3\n')
+
+    def test_wt_rm_refuses_other_branch_checked_out(self):
+        self.ok('wt-add', 'feat')
+        self.git('checkout', '-q', '-b', 'hijack', cwd=self.wt_dir)
+        self.assert_refused(self.gitflow('wt-rm', 'feat'), self.wt_dir, 'hijack')
+        self.assertIsNotNone(self.ref('refs/heads/wt/feat'))
+
+    def test_wt_add_refuses_bad_or_duplicate_names(self):
+        for name in ('a/b', '../x', '.hidden', '-x'):
+            with self.subTest(name=name):
+                self.assertNotEqual(self.gitflow('wt-add', name).returncode, 0)
+        self.assertFalse(self.wt_root.exists() and any(self.wt_root.iterdir()))
+        self.ok('wt-add', 'feat')
+        self.assertNotEqual(self.gitflow('wt-add', 'feat').returncode, 0)
+        self.assertTrue(self.wt_dir.is_dir())
+
+
 class GitflowHelpTests(_Sandbox):
     """审查 [medium]：帮助在仓库探测与 cd 之后才处理，且按相对 $0 读自身。"""
 
@@ -222,6 +488,27 @@ class GitflowHelpTests(_Sandbox):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("未知子命令 'bogus'", result.stderr)
 
+    def test_help_describes_single_trunk_commands_only(self):
+        result = _run(['bash', self.script, '--help'], self.outside, self.env)
+        self.assert_help(result)
+        for wanted in ('candidate', 'freeze <run_id>', '--no-worktree', '--link-assets', 'wt-add <name>',
+                       'wt-rm <name>', 'CODE_PATHS'):
+            self.assertIn(wanted, result.stdout)
+        for retired in ('squash', 'DEV_BRANCH'):
+            self.assertNotIn(retired, result.stdout)
+
+    def test_retired_dev_subcommands_are_unknown(self):
+        (self.repo / 'model.py').write_text('V = 1\n', encoding='utf-8')
+        self.git('add', '-A')
+        self.git('commit', '-q', '-m', 'base')
+        for retired in ('init', 'squash'):
+            with self.subTest(subcommand=retired):
+                result = _run(['bash', self.script, retired, 'msg'], self.repo, self.env)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(f"未知子命令 '{retired}'", result.stderr)
+        self.assertIsNone(self.ref('refs/heads/dev'))
+        self.assertFalse((self.tmp / 'repo.worktrees').exists())
+
 
 class GitflowMultibyteTests(_Sandbox):
     """审查外发现：macOS bash 3.2 在 UTF-8 locale 下把紧跟 $var 的全角标点首字节并入变量名，set -u 下日志行崩溃。"""
@@ -233,20 +520,18 @@ class GitflowMultibyteTests(_Sandbox):
                      if not line.lstrip().startswith('#') and pattern.search(line)]
         self.assertEqual(offenders, [])
 
-    def test_init_and_squash_run_to_completion(self):
+    def test_freeze_and_cleanup_run_to_completion_in_utf8_locale(self):
+        # 原 init → squash 闭环随常驻 dev 一起退役（用户裁决 2026-11-12）；wt-add → 合入 → wt-rm 闭环见
+        # GitflowLinkedAssetsTests.test_wt_cycle_add_commit_fast_forward_remove
         (self.repo / 'model.py').write_text('V = 1\n', encoding='utf-8')
         self.git('add', '-A')
         self.git('commit', '-q', '-m', 'base')
-        result = _run(['bash', GITFLOW, 'init'], self.repo, self.env)
-        self.assertEqual(result.returncode, 0, result.stderr)
-        dev = self.tmp / 'repo.worktrees' / 'dev'
-        (dev / 'model.py').write_text('V = 2\n', encoding='utf-8')
-        self.git('commit', '-q', '-am', 'feat(I9): step', cwd=dev)
-        tree = self.git('rev-parse', 'HEAD^{tree}', cwd=dev)
-        result = _run(['bash', GITFLOW, 'squash', 'feat(I9): innovation'], self.repo, self.env)
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(self.git('rev-parse', 'main^{tree}'), tree)
-        self.assertEqual(self.git('rev-parse', 'dev'), self.git('rev-parse', 'main'))
+        env = {**self.env, 'LC_ALL': 'en_US.UTF-8', 'CI_CMD': 'true'}
+        for args in (['candidate'], ['freeze', 'r1'], ['status'], ['cleanup', 'r1']):
+            with self.subTest(args=args):
+                result = _run(['bash', GITFLOW, *args], self.repo, env)
+                self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse((self.tmp / 'repo.worktrees' / 'run-r1').exists())
 
 
 class CodexReviewEntryTests(_Sandbox):

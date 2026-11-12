@@ -33,7 +33,7 @@
 - 审查包含待运行代码与配置、实验范围、实际测试/冒烟输出及发车 `--dry_run` 输出（焦点追加本节清单）；原文 `codex-review.json` 与逐条处理 `claude-response.md` 落审查目录后一并汇报用户。
 - 由于审查通常发生在 freeze 之前，下面的 provenance 三项由执行方在 freeze 后用命令机械核对，并把原始输出交给用户；不满足即阻断。
 - 逐文件查看 git diff，检查整体逻辑、致命错误、数据划分与泄漏、mask / loss / risk 口径，以及是否违反坑台账、停机门和 GPU 合同。
-- 核对 Git 工作流 provenance（AGENTS.md「Git 工作流」）：待跑 commit 已是 `main` HEAD（squash 完成、`dev` 已归位、`git diff main dev` 为空）；run worktree HEAD（分支 `train/<run_id>`，或 detached）等于 `main` HEAD 且 `git status` 干净；`GIT_STAMP.json` 的 commit 等于 `main` HEAD 且对应 `run/<run_id>` tag。三者任一不满足即阻断。
+- 核对 Git 工作流 provenance（AGENTS.md「Git 工作流」）：待跑 commit 已提交在 `main` 上且 `CODE_PATHS` 工作树干净；若使用冻结 worktree，其 HEAD 严格等于 `run/<run_id>` tag 且 `git status` 干净；`GIT_STAMP.json` 的 commit 等于该 tag 指向的 `main` 提交。三者任一不满足即阻断。
 - 核对 AGENTS.md 的完整发车与评测纪律：包括 batch_size、I/O、GPU-Util 门禁及豁免条件，`train_launcher.py` / `jobrun.sh`、`--dry_run` 和评测入口；核查有没有越权启动或重复启动任务。
 - 审查结论须写明所审代码/配置版本与实验范围、通过或阻断、问题的文件位置及证据。阻断项由执行方修复、补测，并在 `claude-response.md` 逐条记录；执行方不采纳的 high / critical 项交用户裁决。
 - 审查后若实验范围或核心逻辑发生实质变化（并非回应审查意见的修复），由执行方向用户说明，由用户决定是否作为新的审查点再审；变更后的实验须经用户明确同意再启动。审查方不以审查意见替代启动授权。

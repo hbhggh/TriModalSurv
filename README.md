@@ -4,7 +4,6 @@
 
 ## 阅读入口
 
-- [项目状态与历史](STATUS.md)
 - [项目纪律](AGENTS.md) · [坑台账](docs/engineering/pitfalls.md)
 - [项目结构与文件归属](docs/project-structure.md)
 - [通用科研初始化模板](docs/templates/experiment-oriented-ml-template.md)

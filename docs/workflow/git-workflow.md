@@ -1,6 +1,8 @@
-# 科研 Git 工作流迁移模板：策略一（先 Squash 后跑）× Worktree
+# 科研 Git 工作流：单主干 main × 代码范围门禁 × 按需临时 Worktree
 
-> 一句话：**dev 上小步 commit → CI 与 review 通过，并且 smoke 实验结束 → squash 成 main 上一个 commit S → 从 S 建冻结 run worktree（分支 `train/<id>`）跑正式实验 → 结果盖章指向 S → 删 run worktree 和 `train/<id>`，S 永远留在 main。**
+> 一句话：**日常在主目录的 `main` 上小步提交 → 代码范围干净且 CI 绿灯时 `candidate` 得到候选 H → 互审与冒烟通过 → `freeze` 在 `main` HEAD 打 `run/<run_id>` tag（按需建冻结 worktree）→ 跑正式实验，结果盖章指向该 tag 的提交 → `cleanup` 删掉临时 worktree，tag 永远留在 `main` 上。**
+>
+> 用户裁决 2026-11-12，取代此前「常驻开发分支 + 先压缩成单个 commit 再跑」的做法；原常驻 `dev` 分支及其 worktree 已于同日退役。项目内的强制规则以 `AGENTS.md`「Git 工作流」为准，本文件是它的展开说明。
 >
 > 配套脚本：`scripts/ci.sh`、`scripts/gitflow.sh`。两者与项目无关，拷进任何仓库的 `scripts/` 即可用。
 
@@ -8,30 +10,38 @@
 
 ## 【What is it?】 这是什么
 
-一套面向「单人科研 + AI 高频改代码 + 昂贵实验 + 结果要进论文」的 Git 工作流。它只用四个对象：
+一套面向「单人科研 + AI 高频改代码 + 昂贵实验 + 结果要进论文」的 Git 工作流。日常只有一个工作区，临时 worktree 只在需要隔离时出现：
 
 | 对象 | 角色 | 允许改代码 |
 |---|---|---|
-| `main` 分支（主目录） | 实验账本。一个创新 = 一个 commit，每个正式实验的 commit 都在 main 上 | 否 |
-| `dev` 分支（长期开发 worktree） | AI 试错现场。小步 commit 当存档点，永远只领先 main「正在做的那一个创新」 | 是 |
-| run worktree（分支 `train/<id>`，一次性） | 冻结的正式实验源码。从 main 建，分支只读、禁止 commit，跑完连分支一起删。不想要分支标签可设 `RUN_BRANCH_PREFIX=` 用 detached | 否 |
-| 结果账本（仓库外） | `run_id → commit → C-index`。删 worktree 不影响它 | 不适用 |
+| `main` 分支（主目录 `<主目录>`） | 唯一的日常工作区：代码、契约与交接文档、实验结果摘要、论文 `manuscript/` 都在这里小步提交；也是本机重资产（数据、特征、缓存、checkpoint、结果）的唯一真源 | 是 |
+| `run/<run_id>` tag | 正式实验的永久锚点，指向冻结时的 `main` 提交；结果账本里的 commit 必须能对上它 | 不适用 |
+| run worktree `<主目录>.worktrees/run-<run_id>/`（分支 `train/<run_id>`，一次性） | 冻结的正式实验源码，HEAD 严格等于 `run/<run_id>`。只读、禁止 commit，跑完连分支一起删。不想要分支标签可设 `RUN_BRANCH_PREFIX=` 用 detached；远端直接用 `git archive` 同步时可以不建（`--no-worktree`） | 否 |
+| 并行 worktree `<主目录>.worktrees/wt-<name>/`（分支 `wt/<name>`，一次性） | 本地并行试验或多个 AI 同时改不同模块时的隔离现场。提交后快进合回 `main`，再删除 | 是 |
+| 结果账本（仓库外或被忽略） | `run_id → commit → C-index`。删 worktree 不影响它 | 不适用 |
 
-它与「策略二（先跑后 squash）」的区别：策略二让实验 commit H 留在分支上，squash 后 main 上是另一个 commit S，需要 tag 和 H→S 映射；本模板先 squash，实验直接从 S 跑，**H 与 S 合一**，不需要映射。
+目录布局：
 
-多个创新之间靠**文件名**隔离（`model_innovation_1.py`、`model_innovation_2.py` + config 选择），不靠分支。失败的创新文件留在树里，只在账本标 negative。
+| 路径 | 检出 | 用途 | 寿命 |
+|---|---|---|---|
+| `<主目录>/` | `main` | 日常工作区与本机重资产唯一真源；I01–I08 的相对路径不变 | 常驻 |
+| `<主目录>.worktrees/run-<run_id>/` | `train/<run_id>` 或 detached，HEAD = `run/<run_id>` | 正式实验的冻结源码，只读 | `freeze` 建，`cleanup` 删 |
+| `<主目录>.worktrees/wt-<name>/` | `wt/<name>` | 本地并行隔离，可提交 | `wt-add` 建，快进合回后 `wt-rm` 删 |
+
+`<主目录>.worktrees/` 下只会按需出现这两种目录，用完即删，不常驻任何 worktree。
+
+为什么不再压缩成「一个创新一个 commit」：正式实验的版本追溯靠 `run/<run_id>` tag 与 `GIT_STAMP.json` 就能锚定，不需要 main 的提交粒度来承担；而常驻开发分支意味着两份工作区、两份重资产、一条要时刻归位的分支，维护成本高于收益。
+
+多个创新之间靠**目录与文件名**隔离（`experiments/<ID>/`、config 选择），不靠分支。失败的创新文件留在树里，只在账本标 negative。
 
 ```text
-main（主目录）                  dev（长期开发 worktree）
-● baseline ───────────────────┐
-                              ● a1 feat(inn1): add file
-                              ● a2 feat(inn1): wire config
-                              ● a3 fix(inn1): mask
-                    squash ←──┘
-● S1 feat(inn1): ...   ──→ run worktree @ S1，stamp = S1
-        dev 归位到 S1，开始创新 2
-                              ● b1 feat(inn2): add file
-● S2 feat(inn2): ...   ──→ run worktree @ S2，stamp = S2
+main（主目录，唯一日常工作区）
+● feat(I08): add recovery head
+● docs(paper): draft results section        ← 论文改动不阻塞发车
+● fix(I08): mask padding
+● docs(notes): smoke log          ── tag run/i08-v1 ──→ run worktree @ 该提交，stamp = 该提交
+● feat(I09): add new arm                     （正式实验在跑，main 照常前进）
+● docs(paper): table 2            ── tag run/i09-v1 ──→ git archive run/i09-v1（--no-worktree）
 ```
 
 ---
@@ -42,29 +52,30 @@ main（主目录）                  dev（长期开发 worktree）
 
 - AI（Claude / Codex）一次改十几个文件，你只掌握目标，diff 才是真正发生的事，需要高频存档点和廉价回退。
 - 一次正式实验要烧几十 GPU 小时，跑之前必须确定「跑的是哪一版代码」，跑完之后必须能从数字反查到源码。
-- 想同时推进两个创新：一个在跑实验，另一个在改代码，二者不能互相污染。
+- 论文与代码在同一个仓库里同时推进，不希望「论文写到一半」挡住实验发车。
+- 想在一台机器上同时推进两件事（一个在跑实验，另一个在改代码），又不想复制几十 GB 的重资产。
 - 论文审稿时要回答「Table 1 这个数字来自哪一版代码」。
-- main 历史已经被 `fix`、`wip`、`try again` 淹没，想让它读起来像一份创新清单。
 
 ---
 
 ## 【What must be true before I start?】 开始前必须成立的前提
 
-1. **Git ≥ 2.15**（`git worktree` 稳定），仓库有一个干净的 `main`。
-2. **测试命令存在且退出码可信**：`scripts/ci.sh` 默认跑 pytest，没有 pytest 退回 unittest；也可用 `TEST_CMD` 指定。没有测试就先写一个 import 冒烟测试，门禁不能是空的。
-3. **结果目录在 worktree 之外**：正式结果写到主目录的 `results/`、仓库旁的 `<项目>-results/`、或远端服务器，绝不写进 run worktree（它会被删）。
+1. **Git ≥ 2.15**（`git worktree` 稳定），主目录检出 `main`。
+2. **测试命令存在且退出码可信**：`scripts/ci.sh` 默认跑 pytest，没有 pytest 退回 unittest；也可用 `TEST_CMD` 指定。没有测试就先写一个 import 冒烟测试，门禁不能是空的。本项目的 CI 解释器固定为 `protomasksurv-exp1` 环境：`PYTHON_BIN=<protomasksurv-exp1 环境>/bin/python scripts/ci.sh`；默认的 `python3` 没有 torch / pytest，会有 4 个导入错误，那不是代码问题（2026-09-28 实测）。
+3. **结果目录在临时 worktree 之外**：正式结果写到主目录对应的新 `run_id` 目录（`experiments/<ID>/results/<run_id>/`）、仓库旁的目录或远端服务器，绝不写进 run worktree 或并行 worktree（它们会被删）。
 4. **有 stamp 机制**：每次正式运行记录 commit SHA 与 dirty 状态。项目有自己的（如 `scripts/git_stamp.py`）就用自己的；没有则 `gitflow.sh freeze` 自带最小版。
 5. **两个脚本已拷入 `scripts/`** 并 `chmod +x`；需要的话用环境变量覆盖默认值（见下表）。
-6. **大文件不在 Git 里**：数据集、checkpoint、日志走 `.gitignore` 或外部存储，否则 worktree 会很重。
-7. **AI 助手读得到规则**：把本文末尾的「AGENTS.md 规则块」粘进项目的 AGENTS.md / CLAUDE.md。
+6. **大文件不在 Git 里**：数据集、checkpoint、日志走 `.gitignore`，只存在于主目录这一份真源；临时 worktree 需要时用 `--link-assets` 链接过去，不拷贝。
+7. **AI 助手读得到规则**：规则正文在项目的 `AGENTS.md`「Git 工作流」节（`CLAUDE.md` 首行引入它）。
 
 | 环境变量 | 默认 | 说明 |
 |---|---|---|
-| `MAIN_BRANCH` | `main` | 账本分支 |
-| `DEV_BRANCH` | `dev` | 长期开发分支 |
-| `WT_ROOT` | `<主目录>.worktrees` | dev 与 run worktree 的存放目录 |
+| `MAIN_BRANCH` | `main` | 唯一主干分支 |
+| `CODE_PATHS` | `src configs scripts tests experiments pyproject.toml conftest.py` | 代码范围干净门检查的路径，空格分隔；范围外的改动不阻塞 |
+| `WT_ROOT` | `<主目录>.worktrees` | run worktree 与并行 worktree 的存放目录 |
 | `TAG_PREFIX` | `run/` | 正式实验 tag 前缀 |
 | `RUN_BRANCH_PREFIX` | `train/` | run worktree 的分支前缀，须与 `TAG_PREFIX` 不同；设为空串则用 detached HEAD |
+| `WT_BRANCH_PREFIX` | `wt/` | 并行 worktree 的分支前缀 |
 | `CI_CMD` | `scripts/ci.sh` | 候选门禁命令，只看退出码 |
 | `STAMP_CMD` | 自动 | 有 `scripts/git_stamp.py` 就用它，否则内置最小 stamp |
 | `PYTHON_BIN` | `python3` | 解释器 |
@@ -76,83 +87,87 @@ main（主目录）                  dev（长期开发 worktree）
 
 **适用**
 
-- 单人或小团队，main 不会被多人同时推进。
+- 单人或小团队，`main` 不会被多人同时推进。
 - 验收标准是**实验结果**（C-index、AUC、loss 曲线），而不是测试能判定的东西。
-- 创新可以用文件或 config 开关隔离，失败创新留在树里无害。
+- 创新可以用目录、文件或 config 开关隔离，失败创新留在树里无害。
 - 需要「数字 → commit → 源码」的永久反查。
 
 **不适用，或要换做法**
 
 | 情况 | 该怎么做 |
 |---|---|
-| 改动的验收靠测试就能判定（bug fix、重构、日志） | 不用 freeze/run，dev 小步 commit → `candidate` → `squash` 即可；或直接在 main 上一个 commit |
-| 必须保证「main 只收成功创新」且创新靠分支隔离 | 用策略二：分支上锁 H → 从 H 建 run worktree → 成功才 squash，且给 H 打永久 tag |
-| 多人高并发合入 main | 走 GitHub PR + Squash and merge + 必需的 CI check，本模板的 `squash` 子命令由 PR 按钮替代 |
-| 需要保留每个中间 commit 的历史（审计、教学） | 不 squash，用 `merge --no-ff` |
-| 实验期间 main 必须能被别的工作推进 | 可以，但 `squash` 会拒绝「dev 不包含最新 main」的情况，先在 dev 里 `git merge main` |
-| 训练机上没有 `.git` | run worktree 是同步源；stamp 文件随代码一起同步过去，训练入口读 stamp 而不是读 git |
+| 改动的验收靠测试就能判定（bug fix、重构、日志、文档） | 不用 freeze，直接在 `main` 上提交；涉及代码时先跑 CI |
+| 必须保证「main 只收成功创新」 | 本模板不提供这个保证：失败创新留在树里、账本标 negative。真需要就改用分支隔离 + PR 合并的流程 |
+| 多人高并发合入 `main` | 走 GitHub PR + 必需的 CI check；本模板的代码门与 tag 规则照样适用 |
+| 需要并行改代码又不想互相干扰 | 用 `wt-add` 建并行 worktree，完成后快进合回 `main` 再 `wt-rm` |
+| 训练机上没有 `.git` | 同步源是 `run/<run_id>` 指向的提交（run worktree 或 `git archive run/<run_id>`）；stamp 文件随代码一起同步，训练入口读 stamp 而不是读 git |
 
 ---
 
 ## 【How do I do it?】 怎么做
 
-### 一次性初始化
+不需要初始化：主目录检出 `main` 即可开始。
 
-```bash
-scripts/gitflow.sh init          # 主目录运行：建 dev 分支和 <主目录>.worktrees/dev
-```
-
-### 每个创新的循环（9 步；第 5 步冒烟为用户裁决 2026-09-24 新增）
+### 日常循环（主目录）
 
 | 步 | 在哪里 | 命令 / 动作 | 得到什么 |
 |---|---|---|---|
-| 1 | dev worktree | AI 改一小块 → `scripts/ci.sh` → commit，前缀带创新 ID：`feat(inn2): ...` | 存档点 a1, a2, … |
-| 2 | dev worktree | 改坏了：`git restore <file>` 回到上一个 commit；整段作废：`git reset --keep <好的 commit>` | 廉价回退 |
-| 3 | dev worktree | `scripts/gitflow.sh candidate` | CI 退出码 0 + 树干净 → 候选 H，并打印 main..H 的 commit 与文件清单供 review |
-| 4 | 任意 | Review：看 `git diff main..dev`，重点是数据泄漏、mask、loss、config、seed、结果路径 | Review PASS / 阻断 |
-| 5 | 训练服务器 | 冒烟：`git archive H` 打包 → sha256 校验 → 传输 → 解包；在 dev worktree 运行 `scripts/git_stamp.py` 生成 `GIT_STAMP.json`（commit = H）随代码同步；1 癌 1 seed 训练 + 推理冒烟 + 必要的回放门。冒烟产物只判通/不崩，不进账本主表；失败回第 1 步 | 冒烟 PASS 才能 squash。tree(S) = tree(H)，所以冒烟时按文件内容计算的源码摘要与回放记录在 S 上仍然有效 |
-| 6 | 主目录 | `scripts/gitflow.sh squash "feat(inn2): implement prototype bank"` | main 上一个 commit S；脚本校验 tree(S) == tree(H)，并把 dev 归位到 S |
-| 7 | 主目录 | `scripts/gitflow.sh freeze inn2-v1` | tag `run/inn2-v1` → S；分支 `train/inn2-v1` 的 run worktree，HEAD = S；stamp 记 commit = S、dirty = false |
-| 8 | run worktree | 从这里同步或启动正式实验（绑定 commit 的资产锁在这里重写一次）。**禁止修改、禁止 commit**。结果写到 worktree 外，账本追加 `run_id, commit, 指标` | 结果绑定 S |
-| 9 | 主目录 | 判定：好 → 无需 Git 操作；差 → 账本标 negative，代码留着。然后 `scripts/gitflow.sh cleanup inn2-v1` | 脚本先核对：tag `run/inn2-v1` 存在；run worktree HEAD **严格等于**该 tag 的提交（只「仍在 main 上」不够——切到 main 上更早的提交也在 main 上）；仍检出 `train/inn2-v1`（detached 模式须仍为 detached）；该提交仍在 main 上；树干净（被 .gitignore 隐藏的文件也算，只放行 `GIT_STAMP.json` 与字节码缓存——`worktree remove` 会连同被忽略的 checkpoint、日志一起删掉）。全部成立才删 worktree 与 `train/inn2-v1` 分支；tag 与账本保留。任一不符即拒绝并保留现场 |
+| 1 | 主目录 | 改一小块。涉及 `CODE_PATHS` 内的代码时先跑 `PYTHON_BIN=<protomasksurv-exp1 环境>/bin/python scripts/ci.sh`，绿灯才提交；只改论文或笔记可直接提交 | 存档点 |
+| 2 | 主目录 | 提交，前缀带实验或模块标识：`feat(I08): ...`、`fix(I08): ...`、`docs(paper): ...`、`docs(notes): ...` | `main` 上的小步历史 |
+| 3 | 主目录 | 改坏了：`git restore <file>` 回到上一个 commit；已提交的改动用 `git revert` 撤销，不改写历史 | 廉价回退 |
 
-dev 归位后立刻可以开始下一个创新；正在跑的 run worktree 钉在 S 不动。
+### 正式实验循环（candidate → 互审 → 冒烟 → freeze → 跑 → cleanup）
+
+| 步 | 在哪里 | 命令 / 动作 | 得到什么 |
+|---|---|---|---|
+| 1 | 主目录 | `PYTHON_BIN=<protomasksurv-exp1 环境>/bin/python scripts/gitflow.sh candidate` | 先跑 CI，再过代码门：`CODE_PATHS` 下无未提交改动、无未跟踪文件。通过后打印 `H = <短哈希>` 与摘要；不干净时列出路径并拒绝。`manuscript/` 与根目录笔记的改动不阻塞 |
+| 2 | 任意 | 互审：按 `AGENTS.md`「互审 · 自动审查闭环」发起，重点是数据泄漏、mask、loss、config、seed、结果路径 | Review PASS / 阻断 |
+| 3 | 训练服务器 | 冒烟（用户裁决 2026-09-24）：`git archive H` 打包 → sha256 校验 → 传输 → 解包；`GIT_STAMP.json`（commit = H）随代码同步；1 癌 1 seed 训练 + 推理冒烟 + 必要的回放门。冒烟产物只判通/不崩，不进账本主表；失败回主目录修复、重新 candidate | 冒烟 PASS 才能冻结 |
+| 4 | 主目录（须检出 `main`） | 先核对冻结的就是获审的代码：`git diff --stat H HEAD -- <CODE_PATHS 各项>` 须为空，不为空就对新的 HEAD 重新走第 1–3 步。然后 `scripts/gitflow.sh freeze i08-v1 [--no-worktree] [--link-assets <relpath>...]` | 先解析参数、校验链接路径、过代码门，全部通过才打 tag `run/i08-v1` → `main` HEAD。默认建分支 `train/i08-v1` 的 run worktree（HEAD = 该 tag）并生成 stamp；`--no-worktree` 只打 tag 并在主目录生成 stamp。任一步拒绝都不留下 tag、分支或目录 |
+| 5 | run worktree 或 `git archive run/i08-v1` 的快照 | 从这里同步或启动正式实验（绑定 commit 的资产锁在 tag 指向的提交上重写一次）。**禁止修改、禁止 commit**。结果写到 worktree 外，账本追加 `run_id, commit, 指标` | 结果绑定 tag 指向的提交 |
+| 6 | 主目录 | 判定：好 → 无需 Git 操作；差 → 账本标 negative，代码留着。然后 `scripts/gitflow.sh cleanup i08-v1` | 脚本先核对：tag `run/i08-v1` 存在；run worktree HEAD **严格等于**该 tag 的提交（只「仍在 main 上」不够——切到 main 上更早的提交也在 main 上）；仍检出 `train/i08-v1`（detached 模式须仍为 detached）；该提交仍在 main 上；树干净（未提交、未跟踪与被 .gitignore 隐藏的文件都算，只放行根目录 `GIT_STAMP.json`、`.DS_Store`、`__pycache__` 里的字节码与登记过的合法链接——`worktree remove` 会连同被忽略的 checkpoint、日志一起删掉）。全部成立才逐个摘掉链接、删 worktree 与 `train/i08-v1` 分支；tag 与账本保留。任一不符即拒绝并保留现场 |
+
+正式实验进行期间，主目录的 `main` 可以照常前进（写论文、做下一个创新）；正在跑的 run worktree 钉在 tag 上不动。
+
+### 按需并行 worktree（wt-add → 提交 → 快进合回 → wt-rm）
+
+| 步 | 在哪里 | 命令 / 动作 | 得到什么 |
+|---|---|---|---|
+| 1 | 主目录 | `scripts/gitflow.sh wt-add exp-b [--link-assets <relpath>...]` | 从 `main` 建 `<主目录>.worktrees/wt-exp-b/`，分支 `wt/exp-b`。name 以字母或数字开头，只含字母、数字与 `.` `_` `-`；目录或分支已存在即拒绝 |
+| 2 | 并行 worktree | 照日常循环改代码、跑 CI、提交 | `wt/exp-b` 上的提交 |
+| 3 | 主目录 | `git merge --ff-only wt/exp-b` | `main` 快进到这些提交，哈希不变 |
+| 4 | 主目录 | `scripts/gitflow.sh wt-rm exp-b` | 核对目录是可用 worktree、检出的正是 `wt/exp-b`、该分支已是 `main` 的祖先（未合入即拒绝）、树干净（口径同 `cleanup`）；通过后摘链接、删 worktree、`git branch -d wt/exp-b` |
+
+第 3 步如果因为 `main` 在此期间已经前进而无法快进：在并行 worktree 里 `git rebase main`（`wt/*` 分支只在本机、不推远端，可以变基），重新过 CI，再回主目录快进合回。不要为了省事改用非快进合并，那会在 `main` 上留下合并环。
+
+并行 worktree 不是正式实验的源码来源；正式实验仍从主目录 `freeze`。
+
+### 资产链接 `--link-assets` 的含义与边界
+
+重资产（数据、特征、缓存、checkpoint）只在主目录存一份。`freeze` 与 `wt-add` 可以带 `--link-assets <relpath>...`，在临时 worktree 的 `<relpath>` 处建一个符号链接，指向 `<主目录>/<relpath>` 这份真源，避免几十 GB 的拷贝。
+
+- **校验在任何副作用之前完成**：至少给一个路径；必须是相对路径，不能为空，不能含 `..`；`<主目录>/<relpath>` 必须存在；该路径本身在待检出提交里不得存在（已跟踪的文件或目录都算），它的任何祖先也不得是该提交里的非目录条目；同一次调用里的路径不得重复，也不得互为祖先。实际含义：含已跟踪文件的目录（例如带入库摘要的 `experiments/<ID>/results/`）不能整个链接，只能链接其下未被跟踪的子路径（通常是被 `.gitignore` 忽略的重资产目录）。任一不满足即拒绝，不打 tag、不建目录。`freeze` 的 `--no-worktree` 与 `--link-assets` 不能同用。
+- **登记位置**：链接清单写在该 worktree 的 git 管理目录里（`git -C <worktree> rev-parse --absolute-git-dir` 所指目录下的 `gitflow-linked-assets`），不落在工作树中，所以不影响 `git status`。
+- **「只读」只是约定**：脚本不改目标的权限。经链接写入的内容会直接落到 `<主目录>` 的真源里，并且在 worktree 删除后依然存在。因此 worktree 里的程序只读链接；新实验产物写到 worktree 之外，或写到 `<主目录>` 对应的新 `run_id` 目录，绝不覆盖已有结果。
+- **收尾只摘链接**：`cleanup` / `wt-rm` 只认「登记过、仍是符号链接、指向值严格等于 `<主目录物理路径>/<relpath>`」的合法链接。通过全部核对后逐个 `rm` 链接本身（不递归、不带尾斜杠），再删 worktree；主目录里的目标完好无损。登记过却被换了目标或换成真实目录的路径、未登记的符号链接，一律拒绝并保留现场。
+- **链接旁边写了真实文件也会拒绝**：例如在 run worktree 的真实目录里写出 `best.pth`，`cleanup` 照样拒绝——它会随 `worktree remove` 一起消失。
 
 ### 三种意外的处理
 
 | 意外 | 处理 |
 |---|---|
-| 实验跑到一半发现 bug | 不碰 run worktree。回 dev 修 → `candidate` → `squash`（得 `fix(inn2): ...` 的 S'）→ `freeze inn2-v2` 重跑。旧结果作废，账本标 invalid |
-| 误把 dev reset 到别处 | `git reflog dev` 找到原来的 SHA → `git reset --keep <sha>` |
-| `train/<id>` 上被 commit 了，或 run worktree 被切到别的提交（哪怕是 main 上更早的提交）/ 别的分支 | `cleanup` 会拒绝删除并保留现场，这次实验的 provenance 已失效。先 `git -C <run worktree> reflog -n 10` 查清经过；混入的 commit `cherry-pick` 回 dev 走正常流程，账本标 invalid，然后手动 `git worktree remove <run worktree>` 与 `git branch -D train/<id>`。`cleanup` 拒绝就是证据，不要用 `-D` / `--force` 糊过去 |
-| CI 显示通过但代码其实是坏的 | 检查门禁是否在管道左侧（`./ci.sh \| tail` 会吞掉退出码）；检查是否有过期 `__pycache__`（`ci.sh` 已自动清理） |
+| 实验跑到一半发现 bug | 不碰 run worktree。回主目录在 `main` 上修 → `candidate` → 冒烟 → `freeze i08-v2` 重跑。旧结果作废，账本标 invalid |
+| `train/<id>` 上被 commit 了，或 run worktree 被切到别的提交（哪怕是 main 上更早的提交）/ 别的分支 | `cleanup` 会拒绝删除并保留现场，这次实验的 provenance 已失效。先 `git -C <run worktree> reflog -n 10` 查清经过；混入的 commit 回主目录 `cherry-pick` 到 `main` 走正常流程，账本标 invalid。之后的清理不走脚本，查清并经用户确认后手动做：挂了资产链接的，先逐个 `rm <run worktree>/<relpath>`（只删链接本身，路径末尾不带斜杠，不加 `-r`）；再 `git worktree remove <run worktree>`；混入的 commit 已经 cherry-pick 走之后，才用 `git branch -D train/<id>` 删分支。`cleanup` 拒绝就是证据，查清之前不要用 `-D` / `--force` 糊过去 |
+| CI 显示通过但代码其实是坏的 | 检查门禁命令是否被管道接到 `tail` 之类的命令左侧（管道会吞掉退出码）；检查是否有过期 `__pycache__`（`ci.sh` 已自动清理） |
 
 ### 反查：从数字到源码
 
 ```bash
 grep 0.6431 results.tsv                  # → commit e9832fa
 git branch --contains e9832fa            # → main（必须命中，否则结果无效）
-git tag --points-at e9832fa              # → run/inn1-v1
-git show --stat e9832fa                  # 那次创新动了哪些文件
+git tag --points-at e9832fa              # → run/i08-v1（正式实验必须有）
+git show --stat e9832fa                  # 那次冻结时的提交动了哪些文件
 git show e9832fa:config.py               # 不切目录直接读当时的配置
-```
-
-### 粘进 AGENTS.md / CLAUDE.md 的规则块
-
-```text
-## Git 工作流（策略一：先 Squash 后跑）
-1. main 的语义 = 一个创新一个 commit；每个正式实验的 commit 都在 main 上。禁止在主目录直接改代码。
-2. dev 是唯一长期开发分支，检出在 <主目录>.worktrees/dev/；多个创新共用 dev，靠文件名/config 隔离，不靠分支。
-3. 开发只在 dev worktree：小步 commit，前缀带创新 ID；每步跑 scripts/ci.sh，红灯不 commit。
-4. 候选 H = scripts/gitflow.sh candidate 通过（CI 退出码 0 + 工作树干净）。通过后才进入 review。
-5. Review 通过后从 H 的干净快照（git archive H + GIT_STAMP commit=H）上机冒烟；冒烟通过才 squash，冒烟产物不进账本。
-6. 冒烟通过后在主目录 scripts/gitflow.sh squash "<msg>"：main 得 S，dev 归位到 S。dev 领先 main 超过一个创新即违规。
-7. 正式实验只从 scripts/gitflow.sh freeze <run_id> 建的 run worktree 启动：分支 train/<run_id>，HEAD = main；stamp 的 commit 必须等于 main HEAD。
-8. run worktree 与 train/* 分支只读，禁止 commit。发现 bug 回 dev 修，重新 candidate → 冒烟 → squash → freeze 新 run_id；旧结果作废。
-9. 结果 provenance：账本里的 commit 必须 git branch --contains 命中 main，否则结果不得进论文。
-10. 结果差不 revert：账本标 negative，代码留在树里；确需清理另起 chore(<ID>): drop。
-11. 收尾 scripts/gitflow.sh cleanup <run_id>：先核对 tag run/<run_id> 存在、run worktree HEAD 严格等于该 tag 的提交（只核对"仍在 main 上"不够）、仍检出 train/<run_id>（detached 模式须仍为 detached）、该提交仍在 main 上且树干净（被 .gitignore 隐藏的文件也算，只放行 GIT_STAMP.json 与字节码缓存），再删 worktree 与 train/<run_id> 分支；tag 与账本保留；核对失败保留现场，不得 -D / --force 强删。结果永远不放在 run worktree 内。
-12. main 只经 squash 前进；禁止 rebase / force-push main。
 ```
 
 ---
@@ -161,27 +176,30 @@ git show e9832fa:config.py               # 不切目录直接读当时的配置
 
 每个循环结束后逐条核对，任一不成立就是流程被绕过了：
 
-1. `git log --oneline main`：每行一个创新（或一次 `fix(<ID>)`），没有 `wip` / `try` 类 commit。
-2. 账本每一行的 commit 都满足 `git branch --contains <commit>` 命中 `main`，且有对应 `run/<run_id>` tag。
-3. `git worktree list` 只剩主目录和 dev，`git branch --list 'train/*'` 为空；没有残留的 run worktree。
-4. 每个正式实验的 stamp 里 `dirty = false`，commit 等于当时的 main HEAD。
-5. `git diff main dev` 在归位后为空；开始下一个创新后 dev 只领先 main 该创新的 commit。
-6. 主目录 `scripts/ci.sh` 绿。
-7. 从任意一个论文数字出发，五条命令内能读到当时的 config 和模型源码，不需要切换目录。
+1. 账本每一行的 commit 都满足 `git branch --contains <commit>` 命中 `main`、`dirty = 0`，正式实验还有对应的 `run/<run_id>` tag。
+2. 每个正式实验的 stamp 里 `dirty = false`，commit 等于该 `run/<run_id>` tag 指向的提交。
+3. `git worktree list` 只剩主目录，外加正在跑的 run worktree 或正在用的并行 worktree；`git branch --list 'train/*' 'wt/*'` 只剩仍在使用的分支。
+4. 被 `--link-assets` 链接过的主目录重资产完好，数量与内容没有因为 worktree 删除而变化。
+5. 主目录 `scripts/ci.sh` 绿。
+6. 从任意一个论文数字出发，五条命令内能读到当时的 config 和模型源码，不需要切换目录。
 
-Git Graph 里应该看到：**main 一条直线，节点数 = 创新数；dev 要么与 main 重合，要么在 main 正上方多几个节点；tag 标在跑过正式实验的 commit 上；实验进行中 `train/<id>` 标签停在 S 上，cleanup 后消失；没有分叉、没有 merge 气泡。**
+Git Graph 里应该看到：**`main` 一条直线，小步提交按时间排列；`run/*` tag 标在跑过正式实验的提交上；实验进行中 `train/<id>` 标签停在 tag 上，cleanup 后消失；并行分支 `wt/<name>` 快进合回后与 `main` 重合，wt-rm 后消失；没有分叉、没有 merge 气泡。**
+
+不要 force-push，也不要改写已打 `run/*` tag 的 `main` 历史，否则 tag 与账本里的 commit 会脱离 `main`。何时 `git push origin main` 由用户决定。
 
 ---
 
 ## 附：脚本速查
 
-```text
-scripts/ci.sh                          清 __pycache__ → 测试 → 退出码（只接受 -h/--help，其他参数退出码 2 且无副作用）
-scripts/gitflow.sh init                建 dev worktree（一次）
-scripts/gitflow.sh candidate           dev 里：CI + 干净树 + 打印 H 与 review 摘要
-scripts/gitflow.sh squash "<msg>"      主目录：squash 得 S，dev 归位
-scripts/gitflow.sh freeze <run_id>     主目录：tag + run worktree（分支 train/<run_id>）+ stamp
-scripts/gitflow.sh cleanup <run_id>    核对 HEAD = tag run/<run_id>、检出 train/<run_id>（或 detached）、树干净 → 删 run worktree 与 train/<run_id>
-scripts/gitflow.sh status              worktree 列表 + graph + tag
-scripts/gitflow.sh help                打印用法（任意目录，含仓库外）
-```
+| 命令 | 在哪里 | 做什么 |
+|---|---|---|
+| `scripts/ci.sh` | 任意 | 清 `__pycache__` → 测试 → 退出码（只接受 `-h` / `--help`，其他参数退出码 2 且无副作用） |
+| `scripts/gitflow.sh candidate` | 主目录 | CI + 代码范围干净门 + 打印 `H = <短哈希>` 与摘要 |
+| `scripts/gitflow.sh freeze <run_id>` | 主目录（检出 `main`） | 代码门 → tag `run/<run_id>` → run worktree（分支 `train/<run_id>`）+ stamp |
+| `scripts/gitflow.sh freeze <run_id> --no-worktree` | 主目录（检出 `main`） | 代码门 → 只打 tag 并在主目录生成 stamp，供 `git archive run/<run_id>` 同步 |
+| `scripts/gitflow.sh freeze <run_id> --link-assets <relpath>...` | 主目录（检出 `main`） | 同默认 freeze，另在 run worktree 里建指向主目录真源的符号链接 |
+| `scripts/gitflow.sh cleanup <run_id>` | 主目录 | 核对 HEAD = tag `run/<run_id>`、检出 `train/<run_id>`（或 detached）、树干净 → 摘链接 → 删 run worktree 与 `train/<run_id>`，tag 保留 |
+| `scripts/gitflow.sh wt-add <name> [--link-assets <relpath>...]` | 主目录 | 从 `main` 建 `wt-<name>`（分支 `wt/<name>`），可选挂载资产链接 |
+| `scripts/gitflow.sh wt-rm <name>` | 主目录 | 核对已合入 `main`、树干净 → 摘链接 → 删 worktree → `git branch -d wt/<name>` |
+| `scripts/gitflow.sh status` | 任意仓库内 | 当前分支、worktree 列表、最近的 `run/*` tag、代码门是否干净 |
+| `scripts/gitflow.sh help` | 任意目录（含仓库外） | 打印用法 |
