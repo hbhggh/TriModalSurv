@@ -1,0 +1,52 @@
+{
+  "review": "Adversarial Review",
+  "target": {
+    "mode": "working-tree",
+    "label": "working tree diff",
+    "explicit": true
+  },
+  "threadId": "01a13efc-0a62-7290-8f7d-37a66bbc3a17",
+  "context": {
+    "repoRoot": "<仓库根>",
+    "branch": "dev",
+    "summary": "Reviewing 0 staged, 1 unstaged, and 7 untracked file(s)."
+  },
+  "codex": {
+    "status": 0,
+    "stderr": "",
+    "stdout": "{\"verdict\":\"needs-attention\",\"summary\":\"不应发布：首审的重复启动问题仍存在于“请求已认领、PID 尚未写入”的窗口，现有并发测试没有稳定覆盖该竞态。\",\"findings\":[{\"severity\":\"high\",\"title\":\"已认领但尚未写入 PID 的任务可被同名 start 绕过\",\"body\":\"kernel 先把 `JOB.req.TOKEN` rename 为 `JOB.run.TOKEN`，随后才启动进程并写 `JOB.pid`；但 `register_request()` 只检查 `req.*` 和 pid，不检查 `run.*`。若第二个同名 start 恰在 rename 后、PID 写入前登记，它会看到既无 req 又无 pid，创建第二个请求；第一项完成后，排队的第二项仍会执行，造成同名训练重复运行和额外 GPU 费用。T3 只依赖自然调度并发，通常命中 req 或 pid 状态，没有人为暂停在该窗口，因此通过不能排除该竞态。\",\"file\":\"tools/colab_job.sh\",\"line_start\":83,\"line_end\":99,\"confidence\":0.99,\"recommendation\":\"在同一把 job 锁内同时拒绝 `JOB.req.*` 和 `JOB.run.*`；增加确定性测试钩子，让首个请求在 rename 成 run 后、写 pid 前暂停，再发起同名 start，断言第二次被拒且最终只执行一次。\"}],\"next_steps\":[\"补上 `run.*` 未决状态检查和确定性的 claim-to-pid 竞态测试后再复审。\"]}",
+    "reasoning": [
+      "**Preparing for code inspection**",
+      "**Identifying race condition flaw**",
+      "**Analyzing concurrency in registration and claims**",
+      "**Reviewing race condition in colab_job register**"
+    ]
+  },
+  "result": {
+    "verdict": "needs-attention",
+    "summary": "不应发布：首审的重复启动问题仍存在于“请求已认领、PID 尚未写入”的窗口，现有并发测试没有稳定覆盖该竞态。",
+    "findings": [
+      {
+        "severity": "high",
+        "title": "已认领但尚未写入 PID 的任务可被同名 start 绕过",
+        "body": "kernel 先把 `JOB.req.TOKEN` rename 为 `JOB.run.TOKEN`，随后才启动进程并写 `JOB.pid`；但 `register_request()` 只检查 `req.*` 和 pid，不检查 `run.*`。若第二个同名 start 恰在 rename 后、PID 写入前登记，它会看到既无 req 又无 pid，创建第二个请求；第一项完成后，排队的第二项仍会执行，造成同名训练重复运行和额外 GPU 费用。T3 只依赖自然调度并发，通常命中 req 或 pid 状态，没有人为暂停在该窗口，因此通过不能排除该竞态。",
+        "file": "tools/colab_job.sh",
+        "line_start": 83,
+        "line_end": 99,
+        "confidence": 0.99,
+        "recommendation": "在同一把 job 锁内同时拒绝 `JOB.req.*` 和 `JOB.run.*`；增加确定性测试钩子，让首个请求在 rename 成 run 后、写 pid 前暂停，再发起同名 start，断言第二次被拒且最终只执行一次。"
+      }
+    ],
+    "next_steps": [
+      "补上 `run.*` 未决状态检查和确定性的 claim-to-pid 竞态测试后再复审。"
+    ]
+  },
+  "rawOutput": "{\"verdict\":\"needs-attention\",\"summary\":\"不应发布：首审的重复启动问题仍存在于“请求已认领、PID 尚未写入”的窗口，现有并发测试没有稳定覆盖该竞态。\",\"findings\":[{\"severity\":\"high\",\"title\":\"已认领但尚未写入 PID 的任务可被同名 start 绕过\",\"body\":\"kernel 先把 `JOB.req.TOKEN` rename 为 `JOB.run.TOKEN`，随后才启动进程并写 `JOB.pid`；但 `register_request()` 只检查 `req.*` 和 pid，不检查 `run.*`。若第二个同名 start 恰在 rename 后、PID 写入前登记，它会看到既无 req 又无 pid，创建第二个请求；第一项完成后，排队的第二项仍会执行，造成同名训练重复运行和额外 GPU 费用。T3 只依赖自然调度并发，通常命中 req 或 pid 状态，没有人为暂停在该窗口，因此通过不能排除该竞态。\",\"file\":\"tools/colab_job.sh\",\"line_start\":83,\"line_end\":99,\"confidence\":0.99,\"recommendation\":\"在同一把 job 锁内同时拒绝 `JOB.req.*` 和 `JOB.run.*`；增加确定性测试钩子，让首个请求在 rename 成 run 后、写 pid 前暂停，再发起同名 start，断言第二次被拒且最终只执行一次。\"}],\"next_steps\":[\"补上 `run.*` 未决状态检查和确定性的 claim-to-pid 竞态测试后再复审。\"]}",
+  "parseError": null,
+  "reasoningSummary": [
+    "**Preparing for code inspection**",
+    "**Identifying race condition flaw**",
+    "**Analyzing concurrency in registration and claims**",
+    "**Reviewing race condition in colab_job register**"
+  ]
+}

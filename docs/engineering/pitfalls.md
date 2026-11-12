@@ -270,12 +270,27 @@
 | E41 | macOS 上 `tar -rf` 追加文件会带上扩展属性，Linux 解包多出 `._<文件名>`（AppleDouble），远端文件数比清单多 1 个。 | 在 macOS 上打包传服务器前 `export COPYFILE_DISABLE=1`；远端核对除了 `sha256sum -c` 还要比对文件数。 | 本会话 2026-10-11 I07 冒烟部署 |
 | V43 | 授权摘要只绑定 ckpt 时，授权后改 run.json（config、best_epoch）仍能通过评估；资产先整体校验、后按路径重读，中间有替换窗口。 | 测试授权同时绑定 best.pt 与 run.json 的哈希，评估入口核对 config 哈希；数据文件只读一次字节、按 manifest 核对后从同一份字节解析。 | I07 节点一第 3 轮审查（reviews/20261010-node1-terminal/round3） |
 
+## Colab 小时级验证补充（2026-10-15）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| C18 | `colab_job.sh start` 的取消标记按任务名共享，超时后同名重试会删掉它，已进 kernel 队列的旧请求随后照常启动，同名任务跑两份、持续扣费；修复后又先后漏掉"已认领未写 pid""子进程已退出、认领者未写 rc"两个窗口。 | 有排队语义的启动必须一次请求一个 token、远端原子认领与撤销、登记在锁内完成；判断能否回收看认领者（kernel 进程）而不只看子进程；每个窗口用直接构造状态的确定性测试覆盖。 | docs/reviews/20261015-colab-job/（三轮 Codex 审查）；tools/test_colab_job_start.sh |
+| M8 | 计划写了 Colab 预算硬上限，但执行靠主控在线；主控结束回合等用户回复，训练结束后 VM 空转 63 分钟，超预算约 1.2 CU。 | 付费会话运行期间结束回合前，必须先挂跨回合的本地看门狗（Bash run_in_background），在训练结束或到达硬上限时自动 pull 并 down。 | Colab 验证报告 Bug Post-Mortem 6（~/colab_runs/poc-20261015/） |
+| E42 | 这台 Mac 的 `AppleClamshellCausesSleep = No`，合盖不休眠；"合盖 20 分钟"测试没有发生，用户按钮上的预置文字也不能当证据。 | 休眠或断网测试前先查 `ioreg -r -k AppleClamshellState -d 1`；测试后用 `pmset -g log` 的 Sleep/Wake 时间证明测试确实发生，没有系统证据不算测过。 | Colab 验证报告 Bug Post-Mortem 7 |
+
 ## Office Viewer 补丁台账补充（2026-10-26）
 
 | ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
 | --- | --- | --- | --- |
 | E43 | Office Viewer `dist/index.min.js` 在 2026-10-07/09 被另一工作目录（`~/Documents/Codex/excalidraw-tag-integration/`）的脚本在补丁 C 之上连续叠了 4 层，各自记账却没回写 C 的 `hashes.json`，导致 `manage-patch.py check/apply/rollback` 全部拒绝；绕过哈希强行回滚会连带抹掉这 4 层。 | 改任何已记账的扩展文件前，先跑该文件所属台账的 `check`；改完把新哈希登记回同一台账（`hashes.json` 加上层键，README 写清层次与回滚顺序），不在别的目录另起一套哈希表而不回写。 | /Users/wuhao/Documents/Codex/patches/office-outline-color-20260922/README.md（2026-10-26 台账断账 Post-Mortem） |
 | E44 | 测"循环/游标/重置"的断言时，初始状态恰好让"继续前进"与"重置"落到同一目标（2 个目标、游标停在第 2 个），删掉重置语句的变体仍全绿，测试形同虚设。 | 这类断言先构造让"继续"与"重置"结果不同的初始状态，并用删掉重置语句的变体确认测试会变红。 | /Users/wuhao/Documents/Codex/patches/outline-tag-badges-20261026/result.md（Bug Post-Mortem） |
+
+## 删除线完成态补充（2026-10-26）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| E45 | 待办树正则里判断"标签在不在删除线里"的前瞻写成逐字符分支 `(?:[^~\r\n]\|~(?!~))*`，在 excalidraw 内嵌图片的超长行（约 83 万字符）上爆 PCRE2 JIT 栈，rg 退出码 2、该文件后面的条目全部静默丢失；加 `{0,1000}` 上限又编译过大。 | 对整行向后扫描的前瞻一律写成展开循环 `[^~\r\n]*(?:~(?!~)[^~\r\n]*)*`（逐字符部分交给单个字符类）；改正则后在含超长行的真实文件上跑 rg，看退出码和 stderr，不只看命中数。 | 知识库 `.system/lab/collab/20261026-删除线完成态/notes.md`；`~/Library/Application Support/Claude/side-session-notes/local_983ea64a-…/strike-done-tag-probe-20261026.md` |
+| E46 | 用 Python 把正则拼进 settings.json 时，raw 字符串和普通 f-string 混用，`\r\n` 变成真回车换行写进 JSON；插件用 pattern 文件把正则交给 rg，rg 按行切 pattern，整条正则会坏掉。 | 拼正则一律用 `r` / `rf` 前缀；写回配置后解码检查不含 `\r`、`\n` 字符，验收脚本把它设成硬检查。 | 同上（第 2 步 Bug Post-Mortem） |
 
 ## Office Viewer 大纲进度补充（2026-11-01）
 
@@ -298,3 +313,4 @@
 | V44 | 间谍测试按 `t.encode() in blob` 断言 npz 字节里没有 test 患者 id，但 numpy 的 `<U` 字符串按 UTF-32 存储，ASCII 搜索永远搜不到，删掉行过滤的变异仍全绿。 | 对二进制容器（npz / pickle / parquet）的"不含某值"断言必须先解析再核对字段值与行数；新守卫一律用"删掉守卫"的变异确认测试会变红。 | experiments/I08_ps3_shared_recovery/tests/test_cache.py（test_trainval_reader_never_hands_test_rows_to_loader） |
 | V45 | 为隔离 test 在读取代理里先删掉 test 行再交给下游加载器，下游自带的跨 split 重叠检查随之失效：同一患者若同时在 train 与 test，会作为 train 数据带入。 | 在边界处过滤数据前，先在完整数据上做下游原本负责的完整性检查（D1：part 枚举、id 唯一、两两不交），再过滤；补"跨 split 重复必须拒绝"的负例。 | experiments/I08_ps3_shared_recovery/reviews/20261108-node1-impl/（Codex 复审 R2-1） |
 | E51 | zsh 中 `git cat-file -e $H:experiments/__init__.py` 的 `$H:e` 被当作扩展名修饰符，路径变成 `xperiments/...`，检查报不存在。 | zsh 里变量后紧跟冒号一律写 `${H}:`；"文件不存在"类结论先核对命令实际展开的参数。 | 本会话 2026-11-08 I08 部署 |
+| E52 | Office Viewer（Vditor）打开并保存 Markdown 文件时，会把表格单元格反引号内的裸竖线符（ASCII `0x7C`）当作列分隔符解析，超出表头列数的整段后续内容被静默截断。 | Markdown 表格单元格内部（含反引号与公式）严禁写任何竖线符（枚举分隔改用 ` / ` 或 ` · `，范数改用 `\lVert ... \rVert`），落盘后逐行断言每行管道符计数与表头严格一致。 | 03_index-故事线 A-1｜患者级动态恢复_v1.md（2026-11-11 交接契约收单 Post-Mortem） |

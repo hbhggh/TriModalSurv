@@ -76,7 +76,7 @@
 | μ^F、μ^Ω、患者列表、mask | 否（只来自本折 train） |
 | C | 无参数 |
 
-训练策略见 `config.yaml: train`：full-batch，AdamW，lr 1e-3，≤ 200 epoch，候选 r ∈ {16, 32} × λ_m ∈ {0.05, 0.1}，按本折 val 六模式平均 Cox 损失选模，seed 2026；全程不读 test。
+训练策略见 `config.yaml: train`：full-batch，AdamW，lr 1e-3，≤ 200 epoch，固定 `r = 32`、`λ_m = 0.1`，按本折 val 六模式平均 Cox 损失选模，seed 2026；全程不读 test。
 
 ## 5. 静默错误清单 → 守卫
 
@@ -102,7 +102,7 @@
 | Stage 2a | full-batch AdamW 训练 A1 + B1（+ C1），按 val 六模式 Cox 选 epoch 与配置 | `train_eval.train_base / stage2a_grid` |
 | Stage 2b | 固定 Stage 2a 的 U_m、R、b，零重训挂载 B3 / B5 / B6，K × τ × α_max 网格按 val 选 | `train_eval.Plugin`、`operators.py` |
 
-- B6-LOO：ẑ = ẑ^{B1} + α_i Σ_{j∈N_K(i)} a_ij e_j；残差池两种口径 `in_fold_masked`（B1 的 train 误差，检索排除自身）与
+- B6-LOO：ẑ = ẑ^{B1} + α_i Σ_{j∈N_K(i)} a_ij e_j；残差池两种口径 `in_fold_masked`（B1 的 train 残差经 Hat 矩阵对角元留一杠杆系数 (1 − H_jj)^{-1} 去偏放大，检索排除自身）与
   `exact_loo_hat`（固定 U 上闭式 Ridge 的 PRESS 精确留一残差）；相似度默认 `per_modality_mean_cos`；
   门控 α_i = α_max σ(γ(s_{i,(1)} − δ))，δ / IQR 来自 train 留一最近邻相似度，零可学习参数。α_max = 0 时逐值退化为 B1（单测钉死）。
 - 自查询：val 患者本不在残差池里，自掩码只影响 train 侧统计；守卫 `contract.check_b6_no_self_leak` 在每次检索后按 patient_id 核对。
