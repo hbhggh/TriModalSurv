@@ -327,3 +327,11 @@
 | V48 | `check_anti_ai_and_numbers.py` 只扫正文，摘要写在导言区时不在扫描范围内，退出码 0 不代表摘要也过了门禁。 | 摘要在导言区时单独抽出来按 `--strict` 再查一遍，并在汇报里写明；门禁脚本后续应覆盖导言区的 abstract。 | 初稿会话 2026-11-12（`p5-draft-handoff.md` 收尾补充） |
 | V49 | 从对比论文 PRIME 的参考文献表转抄 bib，MCAT 的页码是错的（PRIME 写 4015–4025，Crossref 为 3995–4005），Cox 1972 的页码范围也与一手来源不同。 | bib 条目一律按一手来源（Crossref、arXiv API、会议论文集页面）逐字段核对，不以他人论文的参考文献表为准；与二手来源不一致时按一手来源改并记录。 | 同上（文献核真节） |
 | C19 | `scripts/codex_review.sh` 默认模型 `gpt-5.6-sol` 在当时的 ChatGPT 账号下不可用，companion 返回 400 `model_not_found`，审查没有产出任何结论；所有用该脚本的审查节点都会以同样方式失败。 | 审查调用返回 `model_not_found` 时，按 AGENTS.md「自动审查闭环」第 5 条停下交用户，不自动换模型重发；换模型用 `CODEX_MODEL=<模型>` 并换新的输出目录。 | P2 制表会话 2026-11-12（`experiments/I08_ps3_shared_recovery/reviews/20261112-paper-tables/` 首次调用） |
+
+## 单主干收敛补充（2026-11-13）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| G9 | 归并 dev 工作树期间，另有论文流水线会话在 dev 与主目录里持续写文件；只在探索阶段看过一次状态，校验通过后 dev 里又多出 8 条坑台账，直接退役会丢掉它们。 | 归并与删除目录前各过一道静默门：没有进程的工作目录在待删目录下、分支 HEAD 未变、没有文件晚于校验清单；不过门就停下，增量追平后重新校验。 | docs/reviews/20261112-single-main-workflow/tools/quiet_gate.py；本次收敛 2026-11-13 退役前门 B |
+| G10 | 以 `/` 结尾的忽略规则（如 `logs/`、`checkpoints/`）不匹配符号链接，worktree 里挂的资产链接会以 `??` 出现，`git worktree remove` 也因此拒绝删除。 | 往 worktree 挂符号链接时，把链接清单登记在 worktree 的 git 管理目录，收尾先按登记逐个摘掉合法链接（不带尾斜杠、不递归）再 `worktree remove`；用含尾斜杠忽略规则的夹具测住。 | tests/test_workflow_scripts.py（GitflowLinkedAssetsTests） |
+| S7 | 把 `/private/tmp` 当作会话期兜底备份，电脑重启后整个目录被清空；macOS 的 tmp 清理还会每天删除 3 天未访问的文件，搬进去的旧工作树当晚就会被清掉大半。 | 不可再生的备份、退役目录与校验清单一律放家目录等非临时位置；`/private/tmp` 只放随时可重建的中间文件。 | 本次收敛 2026-11-13 重启后 `/private/tmp/trimodalsurv-converge-20261112/` 消失；decision-reviewer 审查 |
