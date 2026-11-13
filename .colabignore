@@ -1,0 +1,30 @@
+# colab_job.sh（~/.claude/skills/colab-gpu/scripts/）push 的追加排除规则（rsync exclude 语法；每行一条，# 开头为注释，不支持行尾注释）。
+# 脚本内置默认排除始终生效，这里只追加：.git/ __pycache__/ .venv/ .mypy_cache/ .pytest_cache/ .DS_Store
+#   outputs/ logs/ checkpoints/ wandb/ collab/ .env .env.* *.pem *.key
+# 被排除的路径既不上传，也不会被 push 的 --delete 从远端删掉：训练写结果的目录必须出现在这里或内置默认里。
+# 远端运行请从 git archive 快照目录 push（AGENTS.md「Git 工作流」第 5 条「冒烟」），不要直接 push 开发目录。
+
+# 1) 结果与运行产物：保护远端，push 不覆盖、不删除
+/experiments/*/results/
+/experiments/*/runs/
+/results/
+/runs/
+/results.tsv
+tmp_sur_cache*/
+*.pt
+*.pth
+*.ckpt
+# 注：上面三条也挡住了上传；VM 被回收后要把本地 checkpoint 推回去续训，请用单独的 rsync 命令。
+
+# 2) 与 GPU 运行无关的目录：不上传
+/experiments/*/reviews/
+/archive/
+/manuscript/
+/baselines/
+/NPJ/
+/image/
+/ideaspark_run/
+/docs/
+/.claude/
+/.jj/
+/.vscode/

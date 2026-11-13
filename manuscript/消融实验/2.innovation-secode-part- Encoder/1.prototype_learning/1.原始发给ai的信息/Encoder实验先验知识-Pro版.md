@@ -98,12 +98,12 @@ LUAD/none 的 m1 分支触发0次，该列与 `upstream_combo` 的五个seed读�
 
 令 `P_i∈R^(128×1536)` 是 WSI 缓存，`a_ik` 是去中心前识别的有效行掩码。只允许合法非零前缀/补零后缀。
 
-\[
+$$
 u_i=\frac{\sum_k a_{ik}P_{ik}}{\sum_k a_{ik}},\quad
 \mu_c^W=\frac{1}{|I_c|}\sum_{j\in I_c}u_j,\quad
 q_i=u_i-\mu_c^W,\quad
 j^*=\arg\max_{j\in\mathcal D_i}\cos(q_i,q_j). \tag{E1}
-\]
+$$
 
 `I_c` 仅同癌 train，患者等权；候选排除本人且真实具有全部缺失目标模态，双缺用同一donor；同分按patient ID排序。none不使用RNA联合相似度（仅text_100的适用路径使用α）；没有重新K-means或展平余弦。源码：[key](Pro证据/code/wsi_meanpool_key.py)、[推理路由](Pro证据/code/inference_rules1to5.py)、[库](Pro证据/code/patient_bank.py)。
 
@@ -115,21 +115,21 @@ j^*=\arg\max_{j\in\mathcal D_i}\cos(q_i,q_j). \tag{E1}
 
 ### E3：单模态编码与冻结融合
 
-\[
+$$
 z_i^m=\phi_m(\operatorname{mean}_{token}X_{i,in}^m),\quad
 \phi_m=\mathrm{Dropout}\circ\mathrm{ReLU}\circ\mathrm{Linear}_m,\quad
 h_i=\mathrm{Transformer}(\{z_i^m+d_m\};\neg f_i). \tag{E3}
-\]
+$$
 
 模型mean与E1的有效行mean不同：历史模型WSI仍含128行padding。完整donor序列先mean再projector，每模态一个融合token；eval时Dropout关闭。源码：[当前NPJC](Pro证据/code/npjc_current.py)。
 
 ### E4：末端 pooling 与 B 风险
 
-\[
+$$
 v_i=\frac{\sum_m\omega_i^m h_i^m}{\max(1,\sum_m\omega_i^m)},\quad
 \eta_{it}=\mathrm{clip}(\sigma(H_c(v_i)_t),10^{-6},1-10^{-6}),\quad
 S_{it}=\prod_{\tau\le t}(1-\eta_{i\tau}),\quad R_i=-\sum_tS_{it}. \tag{E4}
-\]
+$$
 
 本人有效模态权重1；检索填入位0.5；m1填入位1；仍屏蔽位0。仅调整末端pooling，不改变attention。代码实际模态顺序img/text/rna。源码：[pooling](Pro证据/code/imputed_pooling.py)、[B口径](Pro证据/code/evaluation_common_current.py)。
 

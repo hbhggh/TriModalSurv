@@ -242,21 +242,21 @@ const T_e=e=>{let t=e.cloneNode(!0);return t.querySelectorAll(`.vditor-ir__marke
 
 ## Bug 现象
 
-todo.md 原文：「#BUG 修复Markdown文件使用office viewer 渲染后的md文件，没当标题的颜色进行标红等颜色标记操作，左侧渲染出来的大纲没有渲染出红色」。截图：`image/todo/1789544641035.png`（正文标题「3. James-Stein 收缩：让检索最坏等于均值 #TODO」为红色，左侧大纲同条目为黑色）。
+todo.md 原文：「＃BUG 修复Markdown文件使用office viewer 渲染后的md文件，没当标题的颜色进行标红等颜色标记操作，左侧渲染出来的大纲没有渲染出红色」。截图：`image/todo/1789544641035.png`（正文标题「3. James-Stein 收缩：让检索最坏等于均值 ＃TODO」为红色，左侧大纲同条目为黑色）。
 
 实际标题写法（`experiments/I01_patient_retrieval/knowledge/data-analysis-from-grok/1.progress/实验结果分析-grok.md` 第 102 行）：
 
 ```markdown
-### #TODO-2. <span style="color: #ff0000;">零训练改 key</span>：按模型实际吃的 WSI 检索 #TODO
+### ＃TODO-2. <span style="color: #ff0000;">零训练改 key</span>：按模型实际吃的 WSI 检索 ＃TODO
 ```
 
-修复前用真实安装版 Lute + jsdom 复现（IR 模式、运行时配置）：大纲标签为 `#TODO-2. <strong>零训练改 key</strong>：按模型实际吃的 WSI 检索 #TODO`——颜色丢失，且带色文字被错误渲染成粗体；WYSIWYG 模式下带 span 的标题文字整段丢失（标签只剩 `. `）。
+修复前用真实安装版 Lute + jsdom 复现（IR 模式、运行时配置）：大纲标签为 `＃TODO-2. <strong>零训练改 key</strong>：按模型实际吃的 WSI 检索 ＃TODO`——颜色丢失，且带色文字被错误渲染成粗体；WYSIWYG 模式下带 span 的标题文字整段丢失（标签只剩 `. `）。
 
 ## 根因
 
 - Lute 把行内 HTML 编码成 `span[data-type="html-inline"][data-md-source]` 包装（显示层 + 元数据），A 的目录副本直接把这个包装交给 `HTML2VditorDOM` / `SpinVditorDOM`，TOC 转换既不保留颜色又会把包装误转成 `**`（IR）或丢字（WYSIWYG）。
 - 历史候选 B 已能补回颜色，但因正文嵌套 span 的既有缺陷被整体回滚，单层 span/font 颜色（原生已通过）随之丢失一周。
-- 新增发现：Lute 的 obsidian-tag 节点是「display + 隐藏 source」双层 DOM，B 的文本遍历会把 `#TODO` 计两次，导致目录文字比对失败而安全跳过；当前运行时（0911 本地补丁 `this.vditor.lute.SetObsidianTag(!1)`）标签是纯文本，但测试矩阵必须覆盖两种配置。
+- 新增发现：Lute 的 obsidian-tag 节点是「display + 隐藏 source」双层 DOM，B 的文本遍历会把 `＃TODO` 计两次，导致目录文字比对失败而安全跳过；当前运行时（0911 本地补丁 `this.vditor.lute.SetObsidianTag(!1)`）标签是纯文本，但测试矩阵必须覆盖两种配置。
 
 ## 目标文件与当前状态
 
@@ -403,10 +403,10 @@ function officeOutlineStrike(heading, label) {
 
 ## 验证
 
-- 程序测试 `test-color.cjs`（真实安装版 Lute + jsdom 26，`OFFICE_JSDOM` 指定 jsdom 路径）：**87 项通过**；矩阵 = B 原 12 例 × IR/WYSIWYG × {Lute 默认, 运行时 obsidian 开+obsidianTag 关} + 用户真实标题 5 例（十六进制颜色、局部/整行 span、`#TODO` 尾标签、`✅`）+ 重名标题/清除样式 + 手工 DOM（html-inline 元数据、嵌套颜色、obsidian-tag 双层单次计数）+ 文字不一致必须安全跳过。修复前基线跑同一脚本在首个颜色用例失败（`test-color-before.log`）。
+- 程序测试 `test-color.cjs`（真实安装版 Lute + jsdom 26，`OFFICE_JSDOM` 指定 jsdom 路径）：**87 项通过**；矩阵 = B 原 12 例 × IR/WYSIWYG × {Lute 默认, 运行时 obsidian 开+obsidianTag 关} + 用户真实标题 5 例（十六进制颜色、局部/整行 span、`＃TODO` 尾标签、`✅`）+ 重名标题/清除样式 + 手工 DOM（html-inline 元数据、嵌套颜色、obsidian-tag 双层单次计数）+ 文字不一致必须安全跳过。修复前基线跑同一脚本在首个颜色用例失败（`test-color-before.log`）。
 - Obsidian 标签开启配置（非运行时）：含标签标题因 Lute TOC 自身丢标签文字而安全跳过（不着色、无乱码），不含标签标题正常着色；记录于 `test-color-after.log` 的 `tagOutcome`。
 - 删除线旧回归 `test-strike-regression.cjs`：32 项通过；`node --check` 通过；补丁正向/反向往返哈希一致。
-- 原生 VS Code（窗口「outline-color-demo.md — 知识库 (工作区)」，IR 模式，通过后台窗口截图放大核对）：`零训练改 key` 红、其余黑且不再粗体；`3. James-Stein …#TODO` 整条红；`交集（可以直接锁定` 红而 `）✅` 黑；`红色` 红；`蓝色` 蓝 + `删除` 删除线 + `粗体` 粗；普通标题无颜色。演示文档：`outline-color-demo.md`。
+- 原生 VS Code（窗口「outline-color-demo.md — 知识库 (工作区)」，IR 模式，通过后台窗口截图放大核对）：`零训练改 key` 红、其余黑且不再粗体；`3. James-Stein …＃TODO` 整条红；`交集（可以直接锁定` 红而 `）✅` 黑；`红色` 红；`蓝色` 蓝 + `删除` 删除线 + `粗体` 粗；普通标题无颜色。演示文档：`outline-color-demo.md`。
 - 未覆盖：工具栏字体颜色（Pro 授权）编辑路径、撤销/重做后的目录刷新时序只由既有重建机制保证，未逐一原生实点。
 
 ## 回滚 / 重新应用

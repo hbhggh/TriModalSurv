@@ -270,9 +270,68 @@
 | E41 | macOS 上 `tar -rf` 追加文件会带上扩展属性，Linux 解包多出 `._<文件名>`（AppleDouble），远端文件数比清单多 1 个。 | 在 macOS 上打包传服务器前 `export COPYFILE_DISABLE=1`；远端核对除了 `sha256sum -c` 还要比对文件数。 | 本会话 2026-10-11 I07 冒烟部署 |
 | V43 | 授权摘要只绑定 ckpt 时，授权后改 run.json（config、best_epoch）仍能通过评估；资产先整体校验、后按路径重读，中间有替换窗口。 | 测试授权同时绑定 best.pt 与 run.json 的哈希，评估入口核对 config 哈希；数据文件只读一次字节、按 manifest 核对后从同一份字节解析。 | I07 节点一第 3 轮审查（reviews/20261010-node1-terminal/round3） |
 
+## Colab 小时级验证补充（2026-10-15）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| C18 | `colab_job.sh start` 的取消标记按任务名共享，超时后同名重试会删掉它，已进 kernel 队列的旧请求随后照常启动，同名任务跑两份、持续扣费；修复后又先后漏掉"已认领未写 pid""子进程已退出、认领者未写 rc"两个窗口。 | 有排队语义的启动必须一次请求一个 token、远端原子认领与撤销、登记在锁内完成；判断能否回收看认领者（kernel 进程）而不只看子进程；每个窗口用直接构造状态的确定性测试覆盖。 | docs/reviews/20261015-colab-job/（三轮 Codex 审查）；tools/test_colab_job_start.sh |
+| M8 | 计划写了 Colab 预算硬上限，但执行靠主控在线；主控结束回合等用户回复，训练结束后 VM 空转 63 分钟，超预算约 1.2 CU。 | 付费会话运行期间结束回合前，必须先挂跨回合的本地看门狗（Bash run_in_background），在训练结束或到达硬上限时自动 pull 并 down。 | Colab 验证报告 Bug Post-Mortem 6（~/colab_runs/poc-20261015/） |
+| E42 | 这台 Mac 的 `AppleClamshellCausesSleep = No`，合盖不休眠；"合盖 20 分钟"测试没有发生，用户按钮上的预置文字也不能当证据。 | 休眠或断网测试前先查 `ioreg -r -k AppleClamshellState -d 1`；测试后用 `pmset -g log` 的 Sleep/Wake 时间证明测试确实发生，没有系统证据不算测过。 | Colab 验证报告 Bug Post-Mortem 7 |
+
 ## Office Viewer 补丁台账补充（2026-10-26）
 
 | ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
 | --- | --- | --- | --- |
 | E43 | Office Viewer `dist/index.min.js` 在 2026-10-07/09 被另一工作目录（`~/Documents/Codex/excalidraw-tag-integration/`）的脚本在补丁 C 之上连续叠了 4 层，各自记账却没回写 C 的 `hashes.json`，导致 `manage-patch.py check/apply/rollback` 全部拒绝；绕过哈希强行回滚会连带抹掉这 4 层。 | 改任何已记账的扩展文件前，先跑该文件所属台账的 `check`；改完把新哈希登记回同一台账（`hashes.json` 加上层键，README 写清层次与回滚顺序），不在别的目录另起一套哈希表而不回写。 | /Users/wuhao/Documents/Codex/patches/office-outline-color-20260922/README.md（2026-10-26 台账断账 Post-Mortem） |
 | E44 | 测"循环/游标/重置"的断言时，初始状态恰好让"继续前进"与"重置"落到同一目标（2 个目标、游标停在第 2 个），删掉重置语句的变体仍全绿，测试形同虚设。 | 这类断言先构造让"继续"与"重置"结果不同的初始状态，并用删掉重置语句的变体确认测试会变红。 | /Users/wuhao/Documents/Codex/patches/outline-tag-badges-20261026/result.md（Bug Post-Mortem） |
+
+## 删除线完成态补充（2026-10-26）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| E45 | 待办树正则里判断"标签在不在删除线里"的前瞻写成逐字符分支 `(?:[^~\r\n]\|~(?!~))*`，在 excalidraw 内嵌图片的超长行（约 83 万字符）上爆 PCRE2 JIT 栈，rg 退出码 2、该文件后面的条目全部静默丢失；加 `{0,1000}` 上限又编译过大。 | 对整行向后扫描的前瞻一律写成展开循环 `[^~\r\n]*(?:~(?!~)[^~\r\n]*)*`（逐字符部分交给单个字符类）；改正则后在含超长行的真实文件上跑 rg，看退出码和 stderr，不只看命中数。 | 知识库 `.system/lab/collab/20261026-删除线完成态/notes.md`；`~/Library/Application Support/Claude/side-session-notes/local_983ea64a-…/strike-done-tag-probe-20261026.md` |
+| E46 | 用 Python 把正则拼进 settings.json 时，raw 字符串和普通 f-string 混用，`\r\n` 变成真回车换行写进 JSON；插件用 pattern 文件把正则交给 rg，rg 按行切 pattern，整条正则会坏掉。 | 拼正则一律用 `r` / `rf` 前缀；写回配置后解码检查不含 `\r`、`\n` 字符，验收脚本把它设成硬检查。 | 同上（第 2 步 Bug Post-Mortem） |
+
+## Office Viewer 大纲进度补充（2026-11-01）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| E47 | Office Viewer 大纲进度条按条目宽度取百分比，jsdom 测试全过，真实 Chromium 里 40% 的条却接近满格：Vditor 的大纲 `ul` 是 `width: max-content`，所有条目都和最长标题一样宽（734px，可见区只有 320px）。 | 按百分比画长度的样式，先在真实浏览器里量一次容器宽度与可见宽度是否一致；要跟可见宽度走时用容器查询单位（`container-type: inline-size` + `cqi`）；jsdom 只验属性值，不验视觉长度。 | /Users/wuhao/Documents/Codex/patches/outline-tag-badges-20261026/layers/outline-progress-20261101/README.md（Bug Post-Mortem：进度条按条目宽度失真） |
+| E48 | 用 MutationObserver 断言"渲染不写正文 DOM"，一处监视窗口跨过了测试自己的重建（i$ 按原值重写标题 id，任何实现都红），另一处回调是空函数、`await` 之后 `takeRecords()` 恒为 0，断言形同虚设。 | 用 MutationObserver 断言零写入时，回调必须累积记录，监视窗口只包被测调用，并加一条正向自检（同步写入和跨 await 的写入都能抓到）。 | 同上（Bug Post-Mortem：「不碰正文 DOM」断言失效） |
+
+## I08 框架图补充（2026-11-06）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| E49 | 生成 Excalidraw frame 时 frame 元素沿用通用 id 生成器（`i08-frame-053`），子元素的 frameId 却写常量 `i08-abc-framework-frame`，52 个子元素挂不到 frame 上；预览按 frameId 过滤，正好把 frame 本身漏掉，渲染图看不出问题，拷回主检出后才发现。 | 生成 frame 后断言"frame.id 等于子元素 frameId、所有 id 不重复"；预览要包含 frame 本身，确认能看到 frame 边框与名称再交付。 | experiments/I08_ps3_shared_recovery/tools/build_framework_frame.py（本会话 2026-11-06 Bug Post-Mortem） |
+
+## I08 实现补充（2026-11-08）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| E50 | torch `parametrizations.orthogonal` 对 tall 矩阵默认 householder 映射，叠加 AdamW weight decay 后 ‖UᵀU−I‖ 达 1.0；换 cayley 后 float32 仍在第 1 个 AdamW step 跳到 ~1.1e-5，超过 1e-5 守卫，r=16 在第 1 个 epoch 取 val 最优时载回该状态，开发期 val 实跑中断。 | 正交参数化显式指定映射并在 float64 中计算、对外再转 float32；正交性单测必须覆盖"第 1 步之后"与 weight decay > 0，而不只看训练终点。 | experiments/I08_ps3_shared_recovery/tests/test_operators_and_b6.py（test_orthogonality_after_first_adamw_step_r16）；提交 f4b30740 |
+| V44 | 间谍测试按 `t.encode() in blob` 断言 npz 字节里没有 test 患者 id，但 numpy 的 `<U` 字符串按 UTF-32 存储，ASCII 搜索永远搜不到，删掉行过滤的变异仍全绿。 | 对二进制容器（npz / pickle / parquet）的"不含某值"断言必须先解析再核对字段值与行数；新守卫一律用"删掉守卫"的变异确认测试会变红。 | experiments/I08_ps3_shared_recovery/tests/test_cache.py（test_trainval_reader_never_hands_test_rows_to_loader） |
+| V45 | 为隔离 test 在读取代理里先删掉 test 行再交给下游加载器，下游自带的跨 split 重叠检查随之失效：同一患者若同时在 train 与 test，会作为 train 数据带入。 | 在边界处过滤数据前，先在完整数据上做下游原本负责的完整性检查（D1：part 枚举、id 唯一、两两不交），再过滤；补"跨 split 重复必须拒绝"的负例。 | experiments/I08_ps3_shared_recovery/reviews/20261108-node1-impl/（Codex 复审 R2-1） |
+| E51 | zsh 中 `git cat-file -e $H:experiments/__init__.py` 的 `$H:e` 被当作扩展名修饰符，路径变成 `xperiments/...`，检查报不存在。 | zsh 里变量后紧跟冒号一律写 `${H}:`；"文件不存在"类结论先核对命令实际展开的参数。 | 本会话 2026-11-08 I08 部署 |
+| E52 | Office Viewer（Vditor）打开并保存 Markdown 文件时，会把表格单元格反引号内的裸竖线符（ASCII `0x7C`）当作列分隔符解析，超出表头列数的整段后续内容被静默截断。 | Markdown 表格单元格内部（含反引号与公式）严禁写任何竖线符（枚举分隔改用 ` / ` 或 ` · `，范数改用 `\lVert ... \rVert`），落盘后逐行断言每行管道符计数与表头严格一致。 | 03_index-故事线 A-1｜患者级动态恢复_v1.md（2026-11-11 交接契约收单 Post-Mortem） |
+
+## I08 论文生成补充（2026-11-13）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| E53 | `framework.html` 内嵌 STIX Two Text 可变字体，Chrome `--print-to-pdf` 输出的 PDF 里正文字体变成 Type 3，矢量图入文后期刊排版与放大质量受影响。 | 进 PDF 的网页图只内嵌固定字重实例（用 fontTools `varLib.instancer` 切出 400 / 700 再子集化）；导出后用 `pdffonts` 断言没有 Type 3。 | Fig. 1 会话 2026-11-11（`~/Library/Application Support/Claude/side-session-notes/<主控会话>/fig1-framework/README.md`） |
+| V46 | 旧制表脚本为了凑上 handoff 的字面数字逐臂换统计口径：I07 tri 臂的 Avg SD 硬编码为 0.080，wsi / rna 用三位小数均值，text 用精确均值。 | 制表脚本禁止逐行或逐臂换口径、禁止硬编码派生量；口径写进表注，由独立实现重算断言；与文档字面值不一致时报告差异，不去凑。 | P2 制表会话 2026-11-11（`p2-tables-handoff.md` Post-Mortem 1） |
+| V47 | S1 的两个 Panel 写成两个 `table*` 浮动体，`\input` 进同一文件后 LaTeX 计两个表号，S2–S5 整体错位一位；caption 里写死的 "Supplementary Table S1" 又和自动编号重复。 | 一个 `\input` 文件只放一个带 `\caption` 的编号浮动体，Panel 放在同一浮动体内，caption 不写编号；最小壳编译后检查 .aux 中 newlabel 的编号依次连续。 | 同上（Post-Mortem 2） |
+| G8 | 多个会话共用同一检出时，一个会话先落盘引用尚不存在 API 的测试（TDD 的 RED 中间态），另一个会话跑全量 `ci.sh` 在收集阶段退出码 2，只能排除该文件才得到绿灯。 | 共享检出里，引用新 API 的测试先放 scratchpad，或与实现同一步落盘；无法避免时，先在共享笔记里声明该文件处于 RED 中间态，别的会话据此单独说明，不去改它。 | 同上（Post-Mortem 3）；门禁脚本会话 2026-11-11 汇报 |
+| E54 | `main.tex` 的 sn-jnl / article 自动切换只编译了 article 回退分支：sn-jnl 把 sidewaystable 包进 threeparttable，内部再套 `\resizebox` 报 "Missing \endgroup"；sn-jnl 不定义 `proposition` 环境；版心更窄，公式 1b、9c 和附录符号表溢出。旧 `main.tex` 注释里已记过同根因，没有入台账，又复发两次。 | 有双分支文档类的稿件，每次改导言区、表格或公式后，两个分支都完整编译（sn-jnl 模板只拷到 scratchpad，不进仓库），检查退出码、Overfull 与表号；横向表用不缩放的 tabular，环境用 `\@ifundefined` 条件定义。 | 旧 `manuscript/bmc_initial_draft/main.tex` 注释 Post-Mortem；P2 制表会话 2026-11-12 追加；初稿会话 `p5-draft-handoff.md` 遗留第 7 条 |
+| V48 | `check_anti_ai_and_numbers.py` 只扫正文，摘要写在导言区时不在扫描范围内，退出码 0 不代表摘要也过了门禁。 | 摘要在导言区时单独抽出来按 `--strict` 再查一遍，并在汇报里写明；门禁脚本后续应覆盖导言区的 abstract。 | 初稿会话 2026-11-12（`p5-draft-handoff.md` 收尾补充） |
+| V49 | 从对比论文 PRIME 的参考文献表转抄 bib，MCAT 的页码是错的（PRIME 写 4015–4025，Crossref 为 3995–4005），Cox 1972 的页码范围也与一手来源不同。 | bib 条目一律按一手来源（Crossref、arXiv API、会议论文集页面）逐字段核对，不以他人论文的参考文献表为准；与二手来源不一致时按一手来源改并记录。 | 同上（文献核真节） |
+| C19 | `scripts/codex_review.sh` 默认模型 `gpt-5.6-sol` 在当时的 ChatGPT 账号下不可用，companion 返回 400 `model_not_found`，审查没有产出任何结论；所有用该脚本的审查节点都会以同样方式失败。 | 审查调用返回 `model_not_found` 时，按 AGENTS.md「自动审查闭环」第 5 条停下交用户，不自动换模型重发；换模型用 `CODEX_MODEL=<模型>` 并换新的输出目录。 | P2 制表会话 2026-11-12（`experiments/I08_ps3_shared_recovery/reviews/20261112-paper-tables/` 首次调用） |
+
+## 单主干收敛补充（2026-11-13）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| G9 | 归并 dev 工作树期间，另有论文流水线会话在 dev 与主目录里持续写文件；只在探索阶段看过一次状态，校验通过后 dev 里又多出 8 条坑台账，直接退役会丢掉它们。 | 归并与删除目录前各过一道静默门：没有进程的工作目录在待删目录下、分支 HEAD 未变、没有文件晚于校验清单；不过门就停下，增量追平后重新校验。 | docs/reviews/20261112-single-main-workflow/tools/quiet_gate.py；本次收敛 2026-11-13 退役前门 B |
+| G10 | 以 `/` 结尾的忽略规则（如 `logs/`、`checkpoints/`）不匹配符号链接，worktree 里挂的资产链接会以 `??` 出现，`git worktree remove` 也因此拒绝删除。 | 往 worktree 挂符号链接时，把链接清单登记在 worktree 的 git 管理目录，收尾先按登记逐个摘掉合法链接（不带尾斜杠、不递归）再 `worktree remove`；用含尾斜杠忽略规则的夹具测住。 | tests/test_workflow_scripts.py（GitflowLinkedAssetsTests） |
+| S7 | 把 `/private/tmp` 当作会话期兜底备份，电脑重启后整个目录被清空；macOS 的 tmp 清理还会每天删除 3 天未访问的文件，搬进去的旧工作树当晚就会被清掉大半。 | 不可再生的备份、退役目录与校验清单一律放家目录等非临时位置；`/private/tmp` 只放随时可重建的中间文件。 | 本次收敛 2026-11-13 重启后 `/private/tmp/trimodalsurv-converge-20261112/` 消失；decision-reviewer 审查 |

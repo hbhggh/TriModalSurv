@@ -1,0 +1,52 @@
+{
+  "review": "Adversarial Review",
+  "target": {
+    "mode": "working-tree",
+    "label": "working tree diff",
+    "explicit": true
+  },
+  "threadId": "01a13eed-b6eb-7451-af1d-ff0fa9e9a4e9",
+  "context": {
+    "repoRoot": "<仓库根>",
+    "branch": "dev",
+    "summary": "Reviewing 0 staged, 1 unstaged, and 4 untracked file(s)."
+  },
+  "codex": {
+    "status": 0,
+    "stderr": "",
+    "stdout": "{\"verdict\":\"needs-attention\",\"summary\":\"不应发布：`start` 的取消协议存在可复现竞态，超时后重试可能让旧任务延迟启动，造成重复训练和持续 GPU 扣费。\",\"findings\":[{\"severity\":\"high\",\"title\":\"同名重试会撤销旧排队任务的取消标记\",\"body\":\"第一次 `start` 等待 20 秒后写入共享的 `$job.cancel`，但旧 `colab exec` 请求仍可能已经进入 kernel 队列。用户按提示重新执行同名任务时，第 107 行先删除该取消标记；如果旧请求之后才获执行，它会看不到标记并启动训练。新请求也可能随后启动，导致同一任务重复运行、覆盖同一 pid/rc/log 状态，并持续消耗 GPU。这里的取消状态只按 job 名保存，无法绑定具体启动请求，因此注释和报错所声称的“不会延后启动”不成立；当前也没有针对排队、超时后重试或并发同名 start 的测试。\",\"file\":\"tools/colab_job.sh\",\"line_start\":107,\"line_end\":138,\"confidence\":0.99,\"recommendation\":\"为每次 start 生成唯一 request/token，并让远端请求只读取属于该 token 的取消文件和状态文件；重试不得删除旧 token 的取消状态。另加原子锁，拒绝同一 job 的并发或未决请求，并用模拟排队测试证明旧请求在重试后仍只能写 CANCELLED、绝不会启动命令。\"}],\"next_steps\":[\"修复 token 隔离与原子锁后，补充排队超时、立即同名重试、并发 start 三类回归测试，再复审。\"]}",
+    "reasoning": [
+      "**Needing a tool**",
+      "**Analyzing cancellation and session handling issues**",
+      "**Analyzing security and process risks**",
+      "**Examining job concurrency and timing issues**"
+    ]
+  },
+  "result": {
+    "verdict": "needs-attention",
+    "summary": "不应发布：`start` 的取消协议存在可复现竞态，超时后重试可能让旧任务延迟启动，造成重复训练和持续 GPU 扣费。",
+    "findings": [
+      {
+        "severity": "high",
+        "title": "同名重试会撤销旧排队任务的取消标记",
+        "body": "第一次 `start` 等待 20 秒后写入共享的 `$job.cancel`，但旧 `colab exec` 请求仍可能已经进入 kernel 队列。用户按提示重新执行同名任务时，第 107 行先删除该取消标记；如果旧请求之后才获执行，它会看不到标记并启动训练。新请求也可能随后启动，导致同一任务重复运行、覆盖同一 pid/rc/log 状态，并持续消耗 GPU。这里的取消状态只按 job 名保存，无法绑定具体启动请求，因此注释和报错所声称的“不会延后启动”不成立；当前也没有针对排队、超时后重试或并发同名 start 的测试。",
+        "file": "tools/colab_job.sh",
+        "line_start": 107,
+        "line_end": 138,
+        "confidence": 0.99,
+        "recommendation": "为每次 start 生成唯一 request/token，并让远端请求只读取属于该 token 的取消文件和状态文件；重试不得删除旧 token 的取消状态。另加原子锁，拒绝同一 job 的并发或未决请求，并用模拟排队测试证明旧请求在重试后仍只能写 CANCELLED、绝不会启动命令。"
+      }
+    ],
+    "next_steps": [
+      "修复 token 隔离与原子锁后，补充排队超时、立即同名重试、并发 start 三类回归测试，再复审。"
+    ]
+  },
+  "rawOutput": "{\"verdict\":\"needs-attention\",\"summary\":\"不应发布：`start` 的取消协议存在可复现竞态，超时后重试可能让旧任务延迟启动，造成重复训练和持续 GPU 扣费。\",\"findings\":[{\"severity\":\"high\",\"title\":\"同名重试会撤销旧排队任务的取消标记\",\"body\":\"第一次 `start` 等待 20 秒后写入共享的 `$job.cancel`，但旧 `colab exec` 请求仍可能已经进入 kernel 队列。用户按提示重新执行同名任务时，第 107 行先删除该取消标记；如果旧请求之后才获执行，它会看不到标记并启动训练。新请求也可能随后启动，导致同一任务重复运行、覆盖同一 pid/rc/log 状态，并持续消耗 GPU。这里的取消状态只按 job 名保存，无法绑定具体启动请求，因此注释和报错所声称的“不会延后启动”不成立；当前也没有针对排队、超时后重试或并发同名 start 的测试。\",\"file\":\"tools/colab_job.sh\",\"line_start\":107,\"line_end\":138,\"confidence\":0.99,\"recommendation\":\"为每次 start 生成唯一 request/token，并让远端请求只读取属于该 token 的取消文件和状态文件；重试不得删除旧 token 的取消状态。另加原子锁，拒绝同一 job 的并发或未决请求，并用模拟排队测试证明旧请求在重试后仍只能写 CANCELLED、绝不会启动命令。\"}],\"next_steps\":[\"修复 token 隔离与原子锁后，补充排队超时、立即同名重试、并发 start 三类回归测试，再复审。\"]}",
+  "parseError": null,
+  "reasoningSummary": [
+    "**Needing a tool**",
+    "**Analyzing cancellation and session handling issues**",
+    "**Analyzing security and process risks**",
+    "**Examining job concurrency and timing issues**"
+  ]
+}

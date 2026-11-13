@@ -3,7 +3,7 @@
 #
 # 用法: scripts/codex_review.sh <输出目录> [--base <ref>] [补充焦点 ...]
 #   不给 --base：审查工作树未提交改动（--scope working-tree）
-#   给 --base  ：审查当前分支相对 <ref> 的提交（--scope branch），如 dev 候选用 --base main
+#   给 --base  ：审查当前分支相对 <ref> 的提交（--scope branch），如审查 main 上某个提交之后的改动用 --base <commit>
 #   输出       ：<输出目录>/codex-review.json（companion --json 原文）；已存在则拒绝，不覆盖
 #   退出码     ：0 = 审查已完成并落盘（不代表 PASS，结论看 result.verdict）；1 = 调用失败；2 = 用法错误
 #

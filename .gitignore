@@ -50,6 +50,21 @@ tmp_*/
 # 审查原文含本机绝对路径：只留本地，入库的是 codex-review.public.json（AGENTS.md「自动审查闭环」第 2 条）
 **/reviews/**/codex-review.json
 **/reviews/**/raw/
+# codex_review.sh 调用或校验失败时留下的临时原始输出（mktemp 生成，同样含本机绝对路径）
+**/reviews/**/.codex-review.*
 
 # idea spark 运行产物（2026-10-02）
 ideaspark_run/
+
+# 本机私有知识资产（用户裁决 2026-11-12）：版权文献库、备份、调研草稿与画布原件只留主目录磁盘，不进 Git；
+# 规则全部锚定仓库根，不影响 experiments/ 与 manuscript/ 下的同名文件。画布导出的轻量矢量图 / PDF 照常入库。
+/zotero/
+/.bak/
+/deep-research-*.md
+/0.common-sense.md
+/index.excalidraw
+/index-paper-example-joy.md
+/index-simplify.md
+/生存分析-论文模版.md
+/image/common-sense/
+/image/deep-research-report(5)/

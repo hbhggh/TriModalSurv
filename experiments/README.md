@@ -13,6 +13,7 @@
 | [I04_cap4_multi_prototypes/](I04_cap4_multi_prototypes/README.md) | 时间箱内多原型；已有 D 版实现 |
 | [I05_text_encoder_bcmbert/](I05_text_encoder_bcmbert/README.md) | Text encoder 换成冻结的 BioClinical ModernBERT 嵌入版；消融实验二，轮 C negative（none 严格胜 2/5）；第二轮 A0（全文 ≤8192）开发中 |
 | [I06_llm_condensation/](I06_llm_condensation/README.md) | LLM 浓缩病理报告 → 冻结公开 encoder（NeuML / Qwen3-Embedding）× 结构化 / 摘要四个候选；Text 表征创新（A1 / A2），Phase 0 开发中 |
+| [I08_ps3_shared_recovery/](I08_ps3_shared_recovery/README.md) | 故事线 A-1：冻结 I07，pooled 与风险头之间接 A1 共享基 + B1 按模式恢复，C1 训练期对齐；接口稿 |
 | [_comparisons/](_comparisons/index.md) | 跨实验结果导航与比较边界 |
 | [mcat-1536/](mcat-1536/manifest.md) | MCAT 对照的实验清单 |
 | [npj-uni2/](npj-uni2/manifest.md) | NPJ UNI2 对照的实验清单 |
