@@ -2,12 +2,22 @@
 # gitflow.sh — 科研 Git 工作流助手（单主干 × 按需 worktree；用户裁决 2026-11-12）
 #
 # 子命令（在哪个目录运行有要求，脚本会检查）:
-#   candidate          任意 worktree: 跑 CI（只看退出码）→ 代码范围干净门 → 打印候选 H = <短哈希> 与摘要
-#   freeze <run_id> [--no-worktree] [--link-assets <relpath>...]
-#                      主目录（检出 MAIN）: 先解析参数、校验链接路径、过代码范围干净门，全部通过后才给 MAIN 打 tag
-#                      TAG_PREFIX<run_id>，建 run worktree WT_ROOT/run-<run_id>（分支 RUN_BRANCH_PREFIX<run_id>，
-#                      前缀为空则 detached），写 stamp；任何一步拒绝都不留下 tag、分支或目录
-#     --no-worktree    只打 tag，并在主目录生成 stamp；不建 worktree 与分支（不能与 --link-assets 同用）
+#   candidate          主目录（检出 MAIN）: 跑 CI（只看退出码）→ 代码范围干净门 → 打印候选 H 与摘要；
+#                      wt/* 等其他 worktree 或其他分支上运行即拒绝。打印的完整哈希就是之后传给 freeze 的 H
+#   freeze <run_id> --candidate <H> [--no-worktree] [--link-assets <relpath>...]
+#                      主目录（检出 MAIN）: 先解析参数、核对候选、校验链接路径、过代码范围干净门；之后建 run worktree
+#                      WT_ROOT/run-<run_id>（分支 RUN_BRANCH_PREFIX<run_id>，前缀为空则 detached）、挂链接、写 stamp，
+#                      最后一步才给 MAIN HEAD 打 tag TAG_PREFIX<run_id>。tag 存在即冻结完整成功：中途任何一步失败，
+#                      都回滚本次建的 worktree、分支、链接与 stamp（不 --force、不 -D），不留下 tag。
+#                      无论哪种模式都写 run 级 stamp WT_ROOT/run-<run_id>.GIT_STAMP.json，记录 candidate（H 的完整哈希）、
+#                      commit（实际冻结的 MAIN HEAD）、run_tag，供节点一机械核对。
+#                      同名的 freeze / cleanup（run-<run_id>）与 wt-add / wt-rm（wt-<name>）互斥：开始前在 git 目录
+#                      gitflow-locks/ 下原子建锁，已有锁即拒绝且不动任何东西（复审 R2-2）
+#     --candidate      获审候选 H 的提交哈希（7–40 位十六进制，不收 HEAD、分支名等符号引用）：H 必须在 MAIN 上，
+#                      且 H 与 MAIN HEAD 之间 CODE_PATHS 下没有任何改动（之后只有论文、笔记类提交时放行）
+#     --no-worktree    不建 worktree 与分支，只写 run 级 stamp（不写主目录根，
+#                      已存在即拒绝，commit 必须等于 tag 提交），同步时把它作为 GIT_STAMP.json 放进
+#                      git archive TAG_PREFIX<run_id> 的快照；不能与 --link-assets 同用，也不用 STAMP_CMD
 #     --link-assets    把主目录里的重资产（相对路径；须在主目录存在、在待检出的提交里不存在）用符号链接挂进新 worktree，
 #                      链接指向主目录原位，登记在该 worktree 的 git 管理目录里；收尾只摘链接本身，不碰目标
 #   cleanup <run_id>   任意目录: 核对 tag TAG_PREFIX<run_id> 存在、run worktree HEAD 等于该 tag 的提交、
@@ -17,7 +27,8 @@
 #                      → 全部通过才摘链接、删 worktree 与 run 分支（tag 保留）；任一不符即拒绝并保留现场，不 -D、不 --force
 #   wt-add <name> [--link-assets <relpath>...]
 #                      任意目录: 从 MAIN 建并行 worktree WT_ROOT/wt-<name>，分支 WT_BRANCH_PREFIX<name>；
-#                      name 须以 ASCII 字母或数字开头，其后只含字母、数字与 . _ - ；目录或分支已存在即拒绝
+#                      name 须以 ASCII 字母或数字开头，其后只含字母、数字与 . _ - ；目录或分支已存在即拒绝；
+#                      建链接中途失败时回滚本次建的 worktree、分支与链接
 #   wt-rm <name>       任意目录: 核对该 worktree 检出的正是 WT_BRANCH_PREFIX<name> 且该分支已合入 MAIN，
 #                      再按 cleanup 同样的规则检查剩余项 → 摘链接、删 worktree、git branch -d（不 -D、不 --force）
 #   status             任意目录: 当前分支、worktree 列表、最近的 run tag、代码范围是否干净
@@ -27,11 +38,14 @@
 #   MAIN_BRANCH (main)   TAG_PREFIX (run/)
 #   RUN_BRANCH_PREFIX (train/)   run worktree 的分支前缀；设为空串 RUN_BRANCH_PREFIX= 则用 detached HEAD
 #   WT_BRANCH_PREFIX  (wt/)      wt-add 建的分支前缀
-#   CODE_PATHS  (src configs scripts tests experiments pyproject.toml conftest.py)
-#               代码范围，空格分隔；candidate / freeze 只要求这些路径下没有未提交改动与未跟踪文件
+#   CODE_PATHS  (空)   代码范围的追加项，空格分隔。只能扩大、不能缩小（复审 R2-1）：实际范围恒为默认
+#               src configs scripts tests experiments pyproject.toml conftest.py 与追加项的并集；
+#               candidate / freeze 要求这些路径下没有未提交改动与未跟踪文件，freeze 的候选核对也用它
 #   WT_ROOT     (<主目录>.worktrees)   worktree 存放目录
 #   CI_CMD      (scripts/ci.sh，其次 ./ci.sh)   候选门禁命令，只看退出码
-#   STAMP_CMD   (有 scripts/git_stamp.py 就用它，否则内置最小 stamp 写到 WT_ROOT/run-<id>.GIT_STAMP.json)
+#   STAMP_CMD   只用于 run worktree（在其中运行）。未设置时 run worktree 里有 scripts/git_stamp.py 就用它写
+#               worktree 根的 GIT_STAMP.json。此外两种模式都另写 run 级文件 WT_ROOT/run-<id>.GIT_STAMP.json
+#               （主目录有 src/trimodalsurv/gitstamp.py 就用其 build_stamp，否则内置最小版）
 #   PYTHON_BIN  (python3)
 set -euo pipefail
 
@@ -39,7 +53,8 @@ MAIN_BRANCH="${MAIN_BRANCH:-main}"
 TAG_PREFIX="${TAG_PREFIX:-run/}"
 RUN_BRANCH_PREFIX="${RUN_BRANCH_PREFIX-train/}"   # 用 - 而不是 :- ，显式空串表示 detached
 WT_BRANCH_PREFIX="${WT_BRANCH_PREFIX:-wt/}"
-CODE_PATHS="${CODE_PATHS:-src configs scripts tests experiments pyproject.toml conftest.py}"
+DEFAULT_CODE_PATHS="src configs scripts tests experiments pyproject.toml conftest.py"
+CODE_PATHS_EXTRA="${CODE_PATHS:-}"   # 环境变量只作追加项：范围只能扩大、不能缩小（复审 R2-1）
 LINK_REGISTRY_NAME="gitflow-linked-assets"   # 登记文件名，放在各 worktree 的 git 管理目录里，不落在工作树
 
 die() { echo "gitflow: $*" >&2; exit 1; }
@@ -66,8 +81,23 @@ main_dir="$(dirname "$common_dir")"   # 物理路径：链接目标与「合法�
 WT_ROOT="${WT_ROOT:-${main_dir}.worktrees}"
 case "$WT_ROOT" in /*) ;; *) WT_ROOT="${here}/${WT_ROOT}" ;; esac   # 收尾会 cd 到主目录，相对路径先定死
 
-read -r -a CODE_PATH_LIST <<< "$CODE_PATHS" || true   # here-string 必有换行，read 正常返回 0；|| true 只防空串
-[ "${#CODE_PATH_LIST[@]}" -gt 0 ] || die "CODE_PATHS 为空，无法界定代码范围"
+CODE_PATH_LIST=()
+read -r -a _code_path_raw <<< "${DEFAULT_CODE_PATHS} ${CODE_PATHS_EXTRA}" || true   # here-string 必有换行，read 正常返回 0
+for _p in "${_code_path_raw[@]}"; do   # 去重，保持顺序；默认项永远在前
+  _dup=0
+  for _q in ${CODE_PATH_LIST[@]+"${CODE_PATH_LIST[@]}"}; do
+    if [ "$_q" = "$_p" ]; then _dup=1; break; fi
+  done
+  [ "$_dup" = 1 ] || CODE_PATH_LIST+=("$_p")
+done
+unset _code_path_raw _p _q _dup
+for _p in "${CODE_PATH_LIST[@]}"; do   # 追加项只能是普通相对路径（复审 R3-1）：:(exclude)src、:!src 这类 pathspec 魔法会缩小范围
+  case "$_p" in
+    :*) die "CODE_PATHS 的追加项 '${_p}' 是 git pathspec 魔法写法（如 :(exclude)），会缩小代码范围；只写普通相对路径" ;;
+  esac
+done
+unset _p
+CODE_PATHS="${CODE_PATH_LIST[*]}"   # 之后的提示一律打印实际生效的范围
 
 current_branch() { git symbolic-ref -q --short HEAD || echo detached; }
 
@@ -109,7 +139,7 @@ relpath_ok() {   # 规范相对路径返回 0；否则把原因放进 BAD_REASON
 # ---------- 代码范围干净门 ----------
 
 code_dirty() {   # $1 worktree 顶层；输出 CODE_PATHS 下的未提交改动与未跟踪文件（逐个文件）
-  git -c core.quotePath=false -C "$1" status --porcelain --untracked-files=all -- "${CODE_PATH_LIST[@]}"
+  git --literal-pathspecs -c core.quotePath=false -C "$1" status --porcelain --untracked-files=all -- "${CODE_PATH_LIST[@]}"
 }
 
 require_code_clean() {   # $1 worktree 顶层
@@ -378,6 +408,128 @@ require_own_worktree() {   # $1 目录：必须是本仓库某个 worktree 的�
   [ "$phys" != "$main_dir" ] || die "${dir} 是主目录，不能当 worktree 删除。不删"
 }
 
+# ---------- freeze / wt-add 的事务：中途失败就回滚本次建的东西（首审 #2）----------
+# 不变量：tag 存在 ⇔ 冻结完整成功。tag 是 freeze 的最后一步；之前任何一步失败（含 die、set -e 退出），
+# 退出处理 on_exit 都会按登记撤掉本次亲手建的 run 级 stamp、链接、worktree 与分支。撤之前核对身份，
+# 不 --force、不 -D；撤不掉的照实报告并保留现场。$( ) 与 ( ) 子 shell 不继承 EXIT trap，失败会经 set -e 回到这里。
+# 同名并发（复审 R2-2）：事务只在持有同名锁时开始，锁在任何预检之前原子建立；worktree 建成后写入本次事务的
+# token，回滚只删 token 相符的 worktree。
+CANDIDATE_FULL=""
+TX_TAG=""
+TX_ON=0 TX_COMMIT="" TX_WT="" TX_WT_MADE=0 TX_TOKEN="" TX_BRANCH="" TX_STAMP="" TX_TMP="" LOCK_DIR=""
+TX_TOKEN_NAME="gitflow-tx-token"   # 放在 worktree 的 git 管理目录里，随 worktree remove 一起删除
+
+# acquire_lock <锁名>：在主仓库 git 目录的 gitflow-locks/ 下用 mkdir 原子建锁；已存在即拒绝，不删别人的锁
+acquire_lock() {
+  local root="${common_dir}/gitflow-locks"
+  mkdir -p -- "$root" || die "建不了锁目录 ${root}"
+  if ! mkdir -- "${root}/$1" 2>/dev/null; then
+    die "锁 ${root}/$1 已存在：另一个同名的 freeze、cleanup、wt-add 或 wt-rm 正在运行，或上次被强行中断。确认没有同名操作在运行后手动 rmdir 该锁再重试；什么都没动"
+  fi
+  LOCK_DIR="${root}/$1"
+  trap on_exit EXIT
+  # bash 3.2 被未捕获的信号终止时也跑 EXIT trap，但 $? 是 0；显式转成 exit，让 on_exit 拿到真实退出码（复审 R3-3）
+  trap 'exit 130' INT
+  trap 'exit 143' TERM
+  trap 'exit 129' HUP
+}
+
+on_exit() {
+  local rc=$?
+  trap - EXIT
+  set +e
+  if [ "$TX_ON" = 1 ]; then
+    if [ -n "$TX_TAG" ] && [ "$(git rev-parse -q --verify "refs/tags/${TX_TAG}^{commit}" 2>/dev/null)" = "$TX_COMMIT" ]; then
+      # tag 是最后一步：它已存在且指向本次提交，冻结就是完整成功的，只是在收尾前被中断；保留全部产物（复审 R3-3）
+      TX_ON=0
+      tx_end
+      echo "gitflow: tag ${TX_TAG} 已打好，冻结已完整成功；中断发生在收尾输出之前，不回滚" >&2
+    else
+      [ "$rc" -ne 0 ] || rc=1   # 没走到 tx_end 就退出，一律按失败处理
+      tx_rollback
+    fi
+  fi
+  if [ -n "$LOCK_DIR" ]; then
+    rmdir -- "$LOCK_DIR" 2>/dev/null || echo "gitflow: 释放锁 ${LOCK_DIR} 失败；确认无同名操作在运行后手动 rmdir" >&2
+  fi
+  exit "$rc"
+}
+
+tx_begin() {
+  [ -n "$LOCK_DIR" ] || die "内部错误：事务开始前没有持有锁"
+  TX_COMMIT="$1"; TX_ON=1
+  TX_TOKEN="$$-$(date +%s)-${RANDOM}${RANDOM}"
+}
+tx_end() {
+  local gd
+  TX_ON=0
+  if [ "$TX_WT_MADE" = 1 ]; then   # 成功后不再需要 token
+    gd="$(git -C "$TX_WT" rev-parse --absolute-git-dir 2>/dev/null)" && rm -f -- "${gd}/${TX_TOKEN_NAME}"
+  fi
+  return 0
+}
+
+tx_mark_worktree() {   # worktree add 成功后调用：登记「这是本次建的」，并在其 git 管理目录写入 token
+  local gd
+  TX_WT_MADE=1
+  gd="$(git -C "$TX_WT" rev-parse --absolute-git-dir)" || die "取不到 ${TX_WT} 的 git 管理目录"
+  printf '%s\n' "$TX_TOKEN" > "${gd}/${TX_TOKEN_NAME}" || die "写不了事务 token"
+}
+
+tx_owns_worktree() {   # TX_WT 是本次建的（token 相符）、仍是本仓库的 worktree 顶层，且 HEAD 等于本次检出的提交
+  local phys top cdir head gd
+  [ "$TX_WT_MADE" = 1 ] || return 1
+  gd="$(git -C "$TX_WT" rev-parse --absolute-git-dir 2>/dev/null)" || return 1
+  [ "$(cat -- "${gd}/${TX_TOKEN_NAME}" 2>/dev/null)" = "$TX_TOKEN" ] || return 1
+  phys="$(cd "$TX_WT" 2>/dev/null && pwd -P)" || return 1
+  top="$(git -C "$TX_WT" rev-parse --show-toplevel 2>/dev/null)" || return 1
+  top="$(cd "$top" && pwd -P)" || return 1
+  [ "$top" = "$phys" ] || return 1
+  cdir="$(cd "$TX_WT" && cd "$(git rev-parse --git-common-dir)" && pwd -P)" || return 1
+  [ "$cdir" = "$common_dir" ] || return 1
+  head="$(git -C "$TX_WT" rev-parse -q --verify HEAD)" || return 1
+  [ "$head" = "$TX_COMMIT" ]
+}
+
+tx_rollback() {   # 由 on_exit 调用（已 set +e）；只撤本次亲手建的东西
+  local left=0 reg raw p tip
+  TX_ON=0
+  cd "$main_dir" || true
+  echo "gitflow: 中途失败，回滚本次已建的内容（没有打 tag）" >&2
+  if [ -n "$TX_TMP" ]; then rm -f -- "$TX_TMP"; fi
+  if [ -n "$TX_STAMP" ] && [ -f "$TX_STAMP" ] && [ ! -L "$TX_STAMP" ]; then
+    rm -f -- "$TX_STAMP" || left=1
+  fi
+  if [ "$TX_WT_MADE" = 1 ] && { [ -e "$TX_WT" ] || [ -L "$TX_WT" ]; }; then
+    if tx_owns_worktree; then
+      reg="$(link_registry "$TX_WT")" || reg=""
+      if [ -n "$reg" ] && [ -f "$reg" ]; then
+        raw="$(cat -- "$reg")"
+        while IFS= read -r p; do
+          [ -n "$p" ] || continue
+          if legit_link "$TX_WT" "$p"; then rm -- "${TX_WT}/${p}" || left=1; fi
+        done <<< "$raw"
+      fi
+      git worktree remove "$TX_WT" >/dev/null || left=1   # 不加 --force：有本次之外的内容就失败并保留现场
+    else
+      echo "gitflow: ${TX_WT} 已不是本次建的 worktree（token 或身份不符），不动" >&2
+      left=1
+    fi
+  fi
+  git worktree prune
+  if [ -n "$TX_BRANCH" ]; then
+    tip="$(git rev-parse -q --verify "refs/heads/${TX_BRANCH}" 2>/dev/null)"
+    if [ -n "$tip" ]; then
+      if [ "$tip" = "$TX_COMMIT" ]; then git branch -d "$TX_BRANCH" >/dev/null || left=1; else left=1; fi
+    fi
+  fi
+  if [ "$left" = 0 ]; then
+    echo "gitflow: 回滚完成，没有留下 tag、分支、worktree、链接或 stamp" >&2
+  else
+    echo "gitflow: 回滚未能全部完成，保留现场；先看: git worktree list、git branch --list、ls ${WT_ROOT}" >&2
+  fi
+}
+
 # finish_removal <worktree> <描述>：身份核对已由调用方完成。先查完全部剩余项，有任何一项就拒绝且不动任何东西；
 # 全部通过后才逐个摘合法链接（rm -- 路径，不带尾斜杠、不加 -r，摘前再判一次），再 worktree remove（不加 --force）与 prune
 finish_removal() {
@@ -416,32 +568,46 @@ finish_removal() {
 
 cmd_candidate() {
   [ "$#" -eq 0 ] || die "candidate 不接受参数（收到 '${1}'）"
+  [ "$here" = "$main_dir" ] \
+    || die "candidate 须在检出 ${MAIN_BRANCH} 的主目录 ${main_dir} 运行（当前: ${here}）；wt/* 等 worktree 里的改动先合入 ${MAIN_BRANCH}"
+  [ "$(current_branch)" = "$MAIN_BRANCH" ] \
+    || die "candidate 须在检出 ${MAIN_BRANCH} 的主目录运行（当前分支: $(current_branch)）"
+  local h_full now h subject outside n
+  h_full="$(git rev-parse -q --verify HEAD)" || die "取不到 HEAD"   # 只读这一次：之后的输出都从它生成（复审 R3-2）
   run_ci
   require_code_clean "$here"
-  local h subject outside n
-  h="$(git rev-parse --short HEAD)"
-  subject="$(git log -1 --format=%s)"
+  now="$(git rev-parse -q --verify HEAD)" || die "取不到 HEAD"
+  [ "$now" = "$h_full" ] \
+    || die "CI 期间 HEAD 从 ${h_full} 变成了 ${now}：新提交没有跑过这次 CI，不作候选；等提交结束后重新运行 candidate"
+  h="$(git rev-parse --short "$h_full")"
+  subject="$(git log -1 --format=%s "$h_full")"
   outside="$(git -c core.quotePath=false status --porcelain)" || outside=""
   n=0
   if [ -n "$outside" ]; then n="$(printf '%s\n' "$outside" | wc -l | tr -d ' ')"; fi
   echo
   echo "H = ${h}  (${subject})"
+  echo "完整哈希: ${h_full}"
   echo "分支: $(current_branch) @ ${here}"
   echo "--- 最近 5 个提交:"; git --no-pager log --oneline -n 5
   echo "--- 代码范围外的未提交改动（不阻塞）: ${n} 项"
   echo
-  log "候选就绪。互审与冒烟通过后到主目录运行: scripts/gitflow.sh freeze <run_id>"
+  log "候选就绪。互审与冒烟通过后到主目录运行: scripts/gitflow.sh freeze <run_id> --candidate ${h_full}"
 }
 
-parse_link_args() {   # 解析 [--no-worktree] [--link-assets <relpath>...]；$1 = 是否允许 --no-worktree（1/0），其余为参数
+parse_link_args() {   # 解析 [--candidate <H>] [--no-worktree] [--link-assets <relpath>...]；$1 = 是否为 freeze（1/0），其余为参数
   local allow_nowt="$1"; shift
   local mode=""
-  OPT_NO_WT=0; OPT_LINK=0; LINK_PATHS=()
+  OPT_NO_WT=0; OPT_LINK=0; OPT_CANDIDATE=""; LINK_PATHS=()
   while [ "$#" -gt 0 ]; do
     case "$1" in
       --no-worktree)
         [ "$allow_nowt" = 1 ] || die "不认识的选项 '${1}'"
         OPT_NO_WT=1; mode="" ;;
+      --candidate)
+        [ "$allow_nowt" = 1 ] || die "不认识的选项 '${1}'"
+        [ "$#" -ge 2 ] || die "--candidate 需要获审候选 H 的提交哈希"
+        [ -z "$OPT_CANDIDATE" ] || die "--candidate 只能给一次"
+        OPT_CANDIDATE="$2"; shift; mode="" ;;
       --link-assets) OPT_LINK=1; mode=link ;;
       -*) die "不认识的选项 '${1}'" ;;
       *)
@@ -454,42 +620,112 @@ parse_link_args() {   # 解析 [--no-worktree] [--link-assets <relpath>...]；$1
   return 0
 }
 
-write_stamp() {   # $1 目录 $2 run_id $3 commit $4 tag $5 分支 $6 worktree 描述
-  local dir="$1" run_id="$2" commit="$3" tag="$4" branch_now="$5" where="$6" stamp
-  (
-    cd "$dir"
-    if [ -n "${STAMP_CMD:-}" ]; then
-      log "stamp: $STAMP_CMD"; $STAMP_CMD
-    elif [ -f scripts/git_stamp.py ]; then
-      log "stamp: scripts/git_stamp.py"; "${PYTHON_BIN:-python3}" scripts/git_stamp.py
-    else
-      stamp="${WT_ROOT}/run-${run_id}.GIT_STAMP.json"
-      printf '{ "run_id": "%s", "commit": "%s", "tag": "%s", "branch": "%s", "dirty": false,\n  "worktree": "%s", "date": "%s" }\n' \
-        "$run_id" "$commit" "$tag" "$branch_now" "$where" "$(date +%Y-%m-%dT%H:%M:%S)" > "$stamp"
-      log "stamp: 内置最小版 -> ${stamp}"
-    fi
-  )
+run_stamp_path() { printf '%s/run-%s.GIT_STAMP.json\n' "$WT_ROOT" "$1"; }
+
+# publish_run_stamp <run_id> <commit> <tag> <分支> <worktree 描述> <候选 H 完整哈希>：写不可变的 run 级 stamp（首审 #3）
+# 先写唯一临时文件并核对 commit 等于待冻结提交，再用硬链接发布（目标已存在即失败，绝不覆盖）。
+# 主目录有 src/trimodalsurv/gitstamp.py 时用其 build_stamp（与服务器端 gitstamp 读取的格式相同），否则内置最小版。
+publish_run_stamp() {
+  local run_id="$1" commit="$2" tag="$3" branch_now="$4" where="$5" candidate="$6" out tmp
+  out="$(run_stamp_path "$run_id")"
+  tmp="$(mktemp "${WT_ROOT}/.run-${run_id}.GIT_STAMP.XXXXXX")" || die "建不了临时 stamp 文件"
+  TX_TMP="$tmp"
+  if [ -f "${main_dir}/src/trimodalsurv/gitstamp.py" ]; then
+    "${PYTHON_BIN:-python3}" - "$main_dir" "$commit" "$run_id" "$tag" "$tmp" "$candidate" <<'PY' || die "生成 run 级 stamp 失败"
+import json
+import sys
+root, commit, run_id, tag, out, candidate = sys.argv[1:7]
+sys.path.insert(0, root + '/src')
+from trimodalsurv import gitstamp
+stamp = gitstamp.build_stamp(root)
+if stamp['commit'] != commit:
+    sys.exit('stamp 的 commit %s 不等于待冻结的提交 %s' % (stamp['commit'], commit))
+stamp.update(run_id=run_id, run_tag=tag, candidate=candidate)
+with open(out, 'w', encoding='utf-8') as handle:
+    json.dump(stamp, handle, ensure_ascii=False, indent=1, sort_keys=True)
+    handle.write('\n')
+PY
+    log "stamp: gitstamp.build_stamp -> ${out}"
+  else
+    printf '{ "run_id": "%s", "run_tag": "%s", "candidate": "%s", "commit": "%s", "branch": "%s", "dirty": false,\n  "worktree": "%s", "date": "%s" }\n' \
+      "$run_id" "$tag" "$candidate" "$commit" "$branch_now" "$where" "$(date +%Y-%m-%dT%H:%M:%S)" > "$tmp" \
+      || die "写 run 级 stamp 失败"
+    log "stamp: 内置最小版 -> ${out}"
+  fi
+  ln "$tmp" "$out" 2>/dev/null || die "${out} 已存在，不覆盖"
+  TX_STAMP="$out"
+  rm -f -- "$tmp"
+  TX_TMP=""
+}
+
+write_worktree_stamp() {   # $1 run worktree $2 run_id $3 commit $4 tag $5 分支 $6 候选 H 完整哈希
+  local dir="$1" run_id="$2" commit="$3" tag="$4" branch_now="$5" candidate="$6"
+  if [ -n "${STAMP_CMD:-}" ]; then
+    log "stamp: $STAMP_CMD"
+    ( cd "$dir" && $STAMP_CMD ) || die "STAMP_CMD 失败"
+  elif [ -f "${dir}/scripts/git_stamp.py" ]; then
+    log "stamp: scripts/git_stamp.py"
+    ( cd "$dir" && "${PYTHON_BIN:-python3}" scripts/git_stamp.py ) || die "scripts/git_stamp.py 失败"
+  fi
+  # 不论 worktree 里是否另有 stamp，都写一份记录候选 H 与冻结提交的 run 级 stamp（供节点一机械核对）
+  publish_run_stamp "$run_id" "$commit" "$tag" "$branch_now" "$dir" "$candidate"
+}
+
+require_reviewed_candidate() {   # $1 待冻结的 MAIN HEAD；核对 OPT_CANDIDATE（首审 #1）。纯读取，没有副作用
+  local commit="$1" given="$OPT_CANDIDATE" cand rc names
+  [ -n "$given" ] || die "freeze 必须用 --candidate <H> 指明获审候选（gitflow.sh candidate 打印的 H）；不冻结未审代码"
+  case "$given" in
+    *[!0-9a-f]*) die "--candidate '${given}' 须是小写十六进制提交哈希，不收 HEAD、分支名等会移动的引用" ;;
+  esac
+  [ "${#given}" -ge 7 ] && [ "${#given}" -le 40 ] || die "--candidate '${given}' 须是 7–40 位提交哈希"
+  cand="$(git rev-parse -q --verify "${given}^{commit}" 2>/dev/null)" \
+    || die "--candidate '${given}' 不是本仓库里唯一的提交（不存在或短哈希有歧义）"
+  CANDIDATE_FULL="$cand"
+  git merge-base --is-ancestor "$cand" "$commit" \
+    || die "--candidate ${given} 不在 ${MAIN_BRANCH} 上（候选须先合入 ${MAIN_BRANCH}，再在 ${MAIN_BRANCH} 上 candidate）"
+  rc=0
+  git --literal-pathspecs diff --quiet "$cand" "$commit" -- "${CODE_PATH_LIST[@]}" || rc=$?
+  if [ "$rc" = 1 ]; then
+    names="$(git --literal-pathspecs -c core.quotePath=false diff --name-status "$cand" "$commit" -- "${CODE_PATH_LIST[@]}")" || names="（列不出）"
+    {
+      echo "gitflow: 获审候选 ${given} 之后 ${MAIN_BRANCH} 上的代码范围有改动，冻结的将不是获审代码（CODE_PATHS: ${CODE_PATHS}）："
+      printf '%s\n' "$names"
+      echo "  对新的 ${MAIN_BRANCH} HEAD 重新 candidate、互审与冒烟，再用新的 H 冻结"
+    } >&2
+    exit 1
+  fi
+  [ "$rc" = 0 ] || die "git diff 失败，无法核对候选 ${given} 与 ${MAIN_BRANCH} HEAD 的代码范围"
 }
 
 cmd_freeze() {
-  [ "$#" -gt 0 ] || die "用法: gitflow.sh freeze <run_id> [--no-worktree] [--link-assets <relpath>...]"
+  [ "$#" -gt 0 ] || die "用法: gitflow.sh freeze <run_id> --candidate <H> [--no-worktree] [--link-assets <relpath>...]"
   local run_id="$1"; shift
   valid_name "$run_id" || die "run_id '${run_id}' 不合法：须以 ASCII 字母或数字开头，其后只含字母、数字与 . _ -"
   # 1. 解析全部参数（未知选项即拒绝）
   parse_link_args 1 "$@"
+  if [ "$OPT_NO_WT" = 1 ] && [ -n "${STAMP_CMD:-}" ]; then
+    die "--no-worktree 的 stamp 固定写成 run 级文件，不用 STAMP_CMD；请取消 STAMP_CMD 再运行"
+  fi
   # 2. 位置与分支
   [ "$here" = "$main_dir" ] || die "freeze 须在主目录 ${main_dir} 运行（当前: ${here}）"
   [ "$(current_branch)" = "$MAIN_BRANCH" ] || die "请在检出 '${MAIN_BRANCH}' 的主目录里运行（当前: $(current_branch) @ ${here}）"
   local commit
   commit="$(git rev-parse -q --verify "refs/heads/${MAIN_BRANCH}^{commit}")" || die "取不到 ${MAIN_BRANCH} 的提交"
   local tag="${TAG_PREFIX}${run_id}" run_dir="${WT_ROOT}/run-${run_id}" run_branch="${RUN_BRANCH_PREFIX}${run_id}"
-  # 3. 校验 --link-assets 各路径
+  local stamp_file
+  stamp_file="$(run_stamp_path "$run_id")"
+  # 同名互斥锁先于全部状态预检（复审 R2-2）
+  acquire_lock "run-${run_id}"
+  # 3. 获审候选：在 MAIN 上，且之后代码范围没有改动
+  require_reviewed_candidate "$commit"
+  # 4. 校验 --link-assets 各路径
   if [ "$OPT_LINK" = 1 ]; then validate_link_paths "$commit" ${LINK_PATHS[@]+"${LINK_PATHS[@]}"}; fi
-  # 4. 代码范围干净门
+  # 5. 代码范围干净门
   require_code_clean "$main_dir"
-  # 5. 目标不得已存在
+  # 6. 目标不得已存在
   git check-ref-format "refs/tags/${tag}" || die "tag 名 ${tag} 不是合法的 git 引用名"
   ! git show-ref --verify --quiet "refs/tags/${tag}" || die "tag ${tag} 已存在；同一版本重跑也要换新 run_id"
+  if [ -e "$stamp_file" ] || [ -L "$stamp_file" ]; then die "${stamp_file} 已存在；同一版本重跑也要换新 run_id"; fi
   if [ "$OPT_NO_WT" = 0 ]; then
     if [ -e "$run_dir" ] || [ -L "$run_dir" ]; then die "${run_dir} 已存在"; fi
     if [ -n "$RUN_BRANCH_PREFIX" ]; then
@@ -497,23 +733,30 @@ cmd_freeze() {
       ! git show-ref --verify --quiet "refs/heads/${run_branch}" || die "分支 ${run_branch} 已存在"
     fi
   fi
-  # ---- 以上全部通过，从这里起才产生副作用 ----
+  # ---- 以上全部通过，从这里起才产生副作用；tag 留到最后一步，之前失败一律回滚 ----
   mkdir -p "$WT_ROOT"
-  git tag "$tag" "$commit"
+  tx_begin "$commit"
   if [ "$OPT_NO_WT" = 1 ]; then
-    write_stamp "$main_dir" "$run_id" "$commit" "$tag" "$MAIN_BRANCH" "$main_dir"
+    publish_run_stamp "$run_id" "$commit" "$tag" "$MAIN_BRANCH" "(no worktree)" "$CANDIDATE_FULL"
+    TX_TAG="$tag"
+    git tag "$tag" "$commit" || die "打 tag ${tag} 失败"
+    tx_end
     echo
-    echo "tag          : ${tag} = ${commit}（${MAIN_BRANCH}）"
-    echo "worktree     : 未建（--no-worktree）；同步源码请从该 tag 的干净快照打包（git archive ${tag}）"
+    echo "tag          : ${tag} = ${commit}（${MAIN_BRANCH} HEAD，实际冻结的提交）"
+    echo "获审候选 H   : ${CANDIDATE_FULL}"
+    echo "stamp        : ${stamp_file}"
+    echo "worktree     : 未建（--no-worktree）；同步源码从该 tag 的干净快照打包（git archive ${tag}），"
+    echo "               并把上面的 stamp 作为 GIT_STAMP.json 放进快照根目录"
     return 0
   fi
+  TX_WT="$run_dir"
   if [ -n "$RUN_BRANCH_PREFIX" ]; then
-    git worktree add -b "$run_branch" "$run_dir" "$commit" >/dev/null \
-      || die "已打 tag ${tag}，但建 run worktree 失败；排查后可 git tag -d ${tag} 再重试"
+    TX_BRANCH="$run_branch"
+    git worktree add -b "$run_branch" "$run_dir" "$commit" >/dev/null || die "建 run worktree 失败"
   else
-    git worktree add --detach "$run_dir" "$commit" >/dev/null \
-      || die "已打 tag ${tag}，但建 run worktree 失败；排查后可 git tag -d ${tag} 再重试"
+    git worktree add --detach "$run_dir" "$commit" >/dev/null || die "建 run worktree 失败"
   fi
+  tx_mark_worktree
   local fresh
   fresh="$(git -c core.quotePath=false -C "$run_dir" status --porcelain --untracked-files=all)" \
     || die "run worktree ${run_dir} 建好后 git status 失败，异常"
@@ -529,10 +772,15 @@ cmd_freeze() {
   fi
   local branch_now
   branch_now="$(git -C "$run_dir" symbolic-ref -q --short HEAD || echo detached)"
-  write_stamp "$run_dir" "$run_id" "$commit" "$tag" "$branch_now" "$run_dir"
+  write_worktree_stamp "$run_dir" "$run_id" "$commit" "$tag" "$branch_now" "$CANDIDATE_FULL"
+  TX_TAG="$tag"
+  git tag "$tag" "$commit" || die "打 tag ${tag} 失败"
+  tx_end
   echo
   echo "run worktree : ${run_dir}"
-  echo "HEAD         : ${commit}  (tag ${tag} = ${MAIN_BRANCH})"
+  echo "HEAD         : ${commit}  (tag ${tag} = ${MAIN_BRANCH} HEAD，实际冻结的提交)"
+  echo "获审候选 H   : ${CANDIDATE_FULL}"
+  echo "run 级 stamp : ${stamp_file}"
   echo "分支         : ${branch_now}  ← 只读，禁止 commit；cleanup 会核对 HEAD 仍等于 tag ${tag}、检出不变"
   if [ "$OPT_LINK" = 1 ]; then
     echo "链接         : ${LINK_PATHS[*]}  ← 指向主目录原位；经链接写入会直接落到主目录"
@@ -543,6 +791,8 @@ cmd_freeze() {
 cmd_cleanup() {
   local run_id="${1:-}"; [ -n "$run_id" ] || die "用法: gitflow.sh cleanup <run_id>"
   local run_dir="${WT_ROOT}/run-${run_id}" tag="${TAG_PREFIX}${run_id}"
+  valid_name "$run_id" || die "run_id '${run_id}' 不合法"
+  acquire_lock "run-${run_id}"   # 与同名 freeze 互斥
   [ -d "$run_dir" ] || die "$run_dir 不存在"
   # 冻结身份以 freeze 打的 tag 为准。只核对「HEAD 仍在 MAIN 上」不够：切到 MAIN 上更早的提交也能通过，
   # tag 却仍指着原冻结提交。任一核对不符都拒绝、保留现场供排查；不 -D、不 --force。
@@ -580,13 +830,17 @@ cmd_wt_add() {
   parse_link_args 0 "$@"
   local branch="${WT_BRANCH_PREFIX}${name}" dir="${WT_ROOT}/wt-${name}" commit
   git check-ref-format "refs/heads/${branch}" || die "分支名 ${branch} 不是合法的 git 引用名"
+  acquire_lock "wt-${name}"   # 同名互斥锁先于全部状态预检（复审 R2-2）
   commit="$(git rev-parse -q --verify "refs/heads/${MAIN_BRANCH}^{commit}")" || die "取不到 ${MAIN_BRANCH} 的提交"
   if [ -e "$dir" ] || [ -L "$dir" ]; then die "${dir} 已存在"; fi
   ! git show-ref --verify --quiet "refs/heads/${branch}" || die "分支 ${branch} 已存在"
   if [ "$OPT_LINK" = 1 ]; then validate_link_paths "$commit" ${LINK_PATHS[@]+"${LINK_PATHS[@]}"}; fi
-  # ---- 以上全部通过，从这里起才产生副作用 ----
+  # ---- 以上全部通过，从这里起才产生副作用；中途失败回滚本次建的 worktree、分支与链接 ----
   mkdir -p "$WT_ROOT"
-  git worktree add -b "$branch" "$dir" "$commit" >/dev/null
+  tx_begin "$commit"
+  TX_WT="$dir"; TX_BRANCH="$branch"
+  git worktree add -b "$branch" "$dir" "$commit" >/dev/null || die "建 worktree ${dir} 失败"
+  tx_mark_worktree
   local fresh
   fresh="$(git -c core.quotePath=false -C "$dir" status --porcelain --untracked-files=all)" \
     || die "worktree ${dir} 建好后 git status 失败，异常"
@@ -599,6 +853,7 @@ cmd_wt_add() {
       exit 1
     fi
   fi
+  tx_end
   echo
   echo "worktree : ${dir}"
   echo "分支     : ${branch}（从 ${MAIN_BRANCH} ${commit:0:7} 建）"
@@ -613,6 +868,7 @@ cmd_wt_rm() {
   local name="$1"
   valid_name "$name" || die "名字 '${name}' 不合法：须以 ASCII 字母或数字开头，其后只含字母、数字与 . _ -"
   local branch="${WT_BRANCH_PREFIX}${name}" dir="${WT_ROOT}/wt-${name}" head_ref have
+  acquire_lock "wt-${name}"   # 与同名 wt-add 互斥
   [ -d "$dir" ] || die "${dir} 不存在"
   git -C "$dir" rev-parse -q --verify HEAD >/dev/null || die "${dir} 不是可用的 git worktree。不删"
   require_own_worktree "$dir"

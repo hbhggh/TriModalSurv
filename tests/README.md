@@ -14,7 +14,7 @@
 | [test_run_provenance.py](test_run_provenance.py) | 运行参数、来源与产物记录 |
 | [test_gitstamp.py](test_gitstamp.py) | commit 身份、拒跑门、无 `.git` 拷贝的 stamp 与可重建账本 |
 | [test_shared_runtime_main.py](test_shared_runtime_main.py) | 公共主流程的受控产物写入与冲突拒绝 |
-| [test_workflow_scripts.py](test_workflow_scripts.py) | Git 工作流脚本（临时仓库）：`cleanup` 冻结身份核对、`CODE_PATHS` 代码范围干净门（论文与笔记不阻塞，代码脏改动拒绝）、`--link-assets` 链接回归（只摘链接、主目录目标完好、真实 checkpoint 与被篡改链接拒绝）、`wt-add` → `merge --ff-only` → `wt-rm` 闭环、`ci.sh` 参数先于副作用、`gitflow.sh` 帮助路径、bash 3.2 多字节变量名 |
+| [test_workflow_scripts.py](test_workflow_scripts.py) | Git 工作流脚本（临时仓库）：`cleanup` 冻结身份核对、`CODE_PATHS` 代码范围干净门（论文与笔记不阻塞，代码脏改动拒绝）、`freeze --candidate` 候选绑定（H 须在 main 上且之后代码范围无改动；`CODE_PATHS` 缩窄与排除型 pathspec 都不能绕过）、CI 期间并发提交时 candidate 拒绝、打完 tag 后被信号中断仍保留完整冻结、`candidate` 只许在检出 main 的主目录运行、同名 freeze / wt-add 并发互斥（受控屏障）与残留锁拒绝、`freeze` / `wt-add` 中途失败的回滚（故障注入：建 worktree、建链接、stamp、打 tag 各步）、run 级 stamp（真实 gitstamp 模块，不可覆盖，记录候选 H 与冻结提交）、`--link-assets` 链接回归（只摘链接、主目录目标完好、真实 checkpoint 与被篡改链接拒绝）、`wt-add` → `merge --ff-only` → `wt-rm` 闭环、`ci.sh` 参数先于副作用、`gitflow.sh` 帮助路径、bash 3.2 多字节变量名 |
 
 ## 验证边界
 

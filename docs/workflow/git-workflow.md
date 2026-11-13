@@ -1,6 +1,6 @@
 # 科研 Git 工作流：单主干 main × 代码范围门禁 × 按需临时 Worktree
 
-> 一句话：**日常在主目录的 `main` 上小步提交 → 代码范围干净且 CI 绿灯时 `candidate` 得到候选 H → 互审与冒烟通过 → `freeze` 在 `main` HEAD 打 `run/<run_id>` tag（按需建冻结 worktree）→ 跑正式实验，结果盖章指向该 tag 的提交 → `cleanup` 删掉临时 worktree，tag 永远留在 `main` 上。**
+> 一句话：**日常在主目录的 `main` 上小步提交 → 代码范围干净且 CI 绿灯时 `candidate` 得到候选 H → 互审与冒烟通过 → `freeze --candidate H` 核对冻结的仍是获审代码，在 `main` HEAD 打 `run/<run_id>` tag（按需建冻结 worktree）→ 跑正式实验，结果盖章指向该 tag 的提交 → `cleanup` 删掉临时 worktree，tag 永远留在 `main` 上。**
 >
 > 用户裁决 2026-11-12，取代此前「常驻开发分支 + 先压缩成单个 commit 再跑」的做法；原常驻 `dev` 分支及其 worktree 已于同日退役。项目内的强制规则以 `AGENTS.md`「Git 工作流」为准，本文件是它的展开说明。
 >
@@ -71,13 +71,13 @@ main（主目录，唯一日常工作区）
 | 环境变量 | 默认 | 说明 |
 |---|---|---|
 | `MAIN_BRANCH` | `main` | 唯一主干分支 |
-| `CODE_PATHS` | `src configs scripts tests experiments pyproject.toml conftest.py` | 代码范围干净门检查的路径，空格分隔；范围外的改动不阻塞 |
+| `CODE_PATHS` | 空（默认范围 `src configs scripts tests experiments pyproject.toml conftest.py`） | 代码范围的追加项，空格分隔，只能是普通相对路径（`:(exclude)` 等 pathspec 魔法写法拒绝）；只能扩大、不能缩小，实际范围恒为默认项与追加项的并集；范围外的改动不阻塞 |
 | `WT_ROOT` | `<主目录>.worktrees` | run worktree 与并行 worktree 的存放目录 |
 | `TAG_PREFIX` | `run/` | 正式实验 tag 前缀 |
 | `RUN_BRANCH_PREFIX` | `train/` | run worktree 的分支前缀，须与 `TAG_PREFIX` 不同；设为空串则用 detached HEAD |
 | `WT_BRANCH_PREFIX` | `wt/` | 并行 worktree 的分支前缀 |
 | `CI_CMD` | `scripts/ci.sh` | 候选门禁命令，只看退出码 |
-| `STAMP_CMD` | 自动 | 有 `scripts/git_stamp.py` 就用它，否则内置最小 stamp |
+| `STAMP_CMD` | 自动 | 只用于 run worktree；未设置时有 `scripts/git_stamp.py` 就用它，否则写 run 级文件 `<WT_ROOT>/run-<run_id>.GIT_STAMP.json`（有 `src/trimodalsurv/gitstamp.py` 用其 `build_stamp`，否则内置最小版） |
 | `PYTHON_BIN` | `python3` | 解释器 |
 | `TEST_CMD` | 自动 | `ci.sh` 的测试命令 |
 
@@ -120,10 +120,10 @@ main（主目录，唯一日常工作区）
 
 | 步 | 在哪里 | 命令 / 动作 | 得到什么 |
 |---|---|---|---|
-| 1 | 主目录 | `PYTHON_BIN=<protomasksurv-exp1 环境>/bin/python scripts/gitflow.sh candidate` | 先跑 CI，再过代码门：`CODE_PATHS` 下无未提交改动、无未跟踪文件。通过后打印 `H = <短哈希>` 与摘要；不干净时列出路径并拒绝。`manuscript/` 与根目录笔记的改动不阻塞 |
+| 1 | 主目录（须检出 `main`；其他 worktree 或分支上即拒绝） | `PYTHON_BIN=<protomasksurv-exp1 环境>/bin/python scripts/gitflow.sh candidate` | 先跑 CI，再过代码门：`CODE_PATHS` 下无未提交改动、无未跟踪文件。通过后打印 `H = <短哈希>` 与摘要；不干净时列出路径并拒绝。`manuscript/` 与根目录笔记的改动不阻塞 |
 | 2 | 任意 | 互审：按 `AGENTS.md`「互审 · 自动审查闭环」发起，重点是数据泄漏、mask、loss、config、seed、结果路径 | Review PASS / 阻断 |
 | 3 | 训练服务器 | 冒烟（用户裁决 2026-09-24）：`git archive H` 打包 → sha256 校验 → 传输 → 解包；`GIT_STAMP.json`（commit = H）随代码同步；1 癌 1 seed 训练 + 推理冒烟 + 必要的回放门。冒烟产物只判通/不崩，不进账本主表；失败回主目录修复、重新 candidate | 冒烟 PASS 才能冻结 |
-| 4 | 主目录（须检出 `main`） | 先核对冻结的就是获审的代码：`git diff --stat H HEAD -- <CODE_PATHS 各项>` 须为空，不为空就对新的 HEAD 重新走第 1–3 步。然后 `scripts/gitflow.sh freeze i08-v1 [--no-worktree] [--link-assets <relpath>...]` | 先解析参数、校验链接路径、过代码门，全部通过才打 tag `run/i08-v1` → `main` HEAD。默认建分支 `train/i08-v1` 的 run worktree（HEAD = 该 tag）并生成 stamp；`--no-worktree` 只打 tag 并在主目录生成 stamp。任一步拒绝都不留下 tag、分支或目录 |
+| 4 | 主目录（须检出 `main`） | `scripts/gitflow.sh freeze i08-v1 --candidate <H 的提交哈希> [--no-worktree] [--link-assets <relpath>...]` | 先解析参数，再核对候选：H 在 `main` 上，且 H 之后 `CODE_PATHS` 下没有新改动（不满足即拒绝，对新的 HEAD 重新走第 1–3 步）；然后校验链接路径、过代码门。默认建分支 `train/i08-v1` 的 run worktree（HEAD = `main` HEAD）、挂链接、生成 stamp，最后一步才打 tag `run/i08-v1`；两种模式都写 run 级 stamp，记录 `candidate`（H）与 `commit`（实际冻结的提交）；同名 freeze 与 cleanup 互斥（原子锁）；`--no-worktree` 不建 worktree，把 stamp 写成 run 级文件 `<主目录>.worktrees/run-i08-v1.GIT_STAMP.json`（同步时作为 `GIT_STAMP.json` 放进 `git archive` 快照）。任一步拒绝或中途失败都不留下 tag，本次已建的 worktree、分支、链接与 stamp 一并回滚 |
 | 5 | run worktree 或 `git archive run/i08-v1` 的快照 | 从这里同步或启动正式实验（绑定 commit 的资产锁在 tag 指向的提交上重写一次）。**禁止修改、禁止 commit**。结果写到 worktree 外，账本追加 `run_id, commit, 指标` | 结果绑定 tag 指向的提交 |
 | 6 | 主目录 | 判定：好 → 无需 Git 操作；差 → 账本标 negative，代码留着。然后 `scripts/gitflow.sh cleanup i08-v1` | 脚本先核对：tag `run/i08-v1` 存在；run worktree HEAD **严格等于**该 tag 的提交（只「仍在 main 上」不够——切到 main 上更早的提交也在 main 上）；仍检出 `train/i08-v1`（detached 模式须仍为 detached）；该提交仍在 main 上；树干净（未提交、未跟踪与被 .gitignore 隐藏的文件都算，只放行根目录 `GIT_STAMP.json`、`.DS_Store`、`__pycache__` 里的字节码与登记过的合法链接——`worktree remove` 会连同被忽略的 checkpoint、日志一起删掉）。全部成立才逐个摘掉链接、删 worktree 与 `train/i08-v1` 分支；tag 与账本保留。任一不符即拒绝并保留现场 |
 
@@ -194,10 +194,10 @@ Git Graph 里应该看到：**`main` 一条直线，小步提交按时间排列�
 | 命令 | 在哪里 | 做什么 |
 |---|---|---|
 | `scripts/ci.sh` | 任意 | 清 `__pycache__` → 测试 → 退出码（只接受 `-h` / `--help`，其他参数退出码 2 且无副作用） |
-| `scripts/gitflow.sh candidate` | 主目录 | CI + 代码范围干净门 + 打印 `H = <短哈希>` 与摘要 |
-| `scripts/gitflow.sh freeze <run_id>` | 主目录（检出 `main`） | 代码门 → tag `run/<run_id>` → run worktree（分支 `train/<run_id>`）+ stamp |
-| `scripts/gitflow.sh freeze <run_id> --no-worktree` | 主目录（检出 `main`） | 代码门 → 只打 tag 并在主目录生成 stamp，供 `git archive run/<run_id>` 同步 |
-| `scripts/gitflow.sh freeze <run_id> --link-assets <relpath>...` | 主目录（检出 `main`） | 同默认 freeze，另在 run worktree 里建指向主目录真源的符号链接 |
+| `scripts/gitflow.sh candidate` | 主目录（检出 `main`） | CI + 代码范围干净门 + 打印 `H = <短哈希>`、完整哈希与摘要 |
+| `scripts/gitflow.sh freeze <run_id> --candidate <H>` | 主目录（检出 `main`） | 候选核对 → 代码门 → run worktree（分支 `train/<run_id>`）+ stamp → 最后打 tag `run/<run_id>`；中途失败全部回滚 |
+| `scripts/gitflow.sh freeze <run_id> --candidate <H> --no-worktree` | 主目录（检出 `main`） | 候选核对 → 代码门 → run 级 stamp `<主目录>.worktrees/run-<run_id>.GIT_STAMP.json` → 打 tag；同步时用 `git archive run/<run_id>` 并把该 stamp 作为 `GIT_STAMP.json` 放进快照 |
+| `scripts/gitflow.sh freeze <run_id> --candidate <H> --link-assets <relpath>...` | 主目录（检出 `main`） | 同默认 freeze，另在 run worktree 里建指向主目录真源的符号链接 |
 | `scripts/gitflow.sh cleanup <run_id>` | 主目录 | 核对 HEAD = tag `run/<run_id>`、检出 `train/<run_id>`（或 detached）、树干净 → 摘链接 → 删 run worktree 与 `train/<run_id>`，tag 保留 |
 | `scripts/gitflow.sh wt-add <name> [--link-assets <relpath>...]` | 主目录 | 从 `main` 建 `wt-<name>`（分支 `wt/<name>`），可选挂载资产链接 |
 | `scripts/gitflow.sh wt-rm <name>` | 主目录 | 核对已合入 `main`、树干净 → 摘链接 → 删 worktree → `git branch -d wt/<name>` |
