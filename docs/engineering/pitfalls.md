@@ -314,3 +314,16 @@
 | V45 | 为隔离 test 在读取代理里先删掉 test 行再交给下游加载器，下游自带的跨 split 重叠检查随之失效：同一患者若同时在 train 与 test，会作为 train 数据带入。 | 在边界处过滤数据前，先在完整数据上做下游原本负责的完整性检查（D1：part 枚举、id 唯一、两两不交），再过滤；补"跨 split 重复必须拒绝"的负例。 | experiments/I08_ps3_shared_recovery/reviews/20261108-node1-impl/（Codex 复审 R2-1） |
 | E51 | zsh 中 `git cat-file -e $H:experiments/__init__.py` 的 `$H:e` 被当作扩展名修饰符，路径变成 `xperiments/...`，检查报不存在。 | zsh 里变量后紧跟冒号一律写 `${H}:`；"文件不存在"类结论先核对命令实际展开的参数。 | 本会话 2026-11-08 I08 部署 |
 | E52 | Office Viewer（Vditor）打开并保存 Markdown 文件时，会把表格单元格反引号内的裸竖线符（ASCII `0x7C`）当作列分隔符解析，超出表头列数的整段后续内容被静默截断。 | Markdown 表格单元格内部（含反引号与公式）严禁写任何竖线符（枚举分隔改用 ` / ` 或 ` · `，范数改用 `\lVert ... \rVert`），落盘后逐行断言每行管道符计数与表头严格一致。 | 03_index-故事线 A-1｜患者级动态恢复_v1.md（2026-11-11 交接契约收单 Post-Mortem） |
+
+## I08 论文生成补充（2026-11-13）
+
+| ID | 坑（一句话） | Prevention Rule（一句话） | 出处 |
+| --- | --- | --- | --- |
+| E53 | `framework.html` 内嵌 STIX Two Text 可变字体，Chrome `--print-to-pdf` 输出的 PDF 里正文字体变成 Type 3，矢量图入文后期刊排版与放大质量受影响。 | 进 PDF 的网页图只内嵌固定字重实例（用 fontTools `varLib.instancer` 切出 400 / 700 再子集化）；导出后用 `pdffonts` 断言没有 Type 3。 | Fig. 1 会话 2026-11-11（`~/Library/Application Support/Claude/side-session-notes/<主控会话>/fig1-framework/README.md`） |
+| V46 | 旧制表脚本为了凑上 handoff 的字面数字逐臂换统计口径：I07 tri 臂的 Avg SD 硬编码为 0.080，wsi / rna 用三位小数均值，text 用精确均值。 | 制表脚本禁止逐行或逐臂换口径、禁止硬编码派生量；口径写进表注，由独立实现重算断言；与文档字面值不一致时报告差异，不去凑。 | P2 制表会话 2026-11-11（`p2-tables-handoff.md` Post-Mortem 1） |
+| V47 | S1 的两个 Panel 写成两个 `table*` 浮动体，`\input` 进同一文件后 LaTeX 计两个表号，S2–S5 整体错位一位；caption 里写死的 "Supplementary Table S1" 又和自动编号重复。 | 一个 `\input` 文件只放一个带 `\caption` 的编号浮动体，Panel 放在同一浮动体内，caption 不写编号；最小壳编译后检查 .aux 中 newlabel 的编号依次连续。 | 同上（Post-Mortem 2） |
+| G8 | 多个会话共用同一检出时，一个会话先落盘引用尚不存在 API 的测试（TDD 的 RED 中间态），另一个会话跑全量 `ci.sh` 在收集阶段退出码 2，只能排除该文件才得到绿灯。 | 共享检出里，引用新 API 的测试先放 scratchpad，或与实现同一步落盘；无法避免时，先在共享笔记里声明该文件处于 RED 中间态，别的会话据此单独说明，不去改它。 | 同上（Post-Mortem 3）；门禁脚本会话 2026-11-11 汇报 |
+| E54 | `main.tex` 的 sn-jnl / article 自动切换只编译了 article 回退分支：sn-jnl 把 sidewaystable 包进 threeparttable，内部再套 `\resizebox` 报 "Missing \endgroup"；sn-jnl 不定义 `proposition` 环境；版心更窄，公式 1b、9c 和附录符号表溢出。旧 `main.tex` 注释里已记过同根因，没有入台账，又复发两次。 | 有双分支文档类的稿件，每次改导言区、表格或公式后，两个分支都完整编译（sn-jnl 模板只拷到 scratchpad，不进仓库），检查退出码、Overfull 与表号；横向表用不缩放的 tabular，环境用 `\@ifundefined` 条件定义。 | 旧 `manuscript/bmc_initial_draft/main.tex` 注释 Post-Mortem；P2 制表会话 2026-11-12 追加；初稿会话 `p5-draft-handoff.md` 遗留第 7 条 |
+| V48 | `check_anti_ai_and_numbers.py` 只扫正文，摘要写在导言区时不在扫描范围内，退出码 0 不代表摘要也过了门禁。 | 摘要在导言区时单独抽出来按 `--strict` 再查一遍，并在汇报里写明；门禁脚本后续应覆盖导言区的 abstract。 | 初稿会话 2026-11-12（`p5-draft-handoff.md` 收尾补充） |
+| V49 | 从对比论文 PRIME 的参考文献表转抄 bib，MCAT 的页码是错的（PRIME 写 4015–4025，Crossref 为 3995–4005），Cox 1972 的页码范围也与一手来源不同。 | bib 条目一律按一手来源（Crossref、arXiv API、会议论文集页面）逐字段核对，不以他人论文的参考文献表为准；与二手来源不一致时按一手来源改并记录。 | 同上（文献核真节） |
+| C19 | `scripts/codex_review.sh` 默认模型 `gpt-5.6-sol` 在当时的 ChatGPT 账号下不可用，companion 返回 400 `model_not_found`，审查没有产出任何结论；所有用该脚本的审查节点都会以同样方式失败。 | 审查调用返回 `model_not_found` 时，按 AGENTS.md「自动审查闭环」第 5 条停下交用户，不自动换模型重发；换模型用 `CODEX_MODEL=<模型>` 并换新的输出目录。 | P2 制表会话 2026-11-12（`experiments/I08_ps3_shared_recovery/reviews/20261112-paper-tables/` 首次调用） |
