@@ -6,7 +6,7 @@
 > **路径占位符约定（遵守坑 `I05-04`，本文档零本机用户名硬编码）**：
 >
 > - `<REPO_ROOT>`：仓库主检出目录 `.../TriModalSurv`（检出 `main`，禁止在此改代码；仅同步 `03_index` 与本 `handoff` 文件）
-> - `<DEV_WORKTREE>`：唯一开发与撰稿工作树 `.../TriModalSurv.worktrees/dev`（所有脚本、表格 `.tex`、框图 `.html/.pdf/.png`、论文 `.tex/.bib` 均在此生成与修改）
+> - `<DEV_WORKTREE>`：自 2026-11-13 起与 `<REPO_ROOT>` 是同一个目录，即检出 `main` 的主目录 `.../TriModalSurv`（原常驻 dev 工作树已退役，见 AGENTS.md「Git 工作流」；下文凡写 `<DEV_WORKTREE>` 的路径都按主目录解析，要求两端副本 `diff -u` 为 0 的条款只需维护主目录这一份。所有脚本、表格 `.tex`、框图 `.html/.pdf/.png`、论文 `.tex/.bib` 均在此生成与修改）
 > - `<LIT_DIR>`：本地参考论文目录 `<REPO_ROOT>/../vscode 重构/Template_refactor/科研/论文阅读`（含 `Prime/Prime.pdf` 与 `M3Surv/M3Surv.pdf`）
 > - `<CONDA_PYTHON>`：`protomasksurv-exp1` 环境解释器（`.../miniconda3/envs/protomasksurv-exp1/bin/python`）
 > - `~/.claude/skills/`：已软链挂载的学术写作与核验技能根（含 `_shared`、`nature-writing`、`nature-polishing`、`nature-ref-verifier` 及 `artifact-page`）
